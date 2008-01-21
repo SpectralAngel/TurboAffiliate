@@ -1,0 +1,2 @@
+db_module=turboaffiliate.model
+history_dir=$base/turboaffiliate/sqlobject-history

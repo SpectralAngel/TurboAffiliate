@@ -1,0 +1,73 @@
+thead
+{
+	border-top: 1px solid;
+	border-bottom: 1px solid;	
+}
+body
+{
+	font-size: 80%;
+	font-family: sans-serif;
+	min-width: 550px; /* 2 x (LC fullwidth + CC padding) + RC fullwidth */
+	margin: 0;
+	padding: 0;
+}
+.small
+{
+	font-size: 80%;
+}
+table
+{
+	text-align: left;
+}
+.deuda
+{
+	width: 60px;
+	text-align: right;
+}
+a
+{
+	display: none;
+}
+#sidebar-left, #sidebar-right, #header, #footer
+{
+	display: none;
+	width: 0;
+}
+#content
+{
+	width: 100%;
+	font-size: 100%;
+}
+/* Removing Holy Grail */
+#container
+{
+	clear: both;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.noprint
+{
+	display: none;
+}
+table
+{
+	width: 100%;
+}
+th
+{
+	text-align: center;
+}
+thead th
+{
+	border-bottom: 1px solid;
+}
+tfoot th
+{
+	border-top: 1px solid;
+	border-bottom: 0;
+}
+.print
+{
+	display: inline;
+}
