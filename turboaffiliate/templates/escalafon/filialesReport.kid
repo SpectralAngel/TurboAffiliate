@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
 	import locale
-	locale.setlocale(locale.LC_ALL, "en-US")
+	locale.setlocale(locale.LC_ALL, "")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#">
 	<head>
@@ -23,11 +23,11 @@
 				<tr py:for="name in filiales.keys()">
 					<td py:content="name" />
 					<td py:content="filiales[name]" />
-					<td py:content="'L.', locale.format('%s', filiales[name] * obligation.filiales, True)" />
+					<td py:content="locale.currency(filiales[name] * obligation.filiales)" />
 				</tr>
 				<tr>
 					<td colspan="3">Total</td>
-					<td py:content="'L.', locale.format('%s', total, True)" />
+					<td py:content="locale.currency(total)" />
 				</tr>
 			</tbody>
 		</table>

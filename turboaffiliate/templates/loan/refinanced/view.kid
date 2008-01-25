@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python
+	import locale
+	locale.setlocale(locale.LC_ALL, "")
+?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#"
+    py:extends="'../../master.kid'">
+	<head>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+		<title>TurboAffiliate &bull; Pr&eacute;stamos</title>
+	</head>
+	<body>
+		<div style="text-align: center;">
+			<h1>COPEMH</h1>
+			<h2>Estado de Cuenta P&eacute;stamos Pagados</h2>
+			<h3 py:content="'Pr&eacute;stamo N&uacute;mero ', loan.id" />
+		</div>
+		<ul>
+			<li>
+				<strong>Prestatario:</strong>
+				<a href="${tg.url('/affiliate/%s' % loan.affiliate.id)}">
+					<span py:content="loan.affiliate.id" />
+				</a>
+				<span py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
+			</li>
+			<li>
+				<strong>Fecha de Inicio:</strong>
+				<span py:content="loan.startDate" />
+			</li>
+			<li>
+				<strong>Pago Mensual:</strong>
+				<span py:content="locale.currency(loan.payment)" />
+			</li>
+			<li>
+				<strong>Monto Original:</strong>
+				<span py:content="locale.currency(loan.capital)" />
+			</li>
+		</ul>
+		<ul>
+			<li class="add">
+				<a href="${tg.url('/payed/pay/add/%s' % loan.id)}">Agregar un Pago</a>
+			</li>
+			<li class="add">
+				<a href="${tg.url('/payed/deduction/add/%s' % loan.id)}">A&ntilde;adir Deducci&oacute;n</a>
+			</li>
+		</ul>
+		<h4>Deducciones Aplicadas</h4>
+		<table>
+			<thead>
+				<tr>
+					<th>Concepto</th>
+					<th>Cantidad</th>
+					<th py:if="'admin' in tg.identity.groups">Borrar</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr py:for="deduction in loan.deductions">
+					<td py:content="deduction.name" />
+					<td py:content="deduction.amount" />
+					<td py:if="'admin' in tg.identity.groups">
+						<a href="${tg.url('/payed/deduction/remove/%s' % deduction.id)}">Borrar</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<h4>Pagos Efectuados</h4>
+		<table class="pay" py:if="len(loan.pays) != 0">
+			<thead>
+				<tr>
+					<th>Fecha</th>
+					<th>Intereses</th>
+					<th>Capital</th>
+					<th>Valor</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr py:for="pay in loan.pays">
+					<td py:content="pay.day.strftime('%d/%m/%y')" />
+					<td py:content="locale.currency(pay.interest)" />
+					<td py:content="locale.currency(pay.capital)" />
+					<td py:content="locale.currency(pay.amount)" />
+					<td><a href="${tg.url('/payed/pay/remove/%s' % pay.id)}">X</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+</html>

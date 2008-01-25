@@ -21,13 +21,11 @@
 
 from turbogears import controllers, expose, flash, identity, redirect
 from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json, utility, num2stres
+from turboaffiliate import model, json, num2stres
 from datetime import date
 from decimal import *
 from mx.DateTime import *
 import copy
-# import logging
-# log = logging.getLogger("webac.controllers")
 
 class Pay(controllers.Controller):
 	
@@ -97,7 +95,7 @@ class PayedLoan(controllers.Controller):
 	pay = Pay()
 	
 	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.loan.payed.payed")	
+	@expose(template="turboaffiliate.templates.loan.payed.payed")
 	def default(self, id):
 		
 		try:

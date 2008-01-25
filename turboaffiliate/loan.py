@@ -21,13 +21,11 @@
 
 from turbogears import controllers, expose, flash, identity, redirect
 from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json, utility, num2stres
+from turboaffiliate import model, json, num2stres
 from datetime import date
 from decimal import *
 from mx.DateTime import *
 import copy
-# import logging
-# log = logging.getLogger("webac.controllers")
 
 class Deduction(controllers.Controller):
 	
@@ -61,7 +59,7 @@ class Deduction(controllers.Controller):
 			deduction = model.Deduction(**kw)
 		
 		except model.SQLObjectNotFound:
-			flash('El prÃ©stamo no se ha encontrado')
+			flash('El pr�stamo no se ha encontrado')
 			raise redirect('/loan')
 		
 		except ValueError:
@@ -266,7 +264,7 @@ class Loan(controllers.Controller):
 			raise redirect('/loan')
 		
 		except ValueError:
-			flash(u'NÃºmero de Afiliado invalido')
+			flash('Número de Afiliado invalido')
 			raise redirect('/loan')
 	
 	@identity.require(identity.not_anonymous())
@@ -386,36 +384,13 @@ class Loan(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
-	def refin(self, **kw):
-	
-		try:
-			loan = model.Loan.get(int(kw['loan']))
-		except model.SQLObjectNotFound:
-			flash(u'No se encontrÃ³ el prestamo')
+	def refinance(self, loan):
 		
-		del kw['loan']
-		kw['amount'] = Decimal(kw['amount'].replace(',', ''))
-		
-		if loan.debt > kw['amount']:
-			flash('El monto del nuevo prÃ©stamo no es mayor o igual al anterior')
-			raise redirect('/loan/refinance/%s' % (loan.id))
-		
-		try:
-			kw['aval'] = loan.aval
-			kw['affiliate'] = loan.affiliate
-		except model.SQLObjectNotFound:
-			pass
-		
-		loan.remove()
-		
-		loan = model.Loan(**kw)
-		
-		ded = {}
-		ded['amount'] = kw['amount']
-		ded['name'] = "Retencion por Prestamo"
-		ded['loan'] = loan
-		ded = model.Deduction(**ded)
-		raise redirect('/loan/%s' %s (loan.id))
+		loan = model.Loan.get(int(loan))
+		affiliate = loan.affiliate()
+		loan.refinance()
+		flash('El prestamo anterior ha sido movido a refinanciamiento')
+		raise redirect('/loan/add/%s' % affiliate.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.pagare')
@@ -426,11 +401,11 @@ class Loan(controllers.Controller):
 			return dict(loan=loan)
 		
 		except model.SQLObjectNotFound:
-			flash('No se encontrÃ³ el prÃ©stamo')
+			flash('No se encontró el préstamo')
 			raise redirect('/loan')
 		
 		except ValueError:
-			flash('No se encontrÃ³ el prÃ©stamo')
+			flash('No se encontró el préstamo')
 			raise redirect('/loan')
 	
 	@identity.require(identity.not_anonymous())
@@ -441,11 +416,11 @@ class Loan(controllers.Controller):
 			return dict(loan=loan)
 		
 		except model.SQLObjectNotFound:
-			flash('No se encontrÃ³ el prÃ©stamo')
+			flash('No se encontró el préstamo')
 			raise redirect('/loan')
 		
 		except ValueError:
-			flash('No se encontrÃ³ el prÃ©stamo')
+			flash('No se encontró el préstamo')
 			raise redirect('/loan')
 	
 	@identity.require(identity.not_anonymous())

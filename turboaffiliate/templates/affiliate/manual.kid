@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
 	import locale
-	locale.setlocale(locale.LC_ALL, "en-US")
+	locale.setlocale(locale.LC_ALL, "S")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#"
     py:extends="'../master.kid'">
@@ -29,7 +29,7 @@
 			<tbody>
 				<tr py:for="extra in affiliate.extras">
 					<td py:content="extra.account.name" />
-					<td py:content="locale.format('%s', extra.amount, True)" />
+					<td py:content="locale.currency(extra.amount)" />
 					<td><a href="${tg.url('/affiliate/postextra/%s' % extra.id)}">X</a></td>
 				</tr>
 			</tbody>
@@ -46,7 +46,7 @@
 			<tbody>
 				<tr py:for="loan in affiliate.loans">
 					<td py:content="loan.id" />
-					<td py:content="locale.format('%s', loan.get_payment(), True)" />
+					<td py:content="locale.currency(loan.get_payment())" />
 					<td><a href="${tg.url('/affiliate/postloan/%s' % loan.id)}">X</a></td>
 				</tr>
 			</tbody>

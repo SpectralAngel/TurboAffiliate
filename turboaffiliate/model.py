@@ -94,13 +94,12 @@ class Affiliate(SQLObject):
 	
 	# History of cuota payment
 	cuotaTables = MultipleJoin("CuotaTable", orderBy='year')
-	
 	# Active loans
 	loans = MultipleJoin("Loan", orderBy='startDate')
-	
 	# Payed loans
 	payedLoans = MultipleJoin("PayedLoan", orderBy='startDate')
-	
+	# Refinanced Loans
+	refinancedLoans = MultipleJoin("RefinancedLoan", orderBy='startDate')
 	extras = MultipleJoin("Extra")
 	flyers = MultipleJoin("Flyer")
 	deduced = MultipleJoin("Deduced")
@@ -467,8 +466,8 @@ class Loan(SQLObject):
 	
 	def percent(self):
 	
-		x = (Decimal(str(self.debt)) * Decimal(100)).quantize(dot01)
-		total = x / Decimal(str(self.capital)).quantize(dot01)
+		x = (Decimal(self.debt) * Decimal(100)).quantize(dot01)
+		total = x / Decimal(self.capital).quantize(dot01)
 		return total
 	
 	def get_payment(self):
@@ -480,6 +479,33 @@ class Loan(SQLObject):
 	def start(self):
 	
 		self.debt = self.capital
+	
+	def refinance(self):
+		
+		kw = {}
+		kw['id'] = self.id
+		kw['affiliate'] = self.affiliate
+		kw['capital'] = self.capital
+		kw['letters'] = self.letters
+		kw['debt'] = self.debt
+		kw['payment'] = self.payment
+		kw['interest'] = self.interest
+		kw['months'] = self.months
+		kw['last'] = self.last
+		kw['number'] = self.number
+		kw['startDate'] = self.startDate
+		
+		refinancedLoan = RefinancedLoan(**kw)
+		
+		for pay in self.pays:
+			pay.refinance(refinancedLoan)
+		
+		for deduction in self.deductions:
+			deduction.refinace(refinancedLoan)
+		
+		refinancedLoan.debt = refinancedLoan.get_payment()
+		
+		self.destroySelf()
 	
 	def pay(self, amount, receipt, day=date.today()):
 		
@@ -581,29 +607,12 @@ class Loan(SQLObject):
 		kw['startDate'] = self.startDate
 		kw['payment'] = self.payment
 		payed = PayedLoan(**kw)
-		kw = {}
-		kw['payedLoan'] = payed
 		
 		for pay in self.pays:
-			kw['day'] = pay.day
-			kw['capital'] = pay.capital
-			kw['interest'] = pay.interest
-			kw['amount'] = pay.amount
-			kw['receipt'] = pay.receipt
-			kw['month'] = pay.month
-			pay.destroySelf()
-			OldPay(**kw)
-		
-		kw = {}
-		kw['payedLoan'] = payed
+			pay.remove(payed)
 		
 		for deduction in self.deductions:
-			kw['name'] = deduction.name
-			kw['amount'] = deduction.amount
-			kw['account'] = deduction.account
-			kw['description'] = deduction.description
-			PayedDeduction(**kw)
-			deduction.destroySelf()
+			deduction.remove(payed)
 		
 		self.destroySelf()
 	
@@ -653,6 +662,33 @@ class Pay(SQLObject):
 	amount = CurrencyCol(default=0, notNone=True)
 	receipt = StringCol()
 	month = StringCol(default="")
+	
+	def refinance(self, refinancedLoan):
+		
+		kw = {}
+		kw['refinacedLoan'] = refinacedLoan
+		kw['day'] = self.day
+		kw['capital'] = self.capital
+		kw['interest'] = self.interest
+		kw['amount'] = self.amount
+		kw['receipt'] = self.receipt
+		kw['month'] = self.month
+		
+		refinancedPay = RefinancedPay(**kw)
+		self.destroySelf()
+	
+	def remove(self, payedLoan):
+		
+		kw = {}
+		kw['payedLoan'] = payedLoan
+		kw['day'] = self.day
+		kw['capital'] = self.capital
+		kw['interest'] = self.interest
+		kw['amount'] = self.amount
+		kw['receipt'] = self.receipt
+		kw['month'] = self.month
+		self.destroySelf()
+		OldPay(**kw)
 
 class Account(SQLObject):
 	
@@ -814,6 +850,29 @@ class Deduction(SQLObject):
 	amount = CurrencyCol()
 	account = ForeignKey("Account")
 	description = StringCol()
+	
+	def refinance(self, refinancedLoan):
+		
+		kw = {}
+		kw['refinancedLoan'] = refinancedLoan
+		kw['name'] = self.name
+		kw['amount'] = self.amount
+		kw['account'] = self.account
+		kw['description'] = self.description
+		
+		refinanedDeduction = RefinancedDeduction(**kw)
+		self.destroySelf()
+	
+	def remove(self, payedLoan):
+		
+		kw = {}
+		kw['payedLoan']
+		kw['name'] = self.name
+		kw['amount'] = self.amount
+		kw['account'] = self.account
+		kw['description'] = self.description
+		PayedDeduction(**kw)
+		deduction.destroySelf()
 
 class Company(SQLObject):
 	name = UnicodeCol()
@@ -996,6 +1055,178 @@ class PayedDeduction(SQLObject):
 		kw['account'] = self.account
 		Deduction(**kw)
 		self.destroySelf()
+
+class RefinancedLoan(SQLObject):
+	
+	"""Data concerning to Loans that have been covered with another loan"""
+	
+	affiliate = ForeignKey("Affiliate")
+	
+	capital = CurrencyCol(default=0, notNone=True)
+	letters = StringCol()
+	debt = CurrencyCol(default=0, notNone=True)
+	payment = CurrencyCol(default=0, notNone=True)
+	interest = DecimalCol(default=20, notNone=True, size=4, precision=2)
+	months = IntCol()
+	last = DateCol(default=datetime.now)
+	number = IntCol(default=0)
+	
+	startDate = DateCol(notNone=True, default=datetime.now)
+	aproved = BoolCol(default=False)
+	
+	pays = MultipleJoin("RefinancedPay", orderBy="day")
+	deductions = MultipleJoin("RefinancedDeduction")
+	
+	def get_payment(self):
+	
+		if self.debt < self.payment:
+			return self.debt
+		return self.payment
+	
+	def pay(self, amount, receipt, day=date.today()):
+		
+		"""Charges a normal payment for the loan
+		
+		Calculates the composite interest and acredits the made payment
+		"""
+		
+		amount = Decimal(amount).quantize(dot01)
+		
+		# When the amount to pay is bigger or equal the debt, it is considered the last payment, so interests are not
+		# calculated
+		if(self.debt <= amount):
+			
+			self.last = day
+			# Register the payment in the database
+			Pay(capital=amount, day=day, receipt=receipt, amount=amount, loan=self)
+			# Remove the loan and convert it to PayedLoan
+			self.remove()
+			return True
+		
+		# Otherwise calculate interest for the loan's payment
+		ints = (self.debt * self.interest / 1200).quantize(dot01)
+		# Increase the loans debt by the interest
+		self.debt += ints
+		# Decrease debt by the payment amount
+		self.debt -= amount
+		# Calculate how much money was used to pay the capital
+		capital = amount - ints
+		# Change the last payment date
+		self.last = day
+		# Register the payment in the database
+		Pay(capital=amount, day=day, receipt=receipt, interest=interests,
+			amount=amount, loan=self)
+		# Increase the number of payments by one
+		self.number += 1
+		
+		if self.debt == 0:
+			self.remove()
+			return True
+		
+		return False
+	
+	def payfree(self, amount, receipt, day=date.today()):
+		
+		"""Creates a new payment for the loan without chargin interes"""
+		
+		amount = Decimal(amount).quantize(dot01)
+		
+		# When the amount to pay is bigger or equal the debt, it is considered the last payment, so interests are not
+		# calculated
+		if(self.debt <= amount):
+			
+			self.last = day
+			# Register the payment in the database
+			RefinancedPay(capital=amount, day=day, receipt=receipt, amount=amount, loan=self)
+			# Remove the loan and convert it to PayedLoan
+			self.remove()
+			return True
+		
+		# Otherwise calculate interest for the loan's payment
+		interests = 0
+		# Increase the loans debt by the interest
+		self.debt += interests
+		# Decrease debt by the payment amount
+		self.debt -= amount
+		# Calculate how much money was used to pay the capital
+		capital = amount - interests
+		# Change the last payment date
+		self.last = day
+		# Register the payment in the database
+		RefinancedPay(capital=amount, day=day, interest=interests, receipt=receipt,
+			amount=amount, loan=self)
+		# Increase the number of payments by one
+		self.number += 1
+		
+		if self.debt == 0:
+			self.remove()
+			return True
+		
+		return False
+	
+	def remove(self):
+		
+		kw = {}
+		kw['id'] = self.id
+		kw['affiliate'] = self.affiliate
+		kw['capital'] = self.capital
+		kw['letters'] = self.letters
+		kw['interest'] = self.interest
+		kw['months'] = self.months
+		kw['last'] = self.last
+		kw['startDate'] = self.startDate
+		kw['payment'] = self.payment
+		payed = PayedLoan(**kw)
+		
+		for pay in self.pays:
+			pay.remove(payed)
+		
+		for deduction in self.deductions:
+			deduction.remove(payed)
+		
+		self.destroySelf()
+
+class RefinancedDeduction(SQLObject):
+	
+	loan = ForeignKey("Loan")
+	name = StringCol()
+	amount = CurrencyCol()
+	account = ForeignKey("Account")
+	description = StringCol()
+	
+	def remove(self, payedLoan):
+		
+		kw = {}
+		kw['payedLoan']
+		kw['name'] = self.name
+		kw['amount'] = self.amount
+		kw['account'] = self.account
+		kw['description'] = self.description
+		PayedDeduction(**kw)
+		deduction.destroySelf()
+
+class RefinancedPay(SQLObject):
+	
+	refinancedLoan = ForeignKey("RefinancedLoan")
+	day = DateCol(default=datetime.now)
+	capital = CurrencyCol(default=0, notNone=True)
+	interest = CurrencyCol(default=0, notNone=True)
+	amount = CurrencyCol(default=0, notNone=True)
+	receipt = StringCol()
+	month = StringCol(default="")
+	
+	def remove(self, payedLoan):
+		
+		kw = {}
+		kw['payedLoan'] = payedLoan
+		kw['day'] = self.day
+		kw['capital'] = self.capital
+		kw['interest'] = self.interest
+		kw['amount'] = self.amount
+		kw['receipt'] = self.receipt
+		kw['month'] = self.month
+		self.destroySelf()
+		OldPay(**kw)
 
 class Deduced(SQLObject):
 	

@@ -2,13 +2,12 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
 	import locale
-	locale.setlocale(locale.LC_ALL, "en-US")
+	locale.setlocale(locale.LC_ALL, "")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#">
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Afiliados</title>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print"/>
 	</head>
 	<body>
 		<h3>COPEMH</h3>
@@ -31,7 +30,7 @@
 					<td><a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">${affiliate.id}</a></td>
 					<td py:content="affiliate.escalafon" />
 					<td py:content="affiliate.lastName, ' ', affiliate.firstName" />
-					<td py:content="affiliate.total(month, year)" />
+					<td py:content="locale.currency(affiliate.total(month, year))" />
 					<td class="noprint"><a href="${affiliate.link(year, month)}">X</a></td>
 				</tr>
 			</tbody>

@@ -29,8 +29,8 @@
 					<td><a class="print" href="${tg.url('/loan/%s' % loan.id)}" py:content="loan.id"  /></td>
 					<td py:content="loan.affiliate.id" />
 					<td py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
-					<td py:content="locale.format('%s', loan.capital, True)" />
-					<td py:content="locale.format('%s', loan.debt, True)" />
+					<td py:content="locale.currency(loan.capital)" />
+					<td py:content="locale.currency(loan.debt)" />
 					<td py:content="loan.startDate" />
 				</tr>
 			</tbody>
@@ -39,8 +39,8 @@
 					<td>Cantidad</td>
 					<td py:content="count" />
 					<td></td>
-					<td py:content="locale.format('%s', capital, True)" />
-					<td py:content="locale.format('%s', debt, True)" />
+					<td py:content="locale.currency(capital)" />
+					<td py:content="locale.currency(debt)" />
 					<td></td>
 				</tr>
 			</tfoot>

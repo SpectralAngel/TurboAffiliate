@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
 	import locale
-	locale.setlocale(locale.LC_ALL, "en-US")
+	locale.setlocale(locale.LC_ALL, "")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#"
     py:extends="'../master.kid'">
@@ -33,15 +33,15 @@
 			</li>
 			<li>
 				<strong>Pago Mensual:</strong>
-				<span py:content="'L.', locale.format('%s', loan.payment, True)" />
+				<span py:content="locale.currency(loan.payment)" />
 			</li>
 			<li>
 				<strong>Monto Original:</strong>
-				<span py:content="'L.', locale.format('%s', loan.capital, True)" />
+				<span py:content="locale.currency(loan.capital)" />
 			</li>
 			<li>
 				<strong>Monto Debido</strong>
-				<span py:content="'L.', locale.format('%s', loan.debt, True)" />
+				<span py:content="locale.currency(loan.debt)" />
 			</li>
 		</ul>
 		<ul>
@@ -74,9 +74,9 @@
 			<tbody>
 				<tr py:for="pay in loan.pays">
 					<th py:content="pay.day" />
-					<th py:content="'L.', locale.format('%s', pay.interest, True)" />
-					<th py:content="'L.', locale.format('%s', pay.capital, True)" />
-					<th py:content="'L.', locale.format('%s', pay.amount, True)" />
+					<th py:content="locale.currency(pay.interest)" />
+					<th py:content="locale.currency(pay.capital)" />
+					<th py:content="locale.currency(pay.amount)" />
 				</tr>
 			</tbody>
 		</table>

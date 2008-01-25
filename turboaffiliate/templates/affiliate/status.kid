@@ -2,23 +2,21 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
 	import locale
-	locale.setlocale(locale.LC_ALL, "en-US")
+	locale.setlocale(locale.LC_ALL, "")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#">
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Afiliados</title>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print"/>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" media="print"/>
 	</head>
 	<body>
-		<center><h3>COPEMH</h3>
-		<h4>Estado de Cuenta Aportaciones</h4>
-		<div><strong>Al ${day.day}/${day.month}/${day.year}</strong></div>
-		<h4>${affiliate.id} ${affiliate.firstName} ${affiliate.lastName}</h4>
-		<div>Afiliado desde ${affiliate.joined.day}/${affiliate.joined.month}/${affiliate.joined.year}</div>
-		<br />
-		</center>
+		<div style="text-align: center">
+			<h3>COPEMH</h3>
+			<h4>Estado de Cuenta Aportaciones</h4>
+			<div><strong py:content="'Al', day.strftime('%A %d de %B de %Y')" /></div>
+			<h4 py:content="affiliate.id, ' ', affiliate.firstName, ' ', affiliate.lastName " />
+			<span>Afiliado desde </span><span py:content="affiliate.joined.day.strftime('%A %d de %B de %Y')" />
+		</div>
 		<table class="small" width="100%">
 			<thead>
 				<tr>
@@ -65,8 +63,8 @@
 			<tfoot>
 				<tr class="total">
 					<td colspan="13">&nbsp;</td>
-					<td class="deuda" py:content="locale.format('%s', sum(table.payed() for table in affiliate.cuotaTables), True)" />
-					<td class="deuda" py:content="locale.format('%s', sum(table.debt() for table in affiliate.cuotaTables), True)" />
+					<td class="deuda" py:content="locale.currency(sum(table.payed() for table in affiliate.cuotaTables))" />
+					<td class="deuda" py:content="locale.currency(sum(table.debt() for table in affiliate.cuotaTables))" />
 				</tr>
 			</tfoot>
 		</table>

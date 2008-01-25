@@ -21,12 +21,10 @@
 
 from turbogears import controllers, expose, flash, identity, redirect
 from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json, utility
+from turboaffiliate import model, json
 from datetime import date
 from mx.DateTime import *
 from decimal import *
-# import logging
-# log = logging.getLogger("webac.controllers")
 
 class Line(controllers.Controller):
 	

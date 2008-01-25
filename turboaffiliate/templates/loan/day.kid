@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
 	import locale
-	locale.setlocale(locale.LC_ALL, "en-US")
+	locale.setlocale(locale.LC_ALL, "")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#"
     py:extends="'../master.kid'">
@@ -12,7 +12,7 @@
 		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print"/>
 	</head>
 	<body>
-		<h1 py:content="'Prestamos Otorgados el dia %s/%s/%s' % (day.day, day.month, day.year)" />
+		<h1 py:content="'Prestamos Otorgados el dia', day.strftime('%d/%m/%y')" />
 		<div py:for="loan in loans">
 		<h3 py:content="'Pr&eacute;stamo N&uacute;mero ', loan.id" />
 			<ul>
@@ -23,11 +23,11 @@
 				</li>
 				<li>
 					<strong>Monto Original:</strong>
-					<span py:content="'L.', locale.format('%s',loan.capital, True)" />
+					<span py:content="locale.currency(loan.capital)" />
 				</li>
 			</ul>
 		</div>
 		<strong>Monto Total:</strong>
-		<span py:content="'L.', locale.format('%s',amount, True)" />
+		<span py:content="locale.currency(amount)" />
 	</body>
 </html>

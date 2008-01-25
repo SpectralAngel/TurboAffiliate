@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
 	import locale
@@ -109,20 +109,26 @@
 		<h3 py:if="len(affiliate.extras) != 0">Deducciones Extra</h3>
 		<ul py:if="len(affiliate.extras) != 0">
 			<li py:for="extra in affiliate.extras">
-				<span py:content="extra.account.name" /> <span py:content="'L. ', locale.format('%s', extra.amount, True)" />
+				<span py:content="extra.account.name" /> <span py:content="locale.currency(extra.amount)" />
 				<a href="${tg.url('/affiliate/extra/delete/%s' % extra.id)}">Eliminar</a>
 			</li>
 		</ul>
 		<div id="loan" py:for="loan in affiliate.loans">
 			<h3>Pr&eacute;stamo</h3>
-			<span py:content="'Monto Total: L.', locale.format('%s', loan.capital, True)" />
-			<span py:content="'Monto Adeudado: L.', locale.format('%s', loan.debt, True)" />
+			<span py:content="'Monto Total: ', locale.currency(loan.capital)" />
+			<span py:content="'Monto Adeudado: ', locale.currency(loan.debt)" />
 			<a href="${tg.url('/loan/%s' % loan.id)}" >Ver Pr&eacute;stamo</a>
+		</div>
+		<div id="loan" py:for="loan in affiliate.refinancedLoans">
+			<h3>Pr&eacute;stamo Refinanciado</h3>
+			<span py:content="'Monto Total: ', locale.currency(loan.capital)" />
+			<span py:content="'Monto Adeudado: ', locale.currency(loan.debt)" />
+			<a href="${tg.url('/refinanced/%s' % loan.id)}" >Ver Pr&eacute;stamo</a>
 		</div>
 		<div id="loan" py:for="loan in affiliate.payedLoans">
 			<h3>Pr&eacute;stamo Pagado</h3>
-			<span py:content="'Monto Total: L.', locale.format('%s', loan.capital, True)" />
-			<span py:content="'Ultimo Pago: L.', loan.last" />
+			<span py:content="'Monto Total: ', locale.currency(loan.capital)" />
+			<span py:content="'Ultimo Pago: ', loan.last" />
 			<a href="${tg.url('/payed/%s' % loan.id)}" >Ver Pr&eacute;stamo</a>
 		</div>
 		<a href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a>

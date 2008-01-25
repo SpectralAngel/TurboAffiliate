@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
 	import locale
-	locale.setlocale(locale.LC_ALL, "en-US")
+	locale.setlocale(locale.LC_ALL, "")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#">
 	<head>
@@ -25,23 +25,23 @@
 					<td>0</td>
 					<td>Cuota Aportaciones Ordinarias</td>
 					<td py:content="count" />
-					<td py:content="'L.', locale.format('%s', count * obligation, True)" />
+					<td py:content="locale.currency(count * obligation)" />
 				</tr>
 				<tr>
 					<td>3</td>
 					<td>Cuota Ordinaria de Pr&eacute;tamo</td>
 					<td py:content="loan.qty" />
-					<td py:content="'L.', locale.format('%s', loan.amount, True)" />
+					<td py:content="'locale.currency(loan.amount)" />
 				</tr>
 				<tr py:for="key, value in resume.items()">
 					<td py:content="key.code"/>
 					<td py:content="key.name" />
 					<td py:content="value['number']" />
-					<td py:content="'L.', locale.format('%s', value['total'], True)" />
+					<td py:content="locale.currency(value['total'])" />
 				</tr>
 				<tr>
 					<td colspan="3">Total</td>
-					<td py:content="'L.', locale.format('%s', total, True)" />
+					<td py:content="locale.currency(totale)" />
 				</tr>
 			</tbody>
 		</table>

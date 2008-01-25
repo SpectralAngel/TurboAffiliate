@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
 	import locale
-	locale.setlocale(locale.LC_ALL, "en-US")
+	locale.setlocale(locale.LC_ALL, "")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#"
     py:extends="'../master.kid'">
@@ -13,7 +13,7 @@
 		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" />
 	</head>
 	<body>
-		<h1 py:content="'Pagos de Pr&eacute;stamos Efectuados entre %s/%s/%s y %s/%s/%s' % (start.day, start.month, start.year, end.day, end.month, end.year)" />
+		<h1 py:content="'Pagos de Pr&eacute;stamos Efectuados entre', start.strftime('%d/%m/%Y'), 'y ', end.strftime('%d/%m/%Y') " />
 		<table>
 			<thead>
 				<tr>
@@ -24,15 +24,15 @@
 			<tbody>
 				<tr>
 					<td>Capital</td>
-					<td py:content="'L. ', locale.format('%s', capital, True)" />
+					<td py:content="locale.currency(capital)" />
 				</tr>
 				<tr>
 					<td>Intereses</td>
-					<td py:content="'L. ', locale.format('%s', interest, True)" />
+					<td py:content="locale.currency(interest)" />
 				</tr>
 				<tr>
 					<td>Total</td>
-					<td py:content="'L. ', locale.format('%s', capital + interest, True)" />
+					<td py:content="locale.currency(capital + interest)" />
 				</tr>
 			</tbody>
 		</table>

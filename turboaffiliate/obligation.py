@@ -22,31 +22,24 @@
 
 from turbogears import controllers, expose, flash, identity, redirect
 from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json, utility
+from turboaffiliate import model, json
 from datetime import date
-from mx.DateTime import *
-# import logging
-# log = logging.getLogger("webac.controllers")
-
-cleaner = utility.Cleaner()
 
 class Obligation(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.obligation.index")
 	def index(self):
-		companies = [c for c in model.Company.select()]
-		accounts = [a for a in model.Account.select(orderBy="code")]
 		
-		return dict(companies=companies, accounts=accounts)
+		return dict(companies=model.Company.select(), accounts=model.Account.select(orderBy="code"))
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.obligation.obligation")
 	@expose("json")
 	def default(self, code):
-		cleaner.null([code])
+		
 		try:
-			obligation =  model.Obligation.get(code)
+			obligation =  model.Obligation.get(int(code))
 			return dict(obligation=obligation)
 		except model.SQLObjectNotFound:
 			flash('La obligación no se encontró')
@@ -55,9 +48,8 @@ class Obligation(controllers.Controller):
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.obligation.add")
 	def add(self):
-		companies = [c for c in model.Company.select()]
-		accounts = [a for a in model.Account.select(orderBy="code")]
-		return dict(companies=companies, accounts=accounts)
+		
+		return dict(companies=model.Company.select(), accounts=model.Account.select(orderBy="code"))
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.obligation.edit")
@@ -103,9 +95,8 @@ class Obligation(controllers.Controller):
 	@identity.require(identity.not_anonymous())
 	@expose()
 	def remove(self, code):
-		cleaner.null([code])
 		try:
-			obligation =  model.Obligation.get(code)
+			obligation =  model.Obligation.get(int(code))
 			obligation.destroySelf()
 		except model.SQLObjectNotFound:
 			flash('La obligación no se encontró')

@@ -21,14 +21,10 @@
 
 from turbogears import controllers, expose, flash, identity, redirect
 from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json, utility, obligation
-from turboaffiliate.plugin import translator
+from turboaffiliate import model, json, obligation
 from decimal import *
 from datetime import date
 from mx.DateTime import *
-import tempfile
-# import logging
-# log = logging.getLogger("webac.controllers")
 
 months = {
 			1:'Enero', 2:'Febrero', 3:'Marzo',

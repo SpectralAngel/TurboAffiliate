@@ -2,15 +2,13 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
 	import locale
-	locale.setlocale(locale.LC_ALL, "en-US")
+	locale.setlocale(locale.LC_ALL, "")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#"
     py:extends="'../master.kid'">
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>Recibos &bull; Corte de Caja</title>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" media="print"/>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print"/>
 	</head>
 	<body> 
 		<h1>Reporte de Cuotas Retrasadas</h1>
@@ -25,12 +23,12 @@
 				<tr py:for="key in retrasada.keys()">
 					<td py:content="'Cuota Retrasada L. %s' % key" />
 					<td py:content="retrasada[key]" />
-					<td py:content="'L.', locale.format('%s', key * retrasada[key], True)" />
+					<td py:content="locale.currency(key * retrasada[key])" />
 				</tr>
 			</tbody>
 			<tfoot>
 				<th colspan="2">Total</th>
-				<th py:content="'L.', locale.format('%s', total, True)" />
+				<th py:content="locale.currency(total)" />
 			</tfoot>
 		</table>
 	</body>

@@ -8,8 +8,6 @@
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Afiliados</title>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print"/>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/style.css')}" media="screen"/>
 		<style type="text/css">
 			h1
 			{

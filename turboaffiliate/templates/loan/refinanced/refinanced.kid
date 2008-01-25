@@ -9,11 +9,13 @@
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Pr&eacute;stamos</title>
+		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" media="print"/>
+		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print"/>
 	</head>
 	<body>
 		<div style="text-align: center;">
 			<div style="font-weight: bold; font-size: 180%">COPEMH</div>
-			<div style="font-weight: bold; font-size: 180%">Estado de Cuenta Pr&eacute;stamos</div>
+			<div style="font-weight: bold; font-size: 180%">Estado de Cuenta Pr&eacute;stamos Refinanciados</div>
 			<div py:content="'Pr&eacute;stamo N&uacute;mero ', loan.id" />
 			<span>Al: <span py:content="day.strftime('%A %d de %B de %Y')" /></span>
 		</div>
@@ -27,7 +29,7 @@
 			</li>
 			<li>
 				<strong>Fecha de Otorgamiento:</strong>
-				<span py:content="loan.startDate.strftime('%A %d de %B de %Y')" />
+				<span py:content="loan.startDate" />
 			</li>
 			<li>
 				<strong>Monto Original:</strong>
@@ -36,25 +38,16 @@
 		</ul>
 		<ul class="noprint">
 			<li class="link">
-				<a href="${tg.url('/loan/pay/add/%s' % loan.id)}">Agregar un Pago</a>
+				<a href="${tg.url('pay/add/%s' % loan.id)}">Agregar un Pago</a>
 			</li>
 			<li class="link">
 				<a href="${tg.url('/loan/pay/addfree/%s' % loan.id)}">Agregar un Pago sin Intereses</a>
 			</li>
 			<li class="link">
-				<a href="${'/loan/remove/%s' % loan.id}">Eliminar</a>
+				<a href="${'remove/%s' % loan.id}">Eliminar</a>
 			</li>
 			<li class="link">
-				<a href="${tg.url('/loan/pagare/%s' % loan.id)}">Ver Pagar&eacute;</a>
-			</li>
-			<li class="link">
-				<a href="${tg.url('/loan/receipt/%s' % loan.id)}">Ver Liquidaci&oacute;n</a>
-			</li>
-			<li class="link">
-				<a href="${tg.url('/loan/deduction/add/%s' % loan.id)}">A&ntilde;adir Deducci&oacute;n</a>
-			</li>
-			<li class="link">
-				<a href="${tg.url('/loan/view/%s' % loan.id)}">Modificar Datos del Pr&eacute;stamo</a>
+				<a href="${tg.url('view/%s' % loan.id)}">Modificar Datos del Pr&eacute;stamo</a>
 			</li>
 		</ul>
 		<table width="100%">
@@ -63,15 +56,15 @@
 			</tr>
 			<tr py:for="d in loan.deductions">
 				<td py:content="d.name" />
-				<td py:content="locale.currency(d.amount" />
+				<td py:content="locale.currency(d.amount)" />
 			</tr>
 			<tr>
 				<td>Total deducciones</td>
-				<td><strong py:content="locale.currency(sum(d.amount for d in loan.deductions))" /></td>
+				<td><strong py:content="locale.currency(sum(d.amount for d in loan.deductions)" /></td>
 			</tr>
 			<tr>
 				<td>Remanente o Monto Liquidado</td>
-				<td><strong py:content="locale.currency(loan.capital - sum(d.amount for d in loan.deductions)" /></td>
+				<td><strong py:content="locale.currency(loan.net())" /></td>
 			</tr>
 		</table>
 		<h4 py:if="len(loan.future()) != 0">Pagos a Efectuar</h4>
@@ -123,8 +116,8 @@
 					i = 1
 				?>
 				<tr py:for="pay in loan.pays">
-					<td py:content="pay.day.strftime('%d/%m/%Y')" />
-					<td py:content="i, '/', loan.months" />					
+					<td py:content="pay.day.strftime('%d/%m/%y')" />
+					<td py:content="i, '/', loan.months" />
 					<?python
 						i += 1
 					?>

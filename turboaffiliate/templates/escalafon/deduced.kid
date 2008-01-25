@@ -9,8 +9,6 @@
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Volantes y Deducciones</title>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" media="print"/>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print"/>
 	</head>
 	<body>
 		<h1>Deducciones de <span py:content="account.name" /> para el mes <span py:content="month" /> <span py:content="year" /></h1>
@@ -26,13 +24,13 @@
 				<tr py:for="d in deduced">
 					<td py:content="d.affiliate.id" />
 					<td py:content="d.affiliate.firstName, ' ', d.affiliate.lastName" />
-					<td py:content="'L. ', locale.format('%s', d.amount, True)" />
+					<td py:content="locale.currency(d.amount)" />
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
 					<th colspan="2">Total:</th>
-					<th py:content="'L. ', locale.format('%s', total, True)" />
+					<th py:content="locale.currency(total)" />
 				</tr>
 			</tfoot>
 		</table>

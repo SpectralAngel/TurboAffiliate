@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
 	import locale
-	locale.setlocale(locale.LC_ALL, "en-US")
+	locale.setlocale(locale.LC_ALL, "")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#">
 	<head>
@@ -35,8 +35,8 @@
 					<td><a href="${tg.url('/affiliate/%s' % affiliate.id)}">${affiliate.id}</a></td>
 					<td py:content="affiliate.lastName" />
 					<td py:content="affiliate.firstName" />
-					<td py:content="locale.format('%s', affiliate.debt(), True)" />
-					<td py:content="locale.format('%s', affiliate.loan(), True)" />
+					<td py:content="locale.currency(affiliate.debt())" />
+					<td py:content="locale.currency(affiliate.loan())" />
 				</tr>
 			</tbody>
 		</table>

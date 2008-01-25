@@ -8,8 +8,6 @@
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Afiliados</title>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" />
 	</head>
 	<body>
 		<h1>Pr&eacute;stamos por Liquidaci&oacute;n</h1>
@@ -29,8 +27,8 @@
 					<td py:content="loan.id" />
 					<td py:content="loan.affiliate.id" />
 					<td py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
-					<td py:content="locale.format('%s', loan.capital, True)" />
-					<td py:content="locale.format('%s', loan.net(), True)" />
+					<td py:content="locale.currency(loan.capital)" />
+					<td py:content="locale.currency(loan.net())" />
 					<td py:content="loan.startDate" />
 				</tr>
 			</tbody>
@@ -39,8 +37,8 @@
 					<td>Cantidad</td>
 					<td py:content="count" />
 					<td></td>
-					<td py:content="locale.format('%s', capital, True)" />
-					<td py:content="locale.format('%s', debt, True)" />
+					<td py:content="locale.currency(capital)" />
+					<td py:content="locale.currency(debt)" />
 					<td></td>
 				</tr>
 			</tfoot>

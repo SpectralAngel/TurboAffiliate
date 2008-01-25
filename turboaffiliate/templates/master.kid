@@ -11,6 +11,7 @@
 	    <title py:replace="''">Your title goes here</title>
 	    <meta py:replace="item[:]"/>
 	    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/style.css')}" media="screen" />
+	    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print" />
 	</head>
 	<body py:match="item.tag=='{http://www.w3.org/1999/xhtml}body'" py:attrs="item.items()">
 	    <div id="header">

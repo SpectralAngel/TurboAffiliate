@@ -2,14 +2,13 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
 	import locale
-	locale.setlocale(locale.LC_ALL, "en-US")
+	locale.setlocale(locale.LC_ALL, "")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#"
     py:extends="'../master.kid'">
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Pr&eacute;stamos</title>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print"/>
 	</head>
 	<body>
 		<h1 py:content="'Cartera Pr&eacute;stamos'" />
@@ -25,13 +24,13 @@
 				<td py:content="loan.id" />
 				<td py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
 				<td py:content="loan.affiliate.id" />
-				<td py:content="loan.capital" />
+				<td py:content="locale.currency(loan.capital)" />
 				<td py:content="loan.debt" />
 				<td py:content="loan.startDate" />
 			</tr>
 		</table>
 		<strong>Monto Total:</strong>
-		<span py:content="'L.', locale.format('%s',amount, True)" />
+		<span py:content="locale.currency(amount)" />
 		<br />
 		<strong>Prestamos Otorgados:</strong>
 		<span py:content="count" />
