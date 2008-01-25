@@ -28,12 +28,6 @@ from turbogears import identity
 from turboaffiliate import release
 from turboaffiliate import num2stres
 
-class AppConfigError(Exception):
-	pass
-
-class NotEnoughMoney(Exception):
-	pass
-
 dot01 = Decimal(".01")
 Zero = Decimal(0)
 
@@ -514,32 +508,34 @@ class Loan(SQLObject):
 		Calculates the composite interest and acredits the made payment
 		"""
 		
-		amount = Decimal(amount).quantize(dot01)
+		kw['amount'] = Decimal(amount).quantize(dot01)
+		kw['day'] = day
+		kw['receipt'] = receipt
+		kw['loan'] = self
 		
-		# When the amount to pay is bigger or equal the debt, it is considered the last payment, so interests are not
-		# calculated
+		# When the amount to pay is bigger or equal the debt, it is considered
+		# the last payment, so interests are not calculated
 		if(self.debt <= amount):
 			
-			self.last = day
+			self.last = kw['day']
 			# Register the payment in the database
-			Pay(capital=amount, day=day, receipt=receipt, amount=amount, loan=self)
+			Pay(**kw)
 			# Remove the loan and convert it to PayedLoan
 			self.remove()
 			return True
 		
 		# Otherwise calculate interest for the loan's payment
-		ints = (self.debt * self.interest / 1200).quantize(dot01)
+		kw['interest'] = (self.debt * self.interest / 1200).quantize(dot01)
 		# Increase the loans debt by the interest
 		self.debt += ints
 		# Decrease debt by the payment amount
-		self.debt -= amount
+		self.debt -= kw['amount']
 		# Calculate how much money was used to pay the capital
-		capital = amount - ints
+		kw['capital'] = kw['amount'] - ints
 		# Change the last payment date
 		self.last = day
 		# Register the payment in the database
-		Pay(capital=amount, day=day, receipt=receipt, interest=interests,
-			amount=amount, loan=self)
+		Pay(**kw)
 		# Increase the number of payments by one
 		self.number += 1
 		
@@ -551,34 +547,36 @@ class Loan(SQLObject):
 	
 	def payfree(self, amount, receipt, day=date.today()):
 		
-		"""Creates a new payment for the loan without chargin interes"""
+		"""Creates a new payment for the loan without chargin interest"""
 		
-		amount = Decimal(amount).quantize(dot01)
+		kw['amount'] = Decimal(amount).quantize(dot01)
+		kw['day'] = day
+		kw['receipt'] = receipt
+		kw['loan'] = self
 		
-		# When the amount to pay is bigger or equal the debt, it is considered the last payment, so interests are not
-		# calculated
+		# When the amount to pay is bigger or equal the debt, it is considered
+		# the last payment, so interests are not calculated
 		if(self.debt <= amount):
 			
-			self.last = day
+			self.last = kw['day']
 			# Register the payment in the database
-			Pay(capital=amount, day=day, receipt=receipt, amount=amount, loan=self)
+			Pay(**kw)
 			# Remove the loan and convert it to PayedLoan
 			self.remove()
 			return True
 		
 		# Otherwise calculate interest for the loan's payment
-		interests = 0
+		kw['interests'] = 0
 		# Increase the loans debt by the interest
 		self.debt += interests
 		# Decrease debt by the payment amount
 		self.debt -= amount
 		# Calculate how much money was used to pay the capital
-		capital = amount - interests
+		kw['capital'] = amount - interests
 		# Change the last payment date
 		self.last = day
 		# Register the payment in the database
-		Pay(capital=amount, day=day, interest=interests, receipt=receipt,
-			amount=amount, loan=self)
+		Pay(**kw)
 		# Increase the number of payments by one
 		self.number += 1
 		
@@ -1090,7 +1088,11 @@ class RefinancedLoan(SQLObject):
 		Calculates the composite interest and acredits the made payment
 		"""
 		
-		amount = Decimal(amount).quantize(dot01)
+		kw = {}
+		kw['amount'] = Decimal(amount).quantize(dot01)
+		kw['day'] = day
+		kw['receipt'] = receipt
+		kw['refinancedLoan'] = self
 		
 		# When the amount to pay is bigger or equal the debt, it is considered the last payment, so interests are not
 		# calculated
@@ -1098,24 +1100,23 @@ class RefinancedLoan(SQLObject):
 			
 			self.last = day
 			# Register the payment in the database
-			Pay(capital=amount, day=day, receipt=receipt, amount=amount, loan=self)
+			Pay(**kw)
 			# Remove the loan and convert it to PayedLoan
 			self.remove()
 			return True
 		
 		# Otherwise calculate interest for the loan's payment
-		ints = (self.debt * self.interest / 1200).quantize(dot01)
+		kw['interest'] = (self.debt * self.interest / 1200).quantize(dot01)
 		# Increase the loans debt by the interest
-		self.debt += ints
+		self.debt += kw['interest']
 		# Decrease debt by the payment amount
-		self.debt -= amount
+		self.debt -= kw['amount']
 		# Calculate how much money was used to pay the capital
-		capital = amount - ints
+		kw['capital'] = kw['amount'] - kw['interest']
 		# Change the last payment date
 		self.last = day
 		# Register the payment in the database
-		Pay(capital=amount, day=day, receipt=receipt, interest=interests,
-			amount=amount, loan=self)
+		Pay(**kw)
 		# Increase the number of payments by one
 		self.number += 1
 		
@@ -1127,34 +1128,37 @@ class RefinancedLoan(SQLObject):
 	
 	def payfree(self, amount, receipt, day=date.today()):
 		
-		"""Creates a new payment for the loan without chargin interes"""
+		"""Creates a new payment for the loan without chargin interests"""
 		
-		amount = Decimal(amount).quantize(dot01)
+		kw = {}
+		kw['amount'] = Decimal(amount).quantize(dot01)
+		kw['day'] = day
+		kw['receipt'] = receipt
+		kw['refinancedLoan'] = self
 		
 		# When the amount to pay is bigger or equal the debt, it is considered the last payment, so interests are not
 		# calculated
 		if(self.debt <= amount):
 			
-			self.last = day
+			self.last = kw['day']
 			# Register the payment in the database
-			RefinancedPay(capital=amount, day=day, receipt=receipt, amount=amount, loan=self)
+			RefinancedPay(**kw)
 			# Remove the loan and convert it to PayedLoan
 			self.remove()
 			return True
 		
 		# Otherwise calculate interest for the loan's payment
-		interests = 0
+		kw['interest'] = 0
 		# Increase the loans debt by the interest
 		self.debt += interests
 		# Decrease debt by the payment amount
-		self.debt -= amount
+		self.debt -= kw['amount']
 		# Calculate how much money was used to pay the capital
-		capital = amount - interests
+		kw['capital'] = kw['amount'] - interests
 		# Change the last payment date
 		self.last = day
 		# Register the payment in the database
-		RefinancedPay(capital=amount, day=day, interest=interests, receipt=receipt,
-			amount=amount, loan=self)
+		RefinancedPay(**kw)
 		# Increase the number of payments by one
 		self.number += 1
 		
@@ -1188,7 +1192,7 @@ class RefinancedLoan(SQLObject):
 
 class RefinancedDeduction(SQLObject):
 	
-	loan = ForeignKey("Loan")
+	refinancedloan = ForeignKey("RefinancedLoan")
 	name = StringCol()
 	amount = CurrencyCol()
 	account = ForeignKey("Account")

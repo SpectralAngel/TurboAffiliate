@@ -25,7 +25,6 @@ from turboaffiliate import model, json, num2stres
 from datetime import date
 from decimal import *
 from mx.DateTime import *
-import copy
 
 class Pay(controllers.Controller):
 	

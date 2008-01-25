@@ -56,6 +56,9 @@
 			<li class="link">
 				<a href="${tg.url('/loan/view/%s' % loan.id)}">Modificar Datos del Pr&eacute;stamo</a>
 			</li>
+			<li class="link">
+				<a href="${tg.url('/loan/refinance/%s' % loan.id)}">Refinanciar</a>
+			</li>
 		</ul>
 		<table width="100%">
 			<tr>
