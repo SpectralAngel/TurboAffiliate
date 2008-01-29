@@ -20,9 +20,14 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 import copy
+from turbogears.database import PackageHub
 from sqlobject import *
 from decimal import *
 from datetime import datetime, date
+from turboaffiliate import num2stres
+
+hub = PackageHub("turboaffiliate")
+__connection__ = hub
 
 class Affiliate(SQLObject):
 

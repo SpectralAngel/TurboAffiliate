@@ -19,14 +19,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-import copy
 from datetime import datetime, date
 from turbogears.database import PackageHub
 from decimal import *
 from sqlobject import *
 from turbogears import identity
 from turboaffiliate import release
-from turboaffiliate import num2stres
 from college import *
 
 dot01 = Decimal(".01")
