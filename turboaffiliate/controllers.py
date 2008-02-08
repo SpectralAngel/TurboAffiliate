@@ -1,4 +1,5 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
+# -*- coding: utf8 -*-
 #
 # controllers.py
 # This file is part of TurboAffiliate

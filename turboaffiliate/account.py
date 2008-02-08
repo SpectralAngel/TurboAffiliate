@@ -25,7 +25,6 @@ from cherrypy import request, response, NotFound, HTTPRedirect
 from turboaffiliate import model, json
 from datetime import date
 from decimal import *
-from mx.DateTime import *
 
 class Account(controllers.Controller):
 	

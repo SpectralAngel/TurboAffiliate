@@ -1,4 +1,5 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
+# -*- coding: utf8 -*-
 #
 # model.py
 # This file is part of TurboAffiliate
@@ -26,9 +27,6 @@ from sqlobject import *
 from turbogears import identity
 from turboaffiliate import release
 from college import *
-
-dot01 = Decimal(".01")
-Zero = Decimal(0)
 
 hub = PackageHub("turboaffiliate")
 __connection__ = hub

@@ -1,6 +1,6 @@
 # Release information about TurboAffiliate
 
-version = "0.8.2"
+version = "0.8.4"
 db_version = 7
 
 description = "An Affiliate Manager Program"

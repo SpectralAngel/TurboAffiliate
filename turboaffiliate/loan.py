@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf8 -*-
 #
 # loan.py
 # This file is part of TurboAffiliate
@@ -22,9 +23,8 @@
 from turbogears import controllers, expose, flash, identity, redirect
 from cherrypy import request, response, NotFound, HTTPRedirect
 from turboaffiliate import model, json, num2stres
-from datetime import date
+from datetime import date, datetime
 from decimal import *
-from mx.DateTime import *
 import copy
 
 class Deduction(controllers.Controller):
@@ -59,7 +59,7 @@ class Deduction(controllers.Controller):
 			deduction = model.Deduction(**kw)
 		
 		except model.SQLObjectNotFound:
-			flash('El pr�stamo no se ha encontrado')
+			flash('El préstamo no se ha encontrado')
 			raise redirect('/loan')
 		
 		except ValueError:
@@ -132,11 +132,11 @@ class Pay(controllers.Controller):
 			raise redirect('/loan/%s' % loan.id)
 		
 		except model.SQLObjectNotFound:
-			flash(u'No se encontrÃ³ el pago')
+			flash(u'No se encontró el pago')
 			raise redirect('/loan')
 		
 		except ValueError:
-			flash(u'No se encontrÃ³ el pago')
+			flash(u'No se encontró el pago')
 			raise redirect('/loan')
 		
 	
@@ -144,7 +144,7 @@ class Pay(controllers.Controller):
 	@expose()
 	def newfree(self, amount, day, code, receipt):
 		try:
-			day = Parser.DateFromString(day)
+			day = datetime.strptime(day, "%Y-%m-%d").date()
 			loan = model.Loan.get(code)
 			
 			if amount == '':
@@ -169,7 +169,7 @@ class Pay(controllers.Controller):
 	@expose()
 	def new(self, amount, day, code, receipt):
 		try:
-			day = Parser.DateFromString(day)
+			day = datetime.strptime(day, "%Y-%m-%d").date()
 			loan = model.Loan.get(code)
 			
 			if amount == '':
@@ -194,8 +194,8 @@ class Pay(controllers.Controller):
 	@expose(template='turboaffiliate.templates.loan.pay.resume')
 	def resume(self, start, end):
 		
-		start = Parser.DateFromString(start)
-		end = Parser.DateFromString(end)
+		start = datetime.strptime(start, "%Y-%m-%d").date()
+		end = datetime.strptime(end, "%Y-%m-%d").date()
 		
 		query = "pay.day >= '%s' and pay.day <= '%s'" % (start, end)
 		
@@ -255,7 +255,7 @@ class Loan(controllers.Controller):
 		try:
 			affiliate = model.Affiliate.get(int(cardID))
 			#if (date.today() - affiliate.joined).days < 365:
-			#	flash(u"El afiliado aÃºn no tiene un aÃ±o de afiliaciÃ³n")
+			#	flash(u"El afiliado aún no tiene un año de afiliación")
 			#	raise redirect('/affiliate/%s' % affiliate.id)
 			return dict(affiliate=affiliate)
 		
@@ -298,7 +298,7 @@ class Loan(controllers.Controller):
 			raise redirect('/loan')
 		
 		except ValueError:
-			flash(u'NÃºmero de Afiliado invalido')
+			flash(u'Número de Afiliado invalido')
 			raise redirect('/loan')
 		
 	@identity.require(identity.not_anonymous())
@@ -349,7 +349,7 @@ class Loan(controllers.Controller):
 		# loank['aval'] = model.Aval(**aval)
 		
 		loan = model.Loan(**loank)
-		flash(u'Se ha otorgado el prÃ©stamo')
+		flash(u'Se ha otorgado el préstamo')
 		raise redirect('/loan/%s' % (loan.id))
 	
 	@identity.require(identity.not_anonymous())
@@ -363,7 +363,7 @@ class Loan(controllers.Controller):
 			raise redirect('/payed/%s' % code)
 		
 		except model.SQLObjectNotFound:
-			flash(u'No se encontrÃ³ el prestamo')
+			flash(u'No se encontró el prestamo')
 			raise redirect('/loan')
 	
 	@identity.require(identity.not_anonymous())
@@ -432,7 +432,7 @@ class Loan(controllers.Controller):
 	@expose(template='turboaffiliate.templates.loan.day')
 	def day(self, day):
 		
-		day = Parser.DateFromString(day)
+		day = datetime.strptime(day, "%Y-%m-%d").date()
 		
 		loans = model.Loan.select(model.Loan.q.startDate==day)
 		amount = sum(l.capital for l in loans)
@@ -442,8 +442,8 @@ class Loan(controllers.Controller):
 	@expose(template='turboaffiliate.templates.loan.period')
 	def period(self, first, last):
 		
-		first = Parser.DateFromString(first)
-		last = Parser.DateFromString(last)
+		first = datetime.strptime(first, "%Y-%m-%d").date()
+		last = datetime.strptime(last, "%Y-%m-%d").date()
 		
 		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (first, last)
 		
@@ -456,8 +456,8 @@ class Loan(controllers.Controller):
 	@expose(template='turboaffiliate.templates.loan.cartera')
 	def cartera(self, first, last):
 		
-		first = Parser.DateFromString(first)
-		last = Parser.DateFromString(last)
+		first = datetime.strptime(first, "%Y-%m-%d").date()
+		last = datetime.strptime(last, "%Y-%m-%d").date()
 		
 		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (first, last)
 		
@@ -475,11 +475,11 @@ class Loan(controllers.Controller):
 			return dict(loan=loan)
 		
 		except model.SQLObjectNotFound:
-			flash(u'No se encontrÃ³ el prÃ©stamo')
+			flash(u'No se encontró el préstamo')
 			raise redirect('/loan')
 		
 		except ValueError:
-			flash(u'No se encontrÃ³ el prÃ©stamo')
+			flash(u'No se encontró el préstamo')
 			raise redirect('/loan')
 	
 	@identity.require(identity.not_anonymous())
@@ -510,8 +510,8 @@ class Loan(controllers.Controller):
 	@expose(template='turboaffiliate.templates.loan.monthly')
 	def monthly(self, start, end):
 		
-		start = Parser.DateFromString(start)
-		end = Parser.DateFromString(end)
+		start = datetime.strptime(start, "%Y-%m-%d").date()
+		end = datetime.strptime(end, "%Y-%m-%d").date()
 		
 		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (start, end)
 		
@@ -552,8 +552,8 @@ class Loan(controllers.Controller):
 	@expose(template='turboaffiliate.templates.loan.liquid')
 	def liquid(self, start, end):
 		
-		start = Parser.DateFromString(start)
-		end = Parser.DateFromString(end)
+		start = datetime.strptime(start, "%Y-%m-%d").date()
+		end = datetime.strptime(end, "%Y-%m-%d").date()
 		
 		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (start, end)
 		
@@ -590,7 +590,7 @@ class Loan(controllers.Controller):
 	@expose(template='turboaffiliate.templates.loan.bypay')
 	def byCapital(self, day):
 		
-		day = Parser.DateFromString(day)
+		day = datetime.strptime(day, "%Y-%m-%d").date()
 		
 		pays = model.Pay.select(model.Pay.q.day==day)
 		
@@ -603,8 +603,8 @@ class Loan(controllers.Controller):
 	@expose(template='turboaffiliate.templates.loan.resume')
 	def resume(self, start, end):
 		
-		start = Parser.DateFromString(start)
-		end = Parser.DateFromString(end)
+		start = datetime.strptime(start, "%Y-%m-%d").date()
+		end = datetime.strptime(end, "%Y-%m-%d").date()
 		
 		query = "pay.day >= '%s' and pay.day <= '%s'" % (start, end)
 		

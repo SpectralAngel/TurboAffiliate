@@ -24,7 +24,6 @@ from cherrypy import request, response, NotFound, HTTPRedirect
 from turboaffiliate import model, json, obligation
 from decimal import *
 from datetime import date
-from mx.DateTime import *
 
 months = {
 			1:'Enero', 2:'Febrero', 3:'Marzo',

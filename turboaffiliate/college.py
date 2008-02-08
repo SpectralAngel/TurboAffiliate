@@ -29,6 +29,9 @@ from turboaffiliate import num2stres
 hub = PackageHub("turboaffiliate")
 __connection__ = hub
 
+dot01 = Decimal(".01")
+Zero = Decimal(0)
+
 class Affiliate(SQLObject):
 
 	"""A person that is affiliated to a Company"""

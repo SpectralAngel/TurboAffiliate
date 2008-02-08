@@ -1,4 +1,5 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
+# -*- coding: utf8 -*-
 #
 # affiliate.py
 # This file is part of TurboAffiliate
@@ -21,177 +22,16 @@
 
 from turbogears import controllers, expose, flash, identity, redirect
 from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json
+from turboaffiliate import model, json, cuota, extra
 from decimal import *
-from datetime import date
-from mx.DateTime import *
-# import logging
-# log = logging.getLogger("webac.controllers")
-
-class Cuota(controllers.Controller):
-
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.cuota.add')
-	def pay(self, cardID):
-		try:
-			affiliate = model.Affiliate.get(int(cardID))
-			return dict(affiliate=affiliate)
-		except model.SQLObjectNotFound:
-				flash('No existe el Afiliado con Identidad %s' % cardID)
-				redirect('/affiliate')
-
-	@identity.require(identity.not_anonymous())
-	@expose()
-	def save(self, **kw):
-		kw['how'] = int(kw['how'])
-		
-		if kw['amount'] == '':
-			flash(u'Cantidad incorrecta')
-			raise redirect('/affiliate/cuota/pay/%s' % kw['affiliate'])
-		
-		kw['amount'] = Decimal(str(kw['amount']))
-		kw['day'] = Parser.DateFromString(kw['day'])
-		kw['year'] = kw['day'].year
-		kw['month'] = kw['day'].month
-		try:
-			
-			kw['affiliate'] = model.Affiliate.get(int(kw['affiliate']))
-			if kw['how'] == 1:
-				kw['affiliate'].pay_cuotas(kw['amount'])
-				raise redirect('/affiliate')
-			
-			if kw['how'] == 2:
-				kw['affiliate'].pay_cuota(kw['year'], kw['month'])
-				raise redirect("/receipt/add")
-			
-		except model.SQLObjectNotFound:
-			flash('No existe el Afiliado %s' % kw['affiliate'])
-
-		except ValueError:
-			flash(u'Numero de Afiliado invalido')
-			raise redirect('/affiliate')
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	def remove(self, id):
-		
-		try:
-			table = model.CuotaTable.get(int(id))
-			affiliate = table.affiliate
-			table.destroySelf()
-			raise redirect('/affiliate/status/%s' % affiliate.id)
-		except:
-			raise redirect('/affiliate')
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.cuota.edit')
-	def edit(self, code):
-		try:
-			table = model.CuotaTable.get(int(code))
-			return dict(table=table)
-		
-		except model.SQLObjectNotFound:
-			flash('No existe el Afiliado %s' % kw['affiliate'])
-			
-		except ValueError:
-			flash(u'Numero de Afiliado invalido')
-			raise redirect('/affiliate')
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	def change(self, **kw):
-
-		try:
-			table = model.CuotaTable.get(int(kw['id']))
-			del kw['id']
-			for n in range(1, 13):
-				try:
-					setattr(table, "month%s" % n, kw['month%s' % n])
-				except KeyError:
-					setattr(table, "month%s" % n, False)
-			
-		except model.SQLObjectNotFound:
-			flash('No existe el Afiliado %s' % kw['affiliate'])
-		
-		except ValueError:
-			flash(u'Numero de Afiliado invalido')
-			raise redirect('/affiliate')
-		
-		raise redirect('/affiliate/status/%s' % table.affiliate.id)
-
-class Extra(controllers.Controller):
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.extra.index')
-	def index(self):
-		return dict(accounts=model.Account.select())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.extra.add')
-	def add(self, affiliate):
-		
-		try:
-			affiliate = model.Affiliate.get(int(affiliate))
-			accounts = model.Account.select()
-		except model.SQLObjectNotFound:
-			raise redirect('/affiliate')
-		except ValueError:
-			raise redirect('/affiliate')
-		return dict(affiliate=affiliate, accounts=accounts)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	def save(self, **kw):
-		
-		try:
-			kw['affiliate'] = model.Affiliate.get(int(kw['affiliate']))
-			kw['account'] = model.Account.get(int(kw['account']))
-			kw['months'] = int(kw['months'])
-			extra = model.Extra(**kw)
-			raise redirect('/affiliate/%s' % kw['affiliate'].id)
-		except model.SQLObjectNotFound:
-			raise redirect('/affiliate')
-		except ValueError:
-			raise redirect('/affiliate')
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	def many(self, **kw):
-		try:
-			kw['account'] = model.Account.get(int(kw['account']))
-			kw['months'] = int(kw['months'])
-			first = int(kw['first'])
-			last = int(kw['last']) + 1
-			del kw['last']
-			del kw['first']
-			for n in range(first, last):
-				try:
-					kw['affiliate'] = model.Affiliate.get(n)
-				except model.SQLObjectNotFound:
-					pass
-				extra = model.Extra(**kw)
-			raise redirect('/affiliate')
-		except model.SQLObjectNotFound:
-			raise redirect('/affiliate')
-		except ValueError:
-			raise redirect('/affiliate')
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	def delete(self, code):
-		
-		try:
-			extra = model.Extra.get(int(code))
-			extra.destroySelf()
-		except:
-			raise redirect('/affiliate')
+from datetime import date, datetime
 
 class Affiliate(controllers.Controller):
 	
 	"""Manage Affiliate data"""
 	
-	cuota = Cuota()
-	extra = Extra()
+	cuota = cuota.Cuota()
+	extra = extra.Extra()
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.index')
@@ -264,13 +104,13 @@ class Affiliate(controllers.Controller):
 			flash(u'No se escribio un número de identidad')
 			raise redirect('affiliate/add')
 			
-		kw['birthday'] = Parser.DateFromString(kw['birthday'])
+		kw['birthday'] = datetime.strptime(kw['birthday'], "%Y-%m-%d").date()
 		kw['escalafon'] = kw['escalafon'].upper()
 		
 		try:
 			affiliate = model.Affiliate.get(int(kw['affiliate']))
 			del kw['affiliate']
-			kw['joined'] = Parser.DateFromString(kw['joined'])
+			kw['joined'] = datetime.strptime(kw['joined'], "%Y-%m-%d").date()
 			
 			for key in kw.keys():
 				setattr(affiliate, key, kw[key])
@@ -312,7 +152,7 @@ class Affiliate(controllers.Controller):
 			flash('No existe el Afiliado %s' % cardID)
 		
 		except ValueError:
-			flash(u'NÃºmero de Afiliado invalido')
+			flash(u'Número de Afiliado invalido')
 			raise redirect('/affiliate')
 		
 		redirect('/afiliate')
@@ -339,13 +179,13 @@ class Affiliate(controllers.Controller):
 			affiliate = model.Affiliate.select(model.Affiliate.q.cardID==cardID)
 			
 			if affiliate.count() == 0:
-				flash(u'NÃºmero de identidad no encontrado')
+				flash(u'Número de identidad no encontrado')
 				raise redirect('/affiliate')
 			
 			raise redirect('/affiliate/%s' % affiliate[0].id)
 		
 		except ValueError:
-			flash(u'NÃºmero de Afiliado invalido')
+			flash(u'Número de Afiliado invalido')
 			raise redirect('/affiliate')
 		
 		redirect('/affiliate')
@@ -376,10 +216,10 @@ class Affiliate(controllers.Controller):
 			affiliate.active = True
 		
 		except model.SQLObjectNotFound:
-			flash('El nÃºmero de identidad %s no se encontrÃ³.' % cardID)
+			flash('El número de afiliado %s no se encontró³.' % cardID)
 		
 		except ValueError:
-			flash(u'NÃºmero de Afiliado invalido')
+			flash('Número de Afiliado invalido')
 			raise redirect('/affiliate')
 		
 		raise redirect('/affiliate/%s' % cardID)
@@ -409,11 +249,11 @@ class Affiliate(controllers.Controller):
 			return dict(affiliate=affiliate, day=date.today())
 		
 		except model.SQLObjectNotFound:
-			flash(u'No se encontrÃ³ el afiliado')
+			flash(u'No se encontró el afiliado')
 			raise redirect('/affiliate')
 		
 		except ValueError:
-			flash(u'NÃºmero de Afiliado invalido')
+			flash(u'Número de Afiliado invalido')
 			raise redirect('/affiliate')
 	
 	@identity.require(identity.not_anonymous())
@@ -424,10 +264,10 @@ class Affiliate(controllers.Controller):
 			affiliate = model.Affiliate.get(int(code))
 		
 		except model.SQLObjectNotFound:
-			flash(u'El nÃºmero de identidad %s no se encontrÃ³' % code)
+			flash('El número de identidad %s no se encontró' % code)
 
 		except ValueError:
-			flash(u'NÃºmero de Afiliado invalido')
+			flash('Número de Afiliado invalido')
 			raise redirect('/affiliate')
 		
 		else:
@@ -566,8 +406,8 @@ class Affiliate(controllers.Controller):
 	@expose(template='turboaffiliate.templates.affiliate.show')
 	def byDate(self, start, end):
 		
-		start = Parser.DateFromString(start)
-		end = Parser.DateFromString(end)
+		start = datetime.strptime(start, "%Y-%m-%d").date()
+		end = datetime.strptime(end, "%Y-%m-%d").date
 		query = "affiliate.joined >= '%s' and affiliate.joined <= '%s'" % (start, end)
 		affiliates = model.Affiliate.select(query)
 		return dict(affiliates=affiliates, start=start, end=end, show="Fecha de Afiliaci&oacute;n", count=affiliates.count())
@@ -783,9 +623,9 @@ class Affiliate(controllers.Controller):
 		
 		try:
 			affiliate = model.Affiliate.get(kw['affiliate'])
-			affiliate.jubilated = Parser.DateFromString(kw['jubilated'])
+			affiliate.jubilated = datetime.strptime(kw['jubilated'], "%Y-%m-%d").date()
 			affiliate.payment = "INPREMA"
-			flash(Parser.DateFromString(kw['jubilated']))
+			flash(affiliate.jubilated)
 			raise redirect('/affiliate/%s' % affiliate.id)
 		except:
 			raise redirect('/affiliate')

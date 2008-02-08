@@ -22,9 +22,8 @@
 from turbogears import controllers, expose, flash, identity, redirect
 from cherrypy import request, response, NotFound, HTTPRedirect
 from turboaffiliate import model, json, num2stres
-from datetime import date
+from datetime import date, datetime
 from decimal import *
-from mx.DateTime import *
 
 class Pay(controllers.Controller):
 	
@@ -69,7 +68,7 @@ class Pay(controllers.Controller):
 	@expose()
 	def new(self, **kw):
 		try:
-			day = Parser.DateFromString(kw['day'])
+			day = datetime.strptime(kw['day'], "%Y-%m-%d").date()
 			kw['payedLoan'] = model.PayedLoan.get(kw['payedLoan'])
 			
 			if kw['amount'] == '':

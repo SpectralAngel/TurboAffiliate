@@ -22,8 +22,7 @@
 from turbogears import controllers, expose, flash, identity, redirect
 from cherrypy import request, response, NotFound, HTTPRedirect
 from turboaffiliate import model, json
-from datetime import date
-from mx.DateTime import *
+from datetime import date,datetime
 from decimal import *
 
 class Line(controllers.Controller):
@@ -74,7 +73,7 @@ class Cuotas(controllers.Controller):
 	@expose(template="turboaffiliate.templates.receipt.cuotas.cuotas")
 	def default(self, **kw):
 		
-		day = Parser.DateFromString(kw['day'])
+		day = datetime.strptime(kw['day'], "%Y-%m-%d").date()
 		house = int(kw['house'])
 		
 		query = "receipt.day = '%s' and receipt.house_id = %s" % (day, house)
@@ -100,7 +99,7 @@ class Cuotas(controllers.Controller):
 	@expose(template="turboaffiliate.templates.receipt.cuotas.company")
 	def company(self, **kw):
 		
-		day = Parser.DateFromString(kw['day'])
+		day = datetime.strptime(kw['day'], "%Y-%m-%d").date()
 		house = int(kw['house'])
 		
 		query = "receipt.day = '%s' and receipt.house_id = %s" % (day, house)
@@ -138,7 +137,7 @@ class Cut(controllers.Controller):
 			flash(u'Valor No Válido')
 			raise redirect('/')
 		
-		day = Parser.DateFromString(kw['day'])
+		day = datetime.strptime(kw['day'], "%Y-%m-%d").date()
 		
 		a = model.Account.select()
 		accounts = {}
@@ -173,7 +172,7 @@ class Cut(controllers.Controller):
 			flash(u'Valor No Válido')
 			raise redirect('/')
 		
-		day = Parser.DateFromString(kw['day'])
+		day = Pdatetime.strptime(kw['day'], "%Y-%m-%d").date()
 		
 		a = model.Account.select()
 		accounts = {}
@@ -288,7 +287,7 @@ class Receipt(controllers.Controller):
 				del kw['day']
 			
 			else:
-				kw['day'] = Parser.DateFromString(kw['day'])
+				kw['day'] = datetime.strptime(kw['day'], "%Y-%m-%d").date()
 			
 			kw['id'] = int(kw['id'])
 			kw['house'] = model.House.get(int(kw['house']))
@@ -354,7 +353,7 @@ class Receipt(controllers.Controller):
 		
 		try:
 			house = model.House.get(int(house))
-			day = Parser.DateFromString(day)
+			day =datetime.strptime(day, "%Y-%m-%d").date()
 			query = "receipt.day = '%s' and receipt.house_id = %s and receipt.amount > 0" % (day, house.id)
 			receipts = model.Receipt.select(query)
 			return dict(house=house, receipts=receipts, day=day)

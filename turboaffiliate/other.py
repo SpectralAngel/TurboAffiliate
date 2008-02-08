@@ -24,7 +24,6 @@ from turbogears import controllers, expose, flash, identity, redirect
 from cherrypy import request, response, NotFound, HTTPRedirect
 from turboaffiliate import model, json
 from datetime import date
-from mx.DateTime import *
 
 class Reinteger(controllers.Controller):
 	

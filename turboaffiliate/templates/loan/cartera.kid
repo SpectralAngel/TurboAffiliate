@@ -25,7 +25,7 @@
 				<td py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
 				<td py:content="loan.affiliate.id" />
 				<td py:content="locale.currency(loan.capital)" />
-				<td py:content="loan.debt" />
+				<td py:content="locale.currency(loan.debt)" />
 				<td py:content="loan.startDate" />
 			</tr>
 		</table>
