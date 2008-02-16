@@ -23,13 +23,13 @@
 				<tr py:for="extra in extras">
 					<td py:content="extra.affiliate.id" />
 					<td py:content="extra.affiliate.firstName, '', extra.affiliate.lastName" />
-					<td py:content="locale.currency(extra.amount)" />
+					<td py:content="locale.currency(extra.amount, True, True)" />
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
 					<td>Total:</td>
-					<td py:content="locale.currency(sum(e.amount for e in extras))" />
+					<td py:content="locale.currency(sum(e.amount for e in extras), True, True)" />
 				</tr>
 			</tfoot>
 		</table>

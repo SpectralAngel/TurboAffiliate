@@ -25,10 +25,10 @@
 					<td py:content="account.account.code"/>
 					<td py:content="account.account.name" />
 					<td py:content="account.quantity" />
-					<td py:content="locale.currency(account.amount)" />
+					<td py:content="locale.currency(account.amount, True, True)" />
 				</tr>
 			</tbody>
 		</table>
-		<h2>Total de Ingresos: <span py:replace="locale.currency(report.total())" /></h2>
+		<h2>Total de Ingresos: <span py:replace="locale.currency(report.total(), True, True)" /></h2>
 	</body>
 </html>

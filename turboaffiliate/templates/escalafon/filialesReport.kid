@@ -23,11 +23,11 @@
 				<tr py:for="name in filiales.keys()">
 					<td py:content="name" />
 					<td py:content="filiales[name]" />
-					<td py:content="locale.currency(filiales[name] * obligation.filiales)" />
+					<td py:content="locale.currency(filiales[name] * obligation.filiales, True, True)" />
 				</tr>
 				<tr>
 					<td colspan="3">Total</td>
-					<td py:content="locale.currency(total)" />
+					<td py:content="locale.currency(total, True, True)" />
 				</tr>
 			</tbody>
 		</table>

@@ -31,7 +31,7 @@
 				</li>
 				<li>
 					<strong>Fecha de Otorgamiento:</strong>
-					<span py:content="loan.startDate.strftime('%A %d de %B de %Y')" />
+					<span py:content="loan.startDate.strftime('%d de %B de %Y')" />
 				</li>
 			</ul>
 		</div>

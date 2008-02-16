@@ -35,8 +35,8 @@
 					<td><a href="${tg.url('/affiliate/%s' % affiliate.id)}">${affiliate.id}</a></td>
 					<td py:content="affiliate.lastName" />
 					<td py:content="affiliate.firstName" />
-					<td py:content="locale.currency(affiliate.debt())" />
-					<td py:content="locale.currency(affiliate.loan())" />
+					<td py:content="locale.currency(affiliate.debt(), True, True)" />
+					<td py:content="locale.currency(affiliate.loan(), True, True)" />
 				</tr>
 			</tbody>
 		</table>

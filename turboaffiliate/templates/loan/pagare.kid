@@ -26,7 +26,7 @@
 		</p>
 		<p>
 			En fe de lo cual firmo este pagar&eacute; en la ciudad de Tegucigalpa
-			el d&iacute;a <span py:content="loan.startDate.strftime('%A %d de %B de %Y')" />
+			el d&iacute;a <span py:content="loan.startDate.strftime('%d de %B de %Y')" />
 		</p>
 		<p class="center">Firma del Suscriptor</p>
 		<p>

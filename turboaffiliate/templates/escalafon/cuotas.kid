@@ -23,12 +23,12 @@
 				<tr py:for="key in retrasada.keys()">
 					<td py:content="'Cuota Retrasada L. %s' % key" />
 					<td py:content="retrasada[key]" />
-					<td py:content="locale.currency(key * retrasada[key])" />
+					<td py:content="locale.currency(key * retrasada[key], True, True)" />
 				</tr>
 			</tbody>
 			<tfoot>
 				<th colspan="2">Total</th>
-				<th py:content="locale.currency(total)" />
+				<th py:content="locale.currency(total, True, True)" />
 			</tfoot>
 		</table>
 	</body>

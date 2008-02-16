@@ -23,7 +23,7 @@
 			<tbody>
 				<tr py:for="d in deduced">
 					<td py:content="d.account.name" />
-					<td py:content="locale.currency(d.amount)" />
+					<td py:content="locale.currency(d.amount, True, True)" />
 					<td py:content="d.month" />
 					<td py:content="d.year" />
 				</tr>

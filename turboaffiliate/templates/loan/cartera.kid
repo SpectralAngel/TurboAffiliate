@@ -13,24 +13,29 @@
 	<body>
 		<h1 py:content="'Cartera Pr&eacute;stamos'" />
 		<table>
-			<tr>
-				<th>Prestamo</th>
-				<th>Afiliado</th>
-				<th>Afiliacion</th>
-				<th>Capital</th>
-				<th>Saldo Actual (hoy)</th>
-			</tr>
-			<tr py:for="loan in loans">
-				<td py:content="loan.id" />
-				<td py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
-				<td py:content="loan.affiliate.id" />
-				<td py:content="locale.currency(loan.capital)" />
-				<td py:content="locale.currency(loan.debt)" />
-				<td py:content="loan.startDate" />
-			</tr>
+			<thead>
+				<tr>
+					<th>Prestamo</th>
+					<th>Afiliado</th>
+					<th>Afiliaci&oacute;n</th>
+					<th>Capital</th>
+					<th>Saldo</th>
+					<th>Fecha Otorgado</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr py:for="loan in loans">
+					<td><a href="${tg.url('/loan/%s' % loan.id)}" py:content="loan.id" /></td>
+					<td py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
+					<td py:content="loan.affiliate.id" />
+					<td py:content="locale.currency(loan.capital, True, True)" />
+					<td py:content="locale.currency(loan.debt, True, True)" />
+					<td py:content="loan.startDate.strftime('%d/%m/%Y')" />
+				</tr>
+			</tbody>
 		</table>
 		<strong>Monto Total:</strong>
-		<span py:content="locale.currency(amount)" />
+		<span py:content="locale.currency(amount, True, True)" />
 		<br />
 		<strong>Prestamos Otorgados:</strong>
 		<span py:content="count" />

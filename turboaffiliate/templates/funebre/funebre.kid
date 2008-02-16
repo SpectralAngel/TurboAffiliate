@@ -23,7 +23,7 @@
 				</a>
 			</li>
 			<li>
-				Cantidad: <span py:content="locale.currency(funebre.amount)" />
+				Cantidad: <span py:content="locale.currency(funebre.amount, True, True)" />
 			</li>
 			<li>
 				Raz&oacute;n<span py:content="funebre.reason" />

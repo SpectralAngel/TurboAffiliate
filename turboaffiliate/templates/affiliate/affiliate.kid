@@ -2,13 +2,13 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
 	import locale
-	locale.setlocale(locale.LC_ALL, "en-US")
+	locale.setlocale(locale.LC_ALL, "")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#"
     py:extends="'../master.kid'">
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-		<title>TurboAffiliate &bull; Afiliados</title>
+		<title>TurboAffiliate &bull; Afiliado ${affiliate.id}</title>
 	</head>
 	<body>
 		<div id="breadcrum">
@@ -53,7 +53,7 @@
 			</li>
 			<li>
 				<strong>Fecha de Nacimiento: </strong>
-				<span py:content="affiliate.birthday" />
+				<span py:content="affiliate.birthday.strftime('%d de %B de %Y')" />
 			</li>
 			<li>
 				<strong>G&eacute;nero:</strong>
@@ -97,7 +97,7 @@
 			</li>
 			<li>
 				<strong>Fecha de Afiliaci&oacute;n: </strong>
-				<span py:content="affiliate.joined" />
+				<span py:content="affiliate.joined.strftime('%d de %B de %Y')" />
 			</li>
 			<li>
 				<a href="${tg.url('/affiliate/status/%s' % affiliate.id)}">Estado de Cuenta</a>
@@ -109,26 +109,26 @@
 		<h3 py:if="len(affiliate.extras) != 0">Deducciones Extra</h3>
 		<ul py:if="len(affiliate.extras) != 0">
 			<li py:for="extra in affiliate.extras">
-				<span py:content="extra.account.name" /> <span py:content="locale.currency(extra.amount)" />
+				<span py:content="extra.account.name" /> <span py:content="locale.currency(extra.amount, True, True)" />
 				<a href="${tg.url('/affiliate/extra/delete/%s' % extra.id)}">Eliminar</a>
 			</li>
 		</ul>
 		<div id="loan" py:for="loan in affiliate.loans">
 			<h3>Pr&eacute;stamo</h3>
-			<span py:content="'Monto Total: ', locale.currency(loan.capital)" />
-			<span py:content="'Monto Adeudado: ', locale.currency(loan.debt)" />
+			<span py:content="'Monto Total: ', locale.currency(loan.capital, True, True)" />
+			<span py:content="'Monto Adeudado: ', locale.currency(loan.debt, True, True)" />
 			<a href="${tg.url('/loan/%s' % loan.id)}" >Ver Pr&eacute;stamo</a>
 		</div>
 		<div id="loan" py:for="loan in affiliate.refinancedLoans">
 			<h3>Pr&eacute;stamo Refinanciado</h3>
-			<span py:content="'Monto Total: ', locale.currency(loan.capital)" />
-			<span py:content="'Monto Adeudado: ', locale.currency(loan.debt)" />
+			<span py:content="'Monto Total: ', locale.currency(loan.capital, True, True)" />
+			<span py:content="'Monto Adeudado: ', locale.currency(loan.debt, True, True)" />
 			<a href="${tg.url('/refinanced/%s' % loan.id)}" >Ver Pr&eacute;stamo</a>
 		</div>
 		<div id="loan" py:for="loan in affiliate.payedLoans">
 			<h3>Pr&eacute;stamo Pagado</h3>
-			<span py:content="'Monto Total: ', locale.currency(loan.capital)" />
-			<span py:content="'Ultimo Pago: ', loan.last" />
+			<span py:content="'Monto Total: ', locale.currency(loan.capital, True, True)" />
+			<span py:content="'Ultimo Pago: ', loan.last.strftime('%d de %B de %Y')" />
 			<a href="${tg.url('/payed/%s' % loan.id)}" >Ver Pr&eacute;stamo</a>
 		</div>
 		<a href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a>

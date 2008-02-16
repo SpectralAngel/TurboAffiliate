@@ -36,6 +36,6 @@
 			</tbody>
 		</table>
 		<div style="position: absolute; top: 420px; right: 10px;" py:content="locale.currency(sum(l.value() for l in receipt.lines))" />
-		<div style="position: absolute; top: 440px; left: 100px;" py:content="receipt.day.strftime('%A %d de %B de %Y')" />
+		<div style="position: absolute; top: 440px; left: 100px;" py:content="receipt.day.strftime('%d de %B de %Y')" />
 	</body>
 </html>

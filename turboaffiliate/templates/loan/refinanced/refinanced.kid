@@ -17,7 +17,7 @@
 			<div style="font-weight: bold; font-size: 180%">COPEMH</div>
 			<div style="font-weight: bold; font-size: 180%">Estado de Cuenta Pr&eacute;stamos Refinanciados</div>
 			<div py:content="'Pr&eacute;stamo N&uacute;mero ', loan.id" />
-			<span>Al: <span py:content="day.strftime('%A %d de %B de %Y')" /></span>
+			<span>Al: <span py:content="day.strftime('%d de %B de %Y')" /></span>
 		</div>
 		<ul>
 			<li>

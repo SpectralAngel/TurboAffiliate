@@ -43,18 +43,18 @@
 						<ul>
 							<li py:for="extra in affiliate.extras">
 								<span py:content="extra.account.name" />
-								<span py:content="locale.currency(extra.amount)" />
+								<span py:content="locale.currency(extra.amount, True, True)" />
 							</li>
 						</ul>
 					</td>
 					<td>
 						<ul>
 							<li py:for="loan in affiliate.loans">
-								<span py:content="locale.currency(loan.get_payment())" />
+								<span py:content="locale.currency(loan.get_payment(), True, True)" />
 							</li>
 						</ul>
 					</td>
-					<td py:content="locale.currency(sum(loan.get_payment() for loan in affiliate.loans) + sum(extra.amount for extra in affiliate.extras) + obligation)" />
+					<td py:content="locale.currency(sum(loan.get_payment() for loan in affiliate.loans) + sum(extra.amount for extra in affiliate.extras) + obligation, True, True)" />
 					<td><a href="${tg.url('/affiliate/transfer?affiliate=%s&amp;obligation=%s' % (affiliate.id, obligation))}">X</a></td>
 				</tr>
 			</tbody>

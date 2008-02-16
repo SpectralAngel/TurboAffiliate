@@ -353,7 +353,7 @@ class Receipt(controllers.Controller):
 		
 		try:
 			house = model.House.get(int(house))
-			day =datetime.strptime(day, "%Y-%m-%d").date()
+			day = datetime.strptime(day, "%Y-%m-%d").date()
 			query = "receipt.day = '%s' and receipt.house_id = %s and receipt.amount > 0" % (day, house.id)
 			receipts = model.Receipt.select(query)
 			return dict(house=house, receipts=receipts, day=day)

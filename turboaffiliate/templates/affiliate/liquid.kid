@@ -25,11 +25,11 @@
 				<td py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
 				<td py:content="loan.affiliate.id" />
 				<td py:content="loan.capital" />
-				<td py:content="locale.currency(loan.net())" />
+				<td py:content="locale.currency(loan.net(), True, True)" />
 			</tr>
 		</table>
 		<strong>Monto Total:</strong>
-		<span py:content="locale.currency(amount)" />
+		<span py:content="locale.currency(amount, True, True)" />
 		<br />
 		<strong>Prestamos Otorgados:</strong>
 		<span py:content="count" />

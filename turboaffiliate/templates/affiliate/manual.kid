@@ -29,7 +29,7 @@
 			<tbody>
 				<tr py:for="extra in affiliate.extras">
 					<td py:content="extra.account.name" />
-					<td py:content="locale.currency(extra.amount)" />
+					<td py:content="locale.currency(extra.amount, True, True)" />
 					<td><a href="${tg.url('/affiliate/postextra/%s' % extra.id)}">X</a></td>
 				</tr>
 			</tbody>
@@ -46,7 +46,7 @@
 			<tbody>
 				<tr py:for="loan in affiliate.loans">
 					<td py:content="loan.id" />
-					<td py:content="locale.currency(loan.get_payment())" />
+					<td py:content="locale.currency(loan.get_payment(), True, True)" />
 					<td><a href="${tg.url('/affiliate/postloan/%s' % loan.id)}">X</a></td>
 				</tr>
 			</tbody>

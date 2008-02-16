@@ -17,7 +17,7 @@
 	<body>
 		<h1>Corte de Caja</h1>
 		<h2 py:content="house.name" />
-		<h3 py:content="'Día ', day.strftime('%A %d de %B de %Y')" />
+		<h3 py:content="'Dï¿½a ', day.strftime('%d de %B de %Y')" />
 		<table>
 			<thead>
 				<tr>

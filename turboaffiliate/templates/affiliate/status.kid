@@ -8,14 +8,15 @@
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Afiliados</title>
+		 <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/form.css')}" media="screen" />
 	</head>
 	<body>
 		<div style="text-align: center">
 			<h3>COPEMH</h3>
 			<h4>Estado de Cuenta Aportaciones</h4>
-			<div><strong py:content="'Al', day.strftime('%A %d de %B de %Y')" /></div>
+			<div><strong py:content="'Al ', day.strftime('%d de %B de %Y')" /></div>
 			<h4 py:content="affiliate.id, ' ', affiliate.firstName, ' ', affiliate.lastName " />
-			<span>Afiliado desde </span><span py:content="affiliate.joined.day.strftime('%A %d de %B de %Y')" />
+			<span>Afiliado desde </span><span py:content="affiliate.joined.strftime('%d de %B de %Y')" />
 		</div>
 		<table class="small" width="100%">
 			<thead>
@@ -63,8 +64,8 @@
 			<tfoot>
 				<tr class="total">
 					<td colspan="13">&nbsp;</td>
-					<td class="deuda" py:content="locale.currency(sum(table.payed() for table in affiliate.cuotaTables))" />
-					<td class="deuda" py:content="locale.currency(sum(table.debt() for table in affiliate.cuotaTables))" />
+					<td class="deuda" py:content="locale.currency(sum(table.payed() for table in affiliate.cuotaTables), True, True)" />
+					<td class="deuda" py:content="locale.currency(sum(table.debt() for table in affiliate.cuotaTables), True, True)" />
 				</tr>
 			</tfoot>
 		</table>

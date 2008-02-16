@@ -36,11 +36,11 @@
 				<tr py:for="key, value in deductions.iteritems()">
 					<td py:content="key.code"/>
 					<td py:content="key.name" />
-					<td py:content="locale.format('%s', value['count'], True)" />
-					<td py:content="locale.currency(value['amount'])" />
+					<td py:content="locale.currency(value['count'], True, True)" />
+					<td py:content="locale.currency(value['amount'], True, True)" />
 				</tr>
 			</tbody>
 		</table>
-		<h2>Total de Ingresos: <span py:replace="locale.currency(total + loans['amount'] + count * obligation)" /></h2>
+		<h2>Total de Ingresos: <span py:replace="locale.currency(total + loans['amount'] + count * obligation, True, True)" /></h2>
 	</body>
 </html>

@@ -30,7 +30,7 @@
 					<td><a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">${affiliate.id}</a></td>
 					<td py:content="affiliate.escalafon" />
 					<td py:content="affiliate.lastName, ' ', affiliate.firstName" />
-					<td py:content="locale.currency(affiliate.total(month, year))" />
+					<td py:content="locale.currency(affiliate.total(month, year), True, True)" />
 					<td class="noprint"><a href="${affiliate.link(year, month)}">X</a></td>
 				</tr>
 			</tbody>

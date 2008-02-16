@@ -21,7 +21,7 @@
 			la cantidad de <strong py:content="loan.letters" />.
 			(<span py:content="locale.currency(loan.capital)" />) por prestamo
 			personal que me fue entregado el d&iacute;a
-			<span py:content="loan.startDate.strftime('%A %d de %B de %Y')" />
+			<span py:content="loan.startDate.strftime('%d de %B de %Y')" />
 			Seg&uacute;n el detalle siguiente:
 		</p>
 		<table width="100%">

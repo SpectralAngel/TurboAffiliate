@@ -28,13 +28,13 @@
 					<td py:content="account.code" />
 					<td py:content="account.name" />
 					<td py:content="account.quantity" />
-					<td py:content="locale.currency(account.amount)" />
+					<td py:content="locale.currency(account.amount, True, True)" />
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
 					<th colspan="3">Total:</th>
-					<th py:content="locale.currency(total)" />
+					<th py:content="locale.currency(total, True, True)" />
 				</tr>
 			</tfoot>
 		</table>

@@ -15,7 +15,7 @@
 			<div style="font-weight: bold; font-size: 180%">COPEMH</div>
 			<div style="font-weight: bold; font-size: 180%">Estado de Cuenta Pr&eacute;stamos</div>
 			<div py:content="'Pr&eacute;stamo N&uacute;mero ', loan.id" />
-			<span>Al: <span py:content="day.strftime('%A %d de %B de %Y')" /></span>
+			<span>Al: <span py:content="day.strftime('%d de %B de %Y')" /></span>
 		</div>
 		<ul>
 			<li>
@@ -27,7 +27,7 @@
 			</li>
 			<li>
 				<strong>Fecha de Otorgamiento:</strong>
-				<span py:content="loan.startDate.strftime('%A %d de %B de %Y')" />
+				<span py:content="loan.startDate.strftime('%d de %B de %Y')" />
 			</li>
 			<li>
 				<strong>Monto Original:</strong>

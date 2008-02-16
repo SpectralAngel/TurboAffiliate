@@ -27,13 +27,13 @@
 				<tr py:for="d in deduced">
 					<td py:content="d.affiliate.id" />
 					<td py:content="d.affiliate.firstName, ' ', d.affiliate.lastName" />
-					<td py:content="locale.currency(d.amount)" />
+					<td py:content="locale.currency(d.amount, True, True)" />
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
 					<th colspan="2">Total:</th>
-					<th py:content="locale.currency(total)" />
+					<th py:content="locale.currency(total, True, True)" />
 				</tr>
 			</tfoot>
 		</table>

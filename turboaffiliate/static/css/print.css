@@ -26,7 +26,8 @@ table
 }
 a
 {
-	display: none;
+	text-decoration: none;
+	color: inherit;
 }
 #sidebar-left, #sidebar-right, #header, #footer
 {
