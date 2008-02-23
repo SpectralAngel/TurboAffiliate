@@ -13,6 +13,7 @@
 		<h1>Filiales Departamentales</h1>
 		<div py:for="department in filiales.keys()">
 			<h2 py:content="department" />
+			<h3 py:content="'Total departamento: ', filiales[department]['total']" />
 			<table>
 				<thead>
 					<tr>

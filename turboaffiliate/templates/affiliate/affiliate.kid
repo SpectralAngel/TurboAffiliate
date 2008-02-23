@@ -20,6 +20,10 @@
 		Este Afiliado requiere Actualizar sus datos de Jubilaci&oacute;n haga
 		<a href="${tg.url('/affiliate/jubilate/%s' % affiliate.id)}">click aqu&iacute;</a>
 		actualizarlos</span>
+		<span class="flash" py:if="affiliate.cardID == None">Este afiliado no
+		tiene tarjeta de identidad ingresada haga
+		<a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">click aqu&iacute;</a>
+		para ingresarla</span>
 		<ul class="toolbox">
 			<li>
 				<a class="edit" href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Editar</a>

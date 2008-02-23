@@ -31,7 +31,7 @@
 			</li>
 			<li>
 				<strong>Monto Original:</strong>
-				<span py:content="locale.currency(loan.capital)" />
+				<span py:content="locale.currency(loan.capital, True, True)" />
 			</li>
 		</ul>
 		<ul class="noprint">
@@ -66,15 +66,15 @@
 			</tr>
 			<tr py:for="d in loan.deductions">
 				<td py:content="d.name" />
-				<td py:content="locale.currency(d.amount" />
+				<td py:content="locale.currency(d.amount, True, True)" />
 			</tr>
 			<tr>
 				<td>Total deducciones</td>
-				<td><strong py:content="locale.currency(sum(d.amount for d in loan.deductions))" /></td>
+				<td><strong py:content="locale.currency(sum(d.amount for d in loan.deductions), True, True)" /></td>
 			</tr>
 			<tr>
 				<td>Remanente o Monto Liquidado</td>
-				<td><strong py:content="locale.currency(loan.capital - sum(d.amount for d in loan.deductions)" /></td>
+				<td><strong py:content="locale.currency(loan.capital - sum(d.amount for d in loan.deductions), True, True)" /></td>
 			</tr>
 		</table>
 		<h4 py:if="len(loan.future()) != 0">Pagos a Efectuar</h4>
@@ -96,15 +96,15 @@
 			<tbody>
 				<tr>
 					<td colspan="5">&nbsp;</td>
-					<td><strong py:content="locale.currency(loan.debt)" /></td>
+					<td><strong py:content="locale.currency(loan.debt, True, True)" /></td>
 				</tr>
 				<tr py:for="pay in loan.future()">
 					<td py:content="pay['month']" />
 					<td py:content="pay['number']" />
-					<td py:content="locale.currency(pay['interest'])" />
-					<td py:content="locale.currency(pay['payment'])" />
-					<td py:content="locale.currency(pay['capital'])" />
-					<td py:content="locale.currency(pay['amount'])" />
+					<td py:content="locale.currency(pay['interest'], True, True)" />
+					<td py:content="locale.currency(pay['payment'], True, True)" />
+					<td py:content="locale.currency(pay['capital'], True, True)" />
+					<td py:content="locale.currency(pay['amount'], True, True)" />
 				</tr>
 			</tbody>
 		</table>
@@ -131,11 +131,11 @@
 					<?python
 						i += 1
 					?>
-					<td py:content="locale.currency(pay.interest)" />
-					<td py:content="locale.currency(pay.capital)" />
-					<td py:content="locale.currency(pay.amount)" />
+					<td py:content="locale.currency(pay.interest, True, True)" />
+					<td py:content="locale.currency(pay.capital, True, True)" />
+					<td py:content="locale.currency(pay.amount, True, True)" />
 					<td py:content="pay.receipt" />
-					<td><a href="${tg.url('/loan/pay/remove/%s' % pay.id)}">X</a></td>
+					<td class="noprint"><a href="${tg.url('/loan/pay/remove/%s' % pay.id)}">X</a></td>
 				</tr>
 			</tbody>
 		</table>

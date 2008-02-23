@@ -36,6 +36,7 @@
 			<li><a href="all">Ver Todos los Afiliados</a></li>
 			<li><a href="solventYear">Ver Solventes por A&ntilde;o</a></li>
 			<li><a href="none">Ver Afiliados sin a&ntilde;o de Afiliaci&oacute;n</a></li>
+			<li><a href="noCard">Ver Afiliados sin n&uacute;mero de Identidad</a></li>
 		</ul>
 		<form action="${tg.url('/affiliate/byCopemh')}">
 			<fieldset>

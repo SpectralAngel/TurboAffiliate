@@ -1,9 +1,10 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
+# -*- coding: utf8 -*-
 #
 # flyer.py
 # This file is part of TurboAffiliate
 #
-# Copyright © 2007 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2007 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -221,16 +222,26 @@ class Flyer(controllers.Controller):
 		return dict(filiales=filiales)
 	
 	@identity.require(identity.not_anonymous())
+	@expose(template="turboaffiliate.templates.escalafon.aportaciones")
+	def aportaciones(self, year, month):
+		
+		query = "deduced.year = %s and deduced.month = %s and deduced.account_id = 1" % (int(year), int(month))
+		
+		deduced = model.Deduced.select(query)
+		
+		return dict(deduced=deduced, year=year, month=month)
+	
+	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.escalafon.filiales")
 	def filialesAll(self):
 		
 		affiliates = model.Affiliate.select(model.Affiliate.q.payment=="Escalafon")
 		
-		filiales = {"Atlantida":{}, "Choluteca":{}, "Colon":{}, "Comayagua":{},
-						"Copan":{}, "Cortes":{}, "El Paraiso":{}, "Francisco Morazan":{},
-						"Gracias a Dios":{}, "Intibuca":{}, "Islas de la Bahia":{},
-						"La Paz":{}, "Lempira":{}, "Olancho":{}, "Ocotepeque":{},
-						"Santa Barbara":{}, "Valle":{}, "Yoro":{}}
+		filiales = {"Atlantida":{'total':0}, "Choluteca":{'total':0}, "Colon":{'total':0}, "Comayagua":{'total':0},
+						"Copan":{'total':0}, "Cortes":{'total':0}, "El Paraiso":{'total':0}, "Francisco Morazan":{'total':0},
+						"Gracias a Dios":{'total':0}, "Intibuca":{'total':0}, "Islas de la Bahia":{'total':0},
+						"La Paz":{'total':0}, "Lempira":{'total':0}, "Olancho":{'total':0}, "Ocotepeque":{'total':0},
+						"Santa Barbara":{'total':0}, "Valle":{'total':0}, "Yoro":{'total':0}}
 		for affiliate in affiliates:
 			try:
 				filiales[affiliate.state][affiliate.school] += 1
@@ -238,7 +249,7 @@ class Flyer(controllers.Controller):
 			except KeyError:
 				try:
 					filiales[affiliate.state][affiliate.school] = 1
-					filiales[affiliate.state]['total'] = 1
+					filiales[affiliate.state]['total'] += 1
 				except:
 					pass
 		
@@ -248,7 +259,8 @@ class Flyer(controllers.Controller):
 	@expose(template="turboaffiliate.templates.escalafon.filiales")
 	def filialesDept(self, state):
 		
-		affiliates = model.Affiliate.select(model.Affiliate.q.payment=="Escalafon", model.Affiliate.q.state==str(state))
+		query = "affiliate.payment = '%s' and affiliate.state = '%s'" % ('Escalafon', state)
+		affiliates = model.Affiliate.select(query)
 		
 		filiales = {}
 		

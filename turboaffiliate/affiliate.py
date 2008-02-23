@@ -608,6 +608,14 @@ class Affiliate(controllers.Controller):
 		return dict(affiliates=affiliates, show=show, count=affiliates.count())
 	
 	@identity.require(identity.not_anonymous())
+	@expose(template='turboaffiliate.templates.affiliate.show')
+	def noCard(self):
+		
+		affiliates = model.Affiliate.select(model.Affiliate.q.cardID==None)
+		show = "Sin N&uacute;mero de identidad"
+		return dict(affiliates=affiliates, show=show, count=affiliates.count())
+	
+	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.jubilate')
 	def jubilate(self, affiliate):
 		

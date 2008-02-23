@@ -29,9 +29,9 @@
 				<tr py:for="line in receipt.lines">
 					<td class="first" width="50" style="text-align: right;" py:content="line.qty" />
 					<td class="second" width="450" style="text-align: center;" py:content="line.account.name" />
-					<td class="third" width="450" py:content="line.detail" />
+					<td class="third" width="400" py:content="line.detail" />
 					<td class="first" width="50" style="text-align: right;" py:content="locale.currency(line.unit)" />
-					<td class="last" style="text-align: right;" py:content="locale.currency(line.value())" />
+					<td class="last" width="50" style="text-align: right;" py:content="locale.currency(line.value())" />
 				</tr>
 			</tbody>
 		</table>

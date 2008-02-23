@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf8 -*-
 #
 # college.py
 # This file is part of TurboAffiliate
@@ -450,6 +451,8 @@ class Loan(SQLObject):
 	
 	def refinance(self):
 		
+		self.debt -= self.get_payment()
+		
 		kw = {}
 		kw['id'] = self.id
 		kw['affiliate'] = self.affiliate
@@ -482,6 +485,7 @@ class Loan(SQLObject):
 		Calculates the composite interest and acredits the made payment
 		"""
 		
+		kw = {}
 		kw['amount'] = Decimal(amount).quantize(dot01)
 		kw['day'] = day
 		kw['receipt'] = receipt
@@ -501,11 +505,11 @@ class Loan(SQLObject):
 		# Otherwise calculate interest for the loan's payment
 		kw['interest'] = (self.debt * self.interest / 1200).quantize(dot01)
 		# Increase the loans debt by the interest
-		self.debt += ints
+		self.debt += kw['interest']
 		# Decrease debt by the payment amount
 		self.debt -= kw['amount']
 		# Calculate how much money was used to pay the capital
-		kw['capital'] = kw['amount'] - ints
+		kw['capital'] = kw['amount'] - kw['interest']
 		# Change the last payment date
 		self.last = day
 		# Register the payment in the database
@@ -523,6 +527,7 @@ class Loan(SQLObject):
 		
 		"""Creates a new payment for the loan without chargin interest"""
 		
+		kw = {}
 		kw['amount'] = Decimal(amount).quantize(dot01)
 		kw['day'] = day
 		kw['receipt'] = receipt
@@ -540,13 +545,13 @@ class Loan(SQLObject):
 			return True
 		
 		# Otherwise calculate interest for the loan's payment
-		kw['interests'] = 0
+		kw['interest'] = 0
 		# Increase the loans debt by the interest
-		self.debt += interests
+		self.debt += kw['interest']
 		# Decrease debt by the payment amount
-		self.debt -= amount
+		self.debt -= kw['amount']
 		# Calculate how much money was used to pay the capital
-		kw['capital'] = amount - interests
+		kw['capital'] = kw['amount'] - kw['interest']
 		# Change the last payment date
 		self.last = day
 		# Register the payment in the database
@@ -1124,11 +1129,11 @@ class RefinancedLoan(SQLObject):
 		# Otherwise calculate interest for the loan's payment
 		kw['interest'] = 0
 		# Increase the loans debt by the interest
-		self.debt += interests
+		self.debt += kw['interest']
 		# Decrease debt by the payment amount
 		self.debt -= kw['amount']
 		# Calculate how much money was used to pay the capital
-		kw['capital'] = kw['amount'] - interests
+		kw['capital'] = kw['amount'] - kw['interest']
 		# Change the last payment date
 		self.last = day
 		# Register the payment in the database

@@ -27,7 +27,7 @@
 			<tfoot>
 				<tr>
 					<th>Total</th>
-					<th py:content="locale.currency(sum(r.amount for r in receipts, True, True))" />
+					<th py:content="locale.currency(sum(r.amount for r in receipts), True, True)" />
 				</tr>
 			</tfoot>
 		</table>

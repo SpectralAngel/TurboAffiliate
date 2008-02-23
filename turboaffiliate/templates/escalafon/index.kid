@@ -236,9 +236,60 @@
 				</ul>
 			</fieldset>
 		</form>
+		<form action="${tg.url('/escalafon/filialesDept')}" method="post">
+			<fieldset>
+				<legend>Mostrar Reporte de Filiales</legend>
+				<ul>
+					<li>
+						<label for="state">Departamento:</label>
+						<select name="state">
+							<option>Atlantida</option>
+							<option>Choluteca</option>
+							<option>Colon</option>
+							<option>Comayagua</option>
+							<option>Copan</option>
+							<option>Cortes</option>
+							<option>El Paraiso</option>
+							<option>Francisco Morazan</option>
+							<option>Gracias a Dios</option>
+							<option>Intibuca</option>
+							<option>Islas de la Bahia</option>
+							<option>La Paz</option>
+							<option>Lempira</option>
+							<option>Olancho</option>
+							<option>Ocotepeque</option>
+							<option>Santa Barbara</option>
+							<option>Valle</option>
+							<option>Yoro</option>
+						</select>
+					</li>
+					<li>
+						<input type="submit" value="Mostrar Reporte" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
 		<form action="${tg.url('/escalafon/cuotas')}" method="post">
 			<fieldset>
 				<legend>Mostrar Reporte de Cuotas Retrasadas</legend>
+				<ul>
+					<li>
+						<label for="month">Mes:</label>
+						<input name="month" />
+					</li>
+					<li>
+						<label for="year">A&ntilde;o:</label>
+						<input name="year" />
+					</li>
+					<li>
+						<input type="submit" value="Mostrar Reporte" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
+		<form action="${tg.url('/escalafon/aportaciones')}" method="post">
+			<fieldset>
+				<legend>Mostrar Afiliados que Aportaron</legend>
 				<ul>
 					<li>
 						<label for="month">Mes:</label>

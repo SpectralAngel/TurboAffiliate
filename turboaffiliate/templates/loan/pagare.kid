@@ -3,7 +3,7 @@
 <?python
 	from datetime import date
 	import locale
-	locale.setlocale(locale.LC_ALL, "en-US")
+	locale.setlocale(locale.LC_ALL, "")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#">
 	<head>
@@ -12,12 +12,12 @@
 		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/pagare.css')}" />
 	</head>
 	<body>
-		<h1 style="text-align: center">Pagar&eacute; por L. <span py:content="locale.currency(loan.capital)" /></h1>
+		<h1 style="text-align: center">Pagar&eacute; por <span py:content="locale.currency(loan.capital, True, True)" /></h1>
 		<p>
 			Yo, <strong py:content="loan.affiliate.firstName, loan.affiliate.lastName" />,
 			pagar&eacute; al Colegio de Profesores de Educaci&oacute;n de
-			Honduras. (COPEMH). La cantidad de <strong py:content="loan.letters, 'Lempiras'" />
-			(<span py:content="locale.currency(loan.capital)" />) que en esta
+			Honduras. (COPEMH). La cantidad de <strong py:content="loan.letters, ' Lempiras'" />
+			(<span py:content="locale.currency(loan.capital, True, True)" />) que en esta
 			fecha recibo a mi entera satisfacci&oacute;n y en calidad de
 			pr&eacute;stamo. Esta obligaci&oacute;n devengar&aacute; intereses a la tasa de
 			${loan.interest}% anual. El pago se har&aacute; en las
@@ -32,7 +32,7 @@
 		<p>
 			Nombre del Afiliado: <strong py:content="loan.affiliate.firstName, loan.affiliate.lastName" />
 			<br />
-			Tarjeta de <strong>Identidad: <span py:content="loan.affiliate.cardID" />
+			Tarjeta de <strong>Identidad: <span py:content="loan.affiliate.cardID" /></strong>
 		</p>
 		<!-- <div py:if="loan.aval != None">
 		<h2>Por Aval</h2>

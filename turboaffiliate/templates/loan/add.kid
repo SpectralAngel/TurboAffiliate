@@ -22,8 +22,8 @@
 		$(document).ready(function(e)
 		{
 			$.datePicker.setLanguageStrings(['Domingo', 'Lunes', 'Martes',
-											 'Miércoles', 'Jueves', 'Viernes',
-											 'Sábado'],	['Enero', 'Febrero',
+											 'Miercoles', 'Jueves', 'Viernes',
+											 'Sabado'],	['Enero', 'Febrero',
 											 'Marzo', 'Abril', 'Mayo', 'Junio',
 											 'Julio', 'Agosto', 'Septiembre',
 											 'Octubre', 'Noviembre', 'Diciembre'],

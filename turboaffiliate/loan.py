@@ -333,7 +333,7 @@ class Loan(controllers.Controller):
 			loank['letters'] = num2stres.parse(loank['capital']).capitalize()
 			loank['months'] = int(loank['months'])
 			loank['payment'] = Decimal(loank['payment']).quantize(Decimal("0.01"))
-			loank['startDate'] = Parser.DateFromString(loank['startDate'])
+			loank['startDate'] = datetime.strptime(loank['startDate'], "%Y-%m-%d").date()
 			
 			if loank['id'] == '':
 				del loank['id']
@@ -387,7 +387,7 @@ class Loan(controllers.Controller):
 	def refinance(self, loan):
 		
 		loan = model.Loan.get(int(loan))
-		affiliate = loan.affiliate()
+		affiliate = loan.affiliate
 		loan.refinance()
 		flash('El prestamo anterior ha sido movido a refinanciamiento')
 		raise redirect('/loan/add/%s' % affiliate.id)
