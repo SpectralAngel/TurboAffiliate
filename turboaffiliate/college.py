@@ -451,8 +451,6 @@ class Loan(SQLObject):
 	
 	def refinance(self):
 		
-		self.debt -= self.get_payment()
-		
 		kw = {}
 		kw['id'] = self.id
 		kw['affiliate'] = self.affiliate

@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
 	import locale
-	locale.setlocale(locale.LC_ALL, ")
+	locale.setlocale(locale.LC_ALL, "")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#"
     py:extends="'../master.kid'">
@@ -41,15 +41,15 @@
 			</li>
 			<li>
 				<strong>Pago Mensual:</strong>
-				<span py:content="locale.currency(loan.payment)" />
+				<span py:content="locale.currency(loan.payment, True, True)" />
 			</li>
 			<li>
 				<strong>Monto Original:</strong>
-				<span py:content="locale.currency(loan.capital)" />
+				<span py:content="locale.currency(loan.capital, True, True)" />
 			</li>
 			<li>
 				<strong>Monto Debido</strong>
-				<span py:content="locale.currency(loan.debt)" />
+				<span py:content="locale.currency(loan.debt, True, True)" />
 			</li>
 		</ul>
 		<ul>
@@ -133,7 +133,7 @@
 			<tbody>
 				<tr py:for="deduction in loan.deductions">
 					<td py:content="deduction.name" />
-					<td py:content="deduction.amount" />
+					<td py:content="locale.currency(deduction.amount, True, True)" />
 					<td py:if="'admin' in tg.identity.groups">
 						<a href="${tg.url('/loan/deduction/remove/%s' % deduction.id)}">Borrar</a>
 					</td>
@@ -153,9 +153,9 @@
 			<tbody>
 				<tr py:for="pay in loan.pays">
 					<td py:content="pay.day.strftime('%d/%m/%Y')" />
-					<td py:content="locale.currency(pay.interest)" />
-					<td py:content="locale.currency(pay.capital)" />
-					<td py:content="locale.currency(pay.amount)" />
+					<td py:content="locale.currency(pay.interest, True, True)" />
+					<td py:content="locale.currency(pay.capital, True, True)" />
+					<td py:content="locale.currency(pay.amount, True, True)" />
 					<td><a href="${tg.url('/loan/pay/remove/%s' % pay.id)}">X</a></td>
 				</tr>
 			</tbody>

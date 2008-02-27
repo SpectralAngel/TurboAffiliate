@@ -8,19 +8,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#">
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-		<title>Pr&eacute;stamos &bull; Paga&eacute;</title>
+		<title>Pr&eacute;stamos &bull; Pagar&eacute; ${loan.id}</title>
 		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/pagare.css')}" />
 	</head>
 	<body>
 		<h1 style="text-align: center">Pagar&eacute; por <span py:content="locale.currency(loan.capital, True, True)" /></h1>
 		<p>
-			Yo, <strong py:content="loan.affiliate.firstName, loan.affiliate.lastName" />,
+			Yo, <strong py:content="loan.affiliate.firstName,' ', loan.affiliate.lastName" />,
 			pagar&eacute; al Colegio de Profesores de Educaci&oacute;n de
 			Honduras. (COPEMH). La cantidad de <strong py:content="loan.letters, ' Lempiras'" />
 			(<span py:content="locale.currency(loan.capital, True, True)" />) que en esta
 			fecha recibo a mi entera satisfacci&oacute;n y en calidad de
 			pr&eacute;stamo. Esta obligaci&oacute;n devengar&aacute; intereses a la tasa de
-			${loan.interest}% anual. El pago se har&aacute; en las
+			<span py:content="loan.interest" />% anual. El pago se har&aacute; en las
 			oficinas del COPEMH en esta ciudad, en Lempiras exclusivamente o en
 			moneda de curso legal en la Rep&uacute;blica de Honduras.
 		</p>
@@ -30,9 +30,9 @@
 		</p>
 		<p class="center">Firma del Suscriptor</p>
 		<p>
-			Nombre del Afiliado: <strong py:content="loan.affiliate.firstName, loan.affiliate.lastName" />
+			Nombre del Afiliado: <strong py:content="loan.affiliate.firstName,' ', loan.affiliate.lastName" />
 			<br />
-			Tarjeta de <strong>Identidad: <span py:content="loan.affiliate.cardID" /></strong>
+			Tarjeta de Identidad: <strong py:content="loan.affiliate.cardID" />
 		</p>
 		<!-- <div py:if="loan.aval != None">
 		<h2>Por Aval</h2>
