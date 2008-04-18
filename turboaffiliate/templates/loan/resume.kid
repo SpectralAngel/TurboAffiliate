@@ -24,15 +24,15 @@
 			<tbody>
 				<tr>
 					<td>Capital</td>
-					<td py:content="locale.currency(capital)" />
+					<td py:content="locale.currency(capital, True, True)" />
 				</tr>
 				<tr>
 					<td>Intereses</td>
-					<td py:content="locale.currency(interest)" />
+					<td py:content="locale.currency(interest, True, True)" />
 				</tr>
 				<tr>
 					<td>Total</td>
-					<td py:content="locale.currency(capital + interest)" />
+					<td py:content="locale.currency(capital + interest, True, True)" />
 				</tr>
 			</tbody>
 		</table>

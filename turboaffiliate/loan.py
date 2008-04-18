@@ -613,4 +613,9 @@ class Loan(controllers.Controller):
 		capital = sum(pay.capital for pay in pays)
 		interest = sum(pay.interest for pay in pays)
 		
-		return dict(count=count, capital=capital, interest=interest, start=start, end=end)
+		query = "old_pay.day >= '%s' and old_pay.day <= '%s'" % (start, end)
+		pays = model.OldPay.select(query)
+		capital += sum(pay.capital for pay in pays)
+		interest += sum(pay.interest for pay in pays)
+		
+		return dict(capital=capital, interest=interest, start=start, end=end)

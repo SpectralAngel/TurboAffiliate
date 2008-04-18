@@ -25,6 +25,10 @@
 				<span py:content="obligation.amount" />
 			</li>
 			<li>
+				<strong>Monto:</strong>
+				<span py:content="obligation.inprema" />
+			</li>
+			<li>
 				<strong>Cuenta:</strong>
 				<span py:content="obligation.account.name" />
 			</li>

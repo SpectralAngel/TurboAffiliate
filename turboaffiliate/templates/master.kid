@@ -49,7 +49,7 @@
     				<img src="${tg.url('/static/images/affiliate.png')}" alt="Afiliados" width="48" height="48" />
     				<span>Obligaciones</span>
     			</a>
-    			<a class="menu" href="${tg.url('/receipt')}">
+    			<a class="menu" href="http://172.16.10.2:8010">
     				<img src="${tg.url('/static/images/affiliate.png')}" alt="Caja" width="48" height="48" />
     				<span>Caja</span>
     			</a>

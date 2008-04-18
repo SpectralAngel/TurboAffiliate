@@ -5,7 +5,7 @@ thead
 }
 body
 {
-	font-size: 80%;
+	font-size: 75%;
 	font-family: sans-serif;
 	min-width: 550px; /* 2 x (LC fullwidth + CC padding) + RC fullwidth */
 	margin: 0;

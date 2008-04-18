@@ -170,7 +170,7 @@ class Flyer(controllers.Controller):
 		
 		try:
 			report = model.OtherReport.select(model.OtherReport.q.payment==str(payment))
-			report = [r for r in report if r.year == int(year) and r.month == int(month)]
+			report = [r for r in report if r.year == int(year) and r.month == int(month)][0]
 			return dict(month=month, year=year, report=report, payment=payment)
 		except:
 			flash('Ha ocurrido un error.')
