@@ -31,7 +31,7 @@
 					<td py:content="affiliate.escalafon" />
 					<td py:content="affiliate.lastName, ' ', affiliate.firstName" />
 					<td py:content="locale.currency(affiliate.total(month, year), True, True)" />
-					<td class="noprint"><a href="${affiliate.link(year, month)}">X</a></td>
+					<td class="noprint"><a href="${tg.url('/affiliate/posteo/?how=%s&amp;year=%s&amp;month=%s&amp;code=%s' % (self.payment, year, month, affiliate.id))}">X</a></td>
 				</tr>
 			</tbody>
 		</table>

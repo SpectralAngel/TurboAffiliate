@@ -8,7 +8,7 @@
     py:extends="'../master.kid'">
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-		<title>TurboAffiliate &bull; Pr&eacute;stamos</title>
+		<title>COPEMH &bull; Pr&eacute;stamo ${loan.id}</title>
 	</head>
 	<body>
 		<div style="text-align: center;">
@@ -61,9 +61,7 @@
 			</li>
 		</ul>
 		<table width="100%">
-			<tr>
-				<td colspan="2">Deducciones</td>
-			</tr>
+			<caption>Deducciones</caption>
 			<tr py:for="d in loan.deductions">
 				<td py:content="d.name" />
 				<td py:content="locale.currency(d.amount, True, True)" />
@@ -77,8 +75,8 @@
 				<td><strong py:content="locale.currency(loan.capital - sum(d.amount for d in loan.deductions), True, True)" /></td>
 			</tr>
 		</table>
-		<h4 py:if="len(loan.future()) != 0">Pagos a Efectuar</h4>
-		<table class="pay small" py:if="len(loan.future()) != 0">
+		<table class="pay" py:if="len(loan.future()) != 0">
+			<caption>Pagos a Efectuar</caption>
 			<thead>
 				<tr>
 					<th colspan="5">Abono</th>
@@ -108,8 +106,8 @@
 				</tr>
 			</tbody>
 		</table>
-		<h4 py:if="len(loan.pays) != 0">Pagos Efectuados</h4>
 		<table class="pay" py:if="len(loan.pays) != 0">
+			<caption>Pagos Efectuados</caption>
 			<thead>
 				<tr>
 					<th>Fecha</th>

@@ -298,7 +298,7 @@ class Receipt(controllers.Controller):
 			raise redirect('/receipt/add')
 		
 		receipt = model.Receipt(**kw)
-		raise redirect('/receipt/%s' % receipt.id)
+		return self.default(receipt.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.receipt.edit")
@@ -310,7 +310,7 @@ class Receipt(controllers.Controller):
 			return dict(receipt=receipt, accounts=model.Account.select())
 			
 		except:
-			raise redirect('/receipt')
+			return self.index()
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
@@ -331,9 +331,9 @@ class Receipt(controllers.Controller):
 			flash('Recibo no encontrado')
 		except ValueError:
 			flash('Datos incorrectos')
-			raise redirect('/receipt/edit/%s' % kw['receipt'])
+			return self.edit(kw['receipt'])
 		
-		raise redirect('/receipt')
+		return self.index()
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.receipt.print")
@@ -359,4 +359,4 @@ class Receipt(controllers.Controller):
 			receipts = model.Receipt.select(query)
 			return dict(house=house, receipts=receipts, day=day)
 		except:
-			raise redirect('/receipt')
+			return self.index()

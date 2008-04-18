@@ -21,7 +21,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 from turbogears import controllers, expose, flash, identity, redirect
-from cherrypy import request, response, NotFound, HTTPRedirect
+from turbogears import validate, validators
 from turboaffiliate import model, json, obligation
 from decimal import *
 from datetime import date
@@ -71,6 +71,8 @@ class Flyer(controllers.Controller):
 			kw['affiliate'] = affiliate
 			for e in affiliate.extras:
 				kw['amount'] += e.amount
+			# for loan in affiliate.refinancedLoans:
+			#	kw['amount'] += loan.get_payment()
 			for loan in affiliate.loans:
 				kw['amount'] += loan.get_payment()
 			kw['amount'] += oblig
@@ -150,11 +152,14 @@ class Flyer(controllers.Controller):
 		for other in otherDeduced:
 			
 			try:
+				# The account is already in the report, just add the amount
 				kw[other.account].add(other.amount)
 			except KeyError:
 				init['account'] = other.account
 				kw[other.account] = model.OtherAccount(**init)
 				kw[other.account].add(other.amount)
+			
+			other.destroySelf()
 		
 		flash('Reporte Generado')
 		raise redirect('/escalafon')
@@ -172,7 +177,7 @@ class Flyer(controllers.Controller):
 			raise redirect('/escalafon')
 	
 	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.escalafon.filialesReport")
+	@expose(template="turboaffiliate.templates.escalafon.filiales")
 	def filiales(self, year, month):
 		
 		(month, year) = (int(month), int(year))
@@ -180,17 +185,25 @@ class Flyer(controllers.Controller):
 		query = "obligation.year = %s and obligation.month >= %s" % (year, month)
 		obligation = model.Obligation.select(query)[0]
 		
-		filiales = {}
+		filiales = {"Atlantida":{'total':0}, "Choluteca":{'total':0}, "Colon":{'total':0}, "Comayagua":{'total':0},
+						"Copan":{'total':0}, "Cortes":{'total':0}, "El Paraiso":{'total':0}, "Francisco Morazan":{'total':0},
+						"Gracias a Dios":{'total':0}, "Intibuca":{'total':0}, "Islas de la Bahia":{'total':0},
+						"La Paz":{'total':0}, "Lempira":{'total':0}, "Olancho":{'total':0}, "Ocotepeque":{'total':0},
+						"Santa Barbara":{'total':0}, "Valle":{'total':0}, "Yoro":{'total':0}}
+		
 		for affiliate in affiliates:
 			if affiliate.get_month(year, month):
 				try:
-					filiales[affiliate.school] += 1
+					filiales[affiliate.state][affiliate.school] += 1
+					filiales[affiliate.state]['total'] += 1
 				except KeyError:
-					filiales[affiliate.school] = 1
+					try:
+						filiales[affiliate.state][affiliate.school] = 1
+						filiales[affiliate.state]['total'] += 1
+					except:
+						pass
 		
-		total = sum(filiales.values()) * obligation.filiales
-		
-		return dict(filiales=filiales, total=total, obligation=obligation)
+		return dict(filiales=filiales)
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.escalafon.filiales")

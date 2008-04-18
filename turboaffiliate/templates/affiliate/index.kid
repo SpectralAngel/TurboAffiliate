@@ -137,6 +137,7 @@
 							<option>Escalafon</option>
 							<option>INPREMA</option>
 							<option>UPN</option>
+							<option>Ventanilla</option>
 						</select>
 					</li>
 					<li>
@@ -163,6 +164,7 @@
 							<option>Escalafon</option>
 							<option>INPREMA</option>
 							<option>UPN</option>
+							<option>Ventanilla</option>
 						</select>
 					</li>
 					<li>

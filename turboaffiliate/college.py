@@ -331,7 +331,7 @@ class CuotaTable(SQLObject):
 		query = "obligation.year = %s and obligation.month = %s" % (self.year, month)
 		os = Obligation.select(query)
 		
-		if self.affiliate.payment == "INPREMA" and self.affiliate.jubilated.year >= self.year:
+		if self.affiliate.payment == "INPREMA" and self.affiliate.jubilated.year <= self.year:
 			total = sum(o.inprema for o in os)
 		else:
 			total = sum(o.amount for o in os)
@@ -470,7 +470,7 @@ class Loan(SQLObject):
 			pay.refinance(refinancedLoan)
 		
 		for deduction in self.deductions:
-			deduction.refinace(refinancedLoan)
+			deduction.refinance(refinancedLoan)
 		
 		refinancedLoan.debt = refinancedLoan.get_payment()
 		
@@ -641,7 +641,7 @@ class Pay(SQLObject):
 	def refinance(self, refinancedLoan):
 		
 		kw = {}
-		kw['refinacedLoan'] = refinacedLoan
+		kw['refinancedLoan'] = refinancedLoan
 		kw['day'] = self.day
 		kw['capital'] = self.capital
 		kw['interest'] = self.interest
@@ -841,13 +841,13 @@ class Deduction(SQLObject):
 	def remove(self, payedLoan):
 		
 		kw = {}
-		kw['payedLoan']
+		kw['payedLoan'] = payedLoan
 		kw['name'] = self.name
 		kw['amount'] = self.amount
 		kw['account'] = self.account
 		kw['description'] = self.description
 		PayedDeduction(**kw)
-		deduction.destroySelf()
+		self.destroySelf()
 
 class Company(SQLObject):
 	name = UnicodeCol()
@@ -967,6 +967,11 @@ class PayedLoan(SQLObject):
 	startDate = DateCol(notNone=True, default=datetime.now)
 	pays = MultipleJoin("OldPay")
 	deductions = MultipleJoin("PayedDeduction")
+	
+	def remove(self):
+		
+		[pay.destroySelf() for pay in self.pays]
+		[deduction.destroySelf() for deduction in self.deductions]
 	
 	def to_loan(self):
 		
@@ -1169,7 +1174,7 @@ class RefinancedLoan(SQLObject):
 
 class RefinancedDeduction(SQLObject):
 	
-	refinancedloan = ForeignKey("RefinancedLoan")
+	refinancedLoan = ForeignKey("RefinancedLoan")
 	name = StringCol()
 	amount = CurrencyCol()
 	account = ForeignKey("Account")

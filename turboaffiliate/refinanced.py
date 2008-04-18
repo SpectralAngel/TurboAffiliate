@@ -20,8 +20,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 from turbogears import controllers, expose, flash, identity, redirect
-from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json, num2stres
+from turboaffiliate import model, json
 from datetime import date
 from decimal import *
 
@@ -38,3 +37,19 @@ class Refinanced(controllers.Controller):
 			raise redirect('/loan')
 		
 		return dict(loan=loan)
+	
+	@identity.require(identity.not_anonymous())
+	@expose()
+	def  remove(self, loan):
+		
+		try:
+			loan = model.RefinancedLoan.get(int(loan))
+			loan.remove()
+		except model.SQLObjectNotFound:
+			flash("Prestamo no encontrado")
+			raise redirect('/loan')
+		
+		return dict(loan=loan)
+		
+		flash("Prestamo pagado")
+		raise redirect('/loan')

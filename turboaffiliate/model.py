@@ -146,3 +146,4 @@ class Permission(SQLObject):
 						intermediateTable="group_permission", 
 						 joinColumn="permission_id", 
 						 otherColumn="group_id")
+

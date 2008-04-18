@@ -240,3 +240,8 @@ table .credit
 	right: 0;
 	top: 0;
 }
+caption
+{
+	padding-top: 15px;
+	font-weight: bold;
+}

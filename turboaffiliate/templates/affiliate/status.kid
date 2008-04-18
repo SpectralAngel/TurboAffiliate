@@ -9,6 +9,7 @@
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Afiliados</title>
 		 <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/form.css')}" media="screen" />
+		 <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print" />
 	</head>
 	<body>
 		<div style="text-align: center">
@@ -77,6 +78,25 @@
 					<li>
 						<label for="year">A&ntilde;o</label>
 						<input name="year" />
+					</li>
+					<li>
+						<input type="submit" value="A&ntilde;adir" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
+		<form action="${tg.url('/affiliate/fill')}" method="post" class="noprint">
+			<fieldset>
+				<legend>Postear A&ntilde;os</legend>
+				<input type="hidden" value="${affiliate.id}" name="affiliate" />
+				<ul>
+					<li>
+						<label for="start">A&ntilde;o Inicial</label>
+						<input name="start" />
+					</li>
+					<li>
+						<label for="end">A&ntilde;o Final</label>
+						<input name="end" />
 					</li>
 					<li>
 						<input type="submit" value="A&ntilde;adir" />

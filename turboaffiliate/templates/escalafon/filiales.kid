@@ -22,7 +22,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr py:for="school in filiales[department].keys()">
+					<tr py:for="school in filiales[department].keys()" py:if="school != 'total'">
 						<td py:content="school" />
 						<td py:content="filiales[department][school]" />
 					</tr>

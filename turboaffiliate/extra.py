@@ -86,8 +86,12 @@ class Extra(controllers.Controller):
 	@expose()
 	def delete(self, code):
 		
+		affiliate = None
 		try:
 			extra = model.Extra.get(int(code))
+			affiliate = extra.affiliate
 			extra.destroySelf()
 		except:
 			raise redirect('/affiliate')
+		
+		raise redirect('/affiliate/%s' % affiliate.id)

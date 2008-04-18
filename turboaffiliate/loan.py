@@ -246,7 +246,7 @@ class Loan(controllers.Controller):
 			raise redirect('/loan')
 		
 		except ValueError:
-			flash(u'No se encontrÃ³ el prÃ©stamo')
+			flash(u'No se encontró el prÃ©stamo')
 			raise redirect('/loan')
 	
 	@identity.require(identity.not_anonymous())
@@ -291,7 +291,7 @@ class Loan(controllers.Controller):
 			loan.capital = kw['capital'].replace(',', '')
 			loan.months = int(kw['months'])
 			loan.payment = Decimal(kw['payment']).quantize(Decimal("0.01"))
-			raise redirect('/loan/%s' % loan.id)
+			return self.default(loan.id)
 		
 		except model.SQLObjectNotFound:
 			flash('No se encontro el Afiliado')
@@ -313,7 +313,7 @@ class Loan(controllers.Controller):
 			raise redirect('/loan')
 		
 		except ValueError:
-			flash(u'NÃºmero de Afiliado invalido')
+			flash(u'Número de Afiliado invalido')
 			raise redirect('/loan')
 		
 		if kw['capital'] == '' or kw['capital'] < 0:
@@ -350,7 +350,7 @@ class Loan(controllers.Controller):
 		
 		loan = model.Loan(**loank)
 		flash(u'Se ha otorgado el préstamo')
-		raise redirect('/loan/%s' % (loan.id))
+		return self.default(loan.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
@@ -573,7 +573,7 @@ class Loan(controllers.Controller):
 			loan.number += 1
 		except:
 			pass
-		raise redirect('/loan/%s' % loan.id)
+		return self.default(loan.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
@@ -584,7 +584,7 @@ class Loan(controllers.Controller):
 			loan.number -= 1
 		except:
 			pass
-		raise redirect('/loan/%s' % loan.id)
+		return self.default(loan.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.bypay')

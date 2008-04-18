@@ -477,7 +477,7 @@ class Affiliate(controllers.Controller):
 			kw['account'] = model.Account.get(373)
 			model.Deduced(**kw)
 			model.OtherDeduced(**kw)
-			loan.pay2(payment, date.today(), "Planilla")
+			loan.pay(payment, date.today(), "Planilla")
 		
 		affiliate.pay_cuota(year, month)
 		kw = {}
@@ -493,17 +493,17 @@ class Affiliate(controllers.Controller):
 		kw['account'] = model.Account.get(1)
 		model.OtherDeduced(**kw)
 		
-		raise redirect('/affiliate/listmanual?payment=%s&month=%s&year=%s' %(affiliate.payment, month, year))
+		return self.listmanual(affiliate.payment, year, month)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
-	def postextra(self, extra):
+	def postextra(self, extra, year, month):
 		
 		extra = model.Extra.get(int(extra))
 		affiliate = extra.affiliate
 		extra.manual()
 		
-		raise redirect('/affiliate/manual/%s' % affiliate.id)
+		return self.manual(affiliate.id, year, month)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
@@ -517,9 +517,24 @@ class Affiliate(controllers.Controller):
 		kw['account'] = model.Account.get(373)
 		Deduced(**kw)
 		OtherDeduced(**kw)
-		loan.pay2(payment, date.today(), "Planilla")
+		loan.pay(payment, date.today(), "Planilla")
 		
-		raise redirect('/affiliate/manual/%s' % affiliate.id)
+		return self.manual(affiliate.id, year, month)
+	
+	@identity.require(identity.not_anonymous())
+	@expose()
+	def prestamo(self, loan, amount):
+		
+		loan = model.Loan.get(int(loan))
+		kw = {}
+		kw['amount'] = payment
+		kw['affiliate'] = affiliate
+		kw['account'] = model.Account.get(373)
+		Deduced(**kw)
+		OtherDeduced(**kw)
+		loan.pay(payment, date.today(), "Planilla")
+		
+		return self.manual(affiliate.id, year, month)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
@@ -542,7 +557,7 @@ class Affiliate(controllers.Controller):
 		kw['account'] = model.Account.get(1)
 		model.OtherDeduced(**kw)
 		
-		raise redirect('/affiliate/manual/%s' % affiliate.id)
+		return self.manual(affiliate.id, year, month)
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.payment2')
@@ -634,6 +649,19 @@ class Affiliate(controllers.Controller):
 			affiliate.jubilated = datetime.strptime(kw['jubilated'], "%Y-%m-%d").date()
 			affiliate.payment = "INPREMA"
 			flash(affiliate.jubilated)
-			raise redirect('/affiliate/%s' % affiliate.id)
+			return self.default(affiliate.id)
 		except:
-			raise redirect('/affiliate')
+			return self.index()
+	
+	@identity.require(identity.not_anonymous())
+	@expose()
+	def fill(self, affiliate, start, end):
+		
+		(affiliate, start, end) = (int(affiliate), int(start), int(end))
+		
+		affiliate = model.Affiliate.get(affiliate)
+		
+		for n in range(start, end + 1):
+			[affiliate.pay_cuota(n, month) for month in range(1, 13)]
+		
+		return self.status(affiliate.id)

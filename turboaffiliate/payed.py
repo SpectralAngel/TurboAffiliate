@@ -149,7 +149,7 @@ class PayedLoan(controllers.Controller):
 		raise redirect('/payed/%s' % loan.id)
 	
 	@identity.require(identity.not_anonymous())
-	@expose()	
+	@expose()
 	def toLoan(self, loan):
 		
 		try:
@@ -164,3 +164,15 @@ class PayedLoan(controllers.Controller):
 		except ValueError:
 			flash(u'No se encontró el préstamo')
 			raise redirect('/loan')
+	
+	@identity.require(identity.not_anonymous())
+	@expose()
+	def remove(self, loan):
+		
+		try:
+			loan = model.PayedLoan.get(int(loan))
+			loan.remove()
+		except:
+			return self.default(loan)
+		
+		raise redirect('/affiliate')

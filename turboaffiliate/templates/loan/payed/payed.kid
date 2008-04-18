@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
 	import locale
-	locale.setlocale(locale.LC_ALL, """)
+	locale.setlocale(locale.LC_ALL, "")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#"
     py:extends="'../../master.kid'">
@@ -32,29 +32,32 @@
 			</li>
 			<li>
 				<strong>Monto Original:</strong>
-				<span py:content="'L.', locale.format('%s', loan.capital, True)" />
+				<span py:content="locale.currency(loan.capital, True, True)" />
 			</li>
 			<li>
 				<a href="${tg.url('/payed/view/%s' % loan.id)}">
 					Modificar Datos
 				</a>
 			</li>
+			<li>
+				<a href="${tg.url('/payed/remove/%s' % loan.id)}">
+					Eliminar
+				</a>
+			</li>
 		</ul>
+		<h4>Deducciones</h4>
 		<table width="100%">
-			<tr>
-				<td colspan="2">Deducciones</td>
-			</tr>
 			<tr py:for="d in loan.deductions">
-				<td>${d.name}</td>
-				<td>L. ${locale.format('%s', d.amount, True)}</td>
+				<td py:content="d.name" />
+				<td py:content="locale.currency(d.amount, True, True)" />
 			</tr>
 			<tr>
 				<td>Total deducciones</td>
-				<td><strong>L. ${locale.format('%s', sum([d.amount for d in loan.deductions]), True)}</strong></td>
+				<td><strong py:content="locale.currency(sum(d.amount for d in loan.deductions), True, True)" /></td>
 			</tr>
 			<tr>
 				<td>Remanente o Monto Liquidado</td>
-				<td><strong>L. ${locale.format('%s', loan.capital - sum([d.amount for d in loan.deductions]), True)}</strong></td>
+				<td><strong py:content="locale.currency(loan.capital - sum(d.amount for d in loan.deductions), True, True)" /></td>
 			</tr>
 		</table>
 		<h4 py:if="len(loan.pays) != 0">Pagos Efectuados</h4>
@@ -72,12 +75,12 @@
 			<tbody>
 				<?python i = 1 ?>
 				<tr py:for="pay in loan.pays">
-					<td py:content="pay.day.day, '/', pay.day.month, '/', pay.day.year" />
+					<td py:content="pay.day.strftime('%d de %B de %Y')" />
 					<td py:content="i, '/', loan.months" />					
 					<?python i += 1 ?>
-					<td py:content="'L. ', locale.format('%s', pay.interest, True)" />
-					<td py:content="'L. ', locale.format('%s', pay.capital, True)" />
-					<td py:content="'L. ', locale.format('%s', pay.amount, True)" />
+					<td py:content="locale.currency(pay.interest, True, True)" />
+					<td py:content="locale.currency(pay.capital, True, True)" />
+					<td py:content="locale.currency(pay.amount, True, True)" />
 					<td py:content="pay.receipt" />
 				</tr>
 			</tbody>
