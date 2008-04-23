@@ -544,7 +544,7 @@ class Loan(controllers.Controller):
 		debt = sum(l.debt for l in loans)
 		capital = sum(l.capital for l in loans)
 		
-		count = loans.count()
+		count = len(loans)
 		
 		return dict(loans=loans, count=count, debt=debt, capital=capital, payment=payment)
 	
