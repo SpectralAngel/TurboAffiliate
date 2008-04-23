@@ -24,7 +24,7 @@
 				<tr py:for="account in report.otherAccounts">
 					<td py:content="account.account.code"/>
 					<td py:content="account.account.name" />
-					<td py:content="account.quantity" />
+					<!-- <td py:content="account.quantity" /> -->
 					<td py:content="locale.currency(account.amount, True, True)" />
 				</tr>
 			</tbody>

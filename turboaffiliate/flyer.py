@@ -269,7 +269,7 @@ class Flyer(controllers.Controller):
 		return dict(filiales=filiales)
 	
 	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.escalafon.filiales")
+	@expose(template="turboaffiliate.templates.escalafon.filialesdept")
 	def filialesDept(self, state):
 		
 		query = "affiliate.payment = '%s' and affiliate.state = '%s'" % ('Escalafon', state)
@@ -341,3 +341,19 @@ class Flyer(controllers.Controller):
 		deduced = [d for d in deduced if d.affiliate.payment == payment]
 		total += sum(d.amount for d in deduced)
 		return dict(deduced=deduced, account=account, month=months[month], year=year, total=total, payment=payment)
+	
+	@identity.require(identity.not_anonymous())
+	@expose(template="turboaffiliate.templates.affiliate.show")
+	def empty(self, year, payment):
+		
+		year = int(year)
+		tables = model.CuotaTable.select(model.CuotaTable.q.year==year)
+		
+		affiliates = []
+		for table in tables:
+			
+			if not table.empty() and table.affiliate.payment == payment:
+				
+				affiliates.append(table.affiliate)
+		
+		return dict(affiliates=affiliates, show="Cotizan por %s y pagaron un mes en %s" % (payment, year), count=len(affiliates))

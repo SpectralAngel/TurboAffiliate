@@ -305,5 +305,28 @@
 				</ul>
 			</fieldset>
 		</form>
+		<form action="empty">
+			<fieldset>
+				<legend>Afiliados que cotizaron al menos una vez</legend>
+				<ul>
+					<li>
+						<label for="payment">Cotiza por:</label>
+						<select name="payment">
+							<option>Escalafon</option>
+							<option>INPREMA</option>
+							<option>UPN</option>
+							<option>Ventanilla</option>
+						</select>
+					</li>
+					<li>
+						<label>A&ntilde;o:</label>
+						<input name="year" />
+					</li>
+					<li>
+						<input type="submit" value="Buscar" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
 	</body>
 </html>

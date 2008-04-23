@@ -376,6 +376,24 @@ class CuotaTable(SQLObject):
 		else:
 			return self.month1 and self.month2 and self.month3 and self.month4 and self.month5 and self.month6 and self.month7 and self.month8 and self.month9 and self.month10 and self.month11 and self.month12
 	
+	def empty(self):
+		
+		today = date.today()
+		if self.year == today.year:
+			for n in range(1, today.month):
+				if getattr(self, "month%s" % n):
+					return False
+			return True
+		if self.affiliate.joined == None:
+			return not self.month1 and self.month2 and self.month3 and self.month4 and self.month5 and self.month6 and self.month7 and self.month8 and self.month9 and self.month10 and self.month11 and self.month12
+		if self.year == self.affiliate.joined.year:
+			for n in range(self.affiliate.joined.month, 13):
+				if getattr(self, "month%s" % n):
+					return False
+			return True
+		else:
+			return not self.month1 and self.month2 and self.month3 and self.month4 and self.month5 and self.month6 and self.month7 and self.month8 and self.month9 and self.month10 and self.month11 and self.month12
+	
 	def payed(self):
 		total = Decimal(0)
 		if self.all():
