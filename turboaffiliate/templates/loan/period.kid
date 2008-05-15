@@ -23,11 +23,11 @@
 				</li>
 				<li>
 					<strong>Monto Original:</strong>
-					<span py:content="locale.currency(loan.capital)" />
+					<span py:content="locale.currency(loan.capital, True, True)" />
 				</li>
 				<li>
 					<strong>Saldo Actual:</strong>
-					<span py:content="locale.currency(loan.debt)" />
+					<span py:content="locale.currency(loan.debt, True, True)" />
 				</li>
 				<li>
 					<strong>Fecha de Otorgamiento:</strong>
@@ -36,7 +36,7 @@
 			</ul>
 		</div>
 		<strong>Monto Total:</strong>
-		<span py:content="locale.currency(amounte)" />
+		<span py:content="locale.currency(amount, True, True)" />
 		<br />
 		<strong>Prestamos Otorgados:</strong>
 		<span py:content="count" />

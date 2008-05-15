@@ -13,9 +13,20 @@
 	<body>
 		 <h2 py:content="affiliate.id, ' ', affiliate.firstName, ' ', affiliate.lastName" />
 		 <p><strong>Monto Total: </strong><span py:content="locale.currency(obligation + affiliate.get_monthly(), True, True)" />
-		 <a href="${tg.url('/affiliate/complete?affiliate=%s&amp;year=%s&amp;month=%s' % (affiliate.id, year, month))}">Posteo Completo</a></p>
-		 <a href="${tg.url('/affiliate/postobligation?affiliate=%s&amp;year=%s&amp;month=%s' % (affiliate.id, year, month))}">Postear solo Aportaciones</a>
-		 <h3>Detalle Deducciones Extra</h3>
+		 <form action="${tg.url('/affiliate/complete')}" method="post">
+				<input name="year" value="${year}" type="hidden" />
+				<input name="extra" value="${affiliate.id}" type="hidden" />
+				<input name="month" value="${month}" type="hidden" />
+				<input value="Posteo Completo" type="submit" />
+		</form>
+		<form action="${tg.url('/affiliate/postobligation')}" method="post">
+				<input name="year" value="${year}" type="hidden" />
+				<input name="extra" value="${affiliate.id}" type="hidden" />
+				<input name="month" value="${month}" type="hidden" />
+				<input value="Postear Solo Aportaciones" type="submit" />
+		</form>
+		</p>
+		<h3>Detalle Deducciones Extra</h3>
 		<table>
 			<thead>
 				<tr>
@@ -28,15 +39,30 @@
 				<tr py:for="extra in affiliate.extras">
 					<td py:content="extra.account.name" />
 					<td py:content="locale.currency(extra.amount, True, True)" />
-					<td><a href="${tg.url('/affiliate/postextra/%s' % extra.id)}">X</a></td>
+					<td>
+						<form action="${tg.url('/affiliate/postextra')}" method="post">
+							<input name="year" value="${year}" type="hidden" />
+							<input name="extra" value="${extra.id}" type="hidden" />
+							<input name="month" value="${month}" type="hidden" />
+							<input value="Postear" type="submit" />
+						</form>
+					</td>
 				</tr>
 			</tbody>
 		</table>
 		<h4>Detalle de Pr&eacute;tamos</h4>
 		<div py:for="loan in affiliate.loans">
 			<h4 py:content="'Préstamo ', loan.id" />
-			<span py:content="locale.currency(loan.get_payment(), True, True)" />
-			<a href="${tg.url('/affiliate/postloan/%s' % loan.id)}">Postear</a>
+			<form action="${tg.url('/affiliate/postloan')}" method="post">
+				<fieldset>
+					<legend>Posteo de Pr&eacute;stamo</legend>
+					<label for="amount">Cantidad</label><input name="amount" readonly="readonly" value="${loan.get_payment()}" />
+					<input name="loan" value="${loan.id}" type="hidden" />
+					<input name="year" value="${year}" type="hidden" />
+					<input name="month" value="${month}" type="hidden" />
+					<input value="Postear" type="submit" />
+				</fieldset>
+			</form>
 			<form action="${tg.url('/affiliate/prestamo')}">
 				<fieldset>
 					<legend>Postear otro Pago</legend>

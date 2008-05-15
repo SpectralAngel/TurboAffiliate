@@ -477,7 +477,7 @@ class Affiliate(controllers.Controller):
 			kw['account'] = model.Account.get(373)
 			model.Deduced(**kw)
 			model.OtherDeduced(**kw)
-			loan.pay(payment, date.today(), "Planilla")
+			loan.pay(payment, "Planilla", date.today())
 		
 		affiliate.pay_cuota(year, month)
 		kw = {}
@@ -491,6 +491,7 @@ class Affiliate(controllers.Controller):
 		
 		kw['affiliate'] = affiliate
 		kw['account'] = model.Account.get(1)
+		model.Deduced(**kw)
 		model.OtherDeduced(**kw)
 		
 		return self.listmanual(affiliate.payment, year, month)
@@ -503,23 +504,28 @@ class Affiliate(controllers.Controller):
 		affiliate = extra.affiliate
 		extra.manual()
 		
+		flash('Se ha posteado la deduccion')
+		
 		return self.manual(affiliate.id, year, month)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
-	def postloan(self, loan, amount):
+	def postloan(self, loan, amount, year, month):
 		
 		loan = model.Loan.get(int(loan))
 		payment = loan.get_payment()
 		kw = {}
 		kw['amount'] = payment
-		kw['affiliate'] = affiliate
+		affiliate = loan.affiliate
+		kw['affiliate'] = loan.affiliate
 		kw['account'] = model.Account.get(373)
-		Deduced(**kw)
-		OtherDeduced(**kw)
-		loan.pay(payment, date.today(), "Planilla")
+		model.Deduced(**kw)
+		model.OtherDeduced(**kw)
+		loan.pay(payment, "Planilla", date.today())
 		
-		return self.manual(affiliate.id, year, month)
+		flash('Se ha posteado el prestamo')
+		
+		return self.manual(loan.affiliate.id, year, month)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
@@ -530,11 +536,13 @@ class Affiliate(controllers.Controller):
 		kw['amount'] = payment
 		kw['affiliate'] = affiliate
 		kw['account'] = model.Account.get(373)
-		Deduced(**kw)
-		OtherDeduced(**kw)
-		loan.pay(payment, date.today(), "Planilla")
+		model.Deduced(**kw)
+		model.OtherDeduced(**kw)
+		loan.pay(payment, "Planilla", date.today())
 		
-		return self.manual(affiliate.id, year, month)
+		flash('Se ha posteado el prestamo')
+		
+		return self.manual(loan.affiliate.id, year, month)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
@@ -555,7 +563,10 @@ class Affiliate(controllers.Controller):
 		
 		kw['affiliate'] = affiliate
 		kw['account'] = model.Account.get(1)
+		model.Deduced(**kw)
 		model.OtherDeduced(**kw)
+		
+		flash('Se ha posteado la obligacion')
 		
 		return self.manual(affiliate.id, year, month)
 	

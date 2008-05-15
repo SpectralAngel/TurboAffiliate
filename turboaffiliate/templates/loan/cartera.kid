@@ -19,7 +19,7 @@
 					<th>Afiliado</th>
 					<th>Afiliaci&oacute;n</th>
 					<th>Capital</th>
-					<th>Saldo</th>
+					<!-- <th>Saldo</th> -->
 					<th>Fecha Otorgado</th>
 				</tr>
 			</thead>
@@ -29,7 +29,7 @@
 					<td py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
 					<td py:content="loan.affiliate.id" />
 					<td py:content="locale.currency(loan.capital, True, True)" />
-					<td py:content="locale.currency(loan.debt, True, True)" />
+					<!-- <td py:content="locale.currency(loan.debt, True, True)" />  -->
 					<td py:content="loan.startDate.strftime('%d/%m/%Y')" />
 				</tr>
 			</tbody>

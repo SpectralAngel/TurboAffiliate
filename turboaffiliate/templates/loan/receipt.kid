@@ -32,7 +32,10 @@
 			<td colspan="2">Deducciones</td>
 		</tr>
 		<tr py:for="d in loan.deductions">
-			<td py:content="d.account.name" />
+			<td>
+				<span py:content="d.account.name" /><br />
+				<span py:content="d.description" />
+			</td>
 			<td py:content="locale.currency(d.amount, True, True)"></td>
 		</tr>
 		<tr>

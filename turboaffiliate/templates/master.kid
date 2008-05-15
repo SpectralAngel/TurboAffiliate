@@ -53,11 +53,9 @@
     				<img src="${tg.url('/static/images/affiliate.png')}" alt="Caja" width="48" height="48" />
     				<span>Caja</span>
     			</a>
-				<a class="menu" href="${tg.url('/funebre')}">
-					<span>Ayudas Funebres</span>
-				</a>
-				<a class="menu" href="${tg.url('/survival')}">
-					<span>Ayudas de Sobrevivencia</span>
+				<a class="menu" href="http://172.16.10.2:8080">
+					<img src="${tg.url('/static/images/affiliate.png')}" alt="Caja" width="48" height="48" />
+					<span>Control de Egresos</span>
 				</a>
 	    		<a class="menu"  py:if="'admin' in tg.identity.groups" href="/catwalk">
 					<img src="${tg.url('/static/images/admin.png')}" alt="Admin" width="48" height="48" />

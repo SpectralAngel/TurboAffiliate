@@ -461,8 +461,10 @@ class Loan(controllers.Controller):
 		
 		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (first, last)
 		
-		loans = model.Loan.select(query)
-		count = loans.count()
+		loans = [loan for loan in model.Loan.select(query)]
+		query = "payed_loan.start_date >= '%s' and payed_loan.start_date <= '%s'" % (first, last)
+		loans.extend(loan for loan in model.PayedLoan.select(query))
+		count = len(loans)
 		amount = sum(l.capital for l in loans)
 		return dict(amount=amount, loans=loans, first=first, last=last, count=count)
 	
