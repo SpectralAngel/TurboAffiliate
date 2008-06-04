@@ -55,6 +55,9 @@ class Affiliate(SQLObject):
 	joined = DateCol(default=datetime.now)
 	active = BoolCol(default=True, notNone=True)
 	
+	# Reason for deactivation
+	reason = StringCol(default="Renuncia", length="50")
+	
 	escalafon = StringCol(length=11, varchar=False)
 	inprema = StringCol(length=11)
 	jubilated = DateCol(default=datetime.now)

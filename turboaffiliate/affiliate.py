@@ -352,11 +352,18 @@ class Affiliate(controllers.Controller):
 		return dict(affiliate=model.Affiliate.select(orderBy="-id")[0])
 	
 	@identity.require(identity.not_anonymous())
+	@expose(template='turboaffiliate.templates.affiliate.deactivate')
 	def deactivate(self, code):
+		
+		return dict(affiliate=model.Affiliate.get(code))
+	
+	@identity.require(identity.not_anonymous())
+	def deactivateTrue(self, code, reason):
 		
 		try:
 			affiliate = model.Affiliate.get(int(code))
 			affiliate.active = False
+			affiliate.reason = reason
 			raise redirect('/affiliate/%s' % affiliate.id)
 		
 		except:
