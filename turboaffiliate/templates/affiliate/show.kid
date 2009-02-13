@@ -24,6 +24,7 @@
 					<th>Carnet</th>
 					<th>Apellido</th>
 					<th>Nombre</th>
+					<th>telefono</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -31,6 +32,7 @@
 					<td py:content="affiliate.id" />
 					<td py:content="affiliate.lastName" />
 					<td py:content="affiliate.firstName" />
+					<td py:content="affiliate.phone" />
 				</tr>
 			</tbody>
 		</table>

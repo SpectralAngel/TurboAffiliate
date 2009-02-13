@@ -247,6 +247,11 @@ class CuotaTable(SQLObject):
 	def debt(self):
 		if self.affiliate.joined == None:
 			return Zeros
+		
+		if self.all():
+			
+			return Zero
+		
 		if self.year == self.affiliate.joined.year:
 			total = Decimal(0)
 			query = "obligation.year = %s and obligation.month >= %s" % (self.year, self.affiliate.joined.month)
@@ -365,7 +370,7 @@ class CuotaTable(SQLObject):
 	def all(self):
 		today = date.today()
 		if self.year == today.year:
-			for n in range(1, today.month):
+			for n in range(1, today.month + 1):
 				if not getattr(self, "month%s" % n):
 					return False
 			return True

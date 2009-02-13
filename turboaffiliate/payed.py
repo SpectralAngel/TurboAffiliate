@@ -109,6 +109,19 @@ class PayedLoan(controllers.Controller):
 			raise redirect('/loan')
 	
 	@identity.require(identity.not_anonymous())
+	@expose(template="turboaffiliate.templates.loan.payed.list")
+	def payment(self):
+		
+		start = datetime.strptime(start, "%Y-%m-%d").date()
+		end = datetime.strptime(end, "%Y-%m-%d").date()
+		
+		query = "payed_loan.last >= '%s' and payed_loan.last <= '%s'" % (start, end)
+		
+		loans = model.PayedLoan.select(query)
+		
+		return dict(loans=loans, count=loans.count())
+	
+	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.payed.view')
 	def view(self, code):
 		

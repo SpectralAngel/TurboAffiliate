@@ -15,13 +15,13 @@
 		 <p><strong>Monto Total: </strong><span py:content="locale.currency(obligation + affiliate.get_monthly(), True, True)" />
 		 <form action="${tg.url('/affiliate/complete')}" method="post">
 				<input name="year" value="${year}" type="hidden" />
-				<input name="extra" value="${affiliate.id}" type="hidden" />
+				<input name="affiliate" value="${affiliate.id}" type="hidden" />
 				<input name="month" value="${month}" type="hidden" />
 				<input value="Posteo Completo" type="submit" />
 		</form>
 		<form action="${tg.url('/affiliate/postobligation')}" method="post">
 				<input name="year" value="${year}" type="hidden" />
-				<input name="extra" value="${affiliate.id}" type="hidden" />
+				<input name="affiliate" value="${affiliate.id}" type="hidden" />
 				<input name="month" value="${month}" type="hidden" />
 				<input value="Postear Solo Aportaciones" type="submit" />
 		</form>

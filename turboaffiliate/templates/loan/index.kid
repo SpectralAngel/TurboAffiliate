@@ -28,6 +28,7 @@
 	</head>
 	<body>
 		<h1>Pr&eacute;stamos</h1>
+		<a href="dobles">Ver Afiliados con multiples pr&eacute;stamos</a>
 		<form action="search" method="post">
 			<fieldset>
 				<legend>Buscar Pr&eacute;stamo</legend>
@@ -52,6 +53,42 @@
 					</li>
 					<li>
 						<input type="submit" value="Buscar" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
+		<form action="cotizacion">
+			<fieldset>
+				<legend>Pr&eacute;stamos Otorgados por Periodo y Cotizacion</legend>
+				<ul>
+					<li>
+						<label>Inicio:</label>
+						<input name="start" class="date-picker" />
+					</li>
+					<li>
+						<label>Final:</label>
+						<input name="end" class="date-picker" />
+					</li>
+					<li>
+						<input type="submit" value="Ver" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
+		<form action="payed/payment">
+			<fieldset>
+				<legend>Pr&eacute;stamos Pagados por Periodo y Cotización</legend>
+				<ul>
+					<li>
+						<label>Inicio:</label>
+						<input name="start" class="date-picker" />
+					</li>
+					<li>
+						<label>Final:</label>
+						<input name="end" class="date-picker" />
+					</li>
+					<li>
+						<input type="submit" value="Ver" />
 					</li>
 				</ul>
 			</fieldset>
@@ -156,6 +193,32 @@
 				</ul>
 			</fieldset>
 		</form>
+		<form action="paymentDate">
+			<fieldset>
+				<legend>Pr&eacute;stamos por Tipo de Cotizaci&oacute;n y Fecha</legend>
+				<ul>
+					<li>
+						<label for="payment">Cotiza por:</label>
+						<select name="payment">
+							<option>Escalafon</option>
+							<option>INPREMA</option>
+							<option>UPN</option>
+						</select>
+					</li>
+					<li>
+						<label>Inicio:</label>
+						<input name="start" class="date-picker" />
+					</li>
+					<li>
+						<label>Final:</label>
+						<input name="end" class="date-picker" />
+					</li>
+					<li>
+						<input type="submit" value="Ver" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
 		<form action="liquid">
 			<fieldset>
 				<legend>Reporte de Liquidaci&oacute;n de Pr&eacute;stamos</legend>
@@ -223,6 +286,48 @@
 					</li>
 				</ul>
 			</fieldset>
+		</form>
+		<form action="cotizacionDepto">
+			<fieldset>
+				<legend>Pr&eacute;stamos por Tipo de Cotizaci&oacute;n y Departamento</legend>
+				<ul>
+					<li>
+						<label for="cotizacion">Cotiza por:</label>
+						<select name="cotizacion">
+							<option>Escalafon</option>
+							<option>INPREMA</option>
+							<option>UPN</option>
+						</select>
+					</li>
+					<li>
+						<label for="depto">Departamento:</label>
+						<select name="depto">
+							<option>Atlantida</option>
+							<option>Choluteca</option>
+							<option>Colon</option>
+							<option>Comayagua</option>
+							<option>Copan</option>
+							<option>Cortes</option>
+							<option>El Paraiso</option>
+							<option>Francisco Morazan</option>
+							<option>Gracias a Dios</option>
+							<option>Intibuca</option>
+							<option>Islas de la Bahia</option>
+							<option>La Paz</option>
+							<option>Lempira</option>
+							<option>Olancho</option>
+							<option>Ocotepeque</option>
+							<option>Santa Barbara</option>
+							<option>Valle</option>
+							<option>Yoro</option>
+						</select>
+					</li>
+					<li>
+						<input type="submit" value="Mostrar" />
+					</li>
+				</ul>
+			</fieldset>
+			
 		</form>
 	</body>
 </html>

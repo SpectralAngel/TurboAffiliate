@@ -250,6 +250,53 @@ class Loan(controllers.Controller):
 			raise redirect('/loan')
 	
 	@identity.require(identity.not_anonymous())
+	@expose(template="turboaffiliate.templates.loan.list")
+	def cotizacion(self):
+		
+		start = datetime.strptime(start, "%Y-%m-%d").date()
+		end = datetime.strptime(end, "%Y-%m-%d").date()
+		
+		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (first, last)
+		
+		loans = model.Loan.select(query)
+		
+		return dict(loans=loans, count=loans.count())
+	
+	@identity.require(identity.not_anonymous())
+	@expose(template="turboaffiliate.templates.loan.list")
+	def cotizacionDepto(self, depto, cotizacion):
+		
+		loans = model.Loan.select()
+		
+		l = []
+		
+		for loan in loans:
+			
+			if loan.affiliate.state == depto and loan.affiliate.payment == cotizacion:
+			
+				l.append(loan)
+		
+		return dict(loans=l, count=len(l), payment='',
+				debt=sum(loan.debt for loan in l), capital=sum(loan.capital for loan in l))
+	
+	@identity.require(identity.not_anonymous())
+	@expose(template="turboaffiliate.templates.loan.list")
+	def dobles(self):
+		
+		loans = model.Loan.select()
+		
+		l = []
+		
+		for loan in loans:
+			
+			if len(loan.affiliate.loans) > 1:
+				
+				l.append(loan)
+		
+		return dict(loans=l, count=len(l), payment='',
+				debt=sum(loan.debt for loan in l), capital=sum(loan.capital for loan in l))
+	
+	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.add')
 	def add(self, cardID):
 		try:
@@ -542,6 +589,26 @@ class Loan(controllers.Controller):
 		loans = []
 		for a in affiliates:
 			loans.extend(l for l in a.loans)
+		
+		debt = sum(l.debt for l in loans)
+		capital = sum(l.capital for l in loans)
+		
+		count = len(loans)
+		
+		return dict(loans=loans, count=count, debt=debt, capital=capital, payment=payment)
+		
+	@identity.require(identity.not_anonymous())
+	@expose(template='turboaffiliate.templates.loan.list')
+	def paymentDate(self, payment, start, end):
+		
+		start = datetime.strptime(start, "%Y-%m-%d").date()
+		end = datetime.strptime(end, "%Y-%m-%d").date()
+		
+		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (start, end)
+		
+		loans = model.Loan.select(query)
+		
+		loans = [l for l in loans if l.affiliate.payment==payment]
 		
 		debt = sum(l.debt for l in loans)
 		capital = sum(l.capital for l in loans)
