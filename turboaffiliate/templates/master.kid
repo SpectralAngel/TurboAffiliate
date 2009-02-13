@@ -75,6 +75,10 @@
 	    			<img src="${tg.url('/static/images/import.png')}" alt="Admin" width="48" height="48" />
 	    			<span>Volantes y Deducciones</span>
 	    		</a>
+	    		<a class="menu" href="${tg.url('/affiliate/billing')}">
+	    			<img src="${tg.url('/static/images/import.png')}" alt="Admin" width="48" height="48" />
+	    			<span>Estados de Cuenta</span>
+	    		</a>
 	    		<a class="menu" href="javascript:back();">
 	    			<img src="${tg.url('/static/images/back.png')}" width="48" height="48" />
 	    			<span>Atr&aacute;s</span>

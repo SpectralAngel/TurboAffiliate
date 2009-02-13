@@ -22,7 +22,7 @@
 
 from turbogears import controllers, expose, flash, identity, redirect
 from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json, cuota, extra
+from turboaffiliate import model, json, cuota, extra, billing
 from decimal import *
 from datetime import date, datetime
 
@@ -32,6 +32,7 @@ class Affiliate(controllers.Controller):
 	
 	cuota = cuota.Cuota()
 	extra = extra.Extra()
+	billing = billing.Billing()
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.index')

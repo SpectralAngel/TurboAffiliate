@@ -1,0 +1,6 @@
+/*  Ensures a page will be printed for the current block */
+
+.page
+{
+	page-break-after: always;
+}
