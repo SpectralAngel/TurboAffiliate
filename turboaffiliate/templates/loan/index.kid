@@ -287,6 +287,32 @@
 				</ul>
 			</fieldset>
 		</form>
+		<form action="diverge">
+			<fieldset>
+				<legend>Divergencia de Pr&eacute;stamos</legend>
+				<ul>
+					<li>
+						<label for="payment">Cotiza por:</label>
+						<select name="payment">
+							<option>Escalafon</option>
+							<option>INPREMA</option>
+							<option>UPN</option>
+						</select>
+					</li>
+					<li>
+						<label>Inicio:</label>
+						<input name="start" />
+					</li>
+					<li>
+						<label>Final:</label>
+						<input name="end" />
+					</li>
+					<li>
+						<input type="submit" value="Ver" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
 		<form action="cotizacionDepto">
 			<fieldset>
 				<legend>Pr&eacute;stamos por Tipo de Cotizaci&oacute;n y Departamento</legend>

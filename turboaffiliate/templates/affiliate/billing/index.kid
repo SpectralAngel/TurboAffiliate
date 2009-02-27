@@ -45,8 +45,8 @@
 				<legend>Cotizaci&oacute;n</legend>
 				<ul>
 					<li>
-						<label for="how">Cotiza por:</label>
-						<select name="how">
+						<label for="payment">Cotiza por:</label>
+						<select name="payment">
 							<option>Escalafon</option>
 							<option>INPREMA</option>
 							<option>UPN</option>

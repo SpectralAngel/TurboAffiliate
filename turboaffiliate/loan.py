@@ -20,7 +20,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, expose, flash, identity, redirect
+from turbogears import controllers, expose, flash, identity, redirect, validate, validators
 from cherrypy import request, response, NotFound, HTTPRedirect
 from turboaffiliate import model, json, num2stres
 from datetime import date, datetime
@@ -251,7 +251,7 @@ class Loan(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.loan.list")
-	def cotizacion(self):
+	def cotizacion(self, start, end):
 		
 		start = datetime.strptime(start, "%Y-%m-%d").date()
 		end = datetime.strptime(end, "%Y-%m-%d").date()
@@ -688,3 +688,21 @@ class Loan(controllers.Controller):
 		interest += sum(pay.interest for pay in pays)
 		
 		return dict(capital=capital, interest=interest, start=start, end=end)
+	
+	@identity.require(identity.not_anonymous())
+	@expose(template='turboaffiliate.templates.loan.diverge')
+	@validate(validators=dict(payment=validators.String(),
+							  start=validators.DateTimeConverter(format='%d/%m/%Y'),
+							  end=validators.DateTimeConverter(format='%d/%m/%Y')))
+	def diverge(self, payment, start, end):
+		
+		query = "payed_loan.last >= '%s' and payed_loan.last <= '%s'" % (start, end)
+		payed = model.PayedLoan.select(query)
+		
+		payed = [p for p in payed if len(p.affiliate.loans) > 0]
+		
+		payed = [p for p in payed if p.affiliate.loans[0].get_payment() != p.payment]
+		
+		payed = [p for p in payed if p.affiliate.payment == payment]
+		
+		return dict(payed=payed)

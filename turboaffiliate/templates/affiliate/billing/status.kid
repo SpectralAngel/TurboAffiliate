@@ -19,7 +19,6 @@
 				<h4>Estado de Cuenta Aportaciones</h4>
 				<div><strong py:content="'Al ', day.strftime('%d de %B de %Y')" /></div>
 				<h4 py:content="affiliate.id, ' ', affiliate.firstName, ' ', affiliate.lastName " />
-				<span>Afiliado desde </span><span py:content="affiliate.joined.strftime('%d de %B de %Y')" />
 			</div>
 			<table class="small" width="100%">
 				<thead>

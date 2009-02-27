@@ -24,11 +24,6 @@ table
 	width: 60px;
 	text-align: right;
 }
-a
-{
-	text-decoration: none;
-	color: inherit;
-}
 #sidebar-left, #sidebar-right, #header, #footer
 {
 	display: none;

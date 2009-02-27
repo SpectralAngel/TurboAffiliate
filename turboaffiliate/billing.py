@@ -50,6 +50,8 @@ class Billing(controllers.Controller):
 		
 		affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment)
 		
+		affiliates = (a for a in affiliates if a.joined != None)
+		
 		return dict(affiliates=affiliates, day=date.today())
 	
 	@identity.require(identity.not_anonymous())
@@ -58,6 +60,8 @@ class Billing(controllers.Controller):
 	def school(self, school):
 		
 		affiliates = model.Affiliate.select(model.Affiliate.q.school==school)
+		
+		affiliates = (a for a in affiliates if a.joined != None)
 		
 		return dict(affiliates=affiliates, day=date.today())
 	
@@ -69,5 +73,7 @@ class Billing(controllers.Controller):
 		query = "affiliate.id >= %s and affiliate.id <= %s" % (start, end)
 		
 		affiliates = model.Affiliate.select(query)
+		
+		affiliates = (a for a in affiliates if a.joined != None)
 		
 		return dict(affiliates=affiliates, day=date.today())
