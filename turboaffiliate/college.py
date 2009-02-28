@@ -234,8 +234,7 @@ class CuotaTable(SQLObject):
 	def total(self):
 		total = Decimal(0)
 		if self.all():
-			query = "obligation.year = %s" % (self.year)
-			os = Obligation.select(query)
+			os = Obligation.select(Obligation.q.year=self.year)
 			total += sum(o.amount for o in os)
 			return total
 		for n in range(1, 13):
