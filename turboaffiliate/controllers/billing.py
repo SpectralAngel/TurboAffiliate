@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
 # status.py
@@ -20,9 +20,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, expose, flash, identity, redirect, validate, validators
+from turbogears import controllers, flash, redirect, identity
+from turbogears import expose, validate, validators, error_handler
 from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json, cuota, extra
+from turboaffiliate import model, json
 from decimal import *
 from datetime import date, datetime
 

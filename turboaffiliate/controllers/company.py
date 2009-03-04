@@ -22,7 +22,8 @@
 
 from turbogears import controllers, expose, flash, identity, redirect
 from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json, obligation
+from turboaffiliate import model, json
+from turboaffiliate.controllers import obligation
 
 class Company(controllers.Controller):
 	

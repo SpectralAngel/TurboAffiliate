@@ -22,7 +22,7 @@
 
 from turbogears import controllers, expose, flash, identity, redirect
 from turbogears import validate, validators
-from turboaffiliate import model, json, obligation
+from turboaffiliate import model, json
 from decimal import *
 from datetime import date
 
