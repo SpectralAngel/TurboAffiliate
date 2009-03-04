@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
 # college.py
@@ -98,7 +98,15 @@ class Affiliate(SQLObject):
 	def payment_check(self, string):
 		
 		return self.payment == string
-
+	
+	def unpayed(self):
+		
+		for cuota in self.cuotaTable:
+			
+			if cuota.unpay() != Zero:
+				
+				return cuota
+	
 	def retrasada(self):
 		
 		tables = (t for t in self.cuotaTables if not t.all())
@@ -201,6 +209,14 @@ class Affiliate(SQLObject):
 		
 		return (date.today() - self.birthday).days / 365
 
+class Retrasada(SQLObject):
+	
+	affiliate = ForeignKey("Affiliate")
+	
+	cuota = ForeignKey("Affiliate")
+	
+	month = IntCol()
+
 class Aval(SQLObject):
 	
 	"""A Person that is used as warranty for a Loan"""
@@ -230,6 +246,16 @@ class CuotaTable(SQLObject):
 	month10 = BoolCol(default=False)
 	month11 = BoolCol(default=False)
 	month12 = BoolCol(default=False)
+	
+	def unpay(self):
+		
+		for n in range(1, 13):
+			
+			if not getattr(self, "month%s" % n):
+				
+				return n
+		
+		return Zero
 	
 	def total(self):
 		total = Decimal(0)
@@ -1244,6 +1270,7 @@ class Deduced(SQLObject):
 	affiliate = ForeignKey("Affiliate")
 	amount = CurrencyCol(default=0)
 	account = ForeignKey("Account")
+	reason = UnicodeCol(default=0)
 	month = IntCol(default=datetime.today().month)
 	year = IntCol(default=datetime.today().year)
 
@@ -1273,3 +1300,4 @@ class OtherDeduced(SQLObject):
 	affiliate = ForeignKey("Affiliate")
 	amount = CurrencyCol(default=0)
 	account = ForeignKey("Account")
+

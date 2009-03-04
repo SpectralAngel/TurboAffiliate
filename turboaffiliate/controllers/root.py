@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
 # controllers.py
@@ -79,3 +79,4 @@ class Root(controllers.RootController):
 	def logout(self):
 		identity.current.logout()
 		raise redirect("/")
+

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
 # company.py
@@ -103,3 +103,4 @@ class Company(controllers.Controller):
 			pass
 		
 		raise redirect('/company')
+

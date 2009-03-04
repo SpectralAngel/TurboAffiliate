@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
 # affiliate.py
@@ -87,6 +87,7 @@ class Affiliate(controllers.Controller):
 	@identity.require(identity.not_anonymous())
 	@expose()
 	@validate(validators=dict(
+			affiliate=validators.Int(),
 			cardID=validators.String(),
 			birthday=validators.DateTimeConverter(format='%Y-%m-%d'),
 			escalafon=validators.String(),
@@ -107,7 +108,7 @@ class Affiliate(controllers.Controller):
 			flash(u'No se escribio un número de identidad')
 			raise redirect('affiliate/add')
 		try:
-			affiliate = model.Affiliate.get(int(kw['affiliate']))
+			affiliate = model.Affiliate.get(kw['affiliate'])
 			del kw['affiliate']
 			
 			for key in kw.keys():
@@ -373,6 +374,7 @@ class Affiliate(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.manual')
+	@validate(validators=dict(affiliate=validators.Int(),year=validators.Int(),month=validators.Int()))
 	def manual(self, affiliate, year, month):
 		
 		affiliate = model.Affiliate.get(int(affiliate))
@@ -518,9 +520,9 @@ class Affiliate(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
+	@validate(validators=dict(payment=validators.String(),year=validators.String()))
 	def massChange(self, payment, change):
 		
-		(payment, change) = (str(payment), str(change))
 		affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment)
 		
 		for affiliate in affiliates:
@@ -583,22 +585,20 @@ class Affiliate(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
-	def inprema(self, **kw):
+	@validate(validators=dict(affiliate=validators.Int(),
+							  jubilated=validators.DateTimeConverter(format='%Y-%m-%d')))
+	def inprema(self, affiliate, jubilated):
 		
-		try:
-			affiliate = model.Affiliate.get(kw['affiliate'])
-			affiliate.jubilated = datetime.strptime(kw['jubilated'], "%Y-%m-%d").date()
-			affiliate.payment = "INPREMA"
-			flash(affiliate.jubilated)
-			return self.default(affiliate.id)
-		except:
-			return self.index()
+		affiliate = model.Affiliate.get(affiliate)
+		affiliate.jubilated = jubilated
+		affiliate.payment = "INPREMA"
+		flash(affiliate.jubilated)
+		return self.default(affiliate.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
+	@validate(validators=dict(affiliate=validators.Int(),start=validators.Int(),end=validators.Int()))
 	def fill(self, affiliate, start, end):
-		
-		(affiliate, start, end) = (int(affiliate), int(start), int(end))
 		
 		affiliate = model.Affiliate.get(affiliate)
 		
