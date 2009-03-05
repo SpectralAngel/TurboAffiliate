@@ -24,7 +24,7 @@ from turbogears import controllers, flash, redirect, identity
 from turbogears import expose, validate, validators, error_handler
 from cherrypy import request, response, NotFound, HTTPRedirect
 from turboaffiliate import model, json
-from turboaffiliate.controllers import cuota, extra, billing
+from turboaffiliate.controllers import cuota, extra, billing, deduced
 from decimal import *
 from datetime import date, datetime
 
@@ -35,6 +35,7 @@ class Affiliate(controllers.Controller):
 	cuota = cuota.Cuota()
 	extra = extra.Extra()
 	billing = billing.Billing()
+	deduced = deduced.Deduced()
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.index')
@@ -58,14 +59,6 @@ class Affiliate(controllers.Controller):
 		return dict(affiliates=model.Affiliate.select(model.Affiliate.q.cardID==cardID))
 	
 	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.deduced')
-	@validate(validators=dict(code=validators.Int()))
-	def deduced(self, code):
-		
-		affiliate = model.Affiliate.get(code)
-		return dict(deduced=affiliate.deduced)
-	
-	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.affiliate')
 	@validate(validators=dict(copemh=validators.Int()))
 	def byCopemh(self, copemh):
@@ -87,7 +80,6 @@ class Affiliate(controllers.Controller):
 	@identity.require(identity.not_anonymous())
 	@expose()
 	@validate(validators=dict(
-			affiliate=validators.Int(),
 			cardID=validators.String(),
 			birthday=validators.DateTimeConverter(format='%Y-%m-%d'),
 			escalafon=validators.String(),
@@ -108,7 +100,7 @@ class Affiliate(controllers.Controller):
 			flash(u'No se escribio un número de identidad')
 			raise redirect('affiliate/add')
 		try:
-			affiliate = model.Affiliate.get(kw['affiliate'])
+			affiliate = model.Affiliate.get(int(kw['affiliate']))
 			del kw['affiliate']
 			
 			for key in kw.keys():
@@ -116,7 +108,7 @@ class Affiliate(controllers.Controller):
 			
 			flash('El afiliado ha sido actualizado!')
 		
-		except model.SQLObjectNotFound:
+		except KeyError:
 			affiliate = model.Affiliate(**kw)
 			affiliate.complete(date.today().year)
 			flash('El afiliado ha sido guardado!')
@@ -135,13 +127,8 @@ class Affiliate(controllers.Controller):
 	@validate(validators=dict(affiliate=validators.Int()))
 	def status(self, affiliate):
 		
-		try:
-			affiliate = model.Affiliate.get(affiliate)
-			return dict(affiliate=affiliate, day=date.today())
-		
-		except model.SQLObjectNotFound:
-			flash('No existe el Afiliado %s' % affiliate)
-			redirect('/afiliate')
+		affiliate = model.Affiliate.get(affiliate)
+		return dict(affiliate=affiliate, day=date.today())
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.search')

@@ -75,6 +75,7 @@ class Affiliate(SQLObject):
 	extras = MultipleJoin("Extra")
 	flyers = MultipleJoin("Flyer")
 	deduced = MultipleJoin("Deduced")
+	delayed = MultipleJoin("Delayed")
 	
 	def get_monthly(self):
 		
@@ -99,13 +100,15 @@ class Affiliate(SQLObject):
 		
 		return self.payment == string
 	
-	def unpayed(self):
+	def get_delayed(self):
 		
 		for cuota in self.cuotaTable:
 			
-			if cuota.unpay() != Zero:
+			if cuota.delayed() != Zero:
 				
 				return cuota
+		
+		return None
 	
 	def retrasada(self):
 		
@@ -209,13 +212,29 @@ class Affiliate(SQLObject):
 		
 		return (date.today() - self.birthday).days / 365
 
-class Retrasada(SQLObject):
+class Delayed(SQLObject):
 	
 	affiliate = ForeignKey("Affiliate")
 	
-	cuota = ForeignKey("Affiliate")
+	cuota = ForeignKey("CuotaTable")
 	
 	month = IntCol()
+	
+	def amount(self):
+		
+		query = "obligation.year = %s and obligation.month = %s" % (self.cuota.year, self.month)
+		os = Obligation.select(query)
+		return sum(o.amount for o in os)
+	
+	def act(self):
+		
+		kw = {}
+		kw['affiliate'] = self.affiliate
+		kw['reason'] = "Cuota Retrasada %s de %s" % (self.month, self.cuota.year)
+		# TODO: Add account number
+		kw['account'] = Account.get()
+		
+		Deduced(**kw)
 
 class Aval(SQLObject):
 	
@@ -247,7 +266,7 @@ class CuotaTable(SQLObject):
 	month11 = BoolCol(default=False)
 	month12 = BoolCol(default=False)
 	
-	def unpay(self):
+	def delayed(self):
 		
 		for n in range(1, 13):
 			
@@ -1270,7 +1289,6 @@ class Deduced(SQLObject):
 	affiliate = ForeignKey("Affiliate")
 	amount = CurrencyCol(default=0)
 	account = ForeignKey("Account")
-	reason = UnicodeCol(default=0)
 	month = IntCol(default=datetime.today().month)
 	year = IntCol(default=datetime.today().year)
 
