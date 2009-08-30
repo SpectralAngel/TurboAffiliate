@@ -4,6 +4,14 @@
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Estados de Cuenta</title>
+		<script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
+		<script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
+		<script type="text/javascript">
+		$(document).ready(function(e)
+		{
+			$('input.date-picker').datepicker({ dateFormat: 'dd/mm/yy' });
+		});
+		</script>
 	</head>
 	<body>
 		<h1>Estados de Cuenta</h1>

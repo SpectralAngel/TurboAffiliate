@@ -35,6 +35,10 @@
 						<input name="year" />
 					</li>
 					<li>
+						<label for="detail">Detalle</label>
+						<input name="detail" />
+					</li>
+					<li>
                         <input type="submit" value="Agregar Deducci&oacute;n" />
 					</li>
 				</ul>

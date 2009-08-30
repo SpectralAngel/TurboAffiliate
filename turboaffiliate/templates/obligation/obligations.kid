@@ -30,7 +30,7 @@
 					<span py:content="obligation.account.name" />
 				</li>
 				<li>
-					<a href="${'/obligation/remove/%s' % obligation.id'">
+					<a href="${'/obligation/remove/%s' % obligation.id}">
 						Remover
 					</a>
 				</li>

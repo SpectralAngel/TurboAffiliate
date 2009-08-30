@@ -22,10 +22,10 @@
 
 from turbogears import controllers, expose
 from turbogears import identity, redirect
-from turbogears.toolbox.catwalk import CatWalk
+#from turbogears.toolbox.catwalk import CatWalk
 from cherrypy import request, response
 from turboaffiliate import json, model
-from turboaffiliate.controllers import affiliate, loan, company, obligation, flyer, account, payed, refinanced
+from turboaffiliate.controllers import affiliate, loan, company, obligation, flyer, account, payed, refinanced, logger
 # import logging
 # log = logging.getLogger("turboaffiliate.controllers")
 
@@ -37,10 +37,10 @@ class Root(controllers.RootController):
 	company = company.Company()
 	obligation = obligation.Obligation()
 	account = account.Account()
-	catwalk = CatWalk(model)
-	devolution = other.Devolution()
+#	catwalk = CatWalk(model)
 	payed = payed.PayedLoan()
 	refinanced = refinanced.Refinanced()
+	logger = logger.Logger()
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.welcome")

@@ -115,13 +115,14 @@
 		</form>
 		<form action="${tg.url('/escalafon/OtherReport')}" method="post">
 			<fieldset>
-				<legend>Actualizar Otras Cotizaciones</legend>
+				<legend>Actualizar Otras Cotizaciones - Paso 2</legend>
 				<ul>
 					<li>
 						<label for="payment">Cotizaci&oacute;n:</label>
 						<select name="payment">
 							<option>INPREMA</option>
 							<option>UPN</option>
+							<option>Ministerio</option>
 						</select>
 					</li>
 					<li>
@@ -140,13 +141,14 @@
 		</form>
 		<form action="${tg.url('/escalafon/showReport')}" method="post">
 			<fieldset>
-				<legend>Mostrar Otros Reportes</legend>
+				<legend>Mostrar Otros Reportes - Paso 3</legend>
 				<ul>
 					<li>
 						<label for="payment">Cotizaci&oacute;n:</label>
 						<select name="payment">
 							<option>INPREMA</option>
 							<option>UPN</option>
+							<option>Ministerio</option>
 						</select>
 					</li>
 					<li>
@@ -324,6 +326,72 @@
 					</li>
 					<li>
 						<input type="submit" value="Buscar" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
+		<form action="filialesFourListing">
+			<fieldset>
+				<legend>Filiales con Menos de 5 Afiliados</legend>
+				<ul>
+					<li>
+						<label for="state">Departamento:</label>
+						<select name="state">
+							<option>Atlantida</option>
+							<option>Choluteca</option>
+							<option>Colon</option>
+							<option>Comayagua</option>
+							<option>Copan</option>
+							<option>Cortes</option>
+							<option>El Paraiso</option>
+							<option>Francisco Morazan</option>
+							<option>Gracias a Dios</option>
+							<option>Intibuca</option>
+							<option>Islas de la Bahia</option>
+							<option>La Paz</option>
+							<option>Lempira</option>
+							<option>Olancho</option>
+							<option>Ocotepeque</option>
+							<option>Santa Barbara</option>
+							<option>Valle</option>
+							<option>Yoro</option>
+						</select>
+					</li>
+					<li>
+						<input type="submit" value="Ver" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
+		<form action="filialesFiveListing">
+			<fieldset>
+				<legend>Filiales con 5 o m&aacute;s Afiliados</legend>
+				<ul>
+					<li>
+						<label for="state">Departamento:</label>
+						<select name="state">
+							<option>Atlantida</option>
+							<option>Choluteca</option>
+							<option>Colon</option>
+							<option>Comayagua</option>
+							<option>Copan</option>
+							<option>Cortes</option>
+							<option>El Paraiso</option>
+							<option>Francisco Morazan</option>
+							<option>Gracias a Dios</option>
+							<option>Intibuca</option>
+							<option>Islas de la Bahia</option>
+							<option>La Paz</option>
+							<option>Lempira</option>
+							<option>Olancho</option>
+							<option>Ocotepeque</option>
+							<option>Santa Barbara</option>
+							<option>Valle</option>
+							<option>Yoro</option>
+						</select>
+					</li>
+					<li>
+						<input type="submit" value="Ver" />
 					</li>
 				</ul>
 			</fieldset>

@@ -24,6 +24,10 @@
 import pkg_resources
 pkg_resources.require("TurboGears")
 
+import locale
+locale.setlocale(locale.LC_ALL, "")
+print locale.getlocale()
+
 from turbogears import update_config, start_server
 import cherrypy
 cherrypy.lowercase_api = True

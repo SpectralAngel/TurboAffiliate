@@ -14,6 +14,7 @@
 				text-align: center;
 			}
 		</style>
+		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print" />
 	</head>
 	<body>
 		<h3>COPEMH</h3>
@@ -29,7 +30,7 @@
 			</thead>
 			<tbody>
 				<tr py:for="affiliate in affiliates">
-					<td py:content="affiliate.id" />
+					<td><a href="${tg.url('/affiliate/%s') % affiliate.id}" py:content="affiliate.id" /></td>
 					<td py:content="affiliate.lastName" />
 					<td py:content="affiliate.firstName" />
 					<td py:content="affiliate.phone" />

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
 # affiliate.py
@@ -56,11 +56,16 @@ class Cuota(controllers.Controller):
 			kw['affiliate'] = model.Affiliate.get(int(kw['affiliate']))
 			if kw['how'] == 1:
 				kw['affiliate'].pay_cuotas(kw['amount'])
-				raise redirect('/affiliate')
 			
 			if kw['how'] == 2:
 				kw['affiliate'].pay_cuota(kw['year'], kw['month'])
-				raise redirect("/receipt/add")
+			
+			log = dict()
+			log['user'] = identity.current.user
+			log['action'] = "Cambios de cuota en %s" % kw['affiliate'].id
+			model.Logger(**log)
+			
+			raise redirect('/affiliate')
 			
 		except model.SQLObjectNotFound:
 			flash('No existe el Afiliado %s' % kw['affiliate'])
@@ -108,6 +113,11 @@ class Cuota(controllers.Controller):
 				except KeyError:
 					setattr(table, "month%s" % n, False)
 			
+			log = dict()
+			log['user'] = identity.current.user
+			log['action'] = "Cambios de cuota Completa en %s" % table.id
+			model.Logger(**log)
+			
 		except model.SQLObjectNotFound:
 			flash('No existe el Afiliado %s' % kw['affiliate'])
 		
@@ -116,3 +126,4 @@ class Cuota(controllers.Controller):
 			raise redirect('/affiliate')
 		
 		raise redirect('/affiliate/status/%s' % table.affiliate.id)
+

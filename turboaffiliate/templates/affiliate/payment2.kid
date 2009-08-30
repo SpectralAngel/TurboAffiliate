@@ -38,7 +38,7 @@
 					<td><a href="${tg.url('/affiliate/%s' % affiliate.id)}">${affiliate.id}</a></td>
 					<td py:content="affiliate.lastName" />
 					<td py:content="affiliate.firstName" />
-					<td><a href="${tg.url('/affiliate/manual?affiliate=%s&amp;year=%s&amp;month=%s' % (affiliate.id, year, month))}">X</a></td>
+					<td><a href="${tg.url('/affiliate/manual?affiliate=%s&amp;year=%s&amp;month=%s&amp;day=%s' % (affiliate.id, year, month, day))}">X</a></td>
 				</tr>
 			</tbody>
 		</table>

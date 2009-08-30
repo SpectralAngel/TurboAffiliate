@@ -32,6 +32,7 @@ __connection__ = hub
 
 dot01 = Decimal(".01")
 Zero = Decimal(0)
+Zeros = Decimal(0)
 
 class Affiliate(SQLObject):
 
@@ -48,15 +49,15 @@ class Affiliate(SQLObject):
 	phone = UnicodeCol(default="")
 	
 	state = StringCol(length=50, default="")
-	school = StringCol(length=50, default="")
-	school2 = StringCol(length=50, default="")
+	school = StringCol(length=255, default="")
+	school2 = StringCol(length=255, default="")
 	town = StringCol(length=50, default="")
 	
 	joined = DateCol(default=datetime.now)
 	active = BoolCol(default=True, notNone=True)
 	
 	# Reason for deactivation
-	reason = StringCol(default="Renuncia", length="50")
+	reason = StringCol(default="Renuncia", length=50)
 	
 	escalafon = StringCol(length=11, varchar=False)
 	inprema = StringCol(length=11)
@@ -236,15 +237,6 @@ class Delayed(SQLObject):
 		
 		Deduced(**kw)
 
-class Aval(SQLObject):
-	
-	"""A Person that is used as warranty for a Loan"""
-	
-	firstName = UnicodeCol()
-	lastName = UnicodeCol()
-	cardID = StringCol(length=15, varchar=False)
-	loan = ForeignKey("Loan")
-
 class CuotaTable(SQLObject):
 	
 	"""Contains the payed months as Boolen values"""
@@ -268,7 +260,21 @@ class CuotaTable(SQLObject):
 	
 	def delayed(self):
 		
-		for n in range(1, 13):
+		if self.affiliate.joined == None:
+			return Zero
+		
+		start = 1
+		if self.affiliate.joined.year == self.year:
+			start = self.affiliate.joined.month
+		
+		end = 13
+		if self.year == date.today().year:
+			end = date.today().month - 1
+		
+		if end == 0:
+			end = 1
+		
+		for n in range(start, end):
 			
 			if not getattr(self, "month%s" % n):
 				
@@ -279,7 +285,7 @@ class CuotaTable(SQLObject):
 	def total(self):
 		total = Decimal(0)
 		if self.all():
-			os = Obligation.select(Obligation.q.year=self.year)
+			os = Obligation.select(Obligation.q.year==self.year)
 			total += sum(o.amount for o in os)
 			return total
 		for n in range(1, 13):
@@ -383,8 +389,13 @@ class CuotaTable(SQLObject):
 		query = "obligation.year = %s and obligation.month = %s" % (self.year, month)
 		os = Obligation.select(query)
 		
-		if self.affiliate.payment == "INPREMA" and self.affiliate.jubilated.year <= self.year:
-			total = sum(o.inprema for o in os)
+		total = 0
+		
+		if self.affiliate.payment == "INPREMA" and not self.affiliate.jubilated is None:
+			if self.affiliate.jubilated.year <= self.year:
+				total = sum(o.inprema for o in os)
+			else:
+				total = sum(o.amount for o in os)
 		else:
 			total = sum(o.amount for o in os)
 		
@@ -449,12 +460,13 @@ class CuotaTable(SQLObject):
 	def payed(self):
 		total = Decimal(0)
 		if self.all():
+			if self.affiliate.joined is None: return total
 			if self.year == self.affiliate.joined.year:
 				query = "obligation.year = %s and obligation.month >= %s" % (self.year, self.affiliate.joined.month)
 			else:
 				query = "obligation.year = %s" % (self.year)
 			os = Obligation.select(query)
-			if self.affiliate.payment == "INPREMA":
+			if self.affiliate.payment == "INPREMA" and not self.affiliate.jubilated is None:
 				if self.affiliate.jubilated.year == self.year:
 					total += sum(o.amount for o in os if o.month < self.affiliate.jubilated.month)
 					total += sum(o.inprema for o in os if o.month >= self.affiliate.jubilated.month)
@@ -469,7 +481,7 @@ class CuotaTable(SQLObject):
 			if getattr(self, "month%s" % n):
 				query = "obligation.year = %s and obligation.month = %s" % (self.year, n)
 				os = Obligation.select(query)
-				if self.affiliate.payment == "INPREMA":
+				if self.affiliate.payment == "INPREMA" and not self.affiliate.jubilated is None:
 					if self.affiliate.jubilated.year == self.year:
 						total += sum(o.amount for o in os if o.month < self.affiliate.jubilated.month)
 						total += sum(o.inprema for o in os if o.month >= self.affiliate.jubilated.month)
@@ -486,7 +498,6 @@ class Loan(SQLObject):
 	"""Data concerning to Loans"""
 	
 	affiliate = ForeignKey("Affiliate")
-	aval = SingleJoin("Aval")
 	
 	capital = CurrencyCol(default=0, notNone=True)
 	letters = StringCol()
@@ -502,6 +513,7 @@ class Loan(SQLObject):
 	
 	pays = MultipleJoin("Pay", orderBy="day")
 	deductions = MultipleJoin("Deduction")
+	aproval = ForeignKey("User")
 	
 	def percent(self):
 	
@@ -734,6 +746,12 @@ class Pay(SQLObject):
 		kw['month'] = self.month
 		self.destroySelf()
 		OldPay(**kw)
+	
+	def revert(self):
+		
+		self.loan.debt += self.capital
+		self.loan.number -= 1
+		self.destroySelf()
 
 class Account(SQLObject):
 	
@@ -748,67 +766,6 @@ class Account(SQLObject):
 	details = MultipleJoin("AccountDetail")
 	intermediates = MultipleJoin("Intermediate")
 
-class House(SQLObject):
-	
-	name = StringCol()
-	receipts = MultipleJoin("Receipt")
-	
-	@classmethod
-	def createTable(cls, *args, **kw):
-		super(House, cls).createTable(*args, **kw)
-		count = House.select().count()
-		if count == 0:
-			House(name="Tegucigalpa")
-			House(name="San Pedro Sula")
-			House(name="La Ceiba")
-
-class Receipt(SQLObject):
-	
-	"""Information about Receipts"""
-	
-	name = StringCol()
-	affiliate = IntCol(default=0)
-	amount = CurrencyCol(default=0)
-	day = DateCol(default=datetime.now)
-	house = ForeignKey("House")
-	lines = MultipleJoin("Line")
-	closed = BoolCol(default=False)
-	
-	def letters(self):
-		
-		return num2stres.parse(self.amount)
-
-class Line(SQLObject):
-	
-	"""Represents the lines of the receipt"""
-	
-	account = ForeignKey("Account")
-	receipt = ForeignKey("Receipt")
-	amount = CurrencyCol(default=0)
-	qty = IntCol()
-	unit = CurrencyCol()
-	detail = StringCol()
-	acted = BoolCol(default=False)
-	
-	def value(self):
-		return self.qty * self.unit
-	
-	def act(self):
-		
-		if self.acted:
-			return
-		self.amount = self.value()
-		self.receipt.amount += self.amount
-		self.acted = True
-	
-	def undo(self):
-		
-		if not self.acted:
-			return
-		self.amount = self.value()
-		self.receipt.amount -= self.amount
-		self.acted = False
-
 class Extra(SQLObject):
 	
 	"""Represents a Deduction that will be made"""
@@ -821,8 +778,6 @@ class Extra(SQLObject):
 	
 	def act(self):
 		self.months -= 1
-		if self.retrasada:
-			self.affiliate.pay_retrasada()
 		self.to_deduced()
 		if self.months == 0:
 			self.destroySelf()
@@ -833,6 +788,13 @@ class Extra(SQLObject):
 		kw['amount'] = self.amount
 		kw['affiliate'] = self.affiliate
 		kw['account'] = self.account
+		
+		if self.retrasada:
+			
+			cuota = self.affiliate.get_delayed()
+			month = cuota.delayed()
+			kw['reason'] = "Cuota Retrasada %s de %s" % (cuota.year, month)
+		
 		Deduced(**kw)
 	
 	def to_other(self):
@@ -859,34 +821,6 @@ class Flyer(SQLObject):
 		if self.affiliate.cardID == None:
 			return ""
 		return self.affiliate.cardID.replace('-', '') + '0011' + zeros
-
-class Reinteger(SQLObject):
-	
-	affiliate = ForeignKey("Affiliate")
-	amount = CurrencyCol(default=0)
-	concept = StringCol()
-
-class Funebre(SQLObject):
-	
-	affiliate = ForeignKey("Affiliate")
-	reason = StringCol()
-	cheque = IntCol()
-	day = DateCol(default=datetime.now)
-	amount = CurrencyCol()
-
-class Survival(SQLObject):
-	
-	affiliate = ForeignKey("Affiliate")
-	amount = CurrencyCol()
-	day = DateCol(default=datetime.now)
-	reason = StringCol()
-	cheque = IntCol()
-
-class Devolution(SQLObject):
-	
-	affiliate = IntCol(default=0)
-	name = StringCol()
-	amount = CurrencyCol()
 
 class Deduction(SQLObject):
 	
@@ -957,20 +891,6 @@ class Obligation(SQLObject):
 	
 	def accumulate(self):
 		self.account.increase(self.amount)
-	
-class History(SQLObject):
-	
-	"""Registers every action made by any user"""
-	
-	user = ForeignKey("User")
-	activity = StringCol()
-	day = DateTimeCol(default=datetime.now)
-
-class Lost(SQLObject):
-	
-	affiliate = ForeignKey("Affiliate")
-	reason = StringCol()
-	amount = CurrencyCol()
 
 class AccountDetail(SQLObject):
 	
@@ -1042,10 +962,12 @@ class PayedLoan(SQLObject):
 		
 		[pay.destroySelf() for pay in self.pays]
 		[deduction.destroySelf() for deduction in self.deductions]
+		self.destroySelf()
 	
-	def to_loan(self):
+	def to_loan(self, user):
 		
 		kw = {}
+		kw['aproval'] = user
 		kw['affiliate'] = self.affiliate
 		kw['capital'] = self.capital
 		kw['interest'] = self.interest
@@ -1241,6 +1163,7 @@ class RefinancedLoan(SQLObject):
 			deduction.remove(payed)
 		
 		self.destroySelf()
+		return payed
 
 class RefinancedDeduction(SQLObject):
 	
@@ -1289,6 +1212,7 @@ class Deduced(SQLObject):
 	affiliate = ForeignKey("Affiliate")
 	amount = CurrencyCol(default=0)
 	account = ForeignKey("Account")
+	detail = UnicodeCol(default="")
 	month = IntCol(default=datetime.today().month)
 	year = IntCol(default=datetime.today().year)
 

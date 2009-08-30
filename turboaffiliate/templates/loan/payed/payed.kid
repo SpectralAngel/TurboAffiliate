@@ -40,6 +40,11 @@
 				</a>
 			</li>
 			<li>
+				<a href="${tg.url('/payed/toLoan/%s' % loan.id)}">
+					Enviar a prestamos normales
+				</a>
+			</li>
+			<li py:if="'delete' in tg.identity.permissions">
 				<a href="${tg.url('/payed/remove/%s' % loan.id)}">
 					Eliminar
 				</a>

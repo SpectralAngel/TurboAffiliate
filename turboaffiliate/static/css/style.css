@@ -10,8 +10,8 @@ body
 #container
 {
 	clear: both;
-	padding-left: 200px; /* LC fullwidth */
-	padding-right: 190px; /* RC fullwidth + CC padding */
+	padding-left: 100px; /* LC fullwidth */
+	padding-right: 140px; /* RC fullwidth + CC padding */
 }
 #container .column
 {
@@ -26,14 +26,14 @@ body
 }
 #sidebar-left
 {
-	width: 200px; /* LC width */
+	width: 100px; /* LC width */
 	/*padding: 0 10px; *//* LC padding */
-	right: 240px; /* LC fullwidth + CC padding */
+	right: 140px; /* LC fullwidth + CC padding */
 	margin-left: -100%;
 }
 #sidebar-right
 {
-	width: 150px; /* RC width */
+	width: 100px; /* RC width */
 	padding: 0 0px; /* RC padding */
 	margin-right: -100%;
 }
@@ -82,6 +82,7 @@ body
 /* Header styling */
 #header
 {
+	color: white;
 	text-align: center;
 	width: 100%;
 }
@@ -92,7 +93,7 @@ body
 #header h1
 {
 	margin: 0;
-	padding: 15px 0;
+	padding: 7px 0;
 }
 /* End of Header styling */
 form fieldset
@@ -200,11 +201,13 @@ table .credit
 	width: 100%;
 	color: white;
 }
+#header
+{
+	background: url('/static/images/title.png') repeat-x;
+}
 #header h1
 {
 	margin: 0;
-	padding: 15px 0;
-	background: url('/static/images/title.png') repeat-x;
 	color: white;
 }
 #sidebar-left

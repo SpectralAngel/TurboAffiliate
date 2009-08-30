@@ -67,3 +67,8 @@ tfoot th
 {
 	display: inline;
 }
+a
+{
+	text-decoration: none;
+}
+

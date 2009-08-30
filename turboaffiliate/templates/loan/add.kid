@@ -6,68 +6,27 @@
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>Pr&eacute;stamos &bull; A&ntilde;adir</title>
 		<script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
-		<script src="${tg.url('/static/javascript/jquery.date.js')}" type="text/javascript"></script>
+		<script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
 		<script src="${tg.url('/static/javascript/jquery.cuota.js')}" type="text/javascript"></script>
 		<script type="text/javascript">
-		<![CDATA[
 		$(document).ready(function(e)
 		{
 			$("#calc").click(get_cuota);
+			$('#startDate').datepicker({ dateFormat: 'yy-mm-dd' });
 		});
-		]]>
-		</script>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/date.css')}" />
-		<script type="text/javascript">
-		<![CDATA[
-		$(document).ready(function(e)
-		{
-			$.datePicker.setLanguageStrings(['Domingo', 'Lunes', 'Martes',
-											 'Miercoles', 'Jueves', 'Viernes',
-											 'Sabado'],	['Enero', 'Febrero',
-											 'Marzo', 'Abril', 'Mayo', 'Junio',
-											 'Julio', 'Agosto', 'Septiembre',
-											 'Octubre', 'Noviembre', 'Diciembre'],
-											 {p:'Atras', n:'Siguiente',
-											 c:'Cierre', b:'Elija la fecha'}
-											);
-			$('input.date-picker').datePicker({startDate:'01/01/1950'});
-			$.datePicker.setDateFormat('ymd','-');
-		});
-		]]>
 		</script>
 	</head>
 	<body>
 		<h1>Crear un Pr&eacute;stamo</h1>
 		<form action="${tg.url('/loan/new')}" method="post">
 			<fieldset>
-				<legend>Informaci&oacute;n del Prestatario</legend>
-				<ul>
-					<li>
-						<input type="hidden" name="cardID" value="${affiliate.id}" />
-						<strong py:content="affiliate.firstName, ' ', affiliate.lastName" />
-					</li>
-				</ul>
-			</fieldset>
-			<fieldset>
-				<legend>Informaci&oacute;n del Aval</legend>
-				<ul>
-					<li>
-						<label for="avalFirst">Nombre:</label>
-						<input name="avalFirst" />
-					</li>
-					<li>
-						<label for="avalLast">Apellidos</label>
-						<input name="avalLast" />
-					</li>
-					<li>
-						<label for="avalCard">Identidad</label>
-						<input name="avalCard" />
-					</li>
-				</ul>
-			</fieldset>
-			<fieldset>
 				<legend>Datos del Prest&aacute;mo</legend>
 				<ul>
+					<li>
+						<label for="affiliate">Afiliado:</label>
+						<input readonly="readonly" name="affiliate" value="${affiliate.id}" />
+						<a href="${tg.url('/affiliate/%s' % affiliate.id)}" py:content="affiliate.firstName, ' ', affiliate.lastName" />
+					</li>
 					<li>
 						<label for="id">Solicitud:</label>
 						<input name="id" />
@@ -85,8 +44,8 @@
 						<input name="interest" id="interest" />
 					</li>
 					<li>
-						<label for="startDate">Fecha de Inicio</label>
-						<input name="startDate" class="date-picker" />
+						<label for="startDate">Fecha de Inicio:</label>
+						<input name="startDate" id="startDate" type="text" />
 					</li>
 					<li>
 						<label for="cuota">Cuota:</label>
@@ -101,3 +60,4 @@
 		</form>
 	</body>
 </html>
+

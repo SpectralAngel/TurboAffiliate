@@ -5,23 +5,12 @@
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Afiliados</title>
 		<script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
-		<script src="${tg.url('/static/javascript/jquery.date.js')}" type="text/javascript"></script>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/date.css')}" />
+		<script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
 		<script type="text/javascript">
 		<![CDATA[
 		$(document).ready(function(e)
 		{
-			$.datePicker.setLanguageStrings(['Domingo', 'Lunes', 'Martes',
-											 'Miércoles', 'Jueves', 'Viernes',
-											 'Sábado'],	['Enero', 'Febrero',
-											 'Marzo', 'Abril', 'Mayo', 'Junio',
-											 'Julio', 'Agosto', 'Septiembre',
-											 'Octubre', 'Noviembre', 'Diciembre'],
-											 {p:'Atras', n:'Siguiente',
-											 c:'Cierre', b:'Elija la fecha'}
-											);
-			$('input.date-picker').datePicker({startDate:'01/01/1950'});
-			$.datePicker.setDateFormat('ymd','-');
+			$('input.date-picker').datepicker({ dateFormat: 'yy-mm-dd' });
 		});
 		]]>
 		</script>
@@ -138,6 +127,8 @@
 							<option>INPREMA</option>
 							<option>UPN</option>
 							<option>Ventanilla</option>
+							<option>Ministerio</option>
+							<option>Retirado</option>
 						</select>
 					</li>
 					<li>
@@ -165,6 +156,9 @@
 							<option>INPREMA</option>
 							<option>UPN</option>
 							<option>Ventanilla</option>
+							<option>Ministerio</option>
+							<option>Retirado</option>
+
 						</select>
 					</li>
 					<li>
@@ -228,6 +222,29 @@
 				<legend>Mostrar por Instituto</legend>
 				<ul>
 					<li>
+						<label for="state">Departamento:</label>
+						<select name="state">
+							<option>Atlantida</option>
+							<option>Choluteca</option>
+							<option>Colon</option>
+							<option>Comayagua</option>
+							<option>Copan</option>
+							<option>Cortes</option>
+							<option>El Paraiso</option>
+							<option>Francisco Morazan</option>
+							<option>Gracias a Dios</option>
+							<option>Intibuca</option>
+							<option>Islas de la Bahia</option>
+							<option>La Paz</option>
+							<option>Lempira</option>
+							<option>Olancho</option>
+							<option>Ocotepeque</option>
+							<option>Santa Barbara</option>
+							<option>Valle</option>
+							<option>Yoro</option>
+						</select>
+					</li>
+					<li>
 						<label>Instituto:</label>
 						<input name="school" />
 					</li>
@@ -261,13 +278,14 @@
 		</form>
 		<form action="listmanual">
 			<fieldset>
-				<legend>Listado para Posteo Manual de Afiliados, INPREMA, UPN</legend>
+				<legend>Listado para Posteo Manual de Afiliados, INPREMA, UPN - Paso 1</legend>
 				<ul>
 					<li>
 						<label for="payment">Cotiza por:</label>
 						<select name="payment">
 							<option>INPREMA</option>
 							<option>UPN</option>
+							<option>Ministerio</option>
 						</select>
 					</li>
 					<li>
@@ -279,12 +297,48 @@
 						<input name="month" />
 					</li>
 					<li>
+						<label>D&iacute;a de Posteo:</label>
+						<input name="day" class="date-picker" />
+					</li>
+					<li>
 						<input type="submit" value="Ver" />
 					</li>
 				</ul>
 			</fieldset>
 		</form>
-		
+		<form action="stateSchool">
+			<fieldset>
+				<legend>Mostrar por Instituto</legend>
+				<ul>
+					<li>
+						<label for="state">Departamento:</label>
+						<select name="state">
+							<option>Atlantida</option>
+							<option>Choluteca</option>
+							<option>Colon</option>
+							<option>Comayagua</option>
+							<option>Copan</option>
+							<option>Cortes</option>
+							<option>El Paraiso</option>
+							<option>Francisco Morazan</option>
+							<option>Gracias a Dios</option>
+							<option>Intibuca</option>
+							<option>Islas de la Bahia</option>
+							<option>La Paz</option>
+							<option>Lempira</option>
+							<option>Olancho</option>
+							<option>Ocotepeque</option>
+							<option>Santa Barbara</option>
+							<option>Valle</option>
+							<option>Yoro</option>
+						</select>
+					</li>
+					<li>
+						<input type="submit" value="Ver" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
 		<form action="solvent">
 			<fieldset>
 				<legend>Afiliados Solventes por A&ntilde;o</legend>

@@ -6,23 +6,12 @@
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Editar Afiliado</title>
 		<script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
-		<script src="${tg.url('/static/javascript/jquery.date.js')}" type="text/javascript"></script>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/date.css')}" />
+		<script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
 		<script type="text/javascript">
 		<![CDATA[
 		$(document).ready(function(e)
 		{
-			$.datePicker.setLanguageStrings(['Domingo', 'Lunes', 'Martes',
-											 'Miércoles', 'Jueves', 'Viernes',
-											 'Sábado'],	['Enero', 'Febrero',
-											 'Marzo', 'Abril', 'Mayo', 'Junio',
-											 'Julio', 'Agosto', 'Septiembre',
-											 'Octubre', 'Noviembre', 'Diciembre'],
-											 {p:'Atras', n:'Siguiente',
-											 c:'Cierre', b:'Elija la fecha'}
-											);
-			$('input.date-picker').datePicker({startDate:'01/01/1950'});
-			$.datePicker.setDateFormat('ymd','-');
+			$('input.date-picker').datepicker({ dateFormat: 'yy-mm-dd' });
 		});
 		]]>
 		</script>
@@ -57,12 +46,10 @@
 					<li>
 						<label for="birthday">Fecha de Nacimiento</label>
 						<input name="birthday" value="${affiliate.birthday}" class="date-picker" />
-						<span class="help">formato: a&ntilde;o-mes-d&iacute;a</span>
 					</li>
 					<li>
 						<label for="joined">Fecha de Afiliaci&oacute;n</label>
 						<input name="joined" value="${affiliate.joined}" class="date-picker" />
-						<span class="help">formato: a&ntilde;o-mes-d&iacute;a</span>
 					</li>
 				</ul>
 			</fieldset>
@@ -80,6 +67,10 @@
 							<option py:if="not affiliate.payment == 'INPREMA'">INPREMA</option>
 							<option py:if="affiliate.payment == 'Ventanilla'" selected="">Ventanilla</option>
 							<option py:if="not affiliate.payment == 'Ventanilla'">Ventanilla</option>
+							<option py:if="affiliate.payment == 'Ministerio'" selected="">Ministerio</option>
+							<option py:if="not affiliate.payment == 'Ministerio'">Ministerio</option>
+							<option py:if="affiliate.payment == 'Retirado'" selected="">Retirado</option>
+							<option py:if="not affiliate.payment == 'Retirado'">Retirado</option>
 						</select>
 					</li>
 					<li>

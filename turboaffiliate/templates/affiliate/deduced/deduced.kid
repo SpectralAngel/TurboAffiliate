@@ -16,18 +16,26 @@
 				<tr>
 					<th>Deducci&oacute;n</th>
 					<th>Cantidad</th>
+					<th>Detalle</th>
 					<th>Mes</th>
 					<th>A&ntilde;o</th>
+					<th py:if="tg.identity.user.has_permission('Deductor')">Eliminar</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr py:for="d in deduced">
+				<tr py:for="d in affiliate.deduced">
 					<td py:content="d.account.name" />
 					<td py:content="locale.currency(d.amount, True, True)" />
+					<td py:content="d.detail" />
 					<td py:content="d.month" />
 					<td py:content="d.year" />
+					<th py:if="tg.identity.user.has_permission('Deductor')">
+						<a href="${tg.url('/affiliate/deduced/delete/%s' % d.id)}" >X</a>
+					</th>
 				</tr>
 			</tbody>
 		</table>
+		<a py:if="tg.identity.user.has_permission('Deductor')" href="${tg.url('/affiliate/deduced/add/%s' % affiliate.id)}">Agregar Deducci&oacute;n</a>
 	</body>
 </html>
+

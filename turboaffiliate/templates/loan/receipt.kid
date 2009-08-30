@@ -75,7 +75,6 @@
 	<p class="center"><span style="text-align: center">Vo. Bo.
 	Secretario de Finanzas</span></p>
 	</center>
-	<p><span style="text-align: center">Liquidado por:
-	${tg.identity.user.display_name}</span></p>
+	<p><span py:if="not loan.aproval is None" style="text-align: center">Liquidado por: ${loan.aproval.display_name}</span></p>
 </body>
 </html>

@@ -24,6 +24,12 @@
 		tiene tarjeta de identidad ingresada haga
 		<a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">click aqu&iacute;</a>
 		para ingresarla</span>
+		<span class="flash" py:if="affiliate.state == None or affiliate.state ==''">Este afiliado no
+		tiene Departamento
+		<a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Ingresar</a></span>
+		<span class="flash" py:if="affiliate.town == None or affiliate.town ==''">Este afiliado no
+		tiene Ciudad
+		<a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Ingresar</a></span>
 		<ul class="toolbox">
 			<li>
 				<a class="edit" href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Editar</a>
@@ -38,8 +44,8 @@
 				<a class="add" href="${tg.url('/affiliate/extra/add/%s' % affiliate.id)}">A&ntilde;adir Deducci&oacute;n Extra</a>
 			</li>
 			<li>
-				<a py:if="affiliate.active" class="delete" href="${tg.url('/affiliate/off/%s' % affiliate.id)}">Desactivar Afiliado</a>
-				<a py:if="not affiliate.active" class="delete" href="${tg.url('/affiliate/on/%s' % affiliate.id)}">Activar Afiliado</a>
+				<a py:if="affiliate.active" class="delete" href="${tg.url('/affiliate/deactivate/%s' % affiliate.id)}">Desactivar Afiliado</a>
+				<a py:if="not affiliate.active" class="delete" href="${tg.url('/affiliate/activate/%s' % affiliate.id)}">Activar Afiliado</a>
 			</li>
 			<li>
 				<a class="view" href="${tg.url('/affiliate/deduced/%s' % affiliate.id)}">Ver detalle de Deducciones</a>
@@ -57,7 +63,7 @@
 			</li>
 			<li>
 				<strong>Fecha de Nacimiento: </strong>
-				<span py:content="affiliate.birthday.strftime('%d de %B de %Y')" />
+				<span py:if="not affiliate.birthday is None" py:content="affiliate.birthday.strftime('%d de %B de %Y')" />
 			</li>
 			<li>
 				<strong>G&eacute;nero:</strong>
@@ -101,7 +107,7 @@
 			</li>
 			<li>
 				<strong>Fecha de Afiliaci&oacute;n: </strong>
-				<span py:content="affiliate.joined.strftime('%d de %B de %Y')" />
+				<span py:if="not affiliate.joined is None" py:content="affiliate.joined.strftime('%d de %B de %Y')" />
 			</li>
 			<li>
 				<a href="${tg.url('/affiliate/status/%s' % affiliate.id)}">Estado de Cuenta</a>

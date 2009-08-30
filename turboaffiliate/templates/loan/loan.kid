@@ -21,9 +21,7 @@
 			<li>
 				<strong>Prestatario:</strong>
 				<a href="${tg.url('/affiliate/%s' % loan.affiliate.id)}">
-					<span py:content="loan.affiliate.id" />
-				</a>
-				<span py:content="loan.affiliate.id" /> <span py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
+					<span py:content="loan.affiliate.id" /></a> <span py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
 			</li>
 			<li>
 				<strong>Fecha de Otorgamiento:</strong>
@@ -41,7 +39,7 @@
 			<li class="link">
 				<a href="${tg.url('/loan/pay/addfree/%s' % loan.id)}">Agregar un Pago sin Intereses</a>
 			</li>
-			<li class="link">
+			<li class="link" py:if="'delete' in tg.identity.permissions">
 				<a href="${'/loan/remove/%s' % loan.id}">Eliminar</a>
 			</li>
 			<li class="link">
@@ -55,9 +53,6 @@
 			</li>
 			<li class="link">
 				<a href="${tg.url('/loan/view/%s' % loan.id)}">Modificar Datos del Pr&eacute;stamo</a>
-			</li>
-			<li class="link">
-				<a href="${tg.url('/loan/refinance/%s' % loan.id)}">Refinanciar</a>
 			</li>
 		</ul>
 		<table width="100%">
@@ -120,15 +115,11 @@
 				</tr>
 			</thead>
 			<tbody>
-				<?python
-					i = 1
-				?>
+				<?python i = 1 ?>
 				<tr py:for="pay in loan.pays">
 					<td py:content="pay.day.strftime('%d/%m/%Y')" />
 					<td py:content="i, '/', loan.months" />					
-					<?python
-						i += 1
-					?>
+					<?python i += 1 ?>
 					<td py:content="locale.currency(pay.interest, True, True)" />
 					<td py:content="locale.currency(pay.capital, True, True)" />
 					<td py:content="locale.currency(pay.amount, True, True)" />

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
 # account.py
@@ -20,7 +20,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, expose, flash, identity, redirect
+from turbogears import controllers, flash, redirect, identity
+from turbogears import expose, validate, validators, error_handler
 from cherrypy import request, response, NotFound, HTTPRedirect
 from turboaffiliate import model, json
 from datetime import date
@@ -38,13 +39,11 @@ class Account(controllers.Controller):
 	@identity.require(identity.not_anonymous())
 	#@expose(template="turboaffiliate.templates.account.account")
 	@expose("json")
+	@validate(validators=dict(code=validators.Int()))
 	def default(self, code):
-		try:
-			account = model.Account.byCode(int(code))
-			return dict(account=account)
-		except model.SQLObjectNotFound:
-			flash('No se encontro la cuenta')
-			return dict(account=None)
+	
+		account = model.Account.byCode(code)
+		return dict(account=account)
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.account.add")
@@ -52,18 +51,24 @@ class Account(controllers.Controller):
 		return dict()
 	
 	@expose()
+	@validate(validators=dict(amount=validators.Number(),code=validators.Int(),
+							  name=validators.String()))
 	def save(self, **kw):
 		try:
-			kw['amount'] = Decimal(kw['amount'])
-			kw['code'] = int(kw['code'])
-			account = model.Account.byCode(int(kw['code']))
+			account = model.Account.byCode(kw['code'])
 			account.name = kw['name']
-			account.code = kw['code']
 			account.amount = kw['amount']
+			
+			log = dict()
+			log['user'] = identity.current.user
+			log['action'] = "Agregada cuenta de %s" % account.id
+			model.Logger(**log)
+			
 		except model.SQLObjectNotFound:
 			account = model.Account(**kw)
 		except ValueError:
 			raise redirect('/account/add')
+		
 		flash("La cuenta ha sido grabada")
 		raise redirect('/account/%s' % account.code)
 	
@@ -72,3 +77,4 @@ class Account(controllers.Controller):
 	def resume(self):
 		accounts = model.Account.select()
 		companies = model.Account.select()
+

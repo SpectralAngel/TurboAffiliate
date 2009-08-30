@@ -1,6 +1,1 @@
-*.png
-*.sqlite
-.settings
-.project
-.pydevproject
-turboaffiliate/catwalk-session
+devdata.sqlite

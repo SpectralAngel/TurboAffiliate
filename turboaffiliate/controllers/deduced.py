@@ -29,29 +29,25 @@ from datetime import date, datetime
 
 class Deduced(controllers.Controller):
 	
-	def index(self):
-		 
-		 pass
-	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.deduced.deduced')
 	@validate(validators=dict(code=validators.Int()))
 	def default(self, code):
 		
 		affiliate = model.Affiliate.get(code)
-		return dict(deduced=affiliate.deduced)
+		return dict(affiliate=model.Affiliate.get(code))
 	
-	@identity.require(identity.not_anonymous())
+	@identity.require(identity.has_permission("Deductor"))
 	@expose(template='turboaffiliate.templates.affiliate.deduced.add')
 	@validate(validators=dict(affiliate=validators.Int()))
 	def add(self, affiliate):
 		
-		return dict(affiliate=model.Affiliate.get(affiliate), accounts=model.Accounts.select())
+		return dict(affiliate=model.Affiliate.get(affiliate), accounts=model.Account.select())
 	
-	@identity.require(identity.not_anonymous())
+	@identity.require(identity.has_permission("Deductor"))
 	@expose()
 	@validate(validators=dict(affiliate=validators.Int(), account=validators.Int(),
-							amount=validators.Money(), year=validators.Int(),
+							amount=validators.Number(), year=validators.Int(),
 							month=validators.Int()))
 	def save(self, affiliate, account, **kw):
 	
@@ -61,14 +57,14 @@ class Deduced(controllers.Controller):
 		
 		raise redirect("/affiliate/deduced/%s" % affiliate)
 	
-	@identity.require(identity.not_anonymous())
+	@identity.require(identity.has_permission("Deductor"))
 	@expose()
-	@validate(validators=dict(deduced=validators.Int())
+	@validate(validators=dict(deduced=validators.Int()))
 	def delete(self, deduced):
 		
 		deduced = model.Deduced.get(deduced)
 		affiliate = deduced.affiliate
-		deduced.DestroySelf()
+		deduced.destroySelf()
 		
 		raise redirect("/affiliate/deduced/%s" % affiliate.id)
 

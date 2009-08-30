@@ -19,31 +19,27 @@
 					<th>Pr&eacute;stamo</th>
 					<th>COPEMH</th>
 					<th>Afiliado</th>
-					<th>Monto</th>
 					<th>Cotiza</th>
-					<th>Saldo</th>
+					<th>Monto</th>
 					<th>Otorgado</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr py:for="loan in loans">
 					<td><a class="print" href="${tg.url('/loan/%s' % loan.id)}" py:content="loan.id"  /></td>
-					<td py:content="loan.affiliate.id" />
+					<td><a class="print" href="${tg.url('/affiliate/%s' % loan.affiliate.id)}" py:content="loan.affiliate.id" /></td>
 					<td py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
 					<td py:content="loan.affiliate.payment" />
-					<td py:content="locale.currency(loan.capital)" />
-					<td py:content="locale.currency(loan.debt)" />
+					<td py:content="locale.currency(loan.capital, True, True)" />
 					<td py:content="loan.startDate" />
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
-					<td>Cantidad</td>
-					<td py:content="count" />
-					<td></td>
-					<td py:content="locale.currency(capital)" />
-					<td py:content="locale.currency(debt)" />
-					<td></td>
+					<th>Cantidad</th>
+					<th colspan="3" py:content="count" />
+					<th py:content="locale.currency(capital, True, True)" />
+					<th></th>
 				</tr>
 			</tfoot>
 		</table>

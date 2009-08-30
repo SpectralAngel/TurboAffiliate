@@ -8,14 +8,14 @@
 	</head>
 	<body>
 		<h2>A&ntilde;adir un Afiliado</h2>
-		<form action="deactivateTrue" method="post">
+		<form action="/affiliate/deactivateTrue" method="post">
 			<fieldset>
 				<legend>Desactivar Afiliado</legend>
 				<ul>
 					<li>
 						<label>Afiliado:</label>
 						<input value="${affiliate.firstName + ' ' + affiliate.firstName}" readonly="readonly" />
-						<input value="${affiliate.id}" name="code" />
+						<input value="${affiliate.id}" name="affiliate" readonly="readonly" />
 					</li>
 					<li>
 						<label>Raz&oacute;n</label>
@@ -23,6 +23,8 @@
 							<option>Retiro</option>
 							<option>Fallecimiento</option>
 							<option>Renuncia</option>
+							<option>No es Afiliado</option>
+							<option>Suspendido</option>
 						</select>
 					</li>
 					<li><input type="submit" value="Desactivar" /> </li>

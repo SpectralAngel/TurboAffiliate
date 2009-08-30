@@ -5,6 +5,16 @@
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; A&ntilde;adir Afiliado</title>
+		<script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
+		<script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
+		<script type="text/javascript">
+		<![CDATA[
+		$(document).ready(function(e)
+		{
+			$('input.date-picker').datepicker({ dateFormat: 'yy-mm-dd' });
+		});
+		]]>
+		</script>
 	</head>
 	<body>
 		<h2>A&ntilde;adir un Afiliado</h2>
@@ -56,6 +66,7 @@
 							<option>UPN</option>
 							<option>INPREMA</option>
 							<option>Ventanilla</option>
+							<option>Ministerio</option>
 						</select>
 					</li>
 					<li>

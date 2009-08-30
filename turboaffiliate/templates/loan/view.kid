@@ -99,6 +99,12 @@
 				</ul>
 			</fieldset>
 		</form>
+		<form action="">
+			<div>
+				<input name="interest" id="interest" value="${loan.interest}" type="hidden" />
+				<input name="capital" id="amount" value="${loan.capital}" type="hidden" />
+			</div>
+		</form>
 		<form action="${tg.url('/loan/month')}">
 			<fieldset>
 				<legend>Cambiar Periodo de Pago</legend>
@@ -107,8 +113,6 @@
 						<label for="months">Meses:</label>
 						<input name="months" id="months" />
 						<input type="hidden" name="loan" value="${loan.id}" />
-						<input name="capital" id="amount" value="${loan.capital}" type="hidden" />
-						<input name="interest" id="interest" value="${loan.interest}" type="hidden" />
 					</li>
 					<li>
 						<label for="payment">Cuota:</label>

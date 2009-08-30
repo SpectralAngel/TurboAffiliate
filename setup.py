@@ -13,7 +13,7 @@ setup(
     description=description,
     author=author,
     author_email=email,
-    url=url,
+    #url=url,
     #download_url=download_url,
     license=license,
     

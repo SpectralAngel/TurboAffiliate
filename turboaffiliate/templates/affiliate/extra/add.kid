@@ -30,9 +30,16 @@
 						<label for="months">Meses</label>
 						<input name="months" />
 					</li>
+					<li>
+						<label>Es Retrasada</label>
+						<input name="retrasada" type="checkbox" />
+					</li>
+					<li>
+						<input type="submit" value="Guardar" />
+					</li>
 				</ul>
 			</fieldset>
-			<input type="submit" value="Guardar" />
 		</form>
 	</body>
 </html>
+

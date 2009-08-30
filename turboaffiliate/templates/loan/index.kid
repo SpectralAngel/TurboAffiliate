@@ -5,23 +5,12 @@
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Afiliados</title>
 		<script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
-		<script src="${tg.url('/static/javascript/jquery.date.js')}" type="text/javascript"></script>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/date.css')}" />
+		<script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
 		<script type="text/javascript">
 		<![CDATA[
 		$(document).ready(function(e)
 		{
-			$.datePicker.setLanguageStrings(['Domingo', 'Lunes', 'Martes',
-											 'Miércoles', 'Jueves', 'Viernes',
-											 'Sábado'],	['Enero', 'Febrero',
-											 'Marzo', 'Abril', 'Mayo', 'Junio',
-											 'Julio', 'Agosto', 'Septiembre',
-											 'Octubre', 'Noviembre', 'Diciembre'],
-											 {p:'Atras', n:'Siguiente',
-											 c:'Cierre', b:'Elija la fecha'}
-											);
-			$('input.date-picker').datePicker({startDate:'01/01/1950'});
-			$.datePicker.setDateFormat('ymd','-');
+			$('input.date-picker').datepicker({ dateFormat: 'yy-mm-dd' });
 		});
 		]]>
 		</script>
@@ -57,6 +46,24 @@
 				</ul>
 			</fieldset>
 		</form>
+		<form action="period">
+			<fieldset>
+				<legend>Mostrar Pr&eacute;stamos de un Periodo</legend>
+				<ul>
+					<li>
+						<label>Inicio:</label>
+						<input name="first" class="date-picker" />
+					</li>
+					<li>
+						<label>Final:</label>
+						<input name="last" class="date-picker" />
+					</li>
+					<li>
+						<input type="submit" value="Buscar" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
 		<form action="cotizacion">
 			<fieldset>
 				<legend>Pr&eacute;stamos Otorgados por Periodo y Cotizacion</legend>
@@ -70,14 +77,52 @@
 						<input name="end" class="date-picker" />
 					</li>
 					<li>
+						<label for="payment">Cotiza por:</label>
+						<select name="payment">
+							<option>Escalafon</option>
+							<option>INPREMA</option>
+							<option>UPN</option>
+							<option>Ministerio</option>
+							<option>Retirado</option>
+						</select>
+					</li>
+					<li>
 						<input type="submit" value="Ver" />
 					</li>
 				</ul>
 			</fieldset>
 		</form>
-		<form action="payed/payment">
+		<form action="/payed/payment">
 			<fieldset>
-				<legend>Pr&eacute;stamos Pagados por Periodo y Cotización</legend>
+				<legend>Pr&eacute;stamos por Periodo y Cotizacion - Pagados </legend>
+				<ul>
+					<li>
+						<label>Inicio:</label>
+						<input name="start" class="date-picker" />
+					</li>
+					<li>
+						<label>Final:</label>
+						<input name="end" class="date-picker" />
+					</li>
+					<li>
+						<label for="payment">Cotiza por:</label>
+						<select name="payment">
+							<option>Escalafon</option>
+							<option>INPREMA</option>
+							<option>UPN</option>
+							<option>Ministerio</option>
+							<option>Retirado</option>
+						</select>
+					</li>
+					<li>
+						<input type="submit" value="Ver" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
+		<form action="/payed/period">
+			<fieldset>
+				<legend>Pr&eacute;stamos por Periodo - Pagados</legend>
 				<ul>
 					<li>
 						<label>Inicio:</label>
@@ -114,24 +159,6 @@
 					<li>
 						<label>D&iacute;a:</label>
 						<input name="day" class="date-picker" />
-					</li>
-					<li>
-						<input type="submit" value="Buscar" />
-					</li>
-				</ul>
-			</fieldset>
-		</form>
-		<form action="period">
-			<fieldset>
-				<legend>Mostrar Pr&eacute;stamos de un Periodo</legend>
-				<ul>
-					<li>
-						<label>Inicio:</label>
-						<input name="first" class="date-picker" />
-					</li>
-					<li>
-						<label>Final:</label>
-						<input name="last" class="date-picker" />
 					</li>
 					<li>
 						<input type="submit" value="Buscar" />
@@ -185,6 +212,8 @@
 							<option>Escalafon</option>
 							<option>INPREMA</option>
 							<option>UPN</option>
+							<option>Ministerio</option>
+							<option>Retirado</option>
 						</select>
 					</li>
 					<li>
@@ -203,6 +232,8 @@
 							<option>Escalafon</option>
 							<option>INPREMA</option>
 							<option>UPN</option>
+							<option>Ministerio</option>
+							<option>Retirado</option>
 						</select>
 					</li>
 					<li>
@@ -297,6 +328,8 @@
 							<option>Escalafon</option>
 							<option>INPREMA</option>
 							<option>UPN</option>
+							<option>Ministerio</option>
+							<option>Retirado</option>
 						</select>
 					</li>
 					<li>
@@ -323,6 +356,8 @@
 							<option>Escalafon</option>
 							<option>INPREMA</option>
 							<option>UPN</option>
+							<option>Ministerio</option>
+							<option>Retirado</option>
 						</select>
 					</li>
 					<li>
@@ -353,7 +388,7 @@
 					</li>
 				</ul>
 			</fieldset>
-			
 		</form>
 	</body>
 </html>
+

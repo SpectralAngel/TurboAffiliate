@@ -122,11 +122,20 @@ class User(SQLObject):
 	groups = RelatedJoin("Group", intermediateTable="user_group", 
 						 joinColumn="user_id", otherColumn="group_id")
 	
+	loans = MultipleJoin("Loan", joinColumn="aproval_id")
+	logs = MultipleJoin("Logger", joinColumn="user_id")
+	
 	def _get_permissions(self):
 		perms = set()
 		for g in self.groups:
 			perms = perms | set(g.permissions)
 		return perms
+	
+	def has_permission(self, permission):
+		
+		perms = (p.permission_name for p in self._get_permissions())
+		if permission in perms: return True
+		else: return False
 	
 	def _set_password(self, cleartext_password):
 		"Runs cleartext_password through the hash algorithm before saving."
@@ -146,4 +155,10 @@ class Permission(SQLObject):
 						intermediateTable="group_permission", 
 						 joinColumn="permission_id", 
 						 otherColumn="group_id")
+
+class Logger(SQLObject):
+	
+	user = ForeignKey("User")
+	action = UnicodeCol(default="")
+	day = DateTimeCol(default=datetime.now)
 

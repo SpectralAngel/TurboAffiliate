@@ -17,12 +17,14 @@
 				<input name="year" value="${year}" type="hidden" />
 				<input name="affiliate" value="${affiliate.id}" type="hidden" />
 				<input name="month" value="${month}" type="hidden" />
+				<input name="day" value="${day.date().strftime('%Y-%m-%d')}" type="hidden" />
 				<input value="Posteo Completo" type="submit" />
 		</form>
 		<form action="${tg.url('/affiliate/postobligation')}" method="post">
 				<input name="year" value="${year}" type="hidden" />
 				<input name="affiliate" value="${affiliate.id}" type="hidden" />
 				<input name="month" value="${month}" type="hidden" />
+				<input name="day" value="${day.date().strftime('%Y-%m-%d')}" type="hidden" />
 				<input value="Postear Solo Aportaciones" type="submit" />
 		</form>
 		</p>
@@ -60,6 +62,7 @@
 					<input name="loan" value="${loan.id}" type="hidden" />
 					<input name="year" value="${year}" type="hidden" />
 					<input name="month" value="${month}" type="hidden" />
+					<input name="day" value="${day.date().strftime('%Y-%m-%d')}" type="hidden" />
 					<input value="Postear" type="submit" />
 				</fieldset>
 			</form>
@@ -78,6 +81,7 @@
 				</fieldset>
 			</form>
 		</div>
-		<a href="${tg.url('/affiliate/listmanual?payment=%s&amp;month=%s&amp;year=%s' % (affiliate.payment, month, year))}">Regresar</a>
+		<a href="${tg.url('/affiliate/listmanual?payment=%s&amp;month=%s&amp;year=%s&amp;day=%s' % (affiliate.payment, month, year, day.date()))}">Regresar</a>
 	</body>
 </html>
+

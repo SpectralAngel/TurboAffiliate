@@ -6,25 +6,14 @@
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>Pr&eacute;stamos &bull; Pagar</title>
 		<script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
-		<script src="${tg.url('/static/javascript/jquery.date.js')}" type="text/javascript"></script>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/date.css')}" />
+		<script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
+		<script src="${tg.url('/static/javascript/jquery.cuota.js')}" type="text/javascript"></script>
 		<script type="text/javascript">
-		<![CDATA[
 		$(document).ready(function(e)
 		{
-			$.datePicker.setLanguageStrings(['Domingo', 'Lunes', 'Martes',
-											 'Miércoles', 'Jueves', 'Viernes',
-											 'Sábado'],	['Enero', 'Febrero',
-											 'Marzo', 'Abril', 'Mayo', 'Junio',
-											 'Julio', 'Agosto', 'Septiembre',
-											 'Octubre', 'Noviembre', 'Diciembre'],
-											 {p:'Atras', n:'Siguiente',
-											 c:'Cierre', b:'Elija la fecha'}
-											);
-			$('input.date-picker').datePicker({startDate:'01/01/1950'});
-			$.datePicker.setDateFormat('ymd','-');
+			$("#calc").click(get_cuota);
+			$('#startDate').datepicker({ dateFormat: 'yy-mm-dd' });
 		});
-		]]>
 		</script>
 	</head>
 	<body>

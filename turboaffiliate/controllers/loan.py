@@ -1,10 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
 # loan.py
 # This file is part of TurboAffiliate
 #
-# Copyright (c) 2007 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2007, 2008, 2009 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, expose, flash, identity, redirect, validate, validators
+from turbogears import controllers, flash, redirect, identity, url
+from turbogears import expose, validate, validators, error_handler
 from cherrypy import request, response, NotFound, HTTPRedirect
 from turboaffiliate import model, json, num2stres
 from datetime import date, datetime
@@ -31,9 +32,10 @@ class Deduction(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.loan.deduction.add")	
-	def add(self, code):
+	@validate(validators=dict(loan=validators.Int()))
+	def add(self, loan):
 		try:
-			loan = model.Loan.get(int(code))
+			loan = model.Loan.get(loan)
 			accounts = [a for a in model.Account.select() if a.code > 1000 and a.code < 2000]
 			return dict(loan=loan, accounts=accounts)
 		
@@ -47,15 +49,21 @@ class Deduction(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
+	@validate(validators=dict(loan=validators.Int(),account=validators.Int(),
+							  amount=validators.String(),
+							  description=validators.String()))
 	def save(self, **kw):
 		try:
-			kw['loan'] = model.Loan.get(int(kw['loan']))
-			kw['account'] = model.Account.get(int(kw['account']))
-			if kw['amount'] == '':
-				flash(u'Cantidad incorrecta')
-				raise redirect('/loan')
-			
+			kw['loan'] = model.Loan.get(kw['loan'])
+			kw['account'] = model.Account.get(kw['account'])
+			kw['amount'] = Decimal(kw['amount'])
 			kw['name'] = kw['account'].name
+			
+			log = dict()
+			log['user'] = identity.current.user
+			log['action'] = "Deduccion de %s al prestamo %s" % (kw['amount'], kw['loan'].id)
+			model.Logger(**log)
+			
 			deduction = model.Deduction(**kw)
 		
 		except model.SQLObjectNotFound:
@@ -69,12 +77,19 @@ class Deduction(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
+	@validate(validators=dict(deduction=validators.Int()))
 	def remove(self, deduction):
 		
 		try:
-			deduction = model.Deduction.get(int(deduction))
+			deduction = model.Deduction.get(deduction)
 			loan = deduction.loan
 			deduction.destroySelf()
+			
+			log = dict()
+			log['user'] = identity.current.user
+			log['action'] = "Eliminada deduccion prestamo %s" % kw['loan'].id
+			model.Logger(**log)
+			
 			raise redirect('/loan/%s' % loan.id)
 		
 		except model.SQLObjectNotFound:
@@ -89,6 +104,7 @@ class Pay(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.loan.pay.add")
+	@validate(validators=dict(code=validators.Int()))
 	def add(self, code):
 		try:
 			loan = model.Loan.get(code)
@@ -105,6 +121,7 @@ class Pay(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.loan.pay.addfree")
+	@validate(validators=dict(code=validators.Int()))
 	def addfree(self, code):
 		try:
 			loan = model.Loan.get(code)
@@ -121,81 +138,56 @@ class Pay(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
+	@validate(validators=dict(code=validators.Int()))
 	def remove(self, code):
 		
-		try:
-			pay = model.Pay.get(int(code))
-			pay.loan.debt += pay.capital
-			loan = pay.loan
-			loan.number -= 1
-			pay.destroySelf()
-			raise redirect('/loan/%s' % loan.id)
-		
-		except model.SQLObjectNotFound:
-			flash(u'No se encontró el pago')
-			raise redirect('/loan')
-		
-		except ValueError:
-			flash(u'No se encontró el pago')
-			raise redirect('/loan')
-		
+		pay = model.Pay.get(code)
+		loan = pay.loan
+		pay.revert()
+		raise redirect('/loan/%s' % loan.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
+	@validate(validators=dict(amount=validators.String(),code=validators.Int(),
+							  receipt=validators.String(),
+							  day=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def newfree(self, amount, day, code, receipt):
-		try:
-			day = datetime.strptime(day, "%Y-%m-%d").date()
-			loan = model.Loan.get(code)
-			
-			if amount == '':
-				flash(u'Cantidad incorrecta')
-				raise redirect('/loan')
-			
-			id = loan.id
-			if loan.payfree(amount, receipt, day):
-				raise redirect('/payed/%s' % id)
-			flash('El pago se ha efecutado')
-			raise redirect('/loan/%s' % loan.id)
 		
-		except model.SQLObjectNotFound:
-			flash('El prestamo no se ha encontrado')
-			raise redirect('/payed/%s' % loan.id)
-		
-		except ValueError:
-			flash(u'No se encontro el prestamo')
-			raise redirect('/loan')
+		loan = model.Loan.get(code)
+		amount = Decimal(amount)
+		id = loan.id
+		if day == None: day = date.today()
+		if loan.payfree(amount, receipt, day): raise redirect('/payed/%s' % id)
+		log = dict()
+		log['user'] = identity.current.user
+		log['action'] = "Pago de %s al prestamo %s" % (amount, loan.id)
+		model.Logger(**log)
+		flash('El pago se ha efecutado')
+		raise redirect('/loan/%s' % loan.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
+	@validate(validators=dict(amount=validators.String(),code=validators.Int(),
+						  receipt=validators.String(),
+						  day=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def new(self, amount, day, code, receipt):
-		try:
-			day = datetime.strptime(day, "%Y-%m-%d").date()
-			loan = model.Loan.get(code)
-			
-			if amount == '':
-				flash(u'Cantidad incorrecta')
-				raise redirect('/loan')
-			
-			id = loan.id
-			if loan.pay(amount, receipt, day):
-				raise redirect('/payed/%s' % id)
-			flash('El pago se ha efecutado')
-			raise redirect('/loan/%s' % loan.id)
-		
-		except model.SQLObjectNotFound:
-			flash('El prestamo no se ha encontrado')
-			raise redirect('/payed/%s' % loan.id)
-		
-		except ValueError:
-			flash(u'No se encontro el prestamo')
-			raise redirect('/loan')
+		amount = Decimal(amount)
+		loan = model.Loan.get(code)
+		id = loan.id
+		if day == None: day = date.today()
+		log = dict()
+		log['user'] = identity.current.user
+		log['action'] = "Pago de %s al prestamo %s" % (amount, loan.id)
+		model.Logger(**log)
+		if loan.pay(amount, receipt, day): raise redirect('/payed/%s' % id)
+		flash('El pago se ha efecutado')
+		raise redirect('/loan/%s' % loan.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.pay.resume')
+	@validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
+							  end=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def resume(self, start, end):
-		
-		start = datetime.strptime(start, "%Y-%m-%d").date()
-		end = datetime.strptime(end, "%Y-%m-%d").date()
 		
 		query = "pay.day >= '%s' and pay.day <= '%s'" % (start, end)
 		
@@ -219,56 +211,45 @@ class Loan(controllers.Controller):
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.loan')
 	@expose("json")
+	@validate(validators=dict(code=validators.Int()))
 	def default(self, code):
 		
-		try:
-			loan = model.Loan.get(int(code))
-			return dict(loan=loan, day=date.today())
-		
-		except model.SQLObjectNotFound:
-			flash(u'No se encontró el préstamo')
-			raise redirect('/loan')
-		
-		except ValueError:
-			flash(u'No se encontró el préstamo')
-			raise redirect('/loan')
+		loan = model.Loan.get(code)
+		return dict(loan=loan, day=date.today())
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.loan.pay")
 	def payment(self, code):
 	
-		try:
-			loan = model.Loan.get(int(code))
-			return dict(loan=loan)
-		
-		except model.SQLObjectNotFound:
-			flash(u'No se encontrÃ³ el prÃ©stamo')
-			raise redirect('/loan')
-		
-		except ValueError:
-			flash(u'No se encontró el prÃ©stamo')
-			raise redirect('/loan')
+		return dict(loan=model.Loan.get(code))
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.loan.list")
-	def cotizacion(self, start, end):
+	@validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
+							  end=validators.DateTimeConverter(format='%Y-%m-%d'),
+							  payment=validators.String()))
+	def cotizacion(self, start, end, payment):
 		
-		start = datetime.strptime(start, "%Y-%m-%d").date()
-		end = datetime.strptime(end, "%Y-%m-%d").date()
-		
-		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (first, last)
+		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (start, end)
 		
 		loans = model.Loan.select(query)
 		
-		return dict(loans=loans, count=loans.count())
+		loans = [l for l in loans if l.affiliate.payment==payment]
+		
+		return dict(loans=loans, count=len(loans),
+					payment="de %s Periodo del %s al %s" % (payment,
+							start.strftime('%d de %B de %Y'),
+							end.strftime('%d de %B de %Y')),
+					capital=sum(l.capital for l in loans),
+					debt=sum(l.debt for l in loans))
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.loan.list")
+	@validate(validators=dict(depto=validators.String(),cotizacion=validators.String()))
 	def cotizacionDepto(self, depto, cotizacion):
 		
 		loans = model.Loan.select()
-		
-		l = []
+		l = list()
 		
 		for loan in loans:
 			
@@ -276,7 +257,7 @@ class Loan(controllers.Controller):
 			
 				l.append(loan)
 		
-		return dict(loans=l, count=len(l), payment='',
+		return dict(loans=l, count=len(l), payment=cotizacion,
 				debt=sum(loan.debt for loan in l), capital=sum(loan.capital for loan in l))
 	
 	@identity.require(identity.not_anonymous())
@@ -298,279 +279,230 @@ class Loan(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.add')
-	def add(self, cardID):
-		try:
-			affiliate = model.Affiliate.get(int(cardID))
-			#if (date.today() - affiliate.joined).days < 365:
-			#	flash(u"El afiliado aún no tiene un año de afiliación")
-			#	raise redirect('/affiliate/%s' % affiliate.id)
-			return dict(affiliate=affiliate)
+	@validate(validators=dict(affiliate=validators.Int()))
+	def add(self, affiliate):
+
+		affiliate = model.Affiliate.get(affiliate)
+		#if (date.today() - affiliate.joined).days < 365:
+		#	flash(u"El afiliado aún no tiene un año de afiliación")
+		#	raise redirect('/affiliate/%s' % affiliate.id)
+		#if len(affiliate.loans) > 0:
+		#	
+		#	for loan in affiliate.loans:
+		#		
+		#		if loan.percent() < 59:
+		#			
+		#			flash("El Afiliado no ha pagado el 60% del préstamo anterior")
+		#			raise redirect('/affiliate/%s' % affiliate.id)
+			
+		return dict(affiliate=affiliate)
+	
+	@identity.require(identity.All(identity.not_anonymous(),
+								   identity.has_permission("refinance")))
+	@expose(template='turboaffiliate.templates.loan.add')
+	@validate(validators=dict(affiliate=validators.Int()))
+	def authorize(self, affiliate):
 		
-		except model.SQLObjectNotFound:
-			flash('No se encontro el Afiliado')
-			raise redirect('/loan')
-		
-		except ValueError:
-			flash('Número de Afiliado invalido')
-			raise redirect('/loan')
+		return dict(affiliate=affiliate)
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.edit')
-	def edit(self, code):
-		try:
-			loan = model.Loan.get(int(code))
-			return dict(loan=loan)
+	@validate(validators=dict(loan=validators.Int()))
+	def edit(self, loan):
 		
-		except model.SQLObjectNotFound:
-			flash('No se encontro el Afiliado')
-			raise redirect('/loan')
-		
-		except ValueError:
-			flash(u'NÃºmero de Afiliado invalido')
-			raise redirect('/loan')
+		return dict(loan=model.Loan.get(loan))
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
-	def save(self, **kw):
+	@validate(validators=dict(loan=validators.Int(),
+							  months=validators.Int(),
+							  capital=validators.Number(),
+							  payment=validators.String()))
+	def save(self, loan, capital, months, payment):
 		
-		try:
-			loan = model.Loan.get(int(kw['id']))
-			loan.capital = kw['capital'].replace(',', '')
-			loan.months = int(kw['months'])
-			loan.payment = Decimal(kw['payment']).quantize(Decimal("0.01"))
-			return self.default(loan.id)
 		
-		except model.SQLObjectNotFound:
-			flash('No se encontro el Afiliado')
-			raise redirect('/loan')
+		log = dict()
+		log['user'] = identity.current.user
+		log['action'] = "Modificacion al prestamo %s" % loan.id
+		model.Logger(**log)
 		
-		except ValueError:
-			flash(u'Número de Afiliado invalido')
-			raise redirect('/loan')
-		
-	@identity.require(identity.not_anonymous())
-	@expose()
-	def new(self, **kw):
-		
-		try:
-			kw['affiliate'] = model.Affiliate.get(kw['cardID'])
-		
-		except model.SQLObjectNotFound:
-			flash('No se encontro el Afiliado')
-			raise redirect('/loan')
-		
-		except ValueError:
-			flash(u'Número de Afiliado invalido')
-			raise redirect('/loan')
-		
-		if kw['capital'] == '' or kw['capital'] < 0:
-			flash(u'Cantidad incorrecta')
-			raise redirect('/loan/add')
-		try:
-			loank = copy.copy(kw)
-			del loank['cardID']
-			del loank['avalCard']
-			del loank['avalFirst']
-			del loank['avalLast']
-			
-			# Cleaning amount from commas
-			loank['capital'] = loank['capital'].replace(',', '')
-			loank['capital'] = Decimal(loank['capital'])
-			loank['debt'] = loank['capital']
-			loank['letters'] = num2stres.parse(loank['capital']).capitalize()
-			loank['months'] = int(loank['months'])
-			loank['payment'] = Decimal(loank['payment']).quantize(Decimal("0.01"))
-			loank['startDate'] = datetime.strptime(loank['startDate'], "%Y-%m-%d").date()
-			
-			if loank['id'] == '':
-				del loank['id']
-
-		except ValueError:
-			flash(u'Campo Invalido')
-			raise redirect('/loan/add/%s' % kw['affiliate'].id)
-		
-		aval = {}
-		aval['cardID'] = kw['avalCard']
-		aval['firstName'] = kw['avalFirst']
-		aval['lastName'] = kw['avalLast']
-		# loank['aval'] = model.Aval(**aval)
-		
-		loan = model.Loan(**loank)
-		flash(u'Se ha otorgado el préstamo')
+		loan = model.Loan.get(loan)
+		loan.capital = capital
+		loan.months = months
+		loan.payment = Decimal(payment).quantize(Decimal("0.01"))
 		return self.default(loan.id)
-	
+		
 	@identity.require(identity.not_anonymous())
 	@expose()
+	@validate(validators=dict(affiliate=validators.Int(),
+							  months=validators.Int(),
+							  capital=validators.Number(),
+							  payment=validators.String(),
+							  startDate=validators.DateTimeConverter(format='%Y-%m-%d'),
+							  id=validators.String()))
+	def new(self, affiliate, **kw):
+		
+		affiliate = model.Affiliate.get(affiliate)
+		kw['payment'] = Decimal(kw['payment']).quantize(Decimal("0.01"))
+		kw['debt'] = kw['capital']
+		kw['letters'] = num2stres.parse(kw['capital']).capitalize()
+		if kw['id'] == '': del kw['id']
+		if kw['capital'] < 0: raise redirect('/loan/add/%s' % affiliate.id)
+		kw["aproval"] = identity.current.user
+		loan = model.Loan(affiliate=affiliate, **kw)
+		
+		log = dict()
+		log['user'] = identity.current.user
+		log['action'] = "Otorgar prestamo al afiliado %s" % affiliate.id
+		model.Logger(**log)
+		
+		raise redirect(url("/loan/%s" % loan.id))
+	
+	@identity.require(identity.All(identity.not_anonymous(), identity.has_permission("delete")))
+	@expose()
+	@validate(validators=dict(code=validators.Int()))
 	def remove(self, code):
 		
-		try:
-			loan = model.Loan.get(int(code))
-			loan.remove()
-			flash('El prestamo ha sido removido')
-			raise redirect('/payed/%s' % code)
-		
-		except model.SQLObjectNotFound:
-			flash(u'No se encontró el prestamo')
-			raise redirect('/loan')
+		loan = model.Loan.get(code)
+		loan.remove()
+		flash('El prestamo ha sido removido')
+		raise redirect('/payed/%s' % code)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
-	def month(self, **kw):
+	@validate(validators=dict(loan=validators.Int(),months=validators.Int(),
+			 payment=validators.String()))
+	def month(self, loan, months, payment):
 		
-		try:
-			loan = model.Loan.get(int(kw['loan']))
-			loan.months = int(kw['months'])
-			loan.payment = Decimal(kw['payment'])
-			raise redirect('/loan/%s' % loan.id)
-		except KeyError:
-			flash('Ha ocurrido un error')
-			raise redirect('/loan')
-		except model.SQLObjectNotFound:
-			flash('No se encontro el prestamo')
-			raise redirect('/loan')
+		loan = model.Loan.get(loan)
+		loan.months = months
+		loan.payment = Decimal(payment).quantize(Decimal("0.01"))
+		raise redirect('/loan/%s' % loan.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
+	@validate(validators=dict(loan=validators.Int()))
 	def refinance(self, loan):
 		
-		loan = model.Loan.get(int(loan))
+		loan = model.Loan.get(loan)
 		affiliate = loan.affiliate
+		
+		log = dict()
+		log['user'] = identity.current.user
+		log['action'] = "Prestamo %s refinanciado" % loan.id
+		model.Logger(**log)
+		
 		loan.refinance()
+		
 		flash('El prestamo anterior ha sido movido a refinanciamiento')
 		raise redirect('/loan/add/%s' % affiliate.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.pagare')
-	def pagare(self, code):
-		code = int(code)
-		try:
-			loan = model.Loan.get(code)
-			return dict(loan=loan)
-		
-		except model.SQLObjectNotFound:
-			flash('No se encontró el préstamo')
-			raise redirect('/loan')
-		
-		except ValueError:
-			flash('No se encontró el préstamo')
-			raise redirect('/loan')
+	@validate(validators=dict(loan=validators.Int()))
+	def pagare(self, loan):
+	
+		return dict(loan=model.Loan.get(loan))
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.receipt')
-	def receipt(self, code):
-		try:
-			loan = model.Loan.get(int(code))
-			return dict(loan=loan)
+	@validate(validators=dict(loan=validators.Int()))
+	def receipt(self, loan):
 		
-		except model.SQLObjectNotFound:
-			flash('No se encontró el préstamo')
-			raise redirect('/loan')
-		
-		except ValueError:
-			flash('No se encontró el préstamo')
-			raise redirect('/loan')
+		return dict(loan=model.Loan.get(loan))
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
-	def search(self, code):
-		raise redirect('/loan/%s' % code)
+	@validate(validators=dict(loan=validators.Int()))
+	def search(self, loan):
+		raise redirect('/loan/%s' % loan)
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.day')
+	@validate(validators=dict(day=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def day(self, day):
-		
-		day = datetime.strptime(day, "%Y-%m-%d").date()
 		
 		loans = model.Loan.select(model.Loan.q.startDate==day)
 		amount = sum(l.capital for l in loans)
 		return dict(amount=amount, loans=loans,day=day)
 	
 	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.loan.period')
+	@expose(template='turboaffiliate.templates.loan.list')
+	@validate(validators=dict(first=validators.DateTimeConverter(format='%Y-%m-%d'),
+							  last=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def period(self, first, last):
-		
-		first = datetime.strptime(first, "%Y-%m-%d").date()
-		last = datetime.strptime(last, "%Y-%m-%d").date()
 		
 		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (first, last)
 		
 		loans = model.Loan.select(query)
 		count = loans.count()
 		amount = sum(l.capital for l in loans)
-		return dict(amount=amount, loans=loans, first=first, last=last, count=count)
+		return dict(loans=loans, count=loans.count(),
+					payment="Periodo del %s al %s" % (first.strftime('%d de %B de %Y'),
+														last.strftime('%d de %B de %Y')),
+					capital=sum(l.capital for l in loans),
+					debt=sum(l.debt for l in loans))
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.cartera')
+	@validate(validators=dict(first=validators.DateTimeConverter(format='%Y-%m-%d'),
+							  last=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def cartera(self, first, last):
-		
-		first = datetime.strptime(first, "%Y-%m-%d").date()
-		last = datetime.strptime(last, "%Y-%m-%d").date()
 		
 		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (first, last)
 		
 		loans = [loan for loan in model.Loan.select(query)]
 		query = "payed_loan.start_date >= '%s' and payed_loan.start_date <= '%s'" % (first, last)
 		loans.extend(loan for loan in model.PayedLoan.select(query))
-		count = len(loans)
 		amount = sum(l.capital for l in loans)
-		return dict(amount=amount, loans=loans, first=first, last=last, count=count)
+		return dict(amount=amount, loans=loans, first=first, last=last, count=len(loans))
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.view')
-	def view(self, code):
+	@validate(validators=dict(loan=validators.Int()))
+	def view(self, loan):
 		
-		try:
-			loan = model.Loan.get(int(code))
-			return dict(loan=loan)
-		
-		except model.SQLObjectNotFound:
-			flash(u'No se encontró el préstamo')
-			raise redirect('/loan')
-		
-		except ValueError:
-			flash(u'No se encontró el préstamo')
-			raise redirect('/loan')
+		return dict(loan=model.Loan.get(loan))
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
+	@validate(validators=dict(loan=validators.Int(),payment=validators.String()))
 	def modify(self, loan, payment):
 		
-		try:
-			loan = model.Loan.get(int(loan))
-			loan.payment = Decimal(payment)
-			raise redirect('/loan/%s' % loan.id)
-		except:
-			pass
+		loan = model.Loan.get(loan)
+		loan.payment = Decimal(payment)
+		
+		log = dict()
+		log['user'] = identity.current.user
+		log['action'] = "Cambio de cuota a %s de prestamo %s" % (payment, kw['loan'].id)
+		model.Logger(**log)
+		
 		raise redirect('/loan/%s' % loan.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
+	@validate(validators=dict(loan=validators.Int(),debt=validators.String()))
 	def debt(self, loan, debt):
 		
-		try:
-			loan = model.Loan.get(int(loan))
-			loan.debt = Decimal(debt)
-			raise redirect('/loan/%s' % loan.id)
-		except:
-			pass
+		loan = model.Loan.get(loan)
+		loan.debt = Decimal(debt)
 		raise redirect('/loan/%s' % loan.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.monthly')
+	@validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
+							  end=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def monthly(self, start, end):
-		
-		start = datetime.strptime(start, "%Y-%m-%d").date()
-		end = datetime.strptime(end, "%Y-%m-%d").date()
 		
 		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (start, end)
 		
 		loans = model.Loan.select(query)
 		
-		li = []
+		li = list()
 		
 		for n in range(start.month, end.month + 1):
 			
-			month = {}
+			month = dict()
 			month['month'] = n
 			month['amount'] = sum(l.capital for l in loans if l.startDate.month == n)
 			month['number'] = len(l for l in loans if l.startDate.month == n)
@@ -582,11 +514,12 @@ class Loan(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.list')
+	@validate(validators=dict(payment=validators.String()))
 	def bypayment(self, payment):
 		
-		affiliates = model.Affiliate.select(model.Affiliate.q.payment==str(payment))
+		affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment)
 		
-		loans = []
+		loans = list()
 		for a in affiliates:
 			loans.extend(l for l in a.loans)
 		
@@ -599,10 +532,10 @@ class Loan(controllers.Controller):
 		
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.list')
+	@validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
+							  end=validators.DateTimeConverter(format='%Y-%m-%d'),
+							  payment=validators.String()))
 	def paymentDate(self, payment, start, end):
-		
-		start = datetime.strptime(start, "%Y-%m-%d").date()
-		end = datetime.strptime(end, "%Y-%m-%d").date()
 		
 		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (start, end)
 		
@@ -619,10 +552,9 @@ class Loan(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.liquid')
+	@validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
+							  end=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def liquid(self, start, end):
-		
-		start = datetime.strptime(start, "%Y-%m-%d").date()
-		end = datetime.strptime(end, "%Y-%m-%d").date()
 		
 		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (start, end)
 		
@@ -635,31 +567,27 @@ class Loan(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
+	@validate(validators=dict(loan=validators.Int()))
 	def increase(self, loan):
 		
-		try:
-			loan = model.Loan.get(int(loan))
-			loan.number += 1
-		except:
-			pass
+		loan = model.Loan.get(loan)
+		loan.number += 1
+		
 		return self.default(loan.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
+	@validate(validators=dict(loan=validators.Int()))
 	def decrease(self, loan):
 		
-		try:
-			loan = model.Loan.get(int(loan))
-			loan.number -= 1
-		except:
-			pass
+		loan = model.Loan.get(loan)
+		loan.number -= 1
 		return self.default(loan.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.bypay')
+	@validate(validators=dict(day=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def byCapital(self, day):
-		
-		day = datetime.strptime(day, "%Y-%m-%d").date()
 		
 		pays = model.Pay.select(model.Pay.q.day==day)
 		
@@ -670,10 +598,9 @@ class Loan(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.resume')
+	@validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
+							  end=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def resume(self, start, end):
-		
-		start = datetime.strptime(start, "%Y-%m-%d").date()
-		end = datetime.strptime(end, "%Y-%m-%d").date()
 		
 		query = "pay.day >= '%s' and pay.day <= '%s'" % (start, end)
 		
@@ -706,3 +633,13 @@ class Loan(controllers.Controller):
 		payed = [p for p in payed if p.affiliate.payment == payment]
 		
 		return dict(payed=payed)
+	
+	@identity.require(identity.not_anonymous())
+	@expose(template='turboaffiliate.templates.loan.payment')
+	@validate(validators=dict(payment=validators.String()))
+	def listPayment(self, payment):
+		
+		loans = model.Loan.select()
+		
+		return dict(loans=[l for l in loans if l.affiliate.payment == payment])
+
