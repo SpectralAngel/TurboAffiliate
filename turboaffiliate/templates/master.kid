@@ -40,7 +40,7 @@
     			</a>
     			<a class="menu" href="${tg.url('/loan')}">
     				<img src="${tg.url('/static/images/loan.png')}" alt="Afiliados" width="48" height="48" />
-    				<span>P&eacute;stamos</span>
+    				<span>Pr&eacute;stamos</span>
     			</a>
     			<a class="menu" href="${tg.url('/company')}">
     				<img src="${tg.url('/static/images/company.png')}" alt="Afiliados" width="48" height="48" />

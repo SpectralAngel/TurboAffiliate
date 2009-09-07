@@ -322,7 +322,7 @@ class CuotaTable(SQLObject):
 				elif self.affiliate.jubilated.year < self.year:
 					total += sum(o.inprema for o in os)
 				elif self.affiliate.jubilated.year > self.year:
-					total += sum(o.amount for o in os)
+					total += sum(o.inprema for o in os)
 			else:
 				total += sum(o.amount for o in os)
 			return total - self.payed()

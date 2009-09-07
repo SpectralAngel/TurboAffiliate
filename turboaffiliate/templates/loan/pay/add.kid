@@ -9,10 +9,17 @@
 		<script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
 		<script src="${tg.url('/static/javascript/jquery.cuota.js')}" type="text/javascript"></script>
 		<script type="text/javascript">
+		<![CDATA[
 		$(document).ready(function(e)
 		{
-			$('input.date-picker').datepicker({ dateFormat: 'yy-mm-dd' });
+			$('input.date-picker').datepicker({
+												dateFormat: 'yy-mm-dd',
+												changeMonth: true,
+												changeYear: true,
+												yearRange: '1940:2010'
+											  });
 		});
+		]]>
 		</script>
 	</head>
 	<body>
