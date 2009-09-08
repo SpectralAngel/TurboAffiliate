@@ -449,11 +449,17 @@ class Loan(controllers.Controller):
 							  last=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def cartera(self, first, last):
 		
-		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (first, last)
+		loans = list()
+		query = "loan.start_date >= '%s' and loan.start_date <= '%s' order by start_date" % (first, last)
+		adeudados = [loan for loan in model.Loan.select(query)]
 		
-		loans = [loan for loan in model.Loan.select(query)]
 		query = "payed_loan.start_date >= '%s' and payed_loan.start_date <= '%s'" % (first, last)
-		loans.extend(loan for loan in model.PayedLoan.select(query))
+		pagados = [loan for loan in model.PayedLoan.select(query)]
+		
+		for n in range(first.day, last.day + 1):
+			loans.extend(loan for loan in adeudados if loan.startDate.day == n)
+			loans.extend(loan for loan in pagados if loan.startDate.day == n)
+		
 		amount = sum(l.capital for l in loans)
 		return dict(amount=amount, loans=loans, first=first, last=last, count=len(loans))
 	
