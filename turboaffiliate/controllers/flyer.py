@@ -405,3 +405,15 @@ class Flyer(controllers.Controller):
 				del schools[school]
 		
 		return dict(state=state, schools=schools)
+	
+	@expose(template="turboaffiliate.templates.affiliate.show")
+	@validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
+	def aportaron(self, year, month):
+		
+		query = "cuota_table.month%s = 1 AND cuota_table.year = %s" % (month, year)
+		cuotas = model.CuotaTable.select(query)
+		show = "que Cotizaron en %s de %s" % (month, year)
+		
+		affiliates = [c.affiliate for c in cuotas]
+		return dict(affiliates=affiliates,show=show, count=len(affiliates))
+

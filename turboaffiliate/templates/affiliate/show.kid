@@ -25,7 +25,7 @@
 					<th>Carnet</th>
 					<th>Apellido</th>
 					<th>Nombre</th>
-					<th>telefono</th>
+					<th>Identidad</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -33,7 +33,7 @@
 					<td><a href="${tg.url('/affiliate/%s') % affiliate.id}" py:content="affiliate.id" /></td>
 					<td py:content="affiliate.lastName" />
 					<td py:content="affiliate.firstName" />
-					<td py:content="affiliate.phone" />
+					<td py:content="affiliate.cardID" />
 				</tr>
 			</tbody>
 		</table>
