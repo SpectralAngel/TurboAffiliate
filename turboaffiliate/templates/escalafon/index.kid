@@ -414,5 +414,23 @@
 				</ul>
 			</fieldset>
 		</form>
+		<form action="${tg.url('/escalafon/noAportaron')}">
+			<fieldset>
+				<legend>Mostrar Afiliados que no Aportaron</legend>
+				<ul>
+					<li>
+						<label for="month">Mes:</label>
+						<input name="month" />
+					</li>
+					<li>
+						<label for="year">A&ntilde;o:</label>
+						<input name="year" />
+					</li>
+					<li>
+						<input type="submit" value="Mostrar Reporte" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
 	</body>
 </html>
