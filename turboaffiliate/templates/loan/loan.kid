@@ -20,8 +20,7 @@
 		<ul>
 			<li>
 				<strong>Prestatario:</strong>
-				<a href="${tg.url('/affiliate/%s' % loan.affiliate.id)}">
-					<span py:content="loan.affiliate.id" /></a> <span py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
+				<a href="${tg.url('/affiliate/%s' % loan.affiliate.id)}"><span py:content="loan.affiliate.id" /></a> <span py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
 			</li>
 			<li>
 				<strong>Fecha de Otorgamiento:</strong>
@@ -53,6 +52,9 @@
 			</li>
 			<li class="link">
 				<a href="${tg.url('/loan/view/%s' % loan.id)}">Modificar Datos del Pr&eacute;stamo</a>
+			</li>
+			<li class="link">
+				<a href="javascript:print();">Imprimir</a>
 			</li>
 		</ul>
 		<table width="100%">
