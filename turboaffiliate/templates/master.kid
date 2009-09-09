@@ -58,6 +58,10 @@
 					<img src="${tg.url('/static/images/admin.png')}" alt="Admin" width="48" height="48" />
 					<span>Ver Logs</span>
 				</a>
+				<a class="menu" href="http://172.16.10.68:8050">
+					<img src="${tg.url('/static/images/admin.png')}" alt="Admin" width="48" height="48" />
+					<span>Egresos</span>
+				</a>
 	    	</div>
 	    	<div id="sidebar-right" class="column">
 	    		<a class="menu" href="${tg.url('/')}">
