@@ -427,4 +427,13 @@ class Flyer(controllers.Controller):
 		
 		affiliates = [c.affiliate for c in cuotas]
 		return dict(affiliates=affiliates,show=show, count=len(affiliates))
+	
+	@expose(template="turboaffiliate.templates.affiliate.show")
+	@validate(validators=dict(year=validators.Int()))
+	def conTabla(self, year):
+		
+		cuotas = model.CuotaTable.select(model.CuotaTable.q.year==year)
+		
+		affiliates = [c.affiliate for c in cuotas]
+		return dict(affiliates=affiliates,show=show, count=len(affiliates))
 
