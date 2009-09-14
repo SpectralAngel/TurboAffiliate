@@ -18,7 +18,7 @@
 			<div><strong py:content="'Al ', day.strftime('%d de %B de %Y')" /></div>
 			<h4 py:content="affiliate.id, ' ', affiliate.firstName, ' ', affiliate.lastName " />
 			<span>Afiliado desde </span><span py:content="affiliate.joined.strftime('%d de %B de %Y')" />
-			<p py:if="affiliate.jubilated is None and affiliate.payment == 'INPREMA'">Advertencia, el afiliado esta jubilado y no tiene Fecha de Jubilacion, los calculos pueden ser erroneos</p>
+			<p style="color: red;" py:if="affiliate.jubilated is None and affiliate.payment == 'INPREMA'">Advertencia, el afiliado esta jubilado y no tiene Fecha de Jubilacion, los calculos son erroneos</p>
 		</div>
 		<table class="small" width="100%">
 			<thead>
@@ -71,6 +71,7 @@
 				</tr>
 			</tfoot>
 		</table>
+		<a href="javascript:print()" class="noprint">Imprimir</a>
 		<form action="${tg.url('/affiliate/populate')}" method="post" class="noprint">
 			<fieldset>
 				<legend>A&ntilde;adir A&ntilde;o</legend>
