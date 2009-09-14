@@ -291,14 +291,14 @@ class CuotaTable(SQLObject):
 		for n in range(1, 13):
 			query = "obligation.year = %s and obligation.month = %s" % (self.year, n)
 			os = Obligation.select(query)
-			if self.affiliate.payment == "INPREMA":
+			if self.affiliate.payment == "INPREMA" and not self.affiliate.jubilated is None:
 				if self.affiliate.jubilated.year == self.year:
 					total += sum(o.amount for o in os if o.month < self.affiliate.jubilated.month)
 					total += sum(o.inprema for o in os if o.month >= self.affiliate.jubilated.month)
 				elif self.affiliate.jubilated.year < self.year:
 					total += sum(o.inprema for o in os)
 				elif self.affiliate.jubilated.year > self.year:
-					total += sum(o.inprema for o in os)
+					total += sum(o.amount for o in os)
 			else:
 				total += sum(o.amount for o in os)
 		return total

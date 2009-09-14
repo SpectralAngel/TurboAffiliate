@@ -18,6 +18,7 @@
 			<div><strong py:content="'Al ', day.strftime('%d de %B de %Y')" /></div>
 			<h4 py:content="affiliate.id, ' ', affiliate.firstName, ' ', affiliate.lastName " />
 			<span>Afiliado desde </span><span py:content="affiliate.joined.strftime('%d de %B de %Y')" />
+			<p py:if="affiliate.jubilated is None and affiliate.payment == 'INPREMA'">Advertencia, el afiliado esta jubilado y no tiene Fecha de Jubilacion, los calculos pueden ser erroneos</p>
 		</div>
 		<table class="small" width="100%">
 			<thead>
