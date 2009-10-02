@@ -41,3 +41,21 @@ class Elecciones(controllers.Controller):
 		query = "affiliate.first_name is not null and affiliate.last_name is not null and  affiliate.active = %s" % True
 		affiliates = model.Affiliate.select(query)
 		return dict(affiliates=affiliates, count=affiliates.count())
+	
+	@identity.require(identity.not_anonymous())
+	@expose(template='turboaffiliate.templates.elecciones.institutoDepto')
+	def stateSchool(self, state):
+		
+		affiliates = model.Affiliate.select(model.Affiliate.q.state==state)
+		
+		schools = dict()
+		for affiliate in affiliates:
+			if affiliate.school in schools:
+				if affiliate.active == False:
+					continue
+				schools[affiliate.school].append(affiliate)
+			else:
+				schools[affiliate.school] = list()
+				schools[affiliate.school].append(affiliate)
+		
+		return dict(state=state, schools=schools)

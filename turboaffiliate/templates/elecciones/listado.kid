@@ -18,7 +18,7 @@
 	</head>
 	<body>
 		<h3>COPEMH</h3>
-		<h1>Patr&oacute;n Electoral</h1>
+		<h1>Padr&oacute;n Electoral</h1>
 		<table width="100%">
 			<thead>
 				<tr>
