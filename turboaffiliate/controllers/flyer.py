@@ -434,7 +434,7 @@ class Flyer(controllers.Controller):
 		
 		cuotas = model.CuotaTable.select(model.CuotaTable.q.year==year)
 		
-		affiliates = [c.affiliate for c in cuotas]
+		affiliates = [c.affiliate for c in cuotas if c.affiliate.active]
 		show = "que Cotizaron en %s de %s" % (month, year)
 		return dict(affiliates=affiliates,show=show,count=len(affiliates))
 
