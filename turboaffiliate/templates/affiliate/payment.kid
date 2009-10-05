@@ -30,7 +30,7 @@
 			</thead>
 			<tbody>
 				<tr py:for="affiliate in affiliates">
-					<td>${affiliate.id}</td>
+					<td><a href="${tg.url('/affiliate/%s' % affiliate.id)}">${affiliate.id}</a></td>
 					<td py:content="affiliate.lastName" />
 					<td py:content="affiliate.firstName" />
 				</tr>

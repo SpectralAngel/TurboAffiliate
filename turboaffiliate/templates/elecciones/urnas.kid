@@ -7,7 +7,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#">
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-		<title>TurboAffiliate &bull; Padr&oacute;n Electoral Departamento de ${state}</title>
+		<title>TurboAffiliate &bull; ${departamento}</title>
 		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/form.css')}" media="screen" />
 
 		 <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print" />
@@ -15,26 +15,26 @@
 		 <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/billing.css')}" />
 	</head>
 	<body>
-		<h1>Padr&oacute;n Electoral Departamento de ${state}</h1>
-		<table class="page" py:for="school in schools" style="width: 100%">
-			<caption py:content="school" />
+		<h1>Listado de Urnas</h1>
+		<table style="width: 100%">
+			<caption py:content="departamento" />
 			<thead>
 				<tr>
-					<th>Afiliaci&oacute;n</th>
-					<th>Apellidos</th>
-					<th>Nombre</th>
+					<th>Instituto</th>
+					<th>Cantidad de Afiliados</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr py:for="affiliate in schools[school]">
-					<td py:content="affiliate.id" />
-					<td py:content="affiliate.lastName" />
-					<td py:content="affiliate.firstName" />
+				<tr py:for="instituto in urnas">
+					<td py:content="instituto" />
+					<td py:content="urnas[instituto]" />
 				</tr>
 			</tbody>
 			<tfoot>
-				<th colspan="2">Total de Afiliados</th>
-				<th py:content="len(schools[school])" />
+				<tr>
+					<th>Total de Afiliados</th>
+					<th py:content="cantidad" />
+				</tr>
 			</tfoot>
 		</table>
 	</body>
