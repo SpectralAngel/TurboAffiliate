@@ -15,9 +15,9 @@
 	</head>
 	<body>
 		<a href="javascript:print()">Imprimir</a>
-		<h1>Listado de Urnas</h1>
-		<table style="width: 100%">
-			<caption py:content="departamento" />
+		<h1>Listado de Urnas <span py:content="departamento" /> </h1>
+		<table py:for="municipio in urnas" style="width: 100%">
+			<caption py:content="municipio" />
 			<thead>
 				<tr>
 					<th>Instituto</th>
@@ -25,21 +25,18 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr py:for="instituto in urnas">
+				<tr py:for="instituto in urnas[municipio]">
 					<td py:content="instituto" />
-					<td py:content="urnas[instituto]" />
+					<td py:content="len(urnas[municipio][instituto])" />
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
-					<th>Total de Afiliados</th>
-					<th py:content="cantidad" />
-				</tr>
-				<tr>
 					<th>Total de Centros</th>
-					<th py:content="len(urnas)" />
+					<th py:content="len(urnas[municipio])" />
 				</tr>
 			</tfoot>
 		</table>
 	</body>
 </html>
+

@@ -24,6 +24,7 @@
 		<h1>Afiliados</h1>
 		<ul>
 			<li><a href="all">Ver Todos los Afiliados</a></li>
+			<li><a href="totalUrnas">Total de Urnas</a></li>
 		</ul>
 		<form action="stateSchool">
 			<fieldset>
@@ -87,6 +88,126 @@
 					</li>
 					<li>
 						<input type="submit" value="Ver" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
+		<form action="urnasDepartamentalesCinco">
+			<fieldset>
+				<legend>Listado de Instituto con cinco Afiliados o m&aacute;s</legend>
+				<ul>
+					<li>
+						<label for="departamento">Departamento:</label>
+						<select name="departamento">
+							<option>Atlantida</option>
+							<option>Choluteca</option>
+							<option>Colon</option>
+							<option>Comayagua</option>
+							<option>Copan</option>
+							<option>Cortes</option>
+							<option>El Paraiso</option>
+							<option>Francisco Morazan</option>
+							<option>Gracias a Dios</option>
+							<option>Intibuca</option>
+							<option>Islas de la Bahia</option>
+							<option>La Paz</option>
+							<option>Lempira</option>
+							<option>Olancho</option>
+							<option>Ocotepeque</option>
+							<option>Santa Barbara</option>
+							<option>Valle</option>
+							<option>Yoro</option>
+						</select>
+					</li>
+					<li>
+						<input type="submit" value="Ver" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
+		<form action="urnasMunicipio">
+			<fieldset>
+				<legend>Listado de Centros Por Municipio</legend>
+				<ul>
+					<li>
+						<label for="departamento">Departamento:</label>
+						<select name="departamento">
+							<option>Atlantida</option>
+							<option>Choluteca</option>
+							<option>Colon</option>
+							<option>Comayagua</option>
+							<option>Copan</option>
+							<option>Cortes</option>
+							<option>El Paraiso</option>
+							<option>Francisco Morazan</option>
+							<option>Gracias a Dios</option>
+							<option>Intibuca</option>
+							<option>Islas de la Bahia</option>
+							<option>La Paz</option>
+							<option>Lempira</option>
+							<option>Olancho</option>
+							<option>Ocotepeque</option>
+							<option>Santa Barbara</option>
+							<option>Valle</option>
+							<option>Yoro</option>
+						</select>
+					</li>
+					<li>
+						<input type="submit" value="Ver" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
+		<form action="listaUrnasMunicipio">
+			<fieldset>
+				<legend>Listado de Urnas Por Municipio</legend>
+				<ul>
+					<li>
+						<label for="departamento">Departamento:</label>
+						<select name="departamento">
+							<option>Atlantida</option>
+							<option>Choluteca</option>
+							<option>Colon</option>
+							<option>Comayagua</option>
+							<option>Copan</option>
+							<option>Cortes</option>
+							<option>El Paraiso</option>
+							<option>Francisco Morazan</option>
+							<option>Gracias a Dios</option>
+							<option>Intibuca</option>
+							<option>Islas de la Bahia</option>
+							<option>La Paz</option>
+							<option>Lempira</option>
+							<option>Olancho</option>
+							<option>Ocotepeque</option>
+							<option>Santa Barbara</option>
+							<option>Valle</option>
+							<option>Yoro</option>
+						</select>
+					</li>
+					<li>
+						<input type="submit" value="Ver" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
+		<form action="cotizacion">
+			<fieldset>
+				<legend>Padr&oacute;n Electoral por Cotizaci&oacute;n</legend>
+				<ul>
+					<li>
+						<label for="cotizacion">Cotiza por:</label>
+						<select name="cotizacion">
+							<option>Escalafon</option>
+							<option>INPREMA</option>
+							<option>UPN</option>
+							<option>Ventanilla</option>
+							<option>Ministerio</option>
+							<option>Retirado</option>
+						</select>
+					</li>
+					<li>
+						<input type="submit" value="Buscar" />
 					</li>
 				</ul>
 			</fieldset>

@@ -10,7 +10,7 @@
 		<title>TurboAffiliate &bull; Padr&oacute;n Electoral Departamento de ${state}</title>
 		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/form.css')}" media="screen" />
 
-		 <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print" />
+		 <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" />
 
 		 <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/billing.css')}" />
 	</head>
@@ -20,16 +20,18 @@
 			<caption py:content="school" />
 			<thead>
 				<tr>
-					<th>Afiliaci&oacute;n</th>
+					<th class="numero">Afiliaci&oacute;n</th>
 					<th>Apellidos</th>
 					<th>Nombre</th>
+					<th>Firma</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr py:for="affiliate in schools[school]">
-					<td py:content="affiliate.id" />
+					<td class="numero" py:content="affiliate.id" />
 					<td py:content="affiliate.lastName" />
 					<td py:content="affiliate.firstName" />
+					<td></td>
 				</tr>
 			</tbody>
 			<tfoot>
