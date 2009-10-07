@@ -32,7 +32,7 @@ class Asamblea(controllers.Controller):
 	
 	@expose()
 	@validate(validators=dict(asamblea=validators.Int(), afiliado=validators.Int(), municipio=validators.String()))
-	def asistente(self, afiliado, asamblea)
+	def asistente(self, afiliado, asamblea):
 		
 		asistente = model.Asistente()
 		asistente.afiliado = model.Affiliate.get(afiliado)

@@ -46,7 +46,7 @@ class Application(SQLObject):
 		count = Application.select().count()
 		if count == 0:
 			Application(version=release.version, 
-						db_version=release.db_version, 
+						db_version="0.9", 
 						lastDrop=date.today())
 		elif count > 1:
 			raise AppConfigError

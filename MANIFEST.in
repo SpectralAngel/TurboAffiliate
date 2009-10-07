@@ -1,0 +1,6 @@
+include start-turboaffiliate.py
+include *.cfg
+include turboaffiliate/config/*.cfg
+recursive-include turboaffiliate/templates *.html
+recursive-include turboaffiliate/templates *.kid
+recursive-include turboaffiliate/static *

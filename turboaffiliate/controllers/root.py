@@ -42,7 +42,7 @@ class Root(controllers.RootController):
 	payed = payed.PayedLoan()
 	refinanced = refinanced.Refinanced()
 	logger = logger.Logger()
-	asamblea = amblea.Asamblea()
+	asamblea = asamblea.Asamblea()
 	elecciones = elecciones.Elecciones()
 	
 	@identity.require(identity.not_anonymous())

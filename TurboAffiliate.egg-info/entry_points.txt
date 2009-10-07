@@ -1,0 +1,4 @@
+[console_scripts]
+start-turboaffiliate = turboaffiliate.command:start
+bootstrap-turboaffiliate = turboaffiliate.command:bootstrap
+
