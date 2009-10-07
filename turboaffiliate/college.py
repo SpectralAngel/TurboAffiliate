@@ -77,6 +77,7 @@ class Affiliate(SQLObject):
 	flyers = MultipleJoin("Flyer")
 	deduced = MultipleJoin("Deduced")
 	delayed = MultipleJoin("Delayed")
+	asistencia = MultipleJoin("Asistencia")
 	
 	def get_monthly(self):
 		
@@ -1252,3 +1253,12 @@ class OtherDeduced(SQLObject):
 	amount = CurrencyCol(default=0)
 	account = ForeignKey("Account")
 
+class Asamblea(SQLObject):
+	
+	asistentes = MultipleJoin("Asistente")
+
+class Asistente(SQLObject):
+	
+	asamblea = ForeignKey("Asamblea")
+	municipio = UnicodeCol()
+	afiliado = ForeignKey("Affiliate")
