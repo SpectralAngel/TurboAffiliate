@@ -10,7 +10,22 @@
 		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/form.css')}" media="screen" />
 
 		 <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" />
-
+		 <style>
+			table
+			{
+				width: 100%;
+				border-width: 0 0 1px 1px;
+				border-style: solid;
+				border-collapse: collapse;
+			}
+			td
+			{
+				border-width: 1px 1px 0 0;
+				border-style: solid;
+				margin: 0;
+				padding: 4px;
+			}
+		 </style>
 		 <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/billing.css')}" />
 	</head>
 	<body>

@@ -32,7 +32,7 @@ class Elecciones(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.elecciones.index")
     def index(self):
-        return dict(accounts=model.Account.select())
+        return dict()
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.listado')
@@ -93,6 +93,43 @@ class Elecciones(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.urnas')
     def urnasDepartamentalesCinco(self, departamento):
+        
+        afiliados = model.Affiliate.selectBy(active=True,state=departamento)
+        
+        urnas = dict()
+        urnas['Sin Instituto'] = 0
+        for afiliado in afiliados:
+            
+            if afiliado.school in urnas:
+                urnas[afiliado.school] += 1
+            else:
+                urnas[afiliado.school] = 1
+        
+        for instituto in urnas:
+            
+            if instituto is None:
+                urnas['Sin Instituto'] += urnas[instituto]
+            
+            if instituto == '':
+                urnas['Sin Instituto'] += urnas[instituto]
+        
+        if None in urnas:
+            del urnas[None]
+        if '' in urnas:
+            del urnas['']
+       
+        urnas2 = dict()
+        for instituto in urnas:
+           
+            if urnas[instituto] >= 5:
+                
+                urnas2[instituto] = urnas[instituto]
+        
+        return dict(urnas=urnas2, cantidad=sum(urnas2[i] for i in urnas2), departamento=departamento)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.elecciones.acta')
+    def actas(self, departamento):
         
         afiliados = model.Affiliate.selectBy(active=True,state=departamento)
         
@@ -211,6 +248,14 @@ class Elecciones(controllers.Controller):
         afiliados = model.Affiliate.selectBy(active=True,payment=cotizacion)
         
         return dict(affiliates=afiliados, count=afiliados.count())
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.elecciones.departamento')
+    def departamento(self, departamento):
+        
+        afiliados = model.Affiliate.selectBy(active=True,state=departamento)
+        
+        return dict(afiliados=afiliados, departamento=departamento, cantidad=afiliados.count())
     
     def sinInstituto(self):
         

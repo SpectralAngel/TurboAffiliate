@@ -1,0 +1,26 @@
+﻿table{
+	width: 100%;
+	border: thin black solid;
+	border-collapse:collapse;
+}
+td, th
+{
+	border: thin black solid;
+}
+.logosmall
+{
+	float: left;
+}
+.subrayado
+{
+	text-decoration: underline;
+}
+.clear {
+	clear: both;
+}
+.firma
+{
+	float: left;
+	width: 33%;
+	text-align: center;
+}

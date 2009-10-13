@@ -72,7 +72,7 @@ class Affiliate(controllers.Controller):
 		
 		return dict(affiliates=model.Affiliate.select(model.Affiliate.q.escalafon==escalafon))
 	
-	@identity.require(identity.not_anonymous())
+	@identity.require(identity.has_permission("afiliar"))
 	@expose(template="turboaffiliate.templates.affiliate.add")
 	def add(self):
 		return dict()
