@@ -59,6 +59,39 @@
 				</ul>
 			</fieldset>
 		</form>
+		<form action="departamento">
+			<fieldset>
+				<legend>Padr&oacute;n Electoral Departamental sin Instituto</legend>
+				<ul>
+					<li>
+						<label for="departamento">Departamento:</label>
+						<select name="departamento">
+							<option>Atlantida</option>
+							<option>Choluteca</option>
+							<option>Colon</option>
+							<option>Comayagua</option>
+							<option>Copan</option>
+							<option>Cortes</option>
+							<option>El Paraiso</option>
+							<option>Francisco Morazan</option>
+							<option>Gracias a Dios</option>
+							<option>Intibuca</option>
+							<option>Islas de la Bahia</option>
+							<option>La Paz</option>
+							<option>Lempira</option>
+							<option>Olancho</option>
+							<option>Ocotepeque</option>
+							<option>Santa Barbara</option>
+							<option>Valle</option>
+							<option>Yoro</option>
+						</select>
+					</li>
+					<li>
+						<input type="submit" value="Ver" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
 		<form action="urnasDepartamentales">
 			<fieldset>
 				<legend>Listado de Instituto para Urnas por Departamento</legend>
@@ -161,6 +194,39 @@
 		<form action="listaUrnasMunicipio">
 			<fieldset>
 				<legend>Listado de Urnas Por Municipio</legend>
+				<ul>
+					<li>
+						<label for="departamento">Departamento:</label>
+						<select name="departamento">
+							<option>Atlantida</option>
+							<option>Choluteca</option>
+							<option>Colon</option>
+							<option>Comayagua</option>
+							<option>Copan</option>
+							<option>Cortes</option>
+							<option>El Paraiso</option>
+							<option>Francisco Morazan</option>
+							<option>Gracias a Dios</option>
+							<option>Intibuca</option>
+							<option>Islas de la Bahia</option>
+							<option>La Paz</option>
+							<option>Lempira</option>
+							<option>Olancho</option>
+							<option>Ocotepeque</option>
+							<option>Santa Barbara</option>
+							<option>Valle</option>
+							<option>Yoro</option>
+						</select>
+					</li>
+					<li>
+						<input type="submit" value="Ver" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
+		<form action="actas">
+			<fieldset>
+				<legend>Actas de Resultado Departamental</legend>
 				<ul>
 					<li>
 						<label for="departamento">Departamento:</label>
