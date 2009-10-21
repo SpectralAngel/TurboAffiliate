@@ -40,6 +40,7 @@
 						<th class="numero">N&uacute;mero</th>
 						<th class="nombre">Nombre</th>
 						<th class="nombre">Apellido</th>
+						<th class="nombre">Colegio</th>
 						<th>Firma</th>
 					</tr>
 				</thead>
@@ -48,12 +49,13 @@
 						<td class="numero" py:content="afiliado.id" />
 						<td class="nombre" py:content="afiliado.firstName" />
 						<td class="nombre" py:content="afiliado.lastName" />
+						<td class="nombre" py:content="afiliado.school" />
 						<td></td>
 					</tr>
 				</tbody>
 				<tfoot>
 					<tr>
-						<th colspan="3">Total de Afiliados</th>
+						<th colspan="4">Total de Afiliados</th>
 						<th py:content="len(urnas[municipio][instituto])" />
 					</tr>
 				</tfoot>
