@@ -1257,8 +1257,17 @@ class Asamblea(SQLObject):
 	
 	asistentes = MultipleJoin("Asistente")
 
+class Banco(SQLObject):
+	
+	nombre = UnicodeCol()
+	codigo = IntCol()
+	asistentes = MultipleJoin("Asistente")
+
 class Asistente(SQLObject):
 	
 	asamblea = ForeignKey("Asamblea")
 	municipio = UnicodeCol()
 	afiliado = ForeignKey("Affiliate")
+	cuenta = UnicodeCol()
+	banco = ForeignKey("Banco")
+	departamento = UnicodeCol()
