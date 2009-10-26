@@ -22,8 +22,8 @@
 
 from turbogears import controllers, expose, flash, identity, redirect
 from turbogears import validate, validators
-from turboaffiliate import model, json
-from decimal import *
+from turboaffiliate import model
+from decimal import Decimal
 from datetime import date
 
 months = {
@@ -31,7 +31,7 @@ months = {
 			4:'Abril', 5:'Mayo', 6:'Junio',
 			7:'Julio', 8:'Agosto', 9:'Septiembre',
 			10:'Octubre', 11:'Noviembre', 12:'Diciembre'
-				}
+		 }
 
 class Flyer(controllers.Controller):
 	
@@ -68,15 +68,17 @@ class Flyer(controllers.Controller):
 		for affiliate in affiliates:
 			if not affiliate.active:
 				continue
-			kw = {}
+			kw = dict()
 			kw['amount'] = 0
 			kw['affiliate'] = affiliate
 			for e in affiliate.extras:
 				kw['amount'] += e.amount
-			# for loan in affiliate.refinancedLoans:
-			#	kw['amount'] += loan.get_payment()
-			for loan in affiliate.loans:
-				kw['amount'] += loan.get_payment()
+			if len(affiliate.refinancedLoans) > 0:
+				for loan in affiliate.refinancedLoans:
+					kw['amount'] += loan.get_payment()
+			else:
+				for loan in affiliate.loans:
+					kw['amount'] += loan.get_payment()
 			kw['amount'] += oblig
 			model.Flyer(**kw)
 		
@@ -106,7 +108,7 @@ class Flyer(controllers.Controller):
 		affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment)
 		
 		accounts = model.Account.select()
-		query = query = "obligation.year = %s and obligation.month = %s" % (year, month)
+		query = "obligation.year = %s and obligation.month = %s" % (year, month)
 		obligations = model.Obligation.select(query)
 		obligation = sum(o.amount for o in obligations)
 		
@@ -341,6 +343,7 @@ class Flyer(controllers.Controller):
 		
 		deduced = model.Deduced.select(query)
 		deduced = [d for d in deduced if d.affiliate.payment == payment]
+		total = 0
 		total += sum(d.amount for d in deduced)
 		return dict(deduced=deduced, account=account, month=months[month], year=year, total=total, payment=payment)
 	
@@ -375,7 +378,7 @@ class Flyer(controllers.Controller):
 				schools[affiliate.school] = list()
 				schools[affiliate.school].append(affiliate)
 		
-		for school in schools.keys():
+		for school in schools:
 			
 			if len(schools[school]) < 5:
 				
@@ -398,7 +401,7 @@ class Flyer(controllers.Controller):
 				schools[affiliate.school] = list()
 				schools[affiliate.school].append(affiliate)
 		
-		for school in schools.keys():
+		for school in schools:
 			
 			if len(schools[school]) >= 5:
 				
@@ -437,4 +440,3 @@ class Flyer(controllers.Controller):
 		affiliates = [c.affiliate for c in cuotas if c.affiliate.active]
 		show = "que Cotizaron en %s de %s" % (month, year)
 		return dict(affiliates=affiliates,show=show,count=len(affiliates))
-

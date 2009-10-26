@@ -20,16 +20,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from datetime import datetime, date
-from turbogears.database import PackageHub
-from decimal import *
-from sqlobject import *
+from sqlobject import DateTimeCol, RelatedJoin, SQLObjectNotFound
 from turbogears import identity
 from turboaffiliate import release
 from college import *
 
 hub = PackageHub("turboaffiliate")
 __connection__ = hub
+
+class AppConfigError(Exception):
+	pass
 
 class Application(SQLObject):
 	"""Application Specific Information
@@ -46,14 +46,14 @@ class Application(SQLObject):
 		count = Application.select().count()
 		if count == 0:
 			Application(version=release.version, 
-						db_version="0.9", 
+						db_version=9, 
 						lastDrop=date.today())
 		elif count > 1:
 			raise AppConfigError
 		elif count == 1:
 			app = Application.get(1)
 			app.version = release.version
-			app.db_version = release.db_version
+			app.db_version = 9
 
 # identity models.
 class Visit(SQLObject):

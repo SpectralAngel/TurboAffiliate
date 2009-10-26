@@ -41,12 +41,12 @@ class Asamblea(controllers.Controller):
 		
 		"""Agrega un Asistente a la asamblea"""
 		
-		asistente = model.Asistente()
-		asistente.afiliado = model.Affiliate.get(afiliado)
-		asistente.asamblea = model.Asamblea.get(asamblea)
-		asistente.municipio = municipio
-		asistente.banco = model.Banco.get(banco)
-		asistente.cuenta = cuenta
-		asistente.departamento = departamento
+		asistencia = model.Asistencia()
+		asistencia.afiliado = model.Affiliate.get(afiliado)
+		asistencia.asamblea = model.Asamblea.get(asamblea)
+		asistencia.municipio = municipio
+		asistencia.banco = model.Banco.get(banco)
+		asistencia.cuenta = cuenta
+		asistencia.departamento = departamento
 		
 		raise redirect('/asamblea')

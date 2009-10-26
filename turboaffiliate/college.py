@@ -22,8 +22,10 @@
 
 import copy
 from turbogears.database import PackageHub
-from sqlobject import *
-from decimal import *
+from sqlobject import (SQLObject, UnicodeCol, StringCol, DateCol, CurrencyCol,
+					   MultipleJoin, ForeignKey, IntCol, DecimalCol, BoolCol,
+					   DatabaseIndex)
+from decimal import Decimal
 from datetime import datetime, date
 from turboaffiliate import num2stres
 
@@ -77,7 +79,7 @@ class Affiliate(SQLObject):
 	flyers = MultipleJoin("Flyer")
 	deduced = MultipleJoin("Deduced")
 	delayed = MultipleJoin("Delayed")
-	asistencia = MultipleJoin("Asistencia")
+	asistencias = MultipleJoin("Asistencia")
 	
 	def get_monthly(self):
 		
@@ -96,7 +98,7 @@ class Affiliate(SQLObject):
 		kw = {}
 		kw['affiliate'] = self
 		kw['year'] = year
-		table = CuotaTable(**kw)
+		CuotaTable(**kw)
 	
 	def payment_check(self, string):
 		
@@ -741,7 +743,7 @@ class Pay(SQLObject):
 		kw['receipt'] = self.receipt
 		kw['month'] = self.month
 		
-		refinancedPay = RefinancedPay(**kw)
+		RefinancedPay(**kw)
 		self.destroySelf()
 	
 	def remove(self, payedLoan):
@@ -849,7 +851,7 @@ class Deduction(SQLObject):
 		kw['account'] = self.account
 		kw['description'] = self.description
 		
-		refinanedDeduction = RefinancedDeduction(**kw)
+		RefinancedDeduction(**kw)
 		self.destroySelf()
 	
 	def remove(self, payedLoan):
@@ -933,7 +935,7 @@ class PostReport(SQLObject):
 	reportAccounts = MultipleJoin("ReportAccount", orderBy="name")
 
 	def total(self):
-		return sum(r.amount for r in reportAccounts)
+		return sum(r.amount for r in self.reportAccounts)
 
 class PreReport(SQLObject):
 
@@ -942,7 +944,7 @@ class PreReport(SQLObject):
 	preAccounts = MultipleJoin("PreAccount")
 
 	def total(self):
-		return sum(p.amount for p in preAccounts)
+		return sum(p.amount for p in self.preAccounts)
 
 class preAccount(SQLObject):
 	name = StringCol()
@@ -1192,7 +1194,7 @@ class RefinancedDeduction(SQLObject):
 		kw['account'] = self.account
 		kw['description'] = self.description
 		PayedDeduction(**kw)
-		deduction.destroySelf()
+		self.destroySelf()
 
 class RefinancedPay(SQLObject):
 	
@@ -1255,15 +1257,15 @@ class OtherDeduced(SQLObject):
 
 class Asamblea(SQLObject):
 	
-	asistentes = MultipleJoin("Asistente")
+	asistentes = MultipleJoin("Asistencia")
 
 class Banco(SQLObject):
 	
 	nombre = UnicodeCol()
 	codigo = IntCol()
-	asistentes = MultipleJoin("Asistente")
+	asistencia = MultipleJoin("Asistencia")
 
-class Asistente(SQLObject):
+class Asistencia(SQLObject):
 	
 	asamblea = ForeignKey("Asamblea")
 	municipio = UnicodeCol()
