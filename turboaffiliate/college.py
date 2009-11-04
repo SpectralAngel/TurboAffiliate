@@ -1261,6 +1261,8 @@ class OtherDeduced(SQLObject):
 class Asamblea(SQLObject):
 	
 	asistentes = MultipleJoin("Asistencia")
+	nombre = UnicodeCol()
+	anio = IntCol()
 
 class Banco(SQLObject):
 	
@@ -1271,8 +1273,17 @@ class Banco(SQLObject):
 class Asistencia(SQLObject):
 	
 	asamblea = ForeignKey("Asamblea")
-	municipio = UnicodeCol()
 	afiliado = ForeignKey("Affiliate")
-	cuenta = UnicodeCol()
+	departamento = ForeignKey("Departamento")
+	municipio = ForeignKey("Municipio")
 	banco = ForeignKey("Banco")
-	departamento = UnicodeCol()
+	cuenta = UnicodeCol()
+
+class Departamento(SQLObject):
+	
+	nombre = UnicodeCol()
+
+class Municipio(SQLObject):
+	
+	nombre = UnicodeCol()
+	departamento = ForeignKey("Departamento")
