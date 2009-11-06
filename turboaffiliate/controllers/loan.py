@@ -196,7 +196,7 @@ class Pay(controllers.Controller):
 		capital = sum(pay.capital for pay in pays)
 		interest = sum(pay.interest for pay in pays)
 		
-		return dict(pays=pays, count=count, capital=capital, interest=interest)
+		return dict(start=start, end=end, pays=pays, count=count, capital=capital, interest=interest)
 
 class Loan(controllers.Controller):
 	
