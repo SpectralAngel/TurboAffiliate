@@ -390,6 +390,7 @@ class CuotaTable(SQLObject):
 
 	def amount(self, month):
 		
+		month = int(month)
 		if self.affiliate.joined == None:
 			return Zeros
 		
@@ -407,8 +408,8 @@ class CuotaTable(SQLObject):
 			if self.affiliate.jubilated.year < self.year:
 				total = sum(o.inprema for o in os)
 			elif self.affiliate.jubilated.year == self.year:
-				total = sum(o.amount for o in os if month < self.affiliate.jubilated.month)
-				total = sum(o.inprema for o in os if month >= self.affiliate.jubilated.month)
+				total += sum(o.amount for o in os if month < self.affiliate.jubilated.month)
+				total += sum(o.inprema for o in os if month >= self.affiliate.jubilated.month)
 			elif self.affiliate.jubilated.year > self.year:
 				total = sum(o.amount for o in os)
 		else:
@@ -1191,7 +1192,7 @@ class RefinancedDeduction(SQLObject):
 	def remove(self, payedLoan):
 		
 		kw = {}
-		kw['payedLoan']
+		kw['payedLoan'] = payedLoan
 		kw['name'] = self.name
 		kw['amount'] = self.amount
 		kw['account'] = self.account
