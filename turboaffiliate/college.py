@@ -982,7 +982,7 @@ class PayedLoan(SQLObject):
 	
 	def to_loan(self, user):
 		
-		kw = {}
+		kw = dict()
 		kw['aproval'] = user
 		kw['affiliate'] = self.affiliate
 		kw['capital'] = self.capital
@@ -1001,6 +1001,12 @@ class PayedLoan(SQLObject):
 		
 		self.destroySelf()
 		return loan
+	
+	def net(self):
+		
+		"""Obtains the amount that was given to the affiliate in the check"""
+		
+		return self.capital - sum(d.amount for d in self.deductions)
 
 class OldPay(SQLObject):
 	
@@ -1014,7 +1020,7 @@ class OldPay(SQLObject):
 	
 	def to_pay(self, loan):
 		
-		kw = {}
+		kw = dict()
 		kw['loan'] = loan
 		kw['day'] = self.day
 		kw['capital'] = self.capital
@@ -1035,7 +1041,7 @@ class PayedDeduction(SQLObject):
 	
 	def to_deduction(self, loan):
 		
-		kw = {}
+		kw = dict()
 		kw['loan'] = loan
 		kw['name'] = self.name
 		kw['amount'] = self.amount
@@ -1078,7 +1084,7 @@ class RefinancedLoan(SQLObject):
 		Calculates the composite interest and acredits the made payment
 		"""
 		
-		kw = {}
+		kw = dict()
 		kw['amount'] = Decimal(amount).quantize(dot01)
 		kw['day'] = day
 		kw['receipt'] = receipt
@@ -1120,7 +1126,7 @@ class RefinancedLoan(SQLObject):
 		
 		"""Creates a new payment for the loan without chargin interests"""
 		
-		kw = {}
+		kw = dict()
 		kw['amount'] = Decimal(amount).quantize(dot01)
 		kw['day'] = day
 		kw['receipt'] = receipt
@@ -1160,7 +1166,7 @@ class RefinancedLoan(SQLObject):
 	
 	def remove(self):
 		
-		kw = {}
+		kw = dict()
 		kw['id'] = self.id
 		kw['affiliate'] = self.affiliate
 		kw['capital'] = self.capital
@@ -1191,7 +1197,7 @@ class RefinancedDeduction(SQLObject):
 	
 	def remove(self, payedLoan):
 		
-		kw = {}
+		kw = dict()
 		kw['payedLoan'] = payedLoan
 		kw['name'] = self.name
 		kw['amount'] = self.amount
@@ -1212,7 +1218,7 @@ class RefinancedPay(SQLObject):
 	
 	def remove(self, payedLoan):
 		
-		kw = {}
+		kw = dict()
 		kw['payedLoan'] = payedLoan
 		kw['day'] = self.day
 		kw['capital'] = self.capital
@@ -1288,3 +1294,16 @@ class Municipio(SQLObject):
 	
 	nombre = UnicodeCol()
 	departamento = ForeignKey("Departamento")
+
+class AuxiliarPrestamo(object):
+	
+	def __init__(self, id, nombre, monto, neto, papeleo, aportaciones, intereses, retencion):
+		
+		self.id = id
+		self.nombre = nombre
+		self.monto = monto
+		self.neto = neto
+		self.papeleo = papeleo
+		self.aportaciones = aportaciones
+		self.intereses = intereses
+		self.retencion = retencion

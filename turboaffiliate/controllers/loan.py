@@ -648,4 +648,62 @@ class Loan(controllers.Controller):
 		loans = model.Loan.select()
 		
 		return dict(loans=[l for l in loans if l.affiliate.payment == payment])
+	
+	@identity.require(identity.not_anonymous())
+	@expose(template='turboaffiliate.templates.loan.deducciones')
+	@validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
+							  end=validators.DateTimeConverter(format='%Y-%m-%d')))
+	def deducciones(self, start, end):
+		
+		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (start, end)
+		query2 = "payed_loan.start_date >= '%s' and payed_loan.start_date <= '%s'" % (start, end)
+		
+		loans = model.Loan.select(query)
+		payedLoans = model.PayedLoan.select(query2)
+		
+		prestamos = list()
+		
+		for loan in loans:
+			papeleo = 0
+			intereses = 0
+			retencion = 0
+			aportaciones = 0
+			neto = loan.net()
+			monto = loan.capital
+			for d in loan.deductions:
+				if d.account.id == 660:
+					papeleo = d.amount
+				elif d.account.id == 658:
+					intereses = d.amount
+				elif d.account.id == 659:
+					retencion = d.amount
+				elif d.account.id == 665:
+					aportaciones = d.amount
+			
+			nombre = loan.affiliate.firstName + ' ' + loan.affiliate.lastName 
+			prestamo = model.AuxiliarPrestamo(loan.id, nombre, monto, neto, papeleo, aportaciones, intereses, retencion)
+			prestamos.append(prestamo)
+		
+		for loan in payedLoans:
+			papeleo = 0
+			intereses = 0
+			retencion = 0
+			aportaciones = 0
+			neto = loan.net()
+			monto = loan.capital
+			for d in loan.deductions:
+				if d.account.id == 660:
+					papeleo = d.amount
+				elif d.account.id == 658:
+					intereses = d.amount
+				elif d.account.id == 659:
+					retencion = d.amount
+				elif d.account.id == 665:
+					aportaciones = d.amount
+			
+			nombre = loan.affiliate.firstName + ' ' + loan.affiliate.lastName
+			prestamo = model.AuxiliarPrestamo(loan.id, nombre, monto, neto, papeleo, aportaciones, intereses, retencion)
+			prestamos.append(prestamo)
+		
+		return dict(loans=prestamos, start=start, end=end)
 
