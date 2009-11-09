@@ -38,6 +38,17 @@
 					<td py:content="locale.currency(loan.neto, True, True)" />
 				</tr>
 			</tbody>
+			<tfoot>
+				<tr>
+					<th colspan="2">Total:</th>
+					<th py:content="locale.currency(monto, True, True)" />
+					<th py:content="locale.currency(intereses, True, True)" />
+					<th py:content="locale.currency(papeleo, True, True)" />
+					<th py:content="locale.currency(aportaciones, True, True)" />
+					<th py:content="locale.currency(retencion, True, True)" />
+					<th py:content="locale.currency(neto, True, True)" />
+				</tr>
+			</tfoot>
 		</table>
 	</body>
 </html>

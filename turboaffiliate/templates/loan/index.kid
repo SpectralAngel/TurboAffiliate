@@ -412,6 +412,20 @@
 				</ul>
 			</fieldset>
 		</form>
+		<form action="deduccionesDia">
+			<fieldset>
+				<legend>Reporte de Deducciones de Pr&eacute;stamos Diarios</legend>
+				<ul>
+					<li>
+						<label>Inicio:</label>
+						<input name="start" class="date-picker" />
+					</li>
+					<li>
+						<input type="submit" value="Ver" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
 	</body>
 </html>
 

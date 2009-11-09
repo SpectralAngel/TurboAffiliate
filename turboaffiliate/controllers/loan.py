@@ -705,5 +705,94 @@ class Loan(controllers.Controller):
 			prestamo = model.AuxiliarPrestamo(loan.id, nombre, monto, neto, papeleo, aportaciones, intereses, retencion)
 			prestamos.append(prestamo)
 		
-		return dict(loans=prestamos, start=start, end=end)
-
+		papeleo = 0
+		intereses = 0
+		retencion = 0
+		aportaciones = 0
+		neto = 0
+		monto = 0
+		
+		for p in prestamos:
+			
+			papeleo += p.papeleo
+			intereses += p.intereses
+			retencion += p.retencion
+			aportaciones += p.aportaciones
+			neto += p.neto
+			monto += p.monto
+		
+		return dict(loans=prestamos, start=start, end=end, monto=monto,
+				    neto=neto, papeleo=papeleo, aportaciones=aportaciones,
+				    intereses=intereses, retencion=retencion)
+	
+	@identity.require(identity.not_anonymous())
+	@expose(template='turboaffiliate.templates.loan.deducciones')
+	@validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d')))
+	def deduccionesDia(self, start):
+		
+		loans = model.Loan.selectBy(startDate=start)
+		payedLoans = model.PayedLoan.selectBy(startDate=start)
+		
+		prestamos = list()
+		
+		for loan in loans:
+			papeleo = 0
+			intereses = 0
+			retencion = 0
+			aportaciones = 0
+			neto = loan.net()
+			monto = loan.capital
+			for d in loan.deductions:
+				if d.account.id == 660:
+					papeleo = d.amount
+				elif d.account.id == 658:
+					intereses = d.amount
+				elif d.account.id == 659:
+					retencion = d.amount
+				elif d.account.id == 665:
+					aportaciones = d.amount
+			
+			nombre = loan.affiliate.firstName + ' ' + loan.affiliate.lastName 
+			prestamo = model.AuxiliarPrestamo(loan.id, nombre, monto, neto, papeleo, aportaciones, intereses, retencion)
+			prestamos.append(prestamo)
+		
+		for loan in payedLoans:
+			papeleo = 0
+			intereses = 0
+			retencion = 0
+			aportaciones = 0
+			neto = loan.net()
+			monto = loan.capital
+			for d in loan.deductions:
+				if d.account.id == 660:
+					papeleo = d.amount
+				elif d.account.id == 658:
+					intereses = d.amount
+				elif d.account.id == 659:
+					retencion = d.amount
+				elif d.account.id == 665:
+					aportaciones = d.amount
+			
+			nombre = loan.affiliate.firstName + ' ' + loan.affiliate.lastName
+			prestamo = model.AuxiliarPrestamo(loan.id, nombre, monto, neto, papeleo, aportaciones, intereses, retencion)
+			prestamos.append(prestamo)
+		
+		papeleo = 0
+		intereses = 0
+		retencion = 0
+		aportaciones = 0
+		neto = 0
+		monto = 0
+		
+		for p in prestamos:
+			
+			papeleo += p.papeleo
+			intereses += p.intereses
+			retencion += p.retencion
+			aportaciones += p.aportaciones
+			neto += p.neto
+			monto += p.monto
+		
+		return dict(loans=prestamos, start=start, end=start, monto=monto,
+				    neto=neto, papeleo=papeleo, aportaciones=aportaciones,
+				    intereses=intereses, retencion=retencion)
