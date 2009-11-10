@@ -40,7 +40,8 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<th colspan="2">Total:</th>
+					<th>Total:</th>
+					<th py:content="len(loans)" />
 					<th py:content="locale.currency(monto, True, True)" />
 					<th py:content="locale.currency(intereses, True, True)" />
 					<th py:content="locale.currency(papeleo, True, True)" />

@@ -59,6 +59,13 @@ class Affiliate(controllers.Controller):
 		return dict(affiliates=model.Affiliate.select(model.Affiliate.q.cardID==cardID))
 	
 	@identity.require(identity.not_anonymous())
+	@expose(template='turboaffiliate.templates.affiliate.search')
+	@validate(validators=dict(cobro=validators.String()))
+	def cobro(self, cobro):
+		
+		return dict(result=model.Affiliate.select(model.Affiliate.q.escalafon==cobro))
+	
+	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.affiliate')
 	@validate(validators=dict(copemh=validators.Int()))
 	def byCopemh(self, copemh):
