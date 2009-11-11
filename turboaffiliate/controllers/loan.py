@@ -67,7 +67,7 @@ class Deduction(controllers.Controller):
 			deduction = model.Deduction(**kw)
 		
 		except model.SQLObjectNotFound:
-			flash('El préstamo no se ha encontrado')
+			flash('El pr￩stamo no se ha encontrado')
 			raise redirect('/loan')
 		
 		except ValueError:
@@ -284,7 +284,7 @@ class Loan(controllers.Controller):
 
 		affiliate = model.Affiliate.get(affiliate)
 		#if (date.today() - affiliate.joined).days < 365:
-		#	flash(u"El afiliado aún no tiene un año de afiliación")
+		#	flash(u"El afiliado a￺n no tiene un a￱o de afiliaci￳n")
 		#	raise redirect('/affiliate/%s' % affiliate.id)
 		#if len(affiliate.loans) > 0:
 		#	
@@ -292,7 +292,7 @@ class Loan(controllers.Controller):
 		#		
 		#		if loan.percent() < 59:
 		#			
-		#			flash("El Afiliado no ha pagado el 60% del préstamo anterior")
+		#			flash("El Afiliado no ha pagado el 60% del pr￩stamo anterior")
 		#			raise redirect('/affiliate/%s' % affiliate.id)
 			
 		return dict(affiliate=affiliate)

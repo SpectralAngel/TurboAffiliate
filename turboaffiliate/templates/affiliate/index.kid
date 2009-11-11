@@ -62,11 +62,25 @@
 		</form>
 		<form action="card" method="post">
 			<fieldset>
-				<legend>Buscar Affiliado</legend>
+				<legend>Buscar Afiliado</legend>
 				<ul>
 					<li>
 						<label>Identidad:</label>
 						<input name="cardID" />
+					</li>
+					<li>
+						<input type="submit" value="Buscar" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
+		<form action="cobro">
+			<fieldset>
+				<legend>Buscar Afiliado Por N&uacute;mero de Cobro</legend>
+				<ul>
+					<li>
+						<label>Cobro INPREMA:</label>
+						<input name="cobro" />
 					</li>
 					<li>
 						<input type="submit" value="Buscar" />
