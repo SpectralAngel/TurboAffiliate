@@ -1297,10 +1297,10 @@ class Municipio(SQLObject):
 
 class AuxiliarPrestamo(object):
 	
-	def __init__(self, id, nombre, monto, neto, papeleo, aportaciones, intereses, retencion):
+	def __init__(self, id, afiliado, monto, neto, papeleo, aportaciones, intereses, retencion):
 		
 		self.id = id
-		self.nombre = nombre
+		self.afiliado = afiliado
 		self.monto = monto
 		self.neto = neto
 		self.papeleo = papeleo

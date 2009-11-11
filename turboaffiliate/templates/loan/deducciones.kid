@@ -7,7 +7,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#">
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-		<title>TurboAffiliate &bull; Afiliados</title>
+		<title>TurboAffiliate &bull; Pr&acute;stamos</title>
+		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print" />
 	</head>
 	<body>
 		<h1>Reporte de Deducciones de Pr&eacute;stamos</h1>
@@ -29,7 +30,7 @@
 			<tbody>
 				<tr py:for="loan in loans">
 					<td py:content="loan.id" />
-					<td py:content="loan.nombre" />
+					<td><a href="${tg.url('/affiliate/%s' % loan.afiliado.id)}" py:content="loan.afiliado.firstName, ' ', loan.afiliado.lastName" /></td>
 					<td py:content="locale.currency(loan.monto, True, True)" />
 					<td py:content="locale.currency(loan.intereses, True, True)" />
 					<td py:content="locale.currency(loan.papeleo, True, True)" />
