@@ -431,12 +431,22 @@ class Loan(controllers.Controller):
 	@validate(validators=dict(first=validators.DateTimeConverter(format='%Y-%m-%d'),
 							  last=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def period(self, first, last):
+				
+		loans = list()
+		query = "loan.start_date >= '%s' and loan.start_date <= '%s' order by start_date" % (first, last)
+		adeudados = [loan for loan in model.Loan.select(query)]
 		
-		query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (first, last)
+		query = "payed_loan.start_date >= '%s' and payed_loan.start_date <= '%s'" % (first, last)
+		pagados = [loan for loan in model.PayedLoan.select(query)]
 		
-		loans = model.Loan.select(query)
-		count = loans.count()
-		amount = sum(l.capital for l in loans)
+		query = "refinanced_loan.start_date >= '%s' and refinanced_loan.start_date <= '%s'" % (first, last)
+		refinanciados = [loan for loan in model.RefinancedLoan.select(query)]
+		
+		for n in range(first.day, last.day + 1):
+			loans.extend(loan for loan in adeudados if loan.startDate.day == n)
+			loans.extend(loan for loan in pagados if loan.startDate.day == n)
+			loans.extend(loan for loan in refinanciados if loan.startDate.day == n)
+		
 		return dict(loans=loans, count=loans.count(),
 					payment="Periodo del %s al %s" % (first.strftime('%d de %B de %Y'),
 														last.strftime('%d de %B de %Y')),
@@ -456,9 +466,13 @@ class Loan(controllers.Controller):
 		query = "payed_loan.start_date >= '%s' and payed_loan.start_date <= '%s'" % (first, last)
 		pagados = [loan for loan in model.PayedLoan.select(query)]
 		
+		query = "refinanced_loan.start_date >= '%s' and refinanced_loan.start_date <= '%s'" % (first, last)
+		refinanciados = [loan for loan in model.RefinancedLoan.select(query)]
+		
 		for n in range(first.day, last.day + 1):
 			loans.extend(loan for loan in adeudados if loan.startDate.day == n)
 			loans.extend(loan for loan in pagados if loan.startDate.day == n)
+			loans.extend(loan for loan in refinanciados if loan.startDate.day == n)
 		
 		amount = sum(l.capital for l in loans)
 		return dict(amount=amount, loans=loans, first=first, last=last, count=len(loans))
@@ -480,7 +494,7 @@ class Loan(controllers.Controller):
 		
 		log = dict()
 		log['user'] = identity.current.user
-		log['action'] = "Cambio de cuota a %s de prestamo %s" % (payment, kw['loan'].id)
+		log['action'] = "Cambio de cuota a %s de prestamo %s" % (payment, loan.id)
 		model.Logger(**log)
 		
 		raise redirect('/loan/%s' % loan.id)
@@ -611,7 +625,6 @@ class Loan(controllers.Controller):
 		query = "pay.day >= '%s' and pay.day <= '%s'" % (start, end)
 		
 		pays = model.Pay.select(query)
-		count = pays.count()
 		capital = sum(pay.capital for pay in pays)
 		interest = sum(pay.interest for pay in pays)
 		
