@@ -37,7 +37,7 @@ class Observacion(controllers.Controller):
     def add(self, affiliate, texto):
         
         affiliate = model.Affiliate.get(affiliate)
-        observacion = model.Observacion()
+        observacion = model.Observacion(affiliate=affiliate)
         observacion.affiliate = affiliate
         observacion.texto = texto
         
