@@ -79,7 +79,7 @@ class Affiliate(SQLObject):
 	flyers = MultipleJoin("Flyer")
 	deduced = MultipleJoin("Deduced")
 	delayed = MultipleJoin("Delayed")
-	asistencias = MultipleJoin("Asistencia")
+	observaciones = MultipleJoin('Observacion')
 	
 	def get_monthly(self):
 		
@@ -1265,36 +1265,6 @@ class OtherDeduced(SQLObject):
 	amount = CurrencyCol(default=0)
 	account = ForeignKey("Account")
 
-class Asamblea(SQLObject):
-	
-	asistentes = MultipleJoin("Asistencia")
-	nombre = UnicodeCol()
-	anio = IntCol()
-
-class Banco(SQLObject):
-	
-	nombre = UnicodeCol()
-	codigo = IntCol()
-	asistencia = MultipleJoin("Asistencia")
-
-class Asistencia(SQLObject):
-	
-	asamblea = ForeignKey("Asamblea")
-	afiliado = ForeignKey("Affiliate")
-	departamento = ForeignKey("Departamento")
-	municipio = ForeignKey("Municipio")
-	banco = ForeignKey("Banco")
-	cuenta = UnicodeCol()
-
-class Departamento(SQLObject):
-	
-	nombre = UnicodeCol()
-
-class Municipio(SQLObject):
-	
-	nombre = UnicodeCol()
-	departamento = ForeignKey("Departamento")
-
 class AuxiliarPrestamo(object):
 	
 	def __init__(self, id, afiliado, monto, neto, papeleo, aportaciones, intereses, retencion):
@@ -1307,3 +1277,9 @@ class AuxiliarPrestamo(object):
 		self.aportaciones = aportaciones
 		self.intereses = intereses
 		self.retencion = retencion
+
+class Observacion(SQLObject):
+	
+	affiliate = ForeignKey("Affiliate")
+	texto = UnicodeCol()
+	fecha = DateCol(default=datetime.now)

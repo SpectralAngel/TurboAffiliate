@@ -142,5 +142,24 @@
 			<a href="${tg.url('/payed/%s' % loan.id)}" >Ver Pr&eacute;stamo</a>
 		</div>
 		<a href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a>
+		<div id="observaciones">
+			<h2>Observaciones</h2>
+			<p py:for="observacion in affiliate.observaciones" py:content="observacion.texto" />
+			<form action="${tg.url('/affiliate/observacion/add')}">
+				<fieldset>
+					<legend>Agregar Observaci&oacute;n</legend>
+					<ol>
+						<li>
+							<input name="affiliate" value="${affiliate.id}" type="hidden" />
+							<label>Observaci&oacute;n</label>
+							<textarea name="texto"></textarea>
+						</li>
+						<li>
+							<input type="submit" value="Agregar" />
+						</li>
+					</ol>
+				</fieldset>
+			</form>
+		</div>
 	</body>
 </html>

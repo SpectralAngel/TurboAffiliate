@@ -24,7 +24,7 @@ from turbogears import controllers, flash, redirect, identity
 from turbogears import expose, validate, validators, error_handler
 from cherrypy import request, response, NotFound, HTTPRedirect
 from turboaffiliate import model, json
-from turboaffiliate.controllers import cuota, extra, billing, deduced
+from turboaffiliate.controllers import cuota, extra, billing, deduced, observacion
 from decimal import *
 from datetime import date, datetime
 
@@ -36,6 +36,7 @@ class Affiliate(controllers.Controller):
 	extra = extra.Extra()
 	billing = billing.Billing()
 	deduced = deduced.Deduced()
+	observacion = observacion.Observacion()
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.index')
