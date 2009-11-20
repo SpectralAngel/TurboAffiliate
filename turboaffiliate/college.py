@@ -89,13 +89,13 @@ class Affiliate(SQLObject):
 		return extras + loans
 	
 	def populate(self, year):
-		kw = {}
+		kw = dict()
 		for n in range(1, 13):
 			kw["month%s" % n] = False
 		return kw
 	
 	def complete(self, year):
-		kw = {}
+		kw = dict()
 		kw['affiliate'] = self
 		kw['year'] = year
 		CuotaTable(**kw)

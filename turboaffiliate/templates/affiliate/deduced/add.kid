@@ -11,7 +11,7 @@
 		<title>TurboAffiliate &bull; Afiliados</title>
 	</head>
 	<body>
-		<form action="save">
+		<form action="${tg.url('/affiliate/deduced/save')}">
 			<fieldset>
 				<legend>Datos de la Deducci&oacute;n</legend>
 				<ul>

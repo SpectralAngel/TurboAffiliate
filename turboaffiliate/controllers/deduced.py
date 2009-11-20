@@ -47,11 +47,12 @@ class Deduced(controllers.Controller):
 	@identity.require(identity.has_permission("Deductor"))
 	@expose()
 	@validate(validators=dict(affiliate=validators.Int(), account=validators.Int(),
-							amount=validators.Number(), year=validators.Int(),
+							amount=validators.String(), year=validators.Int(),
 							month=validators.Int()))
 	def save(self, affiliate, account, **kw):
 	
 		kw['affiliate'] = model.Affiliate.get(affiliate)
+		kw['amount'] = Decimal(kw['amount'])
 		kw['account'] = model.Account.get(account)
 		model.Deduced(**kw)
 		
