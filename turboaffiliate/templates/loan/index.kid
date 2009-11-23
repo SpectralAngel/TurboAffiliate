@@ -29,7 +29,7 @@
 				<ul>
 					<li>
 						<label>N&uacute;mero de Pr&eacute;stamo</label>
-						<input name="code" />
+						<input name="loan" />
 					</li>
 					<li>
 						<input type="submit" value="Buscar" />
