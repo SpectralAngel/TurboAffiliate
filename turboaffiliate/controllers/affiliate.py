@@ -105,7 +105,7 @@ class Affiliate(controllers.Controller):
 		
 		if kw['cardID'] == '':
 			flash(u'No se escribio un número de identidad')
-			raise redirect('affiliate/add')
+			flash(u'Al afiliado no se le podra cobrar si cotiza por escalafon')
 		try:			
 			affiliate = model.Affiliate.get(int(kw['affiliate']))
 			
