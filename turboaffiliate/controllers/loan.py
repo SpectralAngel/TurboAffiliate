@@ -693,8 +693,8 @@ class Loan(controllers.Controller):
 				elif d.account.id == 665:
 					aportaciones = d.amount
 			
-			nombre = loan.affiliate.firstName + ' ' + loan.affiliate.lastName 
-			prestamo = model.AuxiliarPrestamo(loan.id, nombre, monto, neto, papeleo, aportaciones, intereses, retencion)
+			afiliado = loan.affiliate
+			prestamo = model.AuxiliarPrestamo(loan.id, afiliado, monto, neto, papeleo, aportaciones, intereses, retencion)
 			prestamos.append(prestamo)
 		
 		for loan in payedLoans:
@@ -714,8 +714,8 @@ class Loan(controllers.Controller):
 				elif d.account.id == 665:
 					aportaciones = d.amount
 			
-			nombre = loan.affiliate.firstName + ' ' + loan.affiliate.lastName
-			prestamo = model.AuxiliarPrestamo(loan.id, nombre, monto, neto, papeleo, aportaciones, intereses, retencion)
+			afiliado = loan.affiliate
+			prestamo = model.AuxiliarPrestamo(loan.id, afiliado, monto, neto, papeleo, aportaciones, intereses, retencion)
 			prestamos.append(prestamo)
 		
 		papeleo = 0

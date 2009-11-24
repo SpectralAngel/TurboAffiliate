@@ -40,9 +40,14 @@ class Affiliate(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.index')
-	def index(self):
-		import time
-		return dict(now=time.ctime())
+	def index(self, tg_errors=None):
+		
+		if tg_errors:
+			errors = [(param,inv.msg,inv.value) for param, inv in
+                      tg_errors.items()]
+			flash(errors)
+        
+		return dict()
 	
 	@error_handler(index)
 	@identity.require(identity.not_anonymous())
@@ -66,6 +71,7 @@ class Affiliate(controllers.Controller):
 		
 		return dict(result=model.Affiliate.select(model.Affiliate.q.escalafon==cobro))
 	
+	@error_handler(index)
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.affiliate')
 	@validate(validators=dict(copemh=validators.Int()))
