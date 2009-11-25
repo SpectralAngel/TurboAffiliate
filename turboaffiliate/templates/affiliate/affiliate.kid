@@ -40,9 +40,6 @@
 				<a class="delete" href="${tg.url('/affiliate/remove/%s' % affiliate.id)}">Borrar</a>
 			</li>
 			<li>
-				<a href="${tg.url('/funebre/add/%s' % affiliate.id)}">A&ntilde;adir Ayuda Funebre</a>
-			</li>
-			<li>
 				<a class="add" href="${tg.url('/affiliate/extra/add/%s' % affiliate.id)}">A&ntilde;adir Deducci&oacute;n Extra</a>
 			</li>
 			<li>

@@ -219,7 +219,7 @@ class Affiliate(controllers.Controller):
 		affiliate = model.Affiliate.get(affiliate)
 		affiliate.complete(year)
 		
-		raise redirect('/affiliate')
+		raise redirect('/affiliate/status/%s' % affiliate.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
@@ -254,7 +254,7 @@ class Affiliate(controllers.Controller):
 	def byRange(self, cardID):
 		
 		affiliates = model.Affiliate.select("affiliate.card_id like '%%%s%%'" % cardID)
-		return dict(affiliates=affiliates, code=code, count=affiliates.count())
+		return dict(affiliates=affiliates, cardID=cardID, count=affiliates.count())
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.list')
@@ -440,7 +440,7 @@ class Affiliate(controllers.Controller):
 		for loan in affiliate.loans:
 			payment = loan.get_payment()
 			
-			kw = {}
+			kw = dict()
 			kw['amount'] = payment
 			kw['affiliate'] = affiliate
 			kw['account'] = model.Account.get(373)

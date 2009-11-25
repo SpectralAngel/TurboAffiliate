@@ -17,6 +17,7 @@
 	<body py:match="item.tag=='{http://www.w3.org/1999/xhtml}body'" py:attrs="item.items()">
 	    <div id="header">
 	    	<div style="float: right;" py:if="tg.config('identity.on',False) and not 'logging_in' in locals()" id="pageLogin">
+	    		<a href="https://bugs.launchpad.net/turboaffiliate/+filebug">Reportar un Fallo</a>&nbsp; 
 				<span py:if="tg.identity.anonymous">
 					<a href="${tg.url('/login')}">Iniciar Sesi&oacute;n</a>
 				</span>

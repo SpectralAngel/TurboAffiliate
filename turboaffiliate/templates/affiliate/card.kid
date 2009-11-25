@@ -24,7 +24,7 @@
 		</style>
 	</head>
 	<body>
-		<h1> Reporte de Afiliados con C&oacute;digo de Identidad ${code}</h1>
+		<h1> Reporte de Afiliados con C&oacute;digo de Identidad ${cardID}</h1>
 		<table>
 			<thead>
 				<tr>
