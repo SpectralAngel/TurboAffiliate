@@ -103,7 +103,7 @@ class Flyer(controllers.Controller):
 							  payment=validators.String()))
 	def report(self, payment, year, month):
 	
-		affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment)
+		affiliates = model.Affiliate.selectBy(payment==payment, active=True)
 		
 		obligations = model.Obligation.selectBy(month=month, year=year)
 		obligation = 0
@@ -139,7 +139,8 @@ class Flyer(controllers.Controller):
 	@validate(validators=dict(account=validators.Int()))
 	def extra(self, account):
 		
-		return dict(account=model.Account.get(account), extras=account.extras)
+		account = model.Account.get(account)
+		return dict(account=account, extras=account.extras)
 	
 	@identity.require(identity.not_anonymous())
 	@validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12),

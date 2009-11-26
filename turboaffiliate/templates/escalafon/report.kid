@@ -25,18 +25,18 @@
 					<td>1</td>
 					<td>Aportaciones Ordinarias</td>
 					<td py:content="count" />
-					<td py:content="locale.currency(count * obligation)" />
+					<td py:content="locale.currency(count * obligation, True, True)" />
 				</tr>
 				<tr>
 					<td>2</td>
 					<td>Cuota Pr&eacute;stamo</td>
 					<td py:content="loans['count']" />
-					<td py:content="locale.currency(loans['amount'])" />
+					<td py:content="locale.currency(loans['amount'], True, True)" />
 				</tr>
-				<tr py:for="key, value in deductions.iteritems()">
-					<td py:content="key.code"/>
-					<td py:content="key.name" />
-					<td py:content="locale.currency(value['count'], True, True)" />
+				<tr py:for="deduccion in deductions">
+					<td py:content="deductions[deduccion].code"/>
+					<td py:content="deductions[deduccion].name" />
+					<td py:content="deductions[deduccion]['count']" />
 					<td py:content="locale.currency(value['amount'], True, True)" />
 				</tr>
 			</tbody>
