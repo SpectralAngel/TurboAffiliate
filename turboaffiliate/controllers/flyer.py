@@ -103,7 +103,7 @@ class Flyer(controllers.Controller):
 							  payment=validators.String()))
 	def report(self, payment, year, month):
 	
-		affiliates = model.Affiliate.selectBy(payment==payment, active=True)
+		affiliates = model.Affiliate.selectBy(payment=payment, active=True)
 		
 		obligations = model.Obligation.selectBy(month=month, year=year)
 		obligation = 0

@@ -34,10 +34,10 @@
 					<td py:content="locale.currency(loans['amount'], True, True)" />
 				</tr>
 				<tr py:for="deduccion in deductions">
-					<td py:content="deductions[deduccion].code"/>
-					<td py:content="deductions[deduccion].name" />
+					<td py:content="deduccion.code"/>
+					<td py:content="deduccion.name" />
 					<td py:content="deductions[deduccion]['count']" />
-					<td py:content="locale.currency(value['amount'], True, True)" />
+					<td py:content="locale.currency(deductions[deduccion]['amount'], True, True)" />
 				</tr>
 			</tbody>
 		</table>
