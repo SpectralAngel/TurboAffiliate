@@ -47,8 +47,7 @@ class Flyer(controllers.Controller):
 	@validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
 	def postReport(self, year, month):
 		
-		query = "post_report.month = %s and post_report.year = %s" % (month, year)
-		report = model.PostReport.select(query)[0]
+		report = model.PostReport.selectBy(month=month, year=year)[0]
 		total = sum(r.amount for r in report.reportAccounts)
 		
 		return dict(total=total, month=month, year=year, report=report)
@@ -61,8 +60,7 @@ class Flyer(controllers.Controller):
 		model.Flyer.clearTable()
 		
 		affiliates = model.Affiliate.select(model.Affiliate.q.payment=="Escalafon")
-		query = "obligation.year = %s and obligation.month = %s" % (year, month)
-		obligations = model.Obligation.select(query)
+		obligations = model.Obligation.selectBy(month=month, year=year)
 		oblig = sum(o.amount for o in obligations)
 		
 		for affiliate in affiliates:
@@ -88,16 +86,16 @@ class Flyer(controllers.Controller):
 	@expose(template="turboaffiliate.templates.escalafon.download")
 	@validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
 	def download(self, year, month):
-		filename = "./turboaffiliate/static/%(year)s%(month)02dCOPEMH.txt" % {'year':int(year), 'month':int(month)}
+		filename = "./turboaffiliate/static/%(year)s%(month)02dCOPEMH.txt" % {'year':year, 'month':month}
 		f = open(filename, 'w')
 		flyers = model.Flyer.select()
-		start = "%(year)s%(month)02d" % {'year':int(year), 'month':int(month)}
+		start = "%(year)s%(month)02d" % {'year':year, 'month':month}
 		for flyer in flyers:
 			if str(flyer) == "":
 				continue
 			l = start + str(flyer) + "\n"
 			f.write(l)
-		return dict(filename="static/%(year)s%(month)02dCOPEMH.txt" % {'year':int(year), 'month':int(month)})
+		return dict(filename="static/%(year)s%(month)02dCOPEMH.txt" % {'year':year, 'month':month})
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.escalafon.report")
@@ -107,10 +105,12 @@ class Flyer(controllers.Controller):
 	
 		affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment)
 		
-		accounts = model.Account.select()
-		query = "obligation.year = %s and obligation.month = %s" % (year, month)
-		obligations = model.Obligation.select(query)
-		obligation = sum(o.amount for o in obligations)
+		obligations = model.Obligation.selectBy(month=month, year=year)
+		obligation = 0
+		if payment == 'INPREMA':
+			obligation = sum(o.inprema for o in obligations)
+		else:
+			obligation = sum(o.amount for o in obligations)
 		
 		loans = model.Loan.select()
 		loans = [loan for loan in loans if loan.affiliate.payment==payment]
@@ -120,6 +120,7 @@ class Flyer(controllers.Controller):
 		
 		kw = dict()
 		total = Decimal(0)
+		accounts = model.Account.select()
 		for account in accounts:
 			kw[account] = dict()
 			li = [extra for extra in account.extras if extra.affiliate.payment==payment]
@@ -148,8 +149,8 @@ class Flyer(controllers.Controller):
 		otherDeduced = model.OtherDeduced.select()
 		otherDeduced = [o for o in otherDeduced if o.affiliate.payment == payment]
 		
-		kw = {}
-		init = {}
+		kw = dict()
+		init = dict()
 		i = {"payment":payment, "month":month, "year":year}
 		init["otherReport"] = model.OtherReport(**i)
 		for other in otherDeduced:
@@ -278,7 +279,7 @@ class Flyer(controllers.Controller):
 		query = "affiliate.payment = '%s' and affiliate.state = '%s'" % ('Escalafon', state)
 		affiliates = model.Affiliate.select(query)
 		
-		filiales = {}
+		filiales = dict()
 		
 		for affiliate in affiliates:
 			try:
@@ -304,7 +305,7 @@ class Flyer(controllers.Controller):
 			total = sum(k * v for k, v in retrasada.items())
 			return dict(retrasada=retrasada, total=total, year=year, month=month)
 		
-		retrasada = {}
+		retrasada = dict()
 		query = "deduced.year = %s and deduced.month = %s and deduced.account_id = 673" % (year, month)
 		deduced = model.Deduced.select(query)
 		for d in deduced:
@@ -413,8 +414,7 @@ class Flyer(controllers.Controller):
 	@validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
 	def aportaron(self, year, month):
 		
-		query = "cuota_table.month%s = 1 AND cuota_table.year = %s" % (month, year)
-		cuotas = model.CuotaTable.select(query)
+		cuotas = model.CuotaTable.selectBy(month=month, year=year)
 		show = "que Cotizaron en %s de %s" % (month, year)
 		
 		affiliates = [c.affiliate for c in cuotas]
