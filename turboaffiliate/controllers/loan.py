@@ -509,6 +509,15 @@ class Loan(controllers.Controller):
 		raise redirect('/loan/%s' % loan.id)
 	
 	@identity.require(identity.not_anonymous())
+	@expose()
+	@validate(validators=dict(loan=validators.Int(),amount=validators.String()))
+	def capital(self, loan, amount):
+		
+		loan = model.Loan.get(loan)
+		loan.amount = Decimal(amount)
+		raise redirect('/loan/%s' % loan.id)
+	
+	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.monthly')
 	@validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
 							  end=validators.DateTimeConverter(format='%Y-%m-%d')))

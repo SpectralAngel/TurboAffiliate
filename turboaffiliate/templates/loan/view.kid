@@ -84,12 +84,12 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/loan/debt')}">
+		<form action="${tg.url('debt')}">
 			<fieldset>
 				<legend>Cambiar Saldo</legend>
 				<ul>
 					<li>
-						<label for="debt">Cuota:</label>
+						<label for="debt">Nuevo Saldo:</label>
 						<input name="debt" />
 						<input type="hidden" name="loan" value="${loan.id}" />
 					</li>
@@ -99,11 +99,35 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="">
-			<div>
-				<input name="interest" id="interest" value="${loan.interest}" type="hidden" />
-				<input name="capital" id="amount" value="${loan.capital}" type="hidden" />
-			</div>
+		<form action="${tg.url('debt')}">
+			<fieldset>
+				<legend>Cambiar Saldo</legend>
+				<ul>
+					<li>
+						<label for="debt">Nuevo Saldo:</label>
+						<input name="debt" />
+						<input type="hidden" name="loan" value="${loan.id}" />
+					</li>
+					<li>
+						<input value="Modificar"  type="submit" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
+		<form action="${tg.url('capital')}">
+			<fieldset>
+				<legend>Cambiar Monto</legend>
+				<ul>
+					<li>
+						<label for="amount">Nuevo Monto:</label>
+						<input name="amount" />
+						<input type="hidden" name="loan" value="${loan.id}" />
+					</li>
+					<li>
+						<input value="Modificar"  type="submit" />
+					</li>
+				</ul>
+			</fieldset>
 		</form>
 		<form action="${tg.url('/loan/month')}">
 			<fieldset>
