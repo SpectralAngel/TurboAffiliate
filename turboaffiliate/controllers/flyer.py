@@ -24,7 +24,6 @@ from turbogears import controllers, expose, flash, identity, redirect
 from turbogears import validate, validators
 from turboaffiliate import model
 from decimal import Decimal
-from datetime import date
 
 months = {
 			1:'Enero', 2:'Febrero', 3:'Marzo',
@@ -33,9 +32,17 @@ months = {
 			10:'Octubre', 11:'Noviembre', 12:'Diciembre'
 		 }
 
+filiales = {"Atlantida":{'total':0},"Choluteca":{'total':0},"Colon":{'total':0},
+		    "Comayagua":{'total':0},"Copan":{'total':0}, "Cortes":{'total':0},
+		    "El Paraiso":{'total':0}, "Francisco Morazan":{'total':0},
+		    "Gracias a Dios":{'total':0}, "Intibuca":{'total':0},
+		    "Islas de la Bahia":{'total':0},"La Paz":{'total':0},
+		    "Lempira":{'total':0},"Olancho":{'total':0},"Ocotepeque":{'total':0},
+			"Santa Barbara":{'total':0},"Valle":{'total':0},"Yoro":{'total':0}}
+
 class Flyer(controllers.Controller):
 	
-	"""Imports the escalafon definition file for Affiliate cuota payment"""
+	"""Exports the escalafon definition file for Affiliate cuota payment"""
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.escalafon.index")
@@ -185,14 +192,6 @@ class Flyer(controllers.Controller):
 	def filiales(self, year, month):
 		
 		affiliates = model.Affiliate.select(model.Affiliate.q.payment=="Escalafon")
-		query = "obligation.year = %s and obligation.month >= %s" % (year, month)
-		obligation = model.Obligation.select(query)[0]
-		
-		filiales = {"Atlantida":{'total':0}, "Choluteca":{'total':0}, "Colon":{'total':0}, "Comayagua":{'total':0},
-						"Copan":{'total':0}, "Cortes":{'total':0}, "El Paraiso":{'total':0}, "Francisco Morazan":{'total':0},
-						"Gracias a Dios":{'total':0}, "Intibuca":{'total':0}, "Islas de la Bahia":{'total':0},
-						"La Paz":{'total':0}, "Lempira":{'total':0}, "Olancho":{'total':0}, "Ocotepeque":{'total':0},
-						"Santa Barbara":{'total':0}, "Valle":{'total':0}, "Yoro":{'total':0}}
 		
 		for affiliate in affiliates:
 			if affiliate.get_month(year, month):
@@ -214,11 +213,6 @@ class Flyer(controllers.Controller):
 		
 		affiliates = model.Affiliate.select(model.Affiliate.q.payment=="Escalafon")
 		
-		filiales = {"Atlantida":{'total':0}, "Choluteca":{'total':0}, "Colon":{'total':0}, "Comayagua":{'total':0},
-						"Copan":{'total':0}, "Cortes":{'total':0}, "El Paraiso":{'total':0}, "Francisco Morazan":{'total':0},
-						"Gracias a Dios":{'total':0}, "Intibuca":{'total':0}, "Islas de la Bahia":{'total':0},
-						"La Paz":{'total':0}, "Lempira":{'total':0}, "Olancho":{'total':0}, "Ocotepeque":{'total':0},
-						"Santa Barbara":{'total':0}, "Valle":{'total':0}, "Yoro":{'total':0}}
 		for affiliate in affiliates:
 			try:
 				filiales[affiliate.state][affiliate.school] += 1
@@ -254,11 +248,6 @@ class Flyer(controllers.Controller):
 		
 		affiliates = model.Affiliate.select(model.Affiliate.q.payment=="Escalafon")
 		
-		filiales = {"Atlantida":{'total':0}, "Choluteca":{'total':0}, "Colon":{'total':0}, "Comayagua":{'total':0},
-						"Copan":{'total':0}, "Cortes":{'total':0}, "El Paraiso":{'total':0}, "Francisco Morazan":{'total':0},
-						"Gracias a Dios":{'total':0}, "Intibuca":{'total':0}, "Islas de la Bahia":{'total':0},
-						"La Paz":{'total':0}, "Lempira":{'total':0}, "Olancho":{'total':0}, "Ocotepeque":{'total':0},
-						"Santa Barbara":{'total':0}, "Valle":{'total':0}, "Yoro":{'total':0}}
 		for affiliate in affiliates:
 			try:
 				filiales[affiliate.state][affiliate.school] += 1
@@ -303,7 +292,7 @@ class Flyer(controllers.Controller):
 						Decimal(5):1, Decimal("50"):191, Decimal("55"):190, Decimal("62"):146,
 						Decimal("65"):182, Decimal("78.90"):356, Decimal("92.53"):378,
 						Decimal("39"):325, Decimal("250"):898}
-			total = sum(k * v for k, v in retrasada.items())
+			total = sum(retrasada[valor] * valor for valor in retrasada)
 			return dict(retrasada=retrasada, total=total, year=year, month=month)
 		
 		retrasada = dict()
@@ -316,7 +305,7 @@ class Flyer(controllers.Controller):
 			
 			except KeyError:
 				retrasada[d.amount] = 1
-		total = sum(k * v for k, v in retrasada.items())
+		total = sum(retrasada[valor] * valor for valor in retrasada)
 		
 		return dict(retrasada=retrasada, total=total, year=year, month=month)
 	
@@ -327,9 +316,8 @@ class Flyer(controllers.Controller):
 	def deduced(self, account, month, year):
 		
 		account = model.Account.get(account)
-		query = "deduced.month = %s and deduced.account_id = %s and deduced.year = %s" % (month, account.id, year)
 		
-		deduced = model.Deduced.select(query)
+		deduced = model.Deduced.selectBy(account=account, year=year, month=month)
 		
 		total = sum(d.amount for d in deduced)
 		
@@ -341,12 +329,8 @@ class Flyer(controllers.Controller):
 							  month=validators.Int(min=1,max=12),payment=validators.String()))
 	def deducedPayment(self, account, month, year, payment):
 		
-		query = "deduced.month = %s and deduced.account_id = %s and deduced.year = %s" % (month, account.id, year)
-		
-		deduced = model.Deduced.select(query)
-		deduced = [d for d in deduced if d.affiliate.payment == payment]
-		total = 0
-		total += sum(d.amount for d in deduced)
+		deduced = model.Deduced.selectBy(account=account, year=year, month=month)
+		total = sum(d.amount for d in deduced if d.affiliate.payment == payment)
 		return dict(deduced=deduced, account=account, month=months[month], year=year, total=total, payment=payment)
 	
 	@identity.require(identity.not_anonymous())

@@ -11,7 +11,7 @@
 			<li><a href="${tg.url('filialesAll')}">Ver Filiales</a></li>
 			<li><a href="${tg.url('filialesFive')}">Ver Filiales con 5 afiliados o m&aacute;s</a></li>
 		</ul>
-		<form action="${tg.url('/escalafon/export')}">
+		<form action="${tg.url('export')}">
 			<fieldset>
 				<legend>Generar Volante</legend>
 				<ul>
@@ -29,7 +29,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/escalafon/postReport')}" method="post">
+		<form action="${tg.url('postReport')}">
 			<fieldset>
 				<legend>Ver Reporte de Ingresos</legend>
 				<ul>
@@ -47,7 +47,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/escalafon/report')}" method="post">
+		<form action="${tg.url('report')}" method="post">
 			<fieldset>
 				<legend>Ver Reporte de Ingresos Previos</legend>
 				<ul>
@@ -73,7 +73,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/escalafon/extra')}" method="post">
+		<form action="${tg.url('extra')}" method="post">
 			<fieldset>
 				<legend>Mostrar Cuentas por Cobrar</legend>
 				<ul>
@@ -89,7 +89,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/escalafon/deduced')}" method="post">
+		<form action="${tg.url('deduced')}" method="post">
 			<fieldset>
 				<legend>Mostrar Cobros Efecutados</legend>
 				<ul>
@@ -113,7 +113,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/escalafon/OtherReport')}" method="post">
+		<form action="${tg.url('OtherReport')}" method="post">
 			<fieldset>
 				<legend>Actualizar Otras Cotizaciones - Paso 2</legend>
 				<ul>
@@ -139,7 +139,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/escalafon/showReport')}" method="post">
+		<form action="${tg.url('showReport')}" method="post">
 			<fieldset>
 				<legend>Mostrar Otros Reportes - Paso 3</legend>
 				<ul>
@@ -165,7 +165,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/escalafon/deduced')}" method="post">
+		<form action="${tg.url('deduced')}" method="post">
 			<fieldset>
 				<legend>Mostrar Reporte Por Cuenta</legend>
 				<ul>
@@ -189,7 +189,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/escalafon/deducedPayment')}" method="post">
+		<form action="${tg.url('deducedPayment')}" method="post">
 			<fieldset>
 				<legend>Mostrar Reporte Por Cuenta y Cotizaci&oacute;n</legend>
 				<ul>
@@ -220,7 +220,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/escalafon/filiales')}" method="post">
+		<form action="${tg.url('filiales')}" method="post">
 			<fieldset>
 				<legend>Mostrar Reporte de Filiales</legend>
 				<ul>
@@ -238,7 +238,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/escalafon/filialesDept')}" method="post">
+		<form action="${tg.url('filialesDept')}" method="post">
 			<fieldset>
 				<legend>Mostrar Reporte de Filiales</legend>
 				<ul>
@@ -271,7 +271,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/escalafon/cuotas')}" method="post">
+		<form action="${tg.url('cuotas')}" method="post">
 			<fieldset>
 				<legend>Mostrar Reporte de Cuotas Retrasadas</legend>
 				<ul>
@@ -289,7 +289,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/escalafon/aportaciones')}" method="post">
+		<form action="${tg.url('aportaciones')}" method="post">
 			<fieldset>
 				<legend>Mostrar Afiliados que Aportaron</legend>
 				<ul>
@@ -396,7 +396,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/escalafon/aportaron')}">
+		<form action="${tg.url('aportaron')}">
 			<fieldset>
 				<legend>Mostrar Afiliados que Aportaron</legend>
 				<ul>
@@ -414,7 +414,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/escalafon/noAportaron')}">
+		<form action="${tg.url('noAportaron')}">
 			<fieldset>
 				<legend>Mostrar Afiliados que no Aportaron</legend>
 				<ul>
@@ -432,7 +432,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('/escalafon/conTabla')}">
+		<form action="${tg.url('conTabla')}">
 			<fieldset>
 				<legend>Reporte Aseguradora</legend>
 				<ul>

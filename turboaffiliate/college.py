@@ -4,7 +4,7 @@
 # college.py
 # This file is part of TurboAffiliate
 #
-# Copyright (c) 2008 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2008 - 2009 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -191,8 +191,7 @@ class Affiliate(SQLObject):
 	
 	def total(self, month, year):
 
-		query = "obligation.year = %s and obligation.month = %s" % (year, month)
-		os = Obligation.select(query)
+		os = Obligation.selectBy(year=year, month=month)
 		obligations = sum(o.amount for o in os)
 		extras = sum(e.amount for e in self.extras)
 		loan = sum(loan.get_payment() for loan in self.loans)
@@ -226,13 +225,12 @@ class Delayed(SQLObject):
 	
 	def amount(self):
 		
-		query = "obligation.year = %s and obligation.month = %s" % (self.cuota.year, self.month)
-		os = Obligation.select(query)
+		os = Obligation.selectBy(year=self.cuota.year, month=self.month)
 		return sum(o.amount for o in os)
 	
 	def act(self):
 		
-		kw = {}
+		kw = dict()
 		kw['affiliate'] = self.affiliate
 		kw['reason'] = "Cuota Retrasada %s de %s" % (self.month, self.cuota.year)
 		# TODO: Add account number
@@ -417,21 +415,6 @@ class CuotaTable(SQLObject):
 		
 		return total
 	
-	def pay(self, amount):
-		if amount <= 0:
-			return
-		for n in range(1, 13):
-			month = getattr(self, "month%s" % n)
-			if month:
-				continue
-			query = "obligation.year = %s and obligation.month = %s" % (self.year, n)
-			os = Obligation.select(query)
-			total = sum(o.amount for o in os)
-			if amount < total and total == 0:
-				continue
-			month = True
-			amount -= total
-	
 	def pay_month(self, month):
 		setattr(self, "month%s" % month, True)
 	
@@ -549,7 +532,7 @@ class Loan(SQLObject):
 	
 	def refinance(self):
 		
-		kw = {}
+		kw = dict()
 		kw['id'] = self.id
 		kw['affiliate'] = self.affiliate
 		kw['capital'] = self.capital
@@ -581,7 +564,7 @@ class Loan(SQLObject):
 		Calculates the composite interest and acredits the made payment
 		"""
 		
-		kw = {}
+		kw = dict()
 		kw['amount'] = Decimal(amount).quantize(dot01)
 		kw['day'] = day
 		kw['receipt'] = receipt
@@ -592,6 +575,7 @@ class Loan(SQLObject):
 		if(self.debt <= amount):
 			
 			self.last = kw['day']
+			kw['capital'] = kw['amount']
 			# Register the payment in the database
 			Pay(**kw)
 			# Remove the loan and convert it to PayedLoan
@@ -621,9 +605,9 @@ class Loan(SQLObject):
 	
 	def payfree(self, amount, receipt, day=date.today()):
 		
-		"""Creates a new payment for the loan without chargin interest"""
+		"""Creates a new payment for the loan without charging interest"""
 		
-		kw = {}
+		kw = dict()
 		kw['amount'] = Decimal(amount).quantize(dot01)
 		kw['day'] = day
 		kw['receipt'] = receipt
@@ -634,6 +618,7 @@ class Loan(SQLObject):
 		if(self.debt <= amount):
 			
 			self.last = kw['day']
+			kw['capital'] = kw['amount']
 			# Register the payment in the database
 			Pay(**kw)
 			# Remove the loan and convert it to PayedLoan
@@ -669,7 +654,7 @@ class Loan(SQLObject):
 	
 	def remove(self):
 		
-		kw = {}
+		kw = dict()
 		kw['id'] = self.id
 		kw['affiliate'] = self.affiliate
 		kw['capital'] = self.capital
@@ -692,7 +677,7 @@ class Loan(SQLObject):
 	def future(self):
 		
 		debt = copy.copy(self.debt)
-		li = []
+		li = list()
 		months = {
 			1:'Enero', 2:'Febrero', 3:'Marzo', 
 			4:'Abril', 5:'Mayo', 6:'Junio', 
@@ -738,7 +723,7 @@ class Pay(SQLObject):
 	
 	def refinance(self, refinancedLoan):
 		
-		kw = {}
+		kw = dict()
 		kw['refinancedLoan'] = refinancedLoan
 		kw['day'] = self.day
 		kw['capital'] = self.capital
@@ -752,7 +737,7 @@ class Pay(SQLObject):
 	
 	def remove(self, payedLoan):
 		
-		kw = {}
+		kw = dict()
 		kw['payedLoan'] = payedLoan
 		kw['day'] = self.day
 		kw['capital'] = self.capital
@@ -1267,7 +1252,8 @@ class OtherDeduced(SQLObject):
 
 class AuxiliarPrestamo(object):
 	
-	def __init__(self, id, afiliado, monto, neto, papeleo, aportaciones, intereses, retencion):
+	def __init__(self, id, afiliado, monto, neto, papeleo, aportaciones,
+				 intereses, retencion):
 		
 		self.id = id
 		self.afiliado = afiliado
