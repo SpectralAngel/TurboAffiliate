@@ -87,7 +87,7 @@ class Deduction(controllers.Controller):
 			
 			log = dict()
 			log['user'] = identity.current.user
-			log['action'] = "Eliminada deduccion prestamo %s" % kw['loan'].id
+			log['action'] = "Eliminada deduccion prestamo %s" % loan.id
 			model.Logger(**log)
 			
 			raise redirect('/loan/%s' % loan.id)

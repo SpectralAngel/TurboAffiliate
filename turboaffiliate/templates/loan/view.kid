@@ -155,14 +155,14 @@
 				<tr>
 					<th>Concepto</th>
 					<th>Cantidad</th>
-					<th py:if="'admin' in tg.identity.groups">Borrar</th>
+					<th py:if="tg.identity.user.has_permission('delete')">Borrar</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr py:for="deduction in loan.deductions">
 					<td py:content="deduction.name" />
 					<td py:content="locale.currency(deduction.amount, True, True)" />
-					<td py:if="'admin' in tg.identity.groups">
+					<td py:if="'borradores' in tg.identity.groups">
 						<a href="${tg.url('/loan/deduction/remove/%s' % deduction.id)}">Borrar</a>
 					</td>
 				</tr>
