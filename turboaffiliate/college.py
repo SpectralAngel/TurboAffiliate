@@ -698,7 +698,7 @@ class Loan(SQLObject):
 				kw['year'] += 1
 			kw['month'] = "%s %s" % (months[kw['month']], kw['year'])
 			kw['interest'] = Decimal(debt * self.interest / 1200).quantize(dot01)
-			if debt < self.payment:
+			if debt <= self.payment:
 				kw['amount'] = 0
 				kw['capital'] = debt
 				kw['payment'] = kw['interest'] + kw['capital']
