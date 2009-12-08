@@ -43,6 +43,9 @@
 				<a class="add" href="${tg.url('/affiliate/extra/add/%s' % affiliate.id)}">A&ntilde;adir Deducci&oacute;n Extra</a>
 			</li>
 			<li>
+				<a class="add" href="${tg.url('/affiliate/jubilate/%s' % affiliate.id)}">Editar Fecha de Jubilaci&oacute;n</a>
+			</li>
+			<li>
 				<a py:if="affiliate.active" class="delete" href="${tg.url('/affiliate/deactivate/%s' % affiliate.id)}">Desactivar Afiliado</a>
 				<a py:if="not affiliate.active" class="delete" href="${tg.url('/affiliate/activate/%s' % affiliate.id)}">Activar Afiliado</a>
 			</li>

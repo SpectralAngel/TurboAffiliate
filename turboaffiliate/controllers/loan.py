@@ -266,7 +266,7 @@ class Loan(controllers.Controller):
 		
 		loans = model.Loan.select()
 		
-		l = []
+		l = list()
 		
 		for loan in loans:
 			

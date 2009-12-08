@@ -689,7 +689,7 @@ class Loan(SQLObject):
 			start += 1
 		year = self.startDate.year
 		for n in range(1, self.months - self.number + 2):
-			kw = {}
+			kw = dict()
 			kw['number'] = "%s/%s" % (n + self.number, self.months)
 			kw['month'] = self.number + n + start
 			kw['year'] = year
