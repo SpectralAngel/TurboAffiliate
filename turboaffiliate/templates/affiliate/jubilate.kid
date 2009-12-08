@@ -15,7 +15,12 @@
 		<![CDATA[
 		$(document).ready(function(e)
 		{
-			$('input.date-picker').datepicker({ dateFormat: 'yy-mm-dd' });
+			$('input.date-picker').datepicker({
+												dateFormat: 'yy-mm-dd',
+												changeMonth: true,
+												changeYear: true,
+												yearRange: '1940:2010'
+											  });
 		});
 		]]>
 		</script>
