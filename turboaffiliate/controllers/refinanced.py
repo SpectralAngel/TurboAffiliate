@@ -38,6 +38,16 @@ class Refinanced(controllers.Controller):
 	@identity.require(identity.not_anonymous())
 	@expose()
 	@validate(validators=dict(loan=validators.Int()))
+	def recover(self, loan):
+		
+		loan = model.RefinancedLoan.get(loan)
+		loan = loan.recover()
+		
+		raise redirect('/loan/%s' % loan.id)
+	
+	@identity.require(identity.not_anonymous())
+	@expose()
+	@validate(validators=dict(loan=validators.Int()))
 	def remove(self, loan):
 		
 		loan = model.RefinancedLoan.get(loan)
