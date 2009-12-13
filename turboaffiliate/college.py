@@ -1171,6 +1171,28 @@ class RefinancedLoan(SQLObject):
 		
 		self.destroySelf()
 		return payed
+	
+	def recover(self, user):
+		
+		kw = dict()
+		kw['aproval'] = user
+		kw['affiliate'] = self.affiliate
+		kw['capital'] = self.capital
+		kw['interest'] = self.interest
+		kw['payment'] = self.payment
+		kw['months'] = self.months
+		kw['last'] = self.last
+		kw['startDate'] = self.startDate
+		kw['letters'] = self.letters
+		kw['number'] = len(self.pays)
+		kw['id'] = self.id
+		loan = Loan(**kw)
+		
+		[pay.to_pay(loan) for pay in self.pays]
+		[deduction.to_deduction(loan) for deduction in self.deductions]
+		
+		self.destroySelf()
+		return loan
 
 class RefinancedDeduction(SQLObject):
 	
@@ -1189,6 +1211,17 @@ class RefinancedDeduction(SQLObject):
 		kw['account'] = self.account
 		kw['description'] = self.description
 		PayedDeduction(**kw)
+		self.destroySelf()
+	
+	def to_deduction(self, loan):
+		
+		kw = dict()
+		kw['loan'] = loan
+		kw['name'] = self.name
+		kw['amount'] = self.amount
+		kw['description'] = self.description
+		kw['account'] = self.account
+		Deduction(**kw)
 		self.destroySelf()
 
 class RefinancedPay(SQLObject):
@@ -1213,6 +1246,19 @@ class RefinancedPay(SQLObject):
 		kw['month'] = self.month
 		self.destroySelf()
 		OldPay(**kw)
+	
+	def to_pay(self, loan):
+		
+		kw = dict()
+		kw['loan'] = loan
+		kw['day'] = self.day
+		kw['capital'] = self.capital
+		kw['interest'] = self.interest
+		kw['amount'] = self.amount
+		kw['receipt'] = self.receipt
+		kw['month'] = self.month
+		Pay(**kw)
+		self.destroySelf()
 
 class Deduced(SQLObject):
 	

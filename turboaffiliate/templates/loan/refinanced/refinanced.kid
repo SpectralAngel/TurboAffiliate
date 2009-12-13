@@ -40,6 +40,11 @@
 				</a>
 			</li>
 			<li>
+				<a href="${tg.url('/refinanced/recover/%s' % loan.id)}">
+					Enviar a Pr&eacute;stamos Normales
+				</a>
+			</li>
+			<li>
 				<a href="${tg.url('/refinanced/remove/%s' % loan.id)}">
 					Eliminar
 				</a>
