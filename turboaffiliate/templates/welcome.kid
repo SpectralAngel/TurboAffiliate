@@ -22,6 +22,41 @@
 				</ul>
 			</fieldset>
 		</form>
+		<form action="${tg.url('/affiliate/solvencia')}">
+				<fieldset>
+					<legend>Solvencia</legend>
+					<ol>
+						<li>
+							<label for="afiliado">Afiliaci&oacute;n</label>
+							<input name="afiliado"/>
+						</li>
+						<li>
+							<label>Mes</label>
+							<select name="mes">
+								<option>Enero</option>
+								<option>Febrero</option>
+								<option>Marzo</option>
+								<option>Abril</option>
+								<option>Mayo</option>
+								<option>Junio</option>
+								<option>Julio</option>
+								<option>Agosto</option>
+								<option>Septiembre</option>
+								<option>Octubre</option>
+								<option>Noviembre</option>
+								<option>Diciembre</option>
+							</select>
+						</li>
+						<li>
+							<label for="anio">A&ntilde;o</label>
+							<input name="anio"/>
+						</li>
+						<li>
+							<input type="submit" value="Agregar" />
+						</li>
+					</ol>
+				</fieldset>
+			</form>
 		<form action="${tg.url('affiliate/status')}">
 			<fieldset>
 				<legend>Ver Estado de Cuenta Aportaciones</legend>

@@ -71,7 +71,6 @@
 				</tr>
 			</tfoot>
 		</table>
-		<a href="javascript:print()" class="noprint">Imprimir</a>
 		<form action="${tg.url('/affiliate/populate')}" method="post" class="noprint">
 			<fieldset>
 				<legend>A&ntilde;adir A&ntilde;o</legend>

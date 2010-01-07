@@ -677,4 +677,11 @@ class Affiliate(controllers.Controller):
 				schools[affiliate.school].append(affiliate)
 		
 		return dict(state=state, schools=schools)
-
+	
+	@identity.require(identity.not_anonymous())
+	@expose(template='turboaffiliate.templates.affiliate.solvencia')
+	@validate(validators=dict(mes=validators.String(),anio=validators.Int(),
+							  afiliado=validators.Int()))
+	def solvencia(self, afiliado, mes, anio):
+		
+		return dict(afiliado=model.Affiliate.get(afiliado),mes=mes,anio=anio, dia=date.today())

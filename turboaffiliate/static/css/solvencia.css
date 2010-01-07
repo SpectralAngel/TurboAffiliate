@@ -1,0 +1,28 @@
+body
+{
+	font: "Verdana";
+	font-size: large;
+	text-align: justify;
+}
+h1
+{
+	text-align: center;
+	text-decoration: underline;
+}
+p
+{
+	line-height: 40px;
+}
+.enfasis
+{
+	font-weight: bold;
+}
+.firma
+{
+	display: block;
+	text-align: center;
+}
+.subrayado
+{
+	text-decoration: underline;
+}

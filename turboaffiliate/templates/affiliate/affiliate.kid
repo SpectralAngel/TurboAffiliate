@@ -30,8 +30,8 @@
 		<span class="flash" py:if="affiliate.town == None or affiliate.town ==''">Este afiliado no
 		tiene Ciudad
 		<a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Ingresar</a></span>
-		<h3 class="flash" py:if="not affiliate.active">Afiliado desactivado, razon:</h3>
-		<span class="flash" py:if="not affiliate.active" py:content="affiliate.reason" />
+		<h3 class="flash" py:if="not affiliate.active">Afiliado desactivado, razon:
+		<strong><span class="flash" py:if="not affiliate.active" py:content="affiliate.reason" /></strong></h3>
 		<ul class="toolbox">
 			<li>
 				<a class="edit" href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Editar</a>
