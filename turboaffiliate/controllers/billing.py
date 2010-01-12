@@ -78,3 +78,15 @@ class Billing(controllers.Controller):
 		affiliates = (a for a in affiliates if a.joined != None)
 		
 		return dict(affiliates=affiliates, day=date.today())
+	
+	@identity.require(identity.not_anonymous())
+	@expose(template='turboaffiliate.templates.affiliate.billing.loans')
+	@validate(validators=dict(state=validators.String()))
+	def loanState(self, state):
+		
+		affiliates = model.Affiliate.select(model.Affiliate.q.state==state)
+		loans = list()
+		for affiliate in affiliates:
+			loans.extend(affiliate.loans)
+		
+		return dict(loans=loans, day=date.today())

@@ -48,6 +48,39 @@
 				</ul>
 			</fieldset>
 		</form>
+        <form action="loanState">
+			<fieldset>
+				<legend>Pr&eacute;stamos por Departamento</legend>
+				<ul>
+					<li>
+						<label for="state">Departamento:</label>
+						<select name="state">
+							<option>Atlantida</option>
+							<option>Choluteca</option>
+							<option>Colon</option>
+							<option>Comayagua</option>
+							<option>Copan</option>
+							<option>Cortes</option>
+							<option>El Paraiso</option>
+							<option>Francisco Morazan</option>
+							<option>Gracias a Dios</option>
+							<option>Intibuca</option>
+							<option>Islas de la Bahia</option>
+							<option>La Paz</option>
+							<option>Lempira</option>
+							<option>Olancho</option>
+							<option>Ocotepeque</option>
+							<option>Santa Barbara</option>
+							<option>Valle</option>
+							<option>Yoro</option>
+						</select>
+					</li>
+					<li>
+						<input type="submit" value="Mostrar" />
+					</li>
+				</ul>
+			</fieldset>
+		</form>
 		<form action="payment">
 			<fieldset>
 				<legend>Cotizaci&oacute;n</legend>
