@@ -77,4 +77,21 @@ class Account(controllers.Controller):
 	def resume(self):
 		accounts = model.Account.select()
 		companies = model.Account.select()
-
+	
+	@identity.require(identity.not_anonymous())
+	@expose(template="turboaffiliate.templates.account.retrasada")
+	def retrasada(self):
+		
+		return dict(accounts=model.Account.select())
+	
+	@identity.require(identity.not_anonymous())
+	@expose()
+	@validate(validators=dict(months=validators.Int(), year=validators.Int(),
+							  account=validators.Int()))
+	def agregarRetrasada(self, account, **kw):
+		
+		account = model.Account.get(account)
+		retrasada = model.CuentaRetrasada(**kw)
+		retrasada.account = account
+		
+		raise redirect('/account/retrasada')

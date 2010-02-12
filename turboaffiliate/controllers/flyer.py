@@ -54,7 +54,7 @@ class Flyer(controllers.Controller):
 	@validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
 	def postReport(self, year, month):
 		
-		report = model.PostReport.selectBy(month=month, year=year)[0]
+		report = model.PostReport.selectBy(month=month, year=year).getOne()
 		total = sum(r.amount for r in report.reportAccounts)
 		
 		return dict(total=total, month=month, year=year, report=report)
