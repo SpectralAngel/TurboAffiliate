@@ -19,12 +19,12 @@
 						</select>
 					</li>
 					<li>
-						<label for="month">Mes</label>
-						<input name="month" />
+						<label for="mes">Mes</label>
+						<input name="mes" />
 					</li>
 					<li>
-						<label for="year">A&ntilde;o</label>
-						<input name="year" />
+						<label for="anio">A&ntilde;o</label>
+						<input name="anio" />
 					</li>
 					<li>
 						<input type="submit" value="Guardar" />
