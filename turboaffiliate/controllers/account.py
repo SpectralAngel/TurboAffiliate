@@ -86,7 +86,7 @@ class Account(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
-	@validate(validators=dict(months=validators.Int(), year=validators.Int(),
+	@validate(validators=dict(mes=validators.Int(), anio=validators.Int(),
 							  account=validators.Int()))
 	def agregarRetrasada(self, account, **kw):
 		
