@@ -91,6 +91,7 @@ class Account(controllers.Controller):
 	def agregarRetrasada(self, account, **kw):
 		
 		account = model.Account.get(account)
+		kw['account'] = account
 		retrasada = model.CuentaRetrasada(**kw)
 		retrasada.account = account
 		
