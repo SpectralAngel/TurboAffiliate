@@ -130,7 +130,7 @@
                 </tr>
             </thead>
             <thead>
-                <tr>
+                <tr py:for="extra in affiliate.extras">
                     <td>${extra.account.name}</td>
                     <td>${locale.currency(extra.amount, True, True)}</td>
                     <td>${extra.retrasada}</td>
