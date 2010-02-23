@@ -16,13 +16,19 @@
 				<tr>
 					<th>N&uacute;mero</th>
 					<th>Nombre</th>
+                    <th>Retrasada</th>
+                    <th>Mes</th>
+                    <th>Anio</th>
 					<th>Cantidad</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr py:for="extra in extras">
 					<td py:content="extra.affiliate.id" />
-					<td py:content="extra.affiliate.firstName, '', extra.affiliate.lastName" />
+					<td py:content="extra.affiliate.firstName, ' ', extra.affiliate.lastName" />
+                    <th>${extra.retrasada}</th>
+                    <th>${extra.mes}</th>
+                    <th>${extra.anio}</th>
 					<td py:content="locale.currency(extra.amount, True, True)" />
 				</tr>
 			</tbody>

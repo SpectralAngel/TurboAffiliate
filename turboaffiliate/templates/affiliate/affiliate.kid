@@ -117,13 +117,29 @@
 				<a href="${tg.url('/affiliate/cuota/pay/%s' % affiliate.id)}">Pagar Cuota</a>
 			</li>
 		</ul>
-		<h3 py:if="len(affiliate.extras) != 0">Deducciones Extra</h3>
-		<ul py:if="len(affiliate.extras) != 0">
-			<li py:for="extra in affiliate.extras">
-				<span py:content="extra.account.name" /> <span py:content="locale.currency(extra.amount, True, True)" />
-				<a href="${tg.url('/affiliate/extra/delete/%s' % extra.id)}">Eliminar</a>
-			</li>
-		</ul>
+        <table py:if="len(affiliate.extras) != 0">
+            <caption>Deducciones Extra</caption>
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Cantidad</th>
+                    <th>Retrasada</th>
+                    <th>Mes</th>
+                    <th>Anio</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <thead>
+                <tr>
+                    <th>${extra.account.name}</th>
+                    <th>${locale.currency(extra.amount, True, True)}</th>
+                    <th>${extra.retrasada}</th>
+                    <th>${extra.mes}</th>
+                    <th>${extra.anio}</th>
+                    <th><a href="${tg.url('/affiliate/extra/delete/%s' % extra.id)}">X</a></th>
+                </tr>
+            </thead>
+        </table>
 		<div id="loan" py:for="loan in affiliate.loans">
 			<h3>Pr&eacute;stamo</h3>
 			<span py:content="'Monto Total: ', locale.currency(loan.capital, True, True)" />

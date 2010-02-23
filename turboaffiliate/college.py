@@ -782,6 +782,8 @@ class Extra(SQLObject):
     months = IntCol(default=1)
     retrasada = BoolCol(default=False)
     account = ForeignKey("Account")
+    mes = IntCol()
+    anio = IntCol()
     
     def act(self, decrementar=True):
         
