@@ -86,7 +86,18 @@ class Affiliate(SQLObject):
         extras = sum(e.amount for e in self.extras)
         loans = sum(l.get_payment() for l in self.loans)
         
-        return extras + loans
+        return extras + loans + self.get_cuota()
+    
+    def get_cuota(self):
+        
+        hoy = date.today()
+        obligations = Obligation.selectBy(month=hoy.month, year=hoy.year)
+        
+        obligation = Decimal(0)
+        obligation += sum(o.amount for o in obligations if self.payment != 'INPREMA')
+        obligation += sum(o.inprema for o in obligations if self.payment == 'INPREMA')
+        
+        return obligation
     
     def populate(self, year):
         kw = dict()
