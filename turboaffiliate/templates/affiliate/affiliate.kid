@@ -128,7 +128,7 @@
                 <th>Cantidad</th>
             </thead>
             <tbody>
-                <tr py:for="loan in affiliate.loans">
+                <tr>
                     <td>Aportaci&oacute;n Ordinaria</td>
                     <td>No</td>
                     <td></td>
@@ -157,41 +157,50 @@
                 </tr>
             </tfoot>
         </table>
-        <form action="${tg.url('/affiliate/deduced/mostrar')}" method="get">
-            <fieldset>
-                <legend>Ver Deducciones Realizadas</legend>
-                <ul>
-                    <input type="hidden" value="${affiliate.id}" name="afiliado" />
-                    <li>
-                        <label>Mes:</label>
-                        <input name="mes" />
-                    </li>
-                    <li>
-                        <label>A&ntilde;o:</label>
-                        <input name="anio" />
-                    </li>
-                    <li><input value="Mostrar" type="submit" /></li>
-                </ul>
-            </fieldset>
-        </form>
-		<div id="loan" py:for="loan in affiliate.loans">
-			<h3>Pr&eacute;stamo</h3>
-			<span py:content="'Monto Total: ', locale.currency(loan.capital, True, True)" />
-			<span py:content="'Monto Adeudado: ', locale.currency(loan.debt, True, True)" />
-			<a href="${tg.url('/loan/%s' % loan.id)}" >Ver Pr&eacute;stamo</a>
-		</div>
-		<div id="loan" py:for="loan in affiliate.refinancedLoans">
-			<h3>Pr&eacute;stamo Refinanciado</h3>
-			<span py:content="'Monto Total: ', locale.currency(loan.capital, True, True)" />
-			<span py:content="'Monto Adeudado: ', locale.currency(loan.debt, True, True)" />
-			<a href="${tg.url('/refinanced/%s' % loan.id)}" >Ver Pr&eacute;stamo</a>
-		</div>
-		<div id="loan" py:for="loan in affiliate.payedLoans">
-			<h3>Pr&eacute;stamo Pagado</h3>
-			<span py:content="'Monto Total: ', locale.currency(loan.capital, True, True)" />
-			<span py:content="'Ultimo Pago: ', loan.last.strftime('%d de %B de %Y')" />
-			<a href="${tg.url('/payed/%s' % loan.id)}" >Ver Pr&eacute;stamo</a>
-		</div>
+        <table>
+            <caption>Historial de Pr&eacute;stamos</caption>
+            <thead>
+                <tr>
+                    <th>Solicitud</th>
+                    <th>Monto</th>
+                    <th>Deuda</th>
+                    <th>Cuota</th>
+                    <th>Ultimo Pago</th>
+                    <th>Ver</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr py:for="loan in affiliate.loans">
+                    <td>${loan.id}</td>
+                    <td>${locale.currency(loan.capital, True, True)}</td>
+                    <td>${locale.currency(loan.debt, True, True)}</td>
+                    <td>${locale.currency(loan.payment, True, True)}</td>
+                    <td>${loan.last.strftime('%d de %B de %Y')}</td>
+                    <td><a href="${tg.url('/loan/%s' % loan.id)}" >Ver</a></td>
+                </tr>
+                <tr py:for="loan in affiliate.refinancedLoans">
+                    <td>${loan.id}</td>
+                    <td>${locale.currency(loan.capital, True, True)}</td>
+                    <td>${locale.currency(loan.debt, True, True)}</td>
+                    <td>${locale.currency(loan.payment, True, True)}</td>
+                    <td>${loan.last.strftime('%d de %B de %Y')}</td>
+                    <td><a href="${tg.url('/refinanced/%s' % loan.id)}" >Ver</a></td>
+                </tr>
+                <tr py:for="loan in affiliate.payedLoans">
+                    <td>${loan.id}</td>
+                    <td>${locale.currency(loan.capital, True, True)}</td>
+                    <td>${locale.currency(0)}</td>
+                    <td>${locale.currency(loan.payment, True, True)}</td>
+                    <td>${loan.last.strftime('%d de %B de %Y')}</td>
+                    <td><a href="${tg.url('/refinanced/%s' % loan.id)}" >Ver</a></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="6"><a href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a></th>
+                </tr>
+            </tfoot>
+        </table>
         <table py:if="len(affiliate.extras) != 0">
             <caption>Deducciones Extra</caption>
             <thead>
@@ -215,7 +224,23 @@
                 </tr>
             </thead>
         </table>
-		<a href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a>
+        <form action="${tg.url('/affiliate/deduced/mostrar')}" method="get">
+            <fieldset>
+                <legend>Ver Deducciones Realizadas</legend>
+                <ul>
+                    <input type="hidden" value="${affiliate.id}" name="afiliado" />
+                    <li>
+                        <label>Mes:</label>
+                        <input name="mes" />
+                    </li>
+                    <li>
+                        <label>A&ntilde;o:</label>
+                        <input name="anio" />
+                    </li>
+                    <li><input value="Mostrar" type="submit" /></li>
+                </ul>
+            </fieldset>
+        </form>
 		<div id="observaciones">
 			<h2>Observaciones</h2>
 			<p py:for="observacion in affiliate.observaciones" py:content="observacion.texto" />
