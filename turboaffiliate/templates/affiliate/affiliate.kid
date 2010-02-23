@@ -131,11 +131,11 @@
             </thead>
             <thead>
                 <tr>
-                    <th>${extra.account.name}</th>
-                    <th>${locale.currency(extra.amount, True, True)}</th>
-                    <th>${extra.retrasada}</th>
-                    <th>${extra.mes}</th>
-                    <th>${extra.anio}</th>
+                    <td>${extra.account.name}</td>
+                    <td>${locale.currency(extra.amount, True, True)}</td>
+                    <td>${extra.retrasada}</td>
+                    <td>${extra.mes}</td>
+                    <td>${extra.anio}</td>
                     <th><a href="${tg.url('/affiliate/extra/delete/%s' % extra.id)}">X</a></th>
                 </tr>
             </thead>

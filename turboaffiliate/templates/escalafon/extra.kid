@@ -26,9 +26,9 @@
 				<tr py:for="extra in extras">
 					<td py:content="extra.affiliate.id" />
 					<td py:content="extra.affiliate.firstName, ' ', extra.affiliate.lastName" />
-                    <th>${extra.retrasada}</th>
-                    <th>${extra.mes}</th>
-                    <th>${extra.anio}</th>
+                    <td>${extra.retrasada}</td>
+                    <td>${extra.mes}</td>
+                    <td>${extra.anio}</td>
 					<td py:content="locale.currency(extra.amount, True, True)" />
 				</tr>
 			</tbody>
