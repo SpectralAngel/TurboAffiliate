@@ -37,9 +37,16 @@
 			</li>
 		</ul>
         <h1 class="afiliado">${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</h1>
-        <h2><span class="pago">${affiliate.payment}</span> ${affiliate.cardID}</h2>
-        <h3>Afiliado desde <span py:if="not affiliate.joined is None">${affiliate.joined.strftime('%d de %B de %Y')}</span></h3>
-		<span class="flash" py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated == None">
+        <h2><span class="pago">${affiliate.payment}</span> ${affiliate.cardID}
+        <span class="pago" py:if="affiliate.payment == 'INPREMA'">N&uacute;mero de Cobro:
+        ${affiliate.escalafon}</span>
+        </h2>
+        
+        <h3>Afiliado desde <span py:if="not affiliate.joined is None">${affiliate.joined.strftime('%d de %B de %Y')}</span>
+            <a href="${tg.url('/affiliate/status/%s' % affiliate.id)}">Estado de Cuenta</a>
+        </h3>
+		
+        <span class="flash" py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated == None">
 		Este Afiliado requiere Actualizar sus datos de Jubilaci&oacute;n haga
 		<a href="${tg.url('/affiliate/jubilate/%s' % affiliate.id)}">click aqu&iacute;</a>
 		actualizarlos</span>
@@ -101,14 +108,7 @@
 				<span py:content="affiliate.escalafon" />
 			</li>
 			<li>
-				<strong>Fecha de Afiliaci&oacute;n: </strong>
-				<span py:if="not affiliate.joined is None" py:content="affiliate.joined.strftime('%d de %B de %Y')" />
-			</li>
-			<li>
 				<a href="${tg.url('/affiliate/status/%s' % affiliate.id)}">Estado de Cuenta</a>
-			</li>
-			<li>
-				<a href="${tg.url('/affiliate/cuota/pay/%s' % affiliate.id)}">Pagar Cuota</a>
 			</li>
 		</ul>
         
@@ -152,7 +152,7 @@
             </tfoot>
         </table>
         <table>
-            <caption>Historial de Pr&eacute;stamos</caption>
+            <caption>Pr&eacute;stamos Personales</caption>
             <thead>
                 <tr>
                     <th>Solicitud</th>
@@ -172,6 +172,26 @@
                     <td>${loan.last.strftime('%d de %B de %Y')}</td>
                     <td><a href="${tg.url('/loan/%s' % loan.id)}" >Ver</a></td>
                 </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="6"><a href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a></th>
+                </tr>
+            </tfoot>
+        </table>
+        <table>
+            <caption>Historial de Pr&eacute;stamos</caption>
+            <thead>
+                <tr>
+                    <th>Solicitud</th>
+                    <th>Monto</th>
+                    <th>Deuda</th>
+                    <th>Cuota</th>
+                    <th>Ultimo Pago</th>
+                    <th>Ver</th>
+                </tr>
+            </thead>
+            <tbody>
                 <tr py:for="loan in affiliate.refinancedLoans">
                     <td>${loan.id}</td>
                     <td>${locale.currency(loan.capital, True, True)}</td>
@@ -189,11 +209,6 @@
                     <td><a href="${tg.url('/payed/%s' % loan.id)}" >Ver</a></td>
                 </tr>
             </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan="6"><a href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a></th>
-                </tr>
-            </tfoot>
         </table>
         <form action="${tg.url('/affiliate/deduced/mostrar')}" method="get">
             <fieldset>
