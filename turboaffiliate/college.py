@@ -125,23 +125,8 @@ class Affiliate(SQLObject):
         
         return None
     
-    def retrasada(self):
-        
-        tables = (t for t in self.cuotaTables if not t.all())
-        for table in tables:
-            old = table.old()
-            if old != Zero:
-                return old
-        return Zero
-    
-    def pay_retrasada(self):
-        tables = (t for t in self.cuotaTables if not t.all())
-        for table in tables:
-            value = table.pay_old()
-            if value == True:
-                return
-    
     def pay_cuota(self, year, month):
+        
         tables = [t for t in self.cuotaTables if t.year == year]
         table = None
         if len(tables) == 0:
@@ -154,6 +139,7 @@ class Affiliate(SQLObject):
         table.pay_month(month)
     
     def remove_cuota(self, year, month):
+        
         tables = [t for t in self.cuotaTables if t.year == year]
         table = None
         if len(tables) == 0:
@@ -195,6 +181,7 @@ class Affiliate(SQLObject):
         return True
     
     def remove(self):
+        
         [table.remove() for table in self.cuotaTables]
         for loan in self.loans:
             loan.remove()
@@ -210,13 +197,11 @@ class Affiliate(SQLObject):
     
     def get_month(self, year, month):
         
-        query = 'cuota_table.affiliate_id = %s and cuota_table.year = %s' % (self.id, year)
-        tables = CuotaTable.select(query)
-        if tables.count() == 0:
-            return False
-        else:
-            table = tables[0]
+        try:
+            table = CuotaTable.selectBy(affiliate=self,year=year).getOne()
             return getattr(table, "month%s" % month)
+        except:
+            return False
     
     def link(self, year, month):
         
@@ -225,29 +210,6 @@ class Affiliate(SQLObject):
     def get_age(self):
         
         return (date.today() - self.birthday).days / 365
-
-class Delayed(SQLObject):
-    
-    affiliate = ForeignKey("Affiliate")
-    
-    cuota = ForeignKey("CuotaTable")
-    
-    month = IntCol()
-    
-    def amount(self):
-        
-        os = Obligation.selectBy(year=self.cuota.year, month=self.month)
-        return sum(o.amount for o in os)
-    
-    def act(self):
-        
-        kw = dict()
-        kw['affiliate'] = self.affiliate
-        kw['reason'] = "Cuota Retrasada %s de %s" % (self.month, self.cuota.year)
-        # TODO: Add account number
-        kw['account'] = Account.get()
-        
-        Deduced(**kw)
 
 class CuentaRetrasada(SQLObject):
     
@@ -307,14 +269,16 @@ class CuotaTable(SQLObject):
             total += sum(o.amount for o in os)
             return total
         for n in range(1, 13):
-            query = "obligation.year = %s and obligation.month = %s" % (self.year, n)
-            os = Obligation.select(query)
+            os = Obligation.selectBy(year=self.year,month=month)
             if self.affiliate.payment == "INPREMA" and not self.affiliate.jubilated is None:
+                
                 if self.affiliate.jubilated.year == self.year:
                     total += sum(o.amount for o in os if o.month < self.affiliate.jubilated.month)
                     total += sum(o.inprema for o in os if o.month >= self.affiliate.jubilated.month)
+                
                 elif self.affiliate.jubilated.year < self.year:
                     total += sum(o.inprema for o in os)
+                
                 elif self.affiliate.jubilated.year > self.year:
                     total += sum(o.amount for o in os)
             else:
@@ -365,19 +329,19 @@ class CuotaTable(SQLObject):
                 month = getattr(self, "month%s" % n)
                 if month:
                     continue
-                query = "obligation.year = %s and obligation.month = %s" % (self.year, n)
-                os = Obligation.select(query)
+                os = Obligation.selectBy(year=self.year,month=n)
                 total = sum(o.amount for o in os)
                 return total
         else:
             for n in range(1, 13):
+                
                 if self.year == today.year and n == today.month:
                     return Zero
                 month = getattr(self, "month%s" % n)
                 if month:
                     continue
-                query = "obligation.year = %s and obligation.month = %s" % (self.year, n)
-                os = Obligation.select(query)
+                
+                os = Obligation.selectBy(year=self.year,month=n)
                 total = sum(o.amount for o in os)
                 return total
         return Zero
@@ -414,8 +378,7 @@ class CuotaTable(SQLObject):
         if not getattr(self, "month%s" % month):
             return Zeros
         
-        query = "obligation.year = %s and obligation.month = %s" % (self.year, month)
-        os = Obligation.select(query)
+        os = Obligation.selectBy(year=self.year,month=month)
         
         total = Zeros
         
@@ -446,14 +409,22 @@ class CuotaTable(SQLObject):
                     return False
             return True
         if self.affiliate.joined == None:
-            return self.month1 and self.month2 and self.month3 and self.month4 and self.month5 and self.month6 and self.month7 and self.month8 and self.month9 and self.month10 and self.month11 and self.month12
+            
+            for n in range(1, 13):
+                if not getattr(self, "month%s" % n):
+                    return False
+            return True
+            
         if self.year == self.affiliate.joined.year:
             for n in range(self.affiliate.joined.month, 13):
                 if not getattr(self, "month%s" % n):
                     return False
             return True
         else:
-            return self.month1 and self.month2 and self.month3 and self.month4 and self.month5 and self.month6 and self.month7 and self.month8 and self.month9 and self.month10 and self.month11 and self.month12
+            for n in range(1, 13):
+                if not getattr(self, "month%s" % n):
+                    return False
+            return True
     
     def empty(self):
         
@@ -464,19 +435,28 @@ class CuotaTable(SQLObject):
                     return False
             return True
         if self.affiliate.joined == None:
-            return not self.month1 and self.month2 and self.month3 and self.month4 and self.month5 and self.month6 and self.month7 and self.month8 and self.month9 and self.month10 and self.month11 and self.month12
+            for n in range(1, 13):
+                if getattr(self, "month%s" % n):
+                    return False
+            return True
+        
         if self.year == self.affiliate.joined.year:
             for n in range(self.affiliate.joined.month, 13):
                 if getattr(self, "month%s" % n):
                     return False
             return True
         else:
-            return not self.month1 and self.month2 and self.month3 and self.month4 and self.month5 and self.month6 and self.month7 and self.month8 and self.month9 and self.month10 and self.month11 and self.month12
+            for n in range(1, 13):
+                if getattr(self, "month%s" % n):
+                    return False
+            return True
     
     def payed(self):
         total = Decimal(0)
         if self.all():
-            if self.affiliate.joined is None: return total
+            if self.affiliate.joined is None:
+                return total
+            
             if self.year == self.affiliate.joined.year:
                 query = "obligation.year = %s and obligation.month >= %s" % (self.year, self.affiliate.joined.month)
             else:
