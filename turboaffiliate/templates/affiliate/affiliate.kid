@@ -37,7 +37,7 @@
 			</li>
 		</ul>
         <h1 class="afiliado">${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</h1>
-        <h2><span class="pago">${affiliate.payment}</span> ${affiliate.cardID}
+        <h2><span class="pago">${affiliate.payment}</span> ID: ${affiliate.cardID}
         <span class="pago" py:if="affiliate.payment == 'INPREMA'">N&uacute;mero de Cobro:
         ${affiliate.escalafon}</span>
         </h2>
@@ -45,6 +45,10 @@
         <h3>Afiliado desde <span py:if="not affiliate.joined is None">${affiliate.joined.strftime('%d de %B de %Y')}</span>
             <a href="${tg.url('/affiliate/status/%s' % affiliate.id)}">Estado de Cuenta</a>
         </h3>
+        
+        <h4 py:if="affiliate.payment == 'INPREMA'">
+				Jubilado desde ${affiliate.jubilated.strftime('%d de %B de %Y')}
+	    </h4>
 		
         <span class="flash" py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated == None">
 		Este Afiliado requiere Actualizar sus datos de Jubilaci&oacute;n haga
@@ -80,13 +84,6 @@
 				<strong>Tel&eacute;fono: </strong>
 				<span py:content="affiliate.phone" />
 			</li>
-		</ul>
-		<h3>Informaci&oacute;n Colegiaci&oacute;n</h3>
-		<ul>
-			<li py:if="affiliate.payment == 'INPREMA'">
-				<strong>Jubilado: </strong>
-				<span py:content="affiliate.jubilated" />
-			</li>
 			<li>
 				<strong>Instituto: </strong>
 				<span py:content="affiliate.school" />
@@ -103,15 +100,7 @@
 				<strong>Departamento: </strong>
 				<span py:content="affiliate.state" />
 			</li>
-			<li>
-				<strong>Escalaf&oacute;n: </strong>
-				<span py:content="affiliate.escalafon" />
-			</li>
-			<li>
-				<a href="${tg.url('/affiliate/status/%s' % affiliate.id)}">Estado de Cuenta</a>
-			</li>
 		</ul>
-        
         <table>
             <caption>Cobros a Efectuar</caption>
             <thead>
