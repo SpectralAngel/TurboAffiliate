@@ -15,23 +15,7 @@
 			<a class="previous" href="${tg.url('/affiliate/%s' % (affiliate.id - 1))}">Anterior</a>
 			<a class="next" href="${tg.url('/affiliate/%s' % (affiliate.id + 1))}">Siguiente</a>
 		</div>
-		<h1 py:content="affiliate.id, ' ', affiliate.firstName, ' ', affiliate.lastName" />
-		<span class="flash" py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated == None">
-		Este Afiliado requiere Actualizar sus datos de Jubilaci&oacute;n haga
-		<a href="${tg.url('/affiliate/jubilate/%s' % affiliate.id)}">click aqu&iacute;</a>
-		actualizarlos</span>
-		<span class="flash" py:if="affiliate.cardID == None">Este afiliado no
-		tiene tarjeta de identidad ingresada haga
-		<a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">click aqu&iacute;</a>
-		para ingresarla</span>
-		<span class="flash" py:if="affiliate.state == None or affiliate.state ==''">Este afiliado no
-		tiene Departamento
-		<a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Ingresar</a></span>
-		<span class="flash" py:if="affiliate.town == None or affiliate.town ==''">Este afiliado no
-		tiene Ciudad
-		<a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Ingresar</a></span>
-		<h3 class="flash" py:if="not affiliate.active">Afiliado desactivado, razon:<strong><span class="flash" py:if="not affiliate.active" py:content="affiliate.reason" /></strong></h3>
-		<ul class="toolbox">
+        <ul class="toolbox">
 			<li>
 				<a class="edit" href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Editar</a>
 			</li>
@@ -52,15 +36,29 @@
 				<a class="view" href="${tg.url('/affiliate/deduced/%s' % affiliate.id)}">Ver detalle de Deducciones</a>
 			</li>
 		</ul>
+        <h1 class="afiliado">${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</h1>
+        <h2><span class="pago">${affiliate.payment}</span> ${affiliate.cardID}</h2>
+        <h3>Afiliado desde <span py:if="not affiliate.joined is None">${affiliate.joined.strftime('%d de %B de %Y')}</span></h3>
+		<span class="flash" py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated == None">
+		Este Afiliado requiere Actualizar sus datos de Jubilaci&oacute;n haga
+		<a href="${tg.url('/affiliate/jubilate/%s' % affiliate.id)}">click aqu&iacute;</a>
+		actualizarlos</span>
+		<span class="flash" py:if="affiliate.cardID == None">Este afiliado no
+		tiene tarjeta de identidad ingresada haga
+		<a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">click aqu&iacute;</a>
+		para ingresarla</span>
+		<span class="flash" py:if="affiliate.state == None or affiliate.state ==''">Este afiliado no
+		tiene Departamento
+		<a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Ingresar</a></span>
+		<span class="flash" py:if="affiliate.town == None or affiliate.town ==''">Este afiliado no
+		tiene Ciudad
+		<a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Ingresar</a></span>
+		<h3 class="flash" py:if="not affiliate.active">Afiliado desactivado, razon:<strong><span class="flash" py:if="not affiliate.active" py:content="affiliate.reason" /></strong></h3>
 		<h3>Informaci&oacute;n Personal</h3>
 		<ul>
 			<li>
 				<strong>Lugar de Nacimiento: </strong>
 				<span py:content="affiliate.birthPlace" />
-			</li>
-			<li>
-				<strong>Identidad: </strong>
-				<span py:content="affiliate.cardID" />
 			</li>
 			<li>
 				<strong>Fecha de Nacimiento: </strong>
@@ -78,10 +76,6 @@
 		</ul>
 		<h3>Informaci&oacute;n Colegiaci&oacute;n</h3>
 		<ul>
-			<li>
-				<strong>Cotiza por: </strong>
-				<span py:content="affiliate.payment" />
-			</li>
 			<li py:if="affiliate.payment == 'INPREMA'">
 				<strong>Jubilado: </strong>
 				<span py:content="affiliate.jubilated" />

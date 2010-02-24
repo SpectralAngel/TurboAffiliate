@@ -149,6 +149,10 @@ th
 {
 	clear: both;
 }
+.pago
+{
+    color: blue;
+}
 #debit_result
 {
 	width: 250px;
@@ -247,4 +251,10 @@ caption
 {
 	padding-top: 15px;
 	font-weight: bold;
+}
+
+.toolbox li
+{
+    display: inline-block;
+    padding-right: 20px;
 }
