@@ -263,19 +263,20 @@ class Flyer(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.escalafon.filialesdept")
-	@validate(validators=dict(state=validators.String()))
-	def filialesDept(self, state):
+	@validate(validators=dict(state=validators.String(),year=validators.Int(),
+							  month=validators.Int(min=1,max=12)))
+	def filialesDept(self, state, month, year):
 		
-		query = "affiliate.payment = '%s' and affiliate.state = '%s'" % ('Escalafon', state)
-		affiliates = model.Affiliate.select(query)
-		
+		afiliados = model.Affiliate.selectBy(payment="Escalafon",state=state)
 		filiales = dict()
 		
-		for affiliate in affiliates:
-			try:
-				filiales[affiliate.school] += 1
-			except KeyError:
-				filiales[affiliate.school] = 1
+		for afiliado in afiliados:
+			if afiliado.get_month(year, month):
+				if afiliado.school in filiales:
+					filiales[afiliado.school].append(afiliado)
+				else:
+					filiales[afiliado.school] = list()
+					filiales[afiliado.school].append(afiliado)
 		
 		return dict(filiales=filiales, state=state)
 	

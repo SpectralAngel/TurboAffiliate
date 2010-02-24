@@ -220,25 +220,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('filiales')}" method="post">
-			<fieldset>
-				<legend>Mostrar Reporte de Filiales</legend>
-				<ul>
-					<li>
-						<label for="month">Mes:</label>
-						<input name="month" />
-					</li>
-					<li>
-						<label for="year">A&ntilde;o:</label>
-						<input name="year" />
-					</li>
-					<li>
-						<input type="submit" value="Mostrar Reporte" />
-					</li>
-				</ul>
-			</fieldset>
-		</form>
-		<form action="${tg.url('filialesDept')}" method="post">
+		<form action="${tg.url('filialesDept')}">
 			<fieldset>
 				<legend>Mostrar Reporte de Filiales</legend>
 				<ul>
@@ -265,13 +247,21 @@
 							<option>Yoro</option>
 						</select>
 					</li>
+                    <li>
+						<label for="month">Mes:</label>
+						<input name="month" />
+					</li>
+					<li>
+						<label for="year">A&ntilde;o:</label>
+						<input name="year" />
+					</li>
 					<li>
 						<input type="submit" value="Mostrar Reporte" />
 					</li>
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('cuotas')}" method="post">
+		<form action="${tg.url('cuotas')}">
 			<fieldset>
 				<legend>Mostrar Reporte de Cuotas Retrasadas</legend>
 				<ul>
@@ -289,7 +279,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('aportaciones')}" method="post">
+		<form action="${tg.url('aportaciones')}">
 			<fieldset>
 				<legend>Mostrar Afiliados que Aportaron</legend>
 				<ul>
