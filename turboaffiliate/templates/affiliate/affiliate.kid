@@ -192,7 +192,7 @@
                     <td>${locale.currency(0)}</td>
                     <td>${locale.currency(loan.payment, True, True)}</td>
                     <td>${loan.last.strftime('%d de %B de %Y')}</td>
-                    <td><a href="${tg.url('/refinanced/%s' % loan.id)}" >Ver</a></td>
+                    <td><a href="${tg.url('/payed/%s' % loan.id)}" >Ver</a></td>
                 </tr>
             </tbody>
             <tfoot>
@@ -200,29 +200,6 @@
                     <th colspan="6"><a href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a></th>
                 </tr>
             </tfoot>
-        </table>
-        <table py:if="len(affiliate.extras) != 0">
-            <caption>Deducciones Extra</caption>
-            <thead>
-                <tr>
-                    <th>Concepto</th>
-                    <th>Cantidad</th>
-                    <th>Retrasada</th>
-                    <th>Mes</th>
-                    <th>Anio</th>
-                    <th>Eliminar</th>
-                </tr>
-            </thead>
-            <thead>
-                <tr py:for="extra in affiliate.extras">
-                    <td>${extra.account.name}</td>
-                    <td>${locale.currency(extra.amount, True, True)}</td>
-                    <td>${extra.retrasada}</td>
-                    <td>${extra.mes}</td>
-                    <td>${extra.anio}</td>
-                    <td><a href="${tg.url('/affiliate/extra/delete/%s' % extra.id)}">X</a></td>
-                </tr>
-            </thead>
         </table>
         <form action="${tg.url('/affiliate/deduced/mostrar')}" method="get">
             <fieldset>
