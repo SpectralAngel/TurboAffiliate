@@ -37,16 +37,16 @@
 			</li>
 		</ul>
         <h1 class="afiliado">${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</h1>
-        <h2><span class="pago">${affiliate.payment}</span> ID: ${affiliate.cardID}
+        <h3>ID: ${affiliate.cardID}   <span class="pago">${affiliate.payment}</span>
         <span class="pago" py:if="affiliate.payment == 'INPREMA'">N&uacute;mero de Cobro:
         ${affiliate.escalafon}</span>
-        </h2>
+        </h3>
         
         <h3>Afiliado desde <span py:if="not affiliate.joined is None">${affiliate.joined.strftime('%d de %B de %Y')}</span>
             <a href="${tg.url('/affiliate/status/%s' % affiliate.id)}">Estado de Cuenta</a>
         </h3>
         
-        <h4 py:if="affiliate.payment == 'INPREMA'">
+        <h4 py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated != None">
 				Jubilado desde ${affiliate.jubilated.strftime('%d de %B de %Y')}
 	    </h4>
 		

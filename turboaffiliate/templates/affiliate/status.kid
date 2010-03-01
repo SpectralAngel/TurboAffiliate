@@ -71,6 +71,45 @@
 				</tr>
 			</tfoot>
 		</table>
+        <table style="width: 100%;">
+            <caption>Cobros a Efectuar</caption>
+            <thead>
+                <th>Concepto</th>
+                <th>Retrasada</th>
+                <th>Mes</th>
+                <th>Anio</th>
+                <th>Cantidad</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Aportaci&oacute;n Ordinaria</td>
+                    <td>No</td>
+                    <td></td>
+                    <td></td>
+                    <td>${locale.currency(affiliate.get_cuota(), True, True)}</td>
+                </tr>
+                <tr py:for="loan in affiliate.loans">
+                    <td>Cuota de Pr&eacute;stamo</td>
+                    <td>No</td>
+                    <td></td>
+                    <td></td>
+                    <td>${locale.currency(loan.get_payment(), True, True)}</td>
+                </tr>
+                <tr py:for="extra in affiliate.extras">
+                    <td>${extra.account.name}</td>
+                    <td>${extra.retrasada}</td>
+                    <td>${extra.mes}</td>
+                    <td>${extra.anio}</td>
+                    <td>${locale.currency(extra.amount, True, True)}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">Total de Deducciones</td>
+                    <td>${locale.currency(affiliate.get_monthly(), True, True)}</td>
+                </tr>
+            </tfoot>
+        </table>
 		<form action="${tg.url('/affiliate/populate')}" method="post" class="noprint">
 			<fieldset>
 				<legend>A&ntilde;adir A&ntilde;o</legend>

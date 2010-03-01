@@ -77,7 +77,7 @@ class Affiliate(SQLObject):
     refinancedLoans = MultipleJoin("RefinancedLoan", orderBy='startDate')
     extras = MultipleJoin("Extra")
     flyers = MultipleJoin("Flyer")
-    deduced = MultipleJoin("Deduced")
+    deduced = MultipleJoin("Deduced", orderBy=['year', 'month'])
     delayed = MultipleJoin("Delayed")
     observaciones = MultipleJoin('Observacion')
     
