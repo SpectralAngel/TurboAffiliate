@@ -127,7 +127,8 @@
                 </tr>
                 <tr py:for="extra in affiliate.extras">
                     <td>${extra.account.name}</td>
-                    <td>${extra.retrasada}</td>
+                    <td py:if="extra.retrasada">S&iacute;</td>
+                    <td py:if="not extra.retrasada">No</td>
                     <td>${extra.mes}</td>
                     <td>${extra.anio}</td>
                     <td>${locale.currency(extra.amount, True, True)}</td>

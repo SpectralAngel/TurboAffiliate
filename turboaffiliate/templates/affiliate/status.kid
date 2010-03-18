@@ -71,7 +71,7 @@
 				</tr>
 			</tfoot>
 		</table>
-        <table style="width: 100%;">
+        <table style="width: 100%; text-align: center;">
             <caption>Cobros a Efectuar</caption>
             <thead>
                 <th>Concepto</th>
@@ -97,7 +97,8 @@
                 </tr>
                 <tr py:for="extra in affiliate.extras">
                     <td>${extra.account.name}</td>
-                    <td>${extra.retrasada}</td>
+                    <td py:if="extra.retrasada">S&iacute;</td>
+                    <td py:if="not extra.retrasada">No</td>
                     <td>${extra.mes}</td>
                     <td>${extra.anio}</td>
                     <td>${locale.currency(extra.amount, True, True)}</td>
@@ -105,8 +106,8 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="4">Total de Deducciones</td>
-                    <td>${locale.currency(affiliate.get_monthly(), True, True)}</td>
+                    <th colspan="4">Total de Deducciones</th>
+                    <th>${locale.currency(affiliate.get_monthly(), True, True)}</th>
                 </tr>
             </tfoot>
         </table>
