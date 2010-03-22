@@ -84,13 +84,14 @@ class Extra(controllers.Controller):
 	@identity.require(identity.not_anonymous())
 	@expose()
 	@validate(validators=dict(account=validators.Int(), months=validators.Int(),
-							  payment=validators.String(),
+							  payment=validators.String(), months=Int(),
 							  amount=validators.String()))
-	def payment(self, payment, account, amount):
+	def payment(self, payment, account, amount, months):
 		
 		kw = dict()
 		kw['account'] = model.Account.get(account)
 		kw['amount'] = Decimal(amount)
+		kw['months'] = months
 		
 		afiliados = model.Affiliate.selectBy(payment=payment)
 		
