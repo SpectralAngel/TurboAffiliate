@@ -7,9 +7,9 @@
 		<title>TurboAffiliate &bull; A&ntilde;adir Afiliado</title>
 	</head>
 	<body>
-		<h2>A&ntilde;adir una Deducci&oacute;n Extra</h2>
 		<form action="${tg.url('/affiliate/extra/many')}">
 			<fieldset>
+			    <legend>A&ntilde;adir una Deducci&oacute;n Extra a un Rango</legend>
 				<ul>
 					<li>
 						<label for="amount">Cantidad:</label>
@@ -36,6 +36,39 @@
 				</ul>
 			</fieldset>
 			<input type="submit" value="Guardar" />
+		</form>
+        <form action="${tg.url('/affiliate/extra/payment')}">
+			<fieldset>
+			    <legend>Agregar por Tipo de Pago</legend>
+				<ul>
+					<li>
+						<label for="amount">Cantidad:</label>
+						<input name="amount" />
+					</li>
+					<li>
+						<label for="account">Cuenta:</label>
+						<select name="account">
+							<option py:for="account in accounts" py:content="account.name" value="${account.id}" />
+						</select>
+					</li>
+					<li>
+						<label for="payment">Cotizaci&oacute;n:</label>
+						<select name="payment">
+							<option>Escalafon</option>
+							<option>INPREMA</option>
+							<option>UPN</option>
+							<option>Ventanilla</option>
+							<option>Ministerio</option>
+							<option>Retirado</option>
+						</select>
+					</li>
+					<li>
+						<label for="months">Meses</label>
+						<input name="months" />
+					</li>
+				</ul>
+			</fieldset>
+			<input type="submit" value="Agregar" />
 		</form>
 	</body>
 </html>

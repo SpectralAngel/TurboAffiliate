@@ -80,4 +80,23 @@ class Extra(controllers.Controller):
 		extra.destroySelf()
 		
 		raise redirect('/affiliate/%s' % affiliate.id)
-
+	
+	@identity.require(identity.not_anonymous())
+	@expose()
+	@validate(validators=dict(account=validators.Int(), months=validators.Int(),
+							  payment=validators.String(),
+							  amount=validators.String()))
+	def payment(self, payment, account, amount):
+		
+		kw = dict()
+		kw['account'] = model.Account.get(account)
+		kw['amount'] = Decimal(amount)
+		
+		afiliados = model.Affiliate.selectBy(payment=payment)
+		
+		for afiliado in afiliados:
+			
+			kw['affiliate'] = afiliado
+			extra = model.Extra(**kw)
+		
+		raise redirect('/affiliate')

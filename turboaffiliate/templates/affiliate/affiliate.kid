@@ -109,6 +109,7 @@
                 <th>Mes</th>
                 <th>Anio</th>
                 <th>Cantidad</th>
+                <th>Borrar</th>
             </thead>
             <tbody>
                 <tr>
@@ -117,6 +118,7 @@
                     <td></td>
                     <td></td>
                     <td>${locale.currency(affiliate.get_cuota(), True, True)}</td>
+                    <td></td>
                 </tr>
                 <tr py:for="loan in affiliate.loans">
                     <td>Cuota de Pr&eacute;stamo</td>
@@ -124,6 +126,7 @@
                     <td></td>
                     <td></td>
                     <td>${locale.currency(loan.get_payment(), True, True)}</td>
+                    <td></td>
                 </tr>
                 <tr py:for="extra in affiliate.extras">
                     <td>${extra.account.name}</td>
@@ -132,6 +135,7 @@
                     <td>${extra.mes}</td>
                     <td>${extra.anio}</td>
                     <td>${locale.currency(extra.amount, True, True)}</td>
+                    <td><a href="tg.url('/affiliate/extra/delete/%s' % extra.id)">X</a></td>
                 </tr>
             </tbody>
             <tfoot>
