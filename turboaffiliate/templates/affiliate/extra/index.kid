@@ -33,11 +33,13 @@
 						<label for="months">Meses</label>
 						<input name="months" />
 					</li>
+                    <li>
+			            <input type="submit" value="Agregar" />
+                    </li>
 				</ul>
 			</fieldset>
-			<input type="submit" value="Guardar" />
 		</form>
-        <form action="${tg.url('/affiliate/extra/payment')}">
+        <form action="${tg.url('/affiliate/extra/payment')}" method="post">
 			<fieldset>
 			    <legend>Agregar por Tipo de Pago</legend>
 				<ul>
@@ -66,9 +68,11 @@
 						<label for="months">Meses</label>
 						<input name="months" />
 					</li>
+                    <li>
+			            <input type="submit" value="Agregar" />
+                    </li>
 				</ul>
 			</fieldset>
-			<input type="submit" value="Agregar" />
 		</form>
 	</body>
 </html>

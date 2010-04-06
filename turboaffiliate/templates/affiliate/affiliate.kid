@@ -135,7 +135,7 @@
                     <td>${extra.mes}</td>
                     <td>${extra.anio}</td>
                     <td>${locale.currency(extra.amount, True, True)}</td>
-                    <td><a href="tg.url('/affiliate/extra/delete/%s' % extra.id)">X</a></td>
+                    <td><a href="${tg.url('/affiliate/extra/delete/%s' % extra.id)}">X</a></td>
                 </tr>
             </tbody>
             <tfoot>

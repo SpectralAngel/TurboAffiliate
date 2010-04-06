@@ -84,7 +84,7 @@ class Extra(controllers.Controller):
 	@identity.require(identity.not_anonymous())
 	@expose()
 	@validate(validators=dict(account=validators.Int(), months=validators.Int(),
-							  payment=validators.String(), months=Int(),
+							  payment=validators.String(),
 							  amount=validators.String()))
 	def payment(self, payment, account, amount, months):
 		
