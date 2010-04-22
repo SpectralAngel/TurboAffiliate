@@ -29,659 +29,659 @@ from decimal import *
 from datetime import date, datetime
 
 class Affiliate(controllers.Controller):
-	
-	"""Manage Affiliate data"""
-	
-	cuota = cuota.Cuota()
-	extra = extra.Extra()
-	billing = billing.Billing()
-	deduced = deduced.Deduced()
-	observacion = observacion.Observacion()
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.index')
-	def index(self, tg_errors=None):
-		
-		if tg_errors:
-			errors = [(param,inv.msg,inv.value) for param, inv in
-                      tg_errors.items()]
-			flash(errors)
+    
+    """Manage Affiliate data"""
+    
+    cuota = cuota.Cuota()
+    extra = extra.Extra()
+    billing = billing.Billing()
+    deduced = deduced.Deduced()
+    observacion = observacion.Observacion()
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.index')
+    def index(self, tg_errors=None):
         
-		return dict()
-	
-	@error_handler(index)
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.affiliate')
-	@validate(validators=dict(affiliate=validators.Int()))
-	def default(self, affiliate):
-		
-		return dict(affiliate=model.Affiliate.get(affiliate))
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.search')
-	@validate(validators=dict(cardID=validators.String()))
-	def byCardID(self, cardID):
-		
-		return dict(affiliates=model.Affiliate.select(model.Affiliate.q.cardID==cardID))
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.search')
-	@validate(validators=dict(cobro=validators.String()))
-	def cobro(self, cobro):
-		
-		return dict(result=model.Affiliate.select(model.Affiliate.q.escalafon==cobro))
-	
-	@error_handler(index)
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.affiliate')
-	@validate(validators=dict(copemh=validators.Int()))
-	def byCopemh(self, copemh):
-		
-		return self.default(copemh)
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.search')
-	@validate(validators=dict(escalafon=validators.String()))
-	def byEscalafon(self, escalafon):
-		
-		return dict(affiliates=model.Affiliate.select(model.Affiliate.q.escalafon==escalafon))
-	
-	@identity.require(identity.has_permission("afiliar"))
-	@expose(template="turboaffiliate.templates.affiliate.add")
-	def add(self):
-		return dict()
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(
-			cardID=validators.String(),
-			birthday=validators.DateTimeConverter(format='%Y-%m-%d'),
-			escalafon=validators.String(),
-			phone=validators.String(),
-			birthPlace=validators.String(),
-			gender=validators.String(),
-			payment=validators.String(),
-			school=validators.String(),
-			school2=validators.String(),
-			inprema=validators.String(),
-			town=validators.String(),
-			state=validators.String(),
-	))
-	def save(self, **kw):
-		
-		if kw['cardID'] == '':
-			flash(u'No se escribio un número de identidad')
-			flash(u'Al afiliado no se le podra cobrar si cotiza por escalafon')
-		try:			
-			affiliate = model.Affiliate.get(int(kw['affiliate']))
-			
-			# Logs del sistema
-			log = dict()
-			log['user'] = identity.current.user
-			log['action'] = "Modificado el afiliado %s" % affiliate.id
-			model.Logger(**log)
-			
-			del kw['affiliate']
-			
-			for key in kw.keys():
-				setattr(affiliate, key, kw[key])
-			
-			flash('El afiliado ha sido actualizado!')
-		
-		except KeyError:
-			
-			affiliate = model.Affiliate(**kw)
-			affiliate.complete(date.today().year)
-			
-			log = dict()
-			log['user'] = identity.current.user
-			log['action'] = "Agregado el afiliado %s" % affiliate.id
-			model.Logger(**log)
-			
-			flash('El afiliado ha sido guardado!')
-		
-		raise redirect('/affiliate/%s' % affiliate.id)
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.edit')
-	def edit(self, cardID):
-		
-		affiliate = model.Affiliate.get(int(cardID))
-		return dict(affiliate=affiliate)
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.status')
-	@validate(validators=dict(affiliate=validators.Int()))
-	def status(self, affiliate):
-		
-		affiliate = model.Affiliate.get(affiliate)
-		return dict(affiliate=affiliate, day=date.today())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.search')
-	@validate(validators=dict(name=validators.String()))
-	def search(self, name):
-		
-		if name == '':
-			raise redirect('/affiliate')
-		name = name.replace('*', '%')
-		query = "affiliate.first_name LIKE '%%%s%%' or affiliate.last_name LIKE '%%%s%%'" % (name, name)
-		affiliates = model.Affiliate.select(query)
-		return dict(result=affiliates)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(cardID=validators.String()))
-	def card(self, cardID):
-		
-		affiliate = model.Affiliate.select(model.Affiliate.q.cardID==cardID)
-		
-		if affiliate.count() == 0:
-			flash(u'Número de identidad no encontrado')
-			raise redirect('/affiliate')
-		
-		raise redirect('/affiliate/%s' % affiliate[0].id)
-		
-		redirect('/affiliate')
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(affiliate=validators.Int()))
-	def off(self, affiliate):
-		
-		affiliate = model.Affiliate.get(affiliate)
-		affiliate.active = False
-		log = dict()
-		log['user'] = identity.current.user
-		log['action'] = "Desactivado el afiliado %s" % affiliate.id
-		model.Logger(**log)
-		raise redirect('/affiliate/%s' % affiliate.id)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(affiliate=validators.Int()))
-	def on(self, affiliate):
-		
-		affiliate = model.Affiliate.get(affiliate)
-		affiliate.active = True
-		
-		log = dict()
-		log['user'] = identity.current.user
-		log['action'] = "Activado el afiliado %s" % affiliate.id
-		model.Logger(**log)
-		raise redirect('/affiliate/%s' % affiliate.id)
+        if tg_errors:
+            errors = [(param,inv.msg,inv.value) for param, inv in
+                      tg_errors.items()]
+            flash(errors)
+        
+        return dict()
+    
+    @error_handler(index)
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.affiliate')
+    @validate(validators=dict(affiliate=validators.Int()))
+    def default(self, affiliate):
+        
+        return dict(affiliate=model.Affiliate.get(affiliate))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.search')
+    @validate(validators=dict(cardID=validators.String()))
+    def byCardID(self, cardID):
+        
+        return dict(affiliates=model.Affiliate.select(model.Affiliate.q.cardID==cardID))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.search')
+    @validate(validators=dict(cobro=validators.String()))
+    def cobro(self, cobro):
+        
+        return dict(result=model.Affiliate.select(model.Affiliate.q.escalafon==cobro))
+    
+    @error_handler(index)
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.affiliate')
+    @validate(validators=dict(copemh=validators.Int()))
+    def byCopemh(self, copemh):
+        
+        return self.default(copemh)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.search')
+    @validate(validators=dict(escalafon=validators.String()))
+    def byEscalafon(self, escalafon):
+        
+        return dict(affiliates=model.Affiliate.select(model.Affiliate.q.escalafon==escalafon))
+    
+    @identity.require(identity.has_permission("afiliar"))
+    @expose(template="turboaffiliate.templates.affiliate.add")
+    def add(self):
+        return dict()
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(
+            cardID=validators.String(),
+            birthday=validators.DateTimeConverter(format='%Y-%m-%d'),
+            escalafon=validators.String(),
+            phone=validators.String(),
+            birthPlace=validators.String(),
+            gender=validators.String(),
+            payment=validators.String(),
+            school=validators.String(),
+            school2=validators.String(),
+            inprema=validators.String(),
+            town=validators.String(),
+            state=validators.String(),
+    ))
+    def save(self, **kw):
+        
+        if kw['cardID'] == '':
+            flash(u'No se escribio un número de identidad')
+            flash(u'Al afiliado no se le podra cobrar si cotiza por escalafon')
+        try:            
+            affiliate = model.Affiliate.get(int(kw['affiliate']))
+            
+            # Logs del sistema
+            log = dict()
+            log['user'] = identity.current.user
+            log['action'] = "Modificado el afiliado %s" % affiliate.id
+            model.Logger(**log)
+            
+            del kw['affiliate']
+            
+            for key in kw.keys():
+                setattr(affiliate, key, kw[key])
+            
+            flash('El afiliado ha sido actualizado!')
+        
+        except KeyError:
+            
+            affiliate = model.Affiliate(**kw)
+            affiliate.complete(date.today().year)
+            
+            log = dict()
+            log['user'] = identity.current.user
+            log['action'] = "Agregado el afiliado %s" % affiliate.id
+            model.Logger(**log)
+            
+            flash('El afiliado ha sido guardado!')
+        
+        raise redirect('/affiliate/%s' % affiliate.id)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.edit')
+    def edit(self, cardID):
+        
+        affiliate = model.Affiliate.get(int(cardID))
+        return dict(affiliate=affiliate)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.status')
+    @validate(validators=dict(affiliate=validators.Int()))
+    def status(self, affiliate):
+        
+        affiliate = model.Affiliate.get(affiliate)
+        return dict(affiliate=affiliate, day=date.today())
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.search')
+    @validate(validators=dict(name=validators.String()))
+    def search(self, name):
+        
+        if name == '':
+            raise redirect('/affiliate')
+        name = name.replace('*', '%')
+        query = "affiliate.first_name LIKE '%%%s%%' or affiliate.last_name LIKE '%%%s%%'" % (name, name)
+        affiliates = model.Affiliate.select(query)
+        return dict(result=affiliates)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(cardID=validators.String()))
+    def card(self, cardID):
+        
+        affiliate = model.Affiliate.select(model.Affiliate.q.cardID==cardID)
+        
+        if affiliate.count() == 0:
+            flash(u'Número de identidad no encontrado')
+            raise redirect('/affiliate')
+        
+        raise redirect('/affiliate/%s' % affiliate[0].id)
+        
+        redirect('/affiliate')
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int()))
+    def off(self, affiliate):
+        
+        affiliate = model.Affiliate.get(affiliate)
+        affiliate.active = False
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Desactivado el afiliado %s" % affiliate.id
+        model.Logger(**log)
+        raise redirect('/affiliate/%s' % affiliate.id)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int()))
+    def on(self, affiliate):
+        
+        affiliate = model.Affiliate.get(affiliate)
+        affiliate.active = True
+        
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Activado el afiliado %s" % affiliate.id
+        model.Logger(**log)
+        raise redirect('/affiliate/%s' % affiliate.id)
 
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(affiliate=validators.Int(),year=validators.Int()))
-	def populate(self, affiliate, year):
-		
-		affiliate = model.Affiliate.get(affiliate)
-		affiliate.complete(year)
-		
-		raise redirect('/affiliate/status/%s' % affiliate.id)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(affiliate=validators.Int()))
-	def remove(self, affiliate):
-		
-		affiliate = model.Affiliate.get(affiliate)
-		
-		for loan in affiliate.loans:
-			loan.remove()
-		
-		for cuota in affiliate.cuotaTables:
-			cuota.destroySelf()
-		
-		affiliate.destroySelf()
-		flash('El afiliado ha sido removido')
-		
-		raise redirect('/affiliate')
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.report')
-	@validate(validators=dict(state=validators.String()))
-	def department(self, state):
-		
-		affiliates = model.Affiliate.select(model.Affiliate.q.state==state)
-		count = affiliates.count()
-		return dict(affiliates=affiliates, state=state, count=count)
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.card')
-	@validate(validators=dict(affiliate=validators.String()))
-	def byRange(self, cardID):
-		
-		affiliates = model.Affiliate.select("affiliate.card_id like '%%%s%%'" % cardID)
-		return dict(affiliates=affiliates, cardID=cardID, count=affiliates.count())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.list')
-	@validate(validators=dict(year=validators.Int(),month=validators.Int(), how=validators.String()))
-	def cotization(self, how, year, month):
-		
-		affiliates = model.Affiliate.select(model.Affiliate.q.payment==how, orderBy="lastName")
-		total = sum(a.total(year, month) for a in affiliates)
-		return dict(affiliates=affiliates, count=affiliates.count(), year=year, month=month, how=how, total=total)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(affiliate=validators.Int(),how=validators.String(),
-							  year=validators.Int(),month=validators.Int()))
-	def posteo(self, affiliate, how, year, month):
-		
-		log = dict()
-		log['user'] = identity.current.user
-		log['action'] = "Posteado el afiliado %s" % affiliate.id
-		model.Logger(**log)
-		
-		affiliate = model.Affiliate.get(affiliate)
-		affiliate.pay_cuota(year, month)
-		
-		for loan in affiliate.loans:
-			loan.pay(loan.get_payment(), "Planilla", date.today())
-		
-		raise redirect('/affiliate/cotization/?how=%s&year=%s&month=%s' % (how, year, month))
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int(),year=validators.Int()))
+    def populate(self, affiliate, year):
+        
+        affiliate = model.Affiliate.get(affiliate)
+        affiliate.complete(year)
+        
+        raise redirect('/affiliate/status/%s' % affiliate.id)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int()))
+    def remove(self, affiliate):
+        
+        affiliate = model.Affiliate.get(affiliate)
+        
+        for loan in affiliate.loans:
+            loan.remove()
+        
+        for cuota in affiliate.cuotaTables:
+            cuota.destroySelf()
+        
+        affiliate.destroySelf()
+        flash('El afiliado ha sido removido')
+        
+        raise redirect('/affiliate')
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.report')
+    @validate(validators=dict(state=validators.String()))
+    def department(self, state):
+        
+        affiliates = model.Affiliate.select(model.Affiliate.q.state==state)
+        count = affiliates.count()
+        return dict(affiliates=affiliates, state=state, count=count)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.card')
+    @validate(validators=dict(affiliate=validators.String()))
+    def byRange(self, cardID):
+        
+        affiliates = model.Affiliate.select("affiliate.card_id like '%%%s%%'" % cardID)
+        return dict(affiliates=affiliates, cardID=cardID, count=affiliates.count())
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.list')
+    @validate(validators=dict(year=validators.Int(),month=validators.Int(), how=validators.String()))
+    def cotization(self, how, year, month):
+        
+        affiliates = model.Affiliate.select(model.Affiliate.q.payment==how, orderBy="lastName")
+        total = sum(a.total(year, month) for a in affiliates)
+        return dict(affiliates=affiliates, count=affiliates.count(), year=year, month=month, how=how, total=total)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int(),how=validators.String(),
+                              year=validators.Int(),month=validators.Int()))
+    def posteo(self, affiliate, how, year, month):
+        
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Posteado el afiliado %s" % affiliate.id
+        model.Logger(**log)
+        
+        affiliate = model.Affiliate.get(affiliate)
+        affiliate.pay_cuota(year, month)
+        
+        for loan in affiliate.loans:
+            loan.pay(loan.get_payment(), "Planilla", date.today())
+        
+        raise redirect('/affiliate/cotization/?how=%s&year=%s&month=%s' % (how, year, month))
 
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.report')
-	@validate(validators=dict(affiliate=validators.Int(),end=validators.Int(), begin=validators.Int()))
-	def aList(self, begin, end):
-		
-		query = "affiliate.id <= %s and affiliate.id >= %s" % (begin, end)
-		affiliates = model.Affiliate.select(query)
-		return dict(affiliates=affiliates, count=affiliates.count())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.affiliate')
-	def last(self):
-		
-		return dict(affiliate=model.Affiliate.select(orderBy="-id")[0])
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.deactivate')
-	@validate(validators=dict(affiliate=validators.Int()))
-	def deactivate(self, affiliate):
-		
-		return dict(affiliate=model.Affiliate.get(affiliate))
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(affiliate=validators.Int(), reason=validators.String()))
-	def deactivateTrue(self, affiliate, reason):
-		
-		affiliate = model.Affiliate.get(affiliate)
-		affiliate.active = False
-		affiliate.reason = reason
-		log = dict()
-		log['user'] = identity.current.user
-		log['action'] = "Desactivado el afiliado %s" % affiliate.id
-		model.Logger(**log)
-		raise redirect('/affiliate/%s' % affiliate.id)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(affiliate=validators.Int()))
-	def activate(self, affiliate):
-		
-		affiliate = model.Affiliate.get(int(affiliate))
-		affiliate.active = True
-		log = dict()
-		log['user'] = identity.current.user
-		log['action'] = "Activado el afiliado %s" % affiliate.id
-		model.Logger(**log)
-		raise redirect('/affiliate/%s' % affiliate.id)
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.payment')
-	@validate(validators=dict(how=validators.String()))
-	def payment(self, how):
-		
-		affiliates = model.Affiliate.select(model.Affiliate.q.payment==how, orderBy="lastName")
-		return dict(affiliates=affiliates, count=affiliates.count(), how=how)
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.age')
-	@validate(validators=dict(joined=validators.Int(),age=validators.Int()))
-	def age(self, joined, age):
-		
-		day = date.today().year - age
-		affiliates = model.Affiliate.select(model.Affiliate.birthday>=day)
-		affiliates = [affiliate for affiliate in affiliates if affiliate.joined.year <= joined]
-		
-		return dict(affiliates=affiliate)
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.posting')
-	@validate(validators=dict(payment=validators.String(), year=validators.Int(),
-							  month=validators.Int()))
-	def posting(self, payment, year, month):
-		
-		query = "obligation.year = %s and obligation.month = %s" % (year, month)
-		obligation = model.Obligation.select(query)[0]
-		if payment == "INPREMA":
-			obligation = obligation.inprema
-		
-		affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment, orderBy="lastName")
-		return dict(affiliates=affiliates, count=affiliates.count(), how=payment, obligation=obligation)
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.show')
-	def byDate(self, start, end):
-		
-		start = datetime.strptime(start, "%Y-%m-%d").date()
-		end = datetime.strptime(end, "%Y-%m-%d").date
-		query = "affiliate.joined >= '%s' and affiliate.joined <= '%s'" % (start, end)
-		affiliates = model.Affiliate.select(query)
-		return dict(affiliates=affiliates, start=start, end=end, show="Fecha de Afiliaci&oacute;n", count=affiliates.count())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.show')
-	def byTown(self, town):
-		
-		town = str(town)
-		affiliates = model.Affiliate.select(model.Affiliate.q.town==town)
-		return dict(affiliates=affiliates, show="Municipio", count=affiliates.count())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.show')
-	@validate(validators=dict(school=validators.String(),state=validators.String()))
-	def bySchool(self, school, state):
-		
-		query = "affiliate.school = '%s' or affiliate.school2 = '%s'" % (school, school)
-		affiliates = model.Affiliate.select(query)
-		affiliates = [a for a in affiliates if a.state == state]
-		return dict(affiliates=affiliates, show="Instituto", count=len(affiliates))
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.show')
-	def disabled(self):
-		
-		affiliates = model.Affiliate.select(model.Affiliate.q.active==False)
-		return dict(affiliates=affiliates, show="Inhabilitados", count=affiliates.count())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.show')
-	def all(self):
-		
-		affiliates = model.Affiliate.select()
-		return dict(affiliates=affiliates, show="Todos", count=affiliates.count())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.manual')
-	@validate(validators=dict(affiliate=validators.Int(),year=validators.Int(),
-							  month=validators.Int(), day=validators.DateTimeConverter(format='%Y-%m-%d')))
-	def manual(self, affiliate, year, month, day):
-		
-		affiliate = model.Affiliate.get(int(affiliate))
-		query = "obligation.year = %s and obligation.month = %s" % (int(year), int(month))
-		obligations = model.Obligation.select(query)
-		obligation = 0
-		
-		if affiliate.payment == "INPREMA":
-			obligation = sum(obligation.inprema for obligation in obligations)
-			
-		else:
-			obligation = sum(obligation.amount for obligation in obligations)
-		
-		return dict(affiliate=affiliate, obligation=obligation, year=year, month=month, day=day)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(affiliate=validators.Int(),year=validators.Int(),
-							  month=validators.Int(),
-							  day=validators.DateTimeConverter(format='%Y-%m-%d')))
-	def complete(self, affiliate, year, month, day):
-		
-		affiliate = model.Affiliate.get(affiliate)
-		[e.manual() for e in affiliate.extras]
-		
-		for loan in affiliate.loans:
-			payment = loan.get_payment()
-			
-			kw = dict()
-			kw['amount'] = payment
-			kw['affiliate'] = affiliate
-			kw['account'] = model.Account.get(373)
-			model.Deduced(**kw)
-			model.OtherDeduced(**kw)
-			loan.pay(payment, "Planilla", day)
-		
-		affiliate.pay_cuota(year, month)
-		kw = {}
-		
-		query = "obligation.year = %s and obligation.month = %s" % (year, month)
-		obligations = model.Obligation.select(query)
-		if affiliate.payment == "INPREMA":
-			kw['amount'] = sum(obligation.inprema for obligation in obligations)
-		else:
-			kw['amount'] = sum(obligation.amount for obligation in obligations)
-		
-		kw['affiliate'] = affiliate
-		kw['account'] = model.Account.get(1)
-		model.Deduced(**kw)
-		model.OtherDeduced(**kw)
-		
-		return self.listmanual(affiliate.payment, year, month, day)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(extra=validators.Int(), year=validators.Int(), month=validators.Int()))
-	def postextra(self, extra, year, month):
-		
-		extra = model.Extra.get(int(extra))
-		affiliate = extra.affiliate
-		extra.manual()
-		
-		flash('Se ha posteado la deduccion')
-		
-		return self.manual(affiliate.id, year, month)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(loan=validators.Int(),amount=validators.Number(),
-							   year=validators.Int(),month=validators.Int(),
-							   day=validators.DateTimeConverter(format='%Y-%m-%d')))
-	def postloan(self, loan, amount, year, month, day):
-		
-		loan = model.Loan.get(loan)
-		payment = loan.get_payment()
-		kw = {}
-		kw['amount'] = payment
-		affiliate = loan.affiliate
-		kw['affiliate'] = loan.affiliate
-		kw['account'] = model.Account.get(373)
-		model.Deduced(**kw)
-		model.OtherDeduced(**kw)
-		loan.pay(payment, "Planilla", day)
-		
-		flash('Se ha posteado el prestamo')
-		
-		return self.manual(loan.affiliate.id, year, month)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(loan=validators.Int(),amount=validators.Number()))
-	def prestamo(self, loan, amount):
-		
-		loan = model.Loan.get(int(loan))
-		kw = {}
-		kw['amount'] = payment
-		kw['affiliate'] = affiliate
-		kw['account'] = model.Account.get(373)
-		model.Deduced(**kw)
-		model.OtherDeduced(**kw)
-		loan.pay(payment, "Planilla", date.today())
-		
-		flash('Se ha posteado el prestamo')
-		
-		return self.manual(loan.affiliate.id, year, month)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(affiliate=validators.Int(),year=validators.Int(),
-							  month=validators.Int(),
-							  day=validators.DateTimeConverter(format='%Y-%m-%d')))
-	def postobligation(self, affiliate, month, year, day):
-		
-		affiliate = model.Affiliate.get(affiliate)
-		affiliate.pay_cuota(year, month)
-		
-		kw = {}
-		query = "obligation.year = %s and obligation.month = %s" % (year, month)
-		obligations = model.Obligation.select(query)
-		
-		if affiliate.payment == "INPREMA":
-			kw['amount'] = sum(obligation.inprema for obligation in obligations)
-		else:
-			kw['amount'] = sum(obligation.amount for obligation in obligations)
-		
-		kw['affiliate'] = affiliate
-		kw['account'] = model.Account.get(1)
-		affiliate.pay_cuota(year, month)
-		model.Deduced(**kw)
-		model.OtherDeduced(**kw)
-		
-		flash('Se ha posteado la obligacion')
-		
-		return self.manual(affiliate.id, year, month, day)
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.payment2')
-	@validate(validators=dict(payment=validators.String(),year=validators.Int(),
-							  month=validators.Int(), day=validators.DateTimeConverter(format='%Y-%m-%d')))
-	def listmanual(self, payment, month, year, day):
-		
-		affiliates = model.Affiliate.select(model.Affiliate.q.payment==str(payment), orderBy="lastName")
-		return dict(affiliates=affiliates, count=affiliates.count(), how=payment, year=year, month=month, day=day.date())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.debt')
-	def debt(self, payment):
-		
-		affiliates = model.Affiliate.select(model.Affiliate.q.payment==str(payment))
-		return dict(affiliates=affiliates, show=payment, count=affiliates.count())
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(payment=validators.String(),year=validators.String()))
-	def massChange(self, payment, change):
-		
-		affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment)
-		
-		for affiliate in affiliates:
-			
-			affiliate.payment = change
-		
-		flash("Se han cambiado %s afiliados" % affiliates.count())
-		raise redirect('/affiliate')
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.show')
-	@validate(validators=dict(year=validators.Int()))
-	def solvent(self, year):
-		
-		affiliates = model.Affiliate.select()
-		affiliates = [affiliate for affiliate in affiliates if affiliate.multisolvent(year)]
-		show = "Solventes al %s" % year
-		return dict(affiliates=affiliates, show=show, count=len(affiliates))
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.year')
-	def solventYear(self):
-		
-		years = {}
-		tables = model.CuotaTable.select()
-		
-		for table in tables:
-			
-			if table.all():
-				try:
-					years[table.year] += 1
-				except:
-					years[table.year] = 1
-		
-		return dict(years=years)
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.show')
-	def none(self):
-		
-		affiliates = model.Affiliate.select(model.Affiliate.q.joined==None)
-		show = "Sin Año de Afiliación"
-		return dict(affiliates=affiliates, show=show, count=affiliates.count())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.show')
-	def noCard(self):
-		
-		affiliates = model.Affiliate.select(model.Affiliate.q.cardID==None)
-		show = "Sin N&uacute;mero de identidad"
-		return dict(affiliates=affiliates, show=show, count=affiliates.count())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.jubilate')
-	@validate(validators=dict(affiliate=validators.Int()))
-	def jubilate(self, affiliate):
-		
-		affiliate = model.Affiliate.get(affiliate)
-		return dict(affiliate=affiliate)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(affiliate=validators.Int(),
-							  jubilated=validators.DateTimeConverter(format='%Y-%m-%d')))
-	def inprema(self, affiliate, jubilated):
-		
-		affiliate = model.Affiliate.get(affiliate)
-		affiliate.jubilated = jubilated
-		affiliate.payment = "INPREMA"
-		return self.default(affiliate.id)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(affiliate=validators.Int(),start=validators.Int(),end=validators.Int()))
-	def fill(self, affiliate, start, end):
-		
-		affiliate = model.Affiliate.get(affiliate)
-		
-		for n in range(start, end + 1):
-			[affiliate.pay_cuota(n, month) for month in range(1, 13)]
-		
-		return self.status(affiliate.id)
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.delayed')
-	@validate(validators=dict(payment=validators.String()))
-	def delayed(self, payment):
-		
-		affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment)
-		affiliates =[a for a in affiliates if a.get_delayed() != None]
-		
-		return dict(affiliates=affiliates,count=len(affiliates),payment=payment)
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.stateSchool')
-	@validate(validators=dict(state=validators.String()))
-	def stateSchool(self, state):
-		
-		affiliates = model.Affiliate.select(model.Affiliate.q.state==state)
-		
-		schools = dict()
-		for affiliate in affiliates:
-			if affiliate.school in schools.keys():
-				schools[affiliate.school].append(affiliate)
-			else:
-				schools[affiliate.school] = list()
-				schools[affiliate.school].append(affiliate)
-		
-		return dict(state=state, schools=schools)
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.solvencia')
-	@validate(validators=dict(mes=validators.String(),anio=validators.Int(),
-							  afiliado=validators.Int()))
-	def solvencia(self, afiliado, mes, anio):
-		
-		return dict(afiliado=model.Affiliate.get(afiliado),mes=mes,anio=anio, dia=date.today())
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.report')
+    @validate(validators=dict(affiliate=validators.Int(),end=validators.Int(), begin=validators.Int()))
+    def aList(self, begin, end):
+        
+        query = "affiliate.id <= %s and affiliate.id >= %s" % (begin, end)
+        affiliates = model.Affiliate.select(query)
+        return dict(affiliates=affiliates, count=affiliates.count())
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.affiliate')
+    def last(self):
+        
+        return dict(affiliate=model.Affiliate.select(orderBy="-id")[0])
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.deactivate')
+    @validate(validators=dict(affiliate=validators.Int()))
+    def deactivate(self, affiliate):
+        
+        return dict(affiliate=model.Affiliate.get(affiliate))
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int(), reason=validators.String()))
+    def deactivateTrue(self, affiliate, reason):
+        
+        affiliate = model.Affiliate.get(affiliate)
+        affiliate.active = False
+        affiliate.reason = reason
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Desactivado el afiliado %s" % affiliate.id
+        model.Logger(**log)
+        raise redirect('/affiliate/%s' % affiliate.id)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int()))
+    def activate(self, affiliate):
+        
+        affiliate = model.Affiliate.get(int(affiliate))
+        affiliate.active = True
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Activado el afiliado %s" % affiliate.id
+        model.Logger(**log)
+        raise redirect('/affiliate/%s' % affiliate.id)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.payment')
+    @validate(validators=dict(how=validators.String()))
+    def payment(self, how):
+        
+        affiliates = model.Affiliate.select(model.Affiliate.q.payment==how, orderBy="lastName")
+        return dict(affiliates=affiliates, count=affiliates.count(), how=how)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.age')
+    @validate(validators=dict(joined=validators.Int(),age=validators.Int()))
+    def age(self, joined, age):
+        
+        day = date.today().year - age
+        affiliates = model.Affiliate.select(model.Affiliate.birthday>=day)
+        affiliates = [affiliate for affiliate in affiliates if affiliate.joined.year <= joined]
+        
+        return dict(affiliates=affiliate)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.posting')
+    @validate(validators=dict(payment=validators.String(), year=validators.Int(),
+                              month=validators.Int()))
+    def posting(self, payment, year, month):
+        
+        query = "obligation.year = %s and obligation.month = %s" % (year, month)
+        obligation = model.Obligation.select(query)[0]
+        if payment == "INPREMA":
+            obligation = obligation.inprema
+        
+        affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment, orderBy="lastName")
+        return dict(affiliates=affiliates, count=affiliates.count(), how=payment, obligation=obligation)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.show')
+    def byDate(self, start, end):
+        
+        start = datetime.strptime(start, "%Y-%m-%d").date()
+        end = datetime.strptime(end, "%Y-%m-%d").date
+        query = "affiliate.joined >= '%s' and affiliate.joined <= '%s'" % (start, end)
+        affiliates = model.Affiliate.select(query)
+        return dict(affiliates=affiliates, start=start, end=end, show="Fecha de Afiliaci&oacute;n", count=affiliates.count())
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.show')
+    def byTown(self, town):
+        
+        town = str(town)
+        affiliates = model.Affiliate.select(model.Affiliate.q.town==town)
+        return dict(affiliates=affiliates, show="Municipio", count=affiliates.count())
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.show')
+    @validate(validators=dict(school=validators.String(),state=validators.String()))
+    def bySchool(self, school, state):
+        
+        query = "affiliate.school = '%s' or affiliate.school2 = '%s'" % (school, school)
+        affiliates = model.Affiliate.select(query)
+        affiliates = [a for a in affiliates if a.state == state]
+        return dict(affiliates=affiliates, show="Instituto", count=len(affiliates))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.show')
+    def disabled(self):
+        
+        affiliates = model.Affiliate.select(model.Affiliate.q.active==False)
+        return dict(affiliates=affiliates, show="Inhabilitados", count=affiliates.count())
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.show')
+    def all(self):
+        
+        affiliates = model.Affiliate.select()
+        return dict(affiliates=affiliates, show="Todos", count=affiliates.count())
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.manual')
+    @validate(validators=dict(affiliate=validators.Int(),year=validators.Int(),
+                              month=validators.Int(), day=validators.DateTimeConverter(format='%Y-%m-%d')))
+    def manual(self, affiliate, year, month, day):
+        
+        affiliate = model.Affiliate.get(int(affiliate))
+        query = "obligation.year = %s and obligation.month = %s" % (int(year), int(month))
+        obligations = model.Obligation.select(query)
+        obligation = 0
+        
+        if affiliate.payment == "INPREMA":
+            obligation = sum(obligation.inprema for obligation in obligations)
+            
+        else:
+            obligation = sum(obligation.amount for obligation in obligations)
+        
+        return dict(affiliate=affiliate, obligation=obligation, year=year, month=month, day=day)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int(),year=validators.Int(),
+                              month=validators.Int(),
+                              day=validators.DateTimeConverter(format='%Y-%m-%d')))
+    def complete(self, affiliate, year, month, day):
+        
+        affiliate = model.Affiliate.get(affiliate)
+        [e.manual() for e in affiliate.extras]
+        
+        for loan in affiliate.loans:
+            payment = loan.get_payment()
+            
+            kw = dict()
+            kw['amount'] = payment
+            kw['affiliate'] = affiliate
+            kw['account'] = model.Account.get(373)
+            model.Deduced(**kw)
+            model.OtherDeduced(**kw)
+            loan.pay(payment, "Planilla", day)
+        
+        affiliate.pay_cuota(year, month)
+        kw = {}
+        
+        query = "obligation.year = %s and obligation.month = %s" % (year, month)
+        obligations = model.Obligation.select(query)
+        if affiliate.payment == "INPREMA":
+            kw['amount'] = sum(obligation.inprema for obligation in obligations)
+        else:
+            kw['amount'] = sum(obligation.amount for obligation in obligations)
+        
+        kw['affiliate'] = affiliate
+        kw['account'] = model.Account.get(1)
+        model.Deduced(**kw)
+        model.OtherDeduced(**kw)
+        
+        return self.listmanual(affiliate.payment, year, month, day)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(extra=validators.Int(), year=validators.Int(), month=validators.Int()))
+    def postextra(self, extra, year, month):
+        
+        extra = model.Extra.get(int(extra))
+        affiliate = extra.affiliate
+        extra.manual()
+        
+        flash('Se ha posteado la deduccion')
+        
+        return self.manual(affiliate.id, year, month)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(loan=validators.Int(),amount=validators.Number(),
+                               year=validators.Int(),month=validators.Int(),
+                               day=validators.DateTimeConverter(format='%Y-%m-%d')))
+    def postloan(self, loan, amount, year, month, day):
+        
+        loan = model.Loan.get(loan)
+        payment = loan.get_payment()
+        kw = {}
+        kw['amount'] = payment
+        affiliate = loan.affiliate
+        kw['affiliate'] = loan.affiliate
+        kw['account'] = model.Account.get(373)
+        model.Deduced(**kw)
+        model.OtherDeduced(**kw)
+        loan.pay(payment, "Planilla", day)
+        
+        flash('Se ha posteado el prestamo')
+        
+        return self.manual(loan.affiliate.id, year, month)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(loan=validators.Int(),amount=validators.Number()))
+    def prestamo(self, loan, amount):
+        
+        loan = model.Loan.get(int(loan))
+        kw = {}
+        kw['amount'] = payment
+        kw['affiliate'] = affiliate
+        kw['account'] = model.Account.get(373)
+        model.Deduced(**kw)
+        model.OtherDeduced(**kw)
+        loan.pay(payment, "Planilla", date.today())
+        
+        flash('Se ha posteado el prestamo')
+        
+        return self.manual(loan.affiliate.id, year, month)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int(),year=validators.Int(),
+                              month=validators.Int(),
+                              day=validators.DateTimeConverter(format='%Y-%m-%d')))
+    def postobligation(self, affiliate, month, year, day):
+        
+        affiliate = model.Affiliate.get(affiliate)
+        affiliate.pay_cuota(year, month)
+        
+        kw = {}
+        query = "obligation.year = %s and obligation.month = %s" % (year, month)
+        obligations = model.Obligation.select(query)
+        
+        if affiliate.payment == "INPREMA":
+            kw['amount'] = sum(obligation.inprema for obligation in obligations)
+        else:
+            kw['amount'] = sum(obligation.amount for obligation in obligations)
+        
+        kw['affiliate'] = affiliate
+        kw['account'] = model.Account.get(1)
+        affiliate.pay_cuota(year, month)
+        model.Deduced(**kw)
+        model.OtherDeduced(**kw)
+        
+        flash('Se ha posteado la obligacion')
+        
+        return self.manual(affiliate.id, year, month, day)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.payment2')
+    @validate(validators=dict(payment=validators.String(),year=validators.Int(),
+                              month=validators.Int(), day=validators.DateTimeConverter(format='%Y-%m-%d')))
+    def listmanual(self, payment, month, year, day):
+        
+        affiliates = model.Affiliate.select(model.Affiliate.q.payment==str(payment), orderBy="lastName")
+        return dict(affiliates=affiliates, count=affiliates.count(), how=payment, year=year, month=month, day=day.date())
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.debt')
+    def debt(self, payment):
+        
+        affiliates = model.Affiliate.select(model.Affiliate.q.payment==str(payment))
+        return dict(affiliates=affiliates, show=payment, count=affiliates.count())
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(payment=validators.String(),year=validators.String()))
+    def massChange(self, payment, change):
+        
+        affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment)
+        
+        for affiliate in affiliates:
+            
+            affiliate.payment = change
+        
+        flash("Se han cambiado %s afiliados" % affiliates.count())
+        raise redirect('/affiliate')
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.show')
+    @validate(validators=dict(year=validators.Int()))
+    def solvent(self, year):
+        
+        affiliates = model.Affiliate.select()
+        affiliates = [affiliate for affiliate in affiliates if affiliate.multisolvent(year)]
+        show = "Solventes al %s" % year
+        return dict(affiliates=affiliates, show=show, count=len(affiliates))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.year')
+    def solventYear(self):
+        
+        years = dict()
+        tables = model.CuotaTable.select()
+        
+        for table in tables:
+            
+            if table.all():
+                try:
+                    years[table.year] += 1
+                except:
+                    years[table.year] = 1
+        
+        return dict(years=years)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.show')
+    def none(self):
+        
+        affiliates = model.Affiliate.select(model.Affiliate.q.joined==None)
+        show = "Sin Año de Afiliación"
+        return dict(affiliates=affiliates, show=show, count=affiliates.count())
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.show')
+    def noCard(self):
+        
+        affiliates = model.Affiliate.select(model.Affiliate.q.cardID==None)
+        show = "Sin N&uacute;mero de identidad"
+        return dict(affiliates=affiliates, show=show, count=affiliates.count())
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.jubilate')
+    @validate(validators=dict(affiliate=validators.Int()))
+    def jubilate(self, affiliate):
+        
+        affiliate = model.Affiliate.get(affiliate)
+        return dict(affiliate=affiliate)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int(),
+                              jubilated=validators.DateTimeConverter(format='%Y-%m-%d')))
+    def inprema(self, affiliate, jubilated):
+        
+        affiliate = model.Affiliate.get(affiliate)
+        affiliate.jubilated = jubilated
+        affiliate.payment = "INPREMA"
+        return self.default(affiliate.id)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int(),start=validators.Int(),end=validators.Int()))
+    def fill(self, affiliate, start, end):
+        
+        affiliate = model.Affiliate.get(affiliate)
+        
+        for n in range(start, end + 1):
+            [affiliate.pay_cuota(n, month) for month in range(1, 13)]
+        
+        return self.status(affiliate.id)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.delayed')
+    @validate(validators=dict(payment=validators.String()))
+    def delayed(self, payment):
+        
+        affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment)
+        affiliates =[a for a in affiliates if a.get_delayed() != None]
+        
+        return dict(affiliates=affiliates,count=len(affiliates),payment=payment)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.stateSchool')
+    @validate(validators=dict(state=validators.String()))
+    def stateSchool(self, state):
+        
+        affiliates = model.Affiliate.select(model.Affiliate.q.state==state)
+        
+        schools = dict()
+        for affiliate in affiliates:
+            if affiliate.school in schools.keys():
+                schools[affiliate.school].append(affiliate)
+            else:
+                schools[affiliate.school] = list()
+                schools[affiliate.school].append(affiliate)
+        
+        return dict(state=state, schools=schools)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.solvencia')
+    @validate(validators=dict(mes=validators.String(),anio=validators.Int(),
+                              afiliado=validators.Int()))
+    def solvencia(self, afiliado, mes, anio):
+        
+        return dict(afiliado=model.Affiliate.get(afiliado),mes=mes,anio=anio, dia=date.today())

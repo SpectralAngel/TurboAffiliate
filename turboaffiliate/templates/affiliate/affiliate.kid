@@ -9,6 +9,21 @@
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Afiliado ${affiliate.id}</title>
+        <script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
+		<script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
+		<script type="text/javascript">
+		<![CDATA[
+		$(document).ready(function(e)
+		{
+			$('input.date-picker').datepicker({
+												dateFormat: 'yy-mm-dd',
+												changeMonth: true,
+												changeYear: true,
+												yearRange: '1940:2010'
+											  });
+		});
+		]]>
+		</script>
 	</head>
 	<body>
 		<div id="breadcrum">
@@ -173,6 +188,52 @@
                 </tr>
             </tfoot>
         </table>
+        <table>
+            <caption>Solicitudes de Pr&eacute;stamo</caption>
+            <thead>
+                <tr>
+                    <th>Monto</th>
+                    <th>Periodo</th>
+                    <th>Recibido</th>
+                    <th>Entrega</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr py:for="solicitud in affiliate.solicitudes">
+                    <td>${locale.currency(solicitud.monto, True, True)}</td>
+                    <td>${solicitud.periodo}</td>
+                    <td>${solicitud.ingreso.strftime('%d de %B de %Y')}</td>
+                    <td>${solicitud.entrega.strftime('%d de %B de %Y')}</td>
+                </tr>
+            </tbody>
+        </table>
+        <form action="${tg.url('/solicitud/agregar')}">
+				<fieldset>
+					<legend>Agregar Solicitud</legend>
+					<ol>
+						<li>
+							<input name="affiliate" value="${affiliate.id}" type="hidden" />
+							<label>Monto</label>
+							<input name="monto" />
+						</li>
+                        <li>
+							<label>Periodo</label>
+							<input name="periodo" />
+						</li>
+                        <li>
+							<label>Entrega</label>
+							<input name="entrega" class="date-picker" />
+						</li>
+                        <li>
+							<label>Ingreso</label>
+							<input name="ingreso" class="date-picker" />
+						</li>
+						<li>
+							<input type="submit" value="Agregar" />
+						</li>
+					</ol>
+				</fieldset>
+			</form>
         <table>
             <caption>Historial de Pr&eacute;stamos</caption>
             <thead>

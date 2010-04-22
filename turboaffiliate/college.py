@@ -80,6 +80,7 @@ class Affiliate(SQLObject):
     deduced = MultipleJoin("Deduced", orderBy=['year', 'month'])
     delayed = MultipleJoin("Delayed")
     observaciones = MultipleJoin('Observacion')
+    solicitudes = MultipleJoin('Solicitud')
     
     def get_monthly(self):
         
@@ -1302,3 +1303,11 @@ class Observacion(SQLObject):
     affiliate = ForeignKey("Affiliate")
     texto = UnicodeCol()
     fecha = DateCol(default=datetime.now)
+
+class Solicitud(SQLObject):
+    
+    affiliate = ForeignKey("Affiliate")
+    ingreso = DateCol(default=datetime.now)
+    entrega = DateCol(default=datetime.now)
+    monto = CurrencyCol(default=0, notNone=True)
+    periodo = IntCol(default=12)
