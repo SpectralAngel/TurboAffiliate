@@ -50,3 +50,11 @@ class Solicitud(controllers.Controller):
         solicitud.destroySelf()
         
         raise redirect('/loan/%s' % affiliate.id)
+    
+    @expose(template='turboaffiliate.templates.solicitud.dia')
+    @validate(validators=dict(dia=validators.DateTimeConverter(format='%Y-%m-%d')))
+    def dia(self, dia):
+        
+        solicitudes = model.Solicitud.selectBy(entrega=dia)
+        
+        return dict(solicitudes=solicitudes, dia=dia)

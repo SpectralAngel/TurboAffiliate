@@ -20,3 +20,7 @@ a
 {
 	display: none;
 }
+a.show
+{
+    display: inline;
+}

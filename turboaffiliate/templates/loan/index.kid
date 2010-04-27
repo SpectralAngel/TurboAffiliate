@@ -37,6 +37,20 @@
 				</ul>
 			</fieldset>
 		</form>
+        <form action="${tg.url('/solicitud/dia')}">
+            <fieldset>
+                <legend>Solicitudes para una Fecha</legend>
+                <ol>
+                    <li>
+                        <label>D&iacute;a</label>
+                        <input name="dia" class="date-picker" />
+                    </li>
+                    <li>
+						<input type="submit" value="Mostrar" />
+					</li>
+                </ol>
+            </fieldset>
+        </form>
 		<form action="/payed">
 			<fieldset>
 				<legend>Ver Pr&eacute;stamo Pagado</legend>
