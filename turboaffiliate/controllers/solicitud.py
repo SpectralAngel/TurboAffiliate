@@ -41,3 +41,12 @@ class Solicitud(controllers.Controller):
         
         raise redirect('/affiliate/%s' % kw['affiliate'].id)
     
+    @expose()
+    @validate(validators=dict(solicitud=validators.Int()))
+    def eliminar(self, solicitud):
+        
+        solicitud = model.Solicitud.get(solicitud)
+        affiliate = solicitud.affiliate
+        solicitud.destroySelf()
+        
+        raise redirect('/loan/%s' % affiliate.id)

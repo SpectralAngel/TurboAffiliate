@@ -196,6 +196,8 @@
                     <th>Periodo</th>
                     <th>Recibido</th>
                     <th>Entrega</th>
+                    <th>Liquidar</th>
+                    <th>Eliminar</th>
                 </tr>
             </thead>
             <tbody>
@@ -204,6 +206,8 @@
                     <td>${solicitud.periodo}</td>
                     <td>${solicitud.ingreso.strftime('%d de %B de %Y')}</td>
                     <td>${solicitud.entrega.strftime('%d de %B de %Y')}</td>
+                    <td><a href="${tg.url('/solicitud/convertir/%s' % solicitud.id)}">Liquidar</a></td>
+                    <td><a href="${tg.url('/solicitud/eliminar/%s' % solicitud.id)}">Eliminar</a></td>
                 </tr>
             </tbody>
         </table>

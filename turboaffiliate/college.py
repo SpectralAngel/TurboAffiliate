@@ -28,6 +28,7 @@ from sqlobject import (SQLObject, UnicodeCol, StringCol, DateCol, CurrencyCol,
 from decimal import Decimal
 from datetime import datetime, date
 from turboaffiliate import num2stres
+import math
 
 hub = PackageHub("turboaffiliate")
 __connection__ = hub
@@ -85,7 +86,13 @@ class Affiliate(SQLObject):
     def get_monthly(self):
         
         extras = sum(e.amount for e in self.extras)
-        loans = sum(l.get_payment() for l in self.loans)
+        
+        loans = Decimal(0)
+        
+        for loan in self.loans:
+            
+            loans += loan.get_payment()
+            break
         
         return extras + loans + self.get_cuota()
     
@@ -1311,3 +1318,24 @@ class Solicitud(SQLObject):
     entrega = DateCol(default=datetime.now)
     monto = CurrencyCol(default=0, notNone=True)
     periodo = IntCol(default=12)
+    
+    def prestamo(self, user):
+        
+        tipo = Decimal(20) / 1200
+        numerado = str(1 - math.pow(tipo + 1, -self.periodo))
+        cuota = self.monto * Decimal(tipo / Decimal(numerado))
+        
+        kw = dict()
+        kw['aproval'] = user
+        kw['affiliate'] = self.affiliate
+        kw['capital'] = self.monto
+        kw['interest'] = 20
+        kw['payment'] = cuota
+        kw['months'] = self.periodo
+        kw['last'] = self.entrega
+        kw['startDate'] = self.entrega
+        kw['letters'] = num2stres.parse(self.monto).capitalize()
+        kw['number'] = 0
+        loan = Loan(**kw)
+        
+        return loan
