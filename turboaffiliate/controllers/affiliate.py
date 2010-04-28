@@ -27,6 +27,7 @@ from turboaffiliate import model, json
 from turboaffiliate.controllers import cuota, extra, billing, deduced, observacion
 from decimal import *
 from datetime import date, datetime
+from sqlobject.sqlbuilder import OR
 
 class Affiliate(controllers.Controller):
     
@@ -165,8 +166,7 @@ class Affiliate(controllers.Controller):
         if name == '':
             raise redirect('/affiliate')
         name = name.replace('*', '%')
-        query = "affiliate.first_name LIKE '%%%s%%' or affiliate.last_name LIKE '%%%s%%'" % (name, name)
-        affiliates = model.Affiliate.select(query)
+        affiliates = model.Affiliate.select(OR(model.Affiliate.q.firstName.contains(name),model.Affiliate.q.lastName.contains(name)))
         return dict(result=affiliates)
     
     @identity.require(identity.not_anonymous())
@@ -358,8 +358,7 @@ class Affiliate(controllers.Controller):
                               month=validators.Int()))
     def posting(self, payment, year, month):
         
-        query = "obligation.year = %s and obligation.month = %s" % (year, month)
-        obligation = model.Obligation.select(query)[0]
+        obligation = model.Obligation.selectBy(year=year, month=month).getOne()
         if payment == "INPREMA":
             obligation = obligation.inprema
         
@@ -368,10 +367,10 @@ class Affiliate(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.show')
+    @validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
+                              end=validators.DateTimeConverter(format='%Y-%m-%d')))
     def byDate(self, start, end):
         
-        start = datetime.strptime(start, "%Y-%m-%d").date()
-        end = datetime.strptime(end, "%Y-%m-%d").date
         query = "affiliate.joined >= '%s' and affiliate.joined <= '%s'" % (start, end)
         affiliates = model.Affiliate.select(query)
         return dict(affiliates=affiliates, start=start, end=end, show="Fecha de Afiliaci&oacute;n", count=affiliates.count())
@@ -415,8 +414,7 @@ class Affiliate(controllers.Controller):
     def manual(self, affiliate, year, month, day):
         
         affiliate = model.Affiliate.get(int(affiliate))
-        query = "obligation.year = %s and obligation.month = %s" % (int(year), int(month))
-        obligations = model.Obligation.select(query)
+        obligations = model.Obligation.selectBy(year=year,month=month)
         obligation = 0
         
         if affiliate.payment == "INPREMA":
@@ -449,7 +447,7 @@ class Affiliate(controllers.Controller):
             loan.pay(payment, "Planilla", day)
         
         affiliate.pay_cuota(year, month)
-        kw = {}
+        kw = dict()
         
         query = "obligation.year = %s and obligation.month = %s" % (year, month)
         obligations = model.Obligation.select(query)
@@ -487,7 +485,7 @@ class Affiliate(controllers.Controller):
         
         loan = model.Loan.get(loan)
         payment = loan.get_payment()
-        kw = {}
+        kw = dict()
         kw['amount'] = payment
         affiliate = loan.affiliate
         kw['affiliate'] = loan.affiliate
@@ -495,24 +493,6 @@ class Affiliate(controllers.Controller):
         model.Deduced(**kw)
         model.OtherDeduced(**kw)
         loan.pay(payment, "Planilla", day)
-        
-        flash('Se ha posteado el prestamo')
-        
-        return self.manual(loan.affiliate.id, year, month)
-    
-    @identity.require(identity.not_anonymous())
-    @expose()
-    @validate(validators=dict(loan=validators.Int(),amount=validators.Number()))
-    def prestamo(self, loan, amount):
-        
-        loan = model.Loan.get(int(loan))
-        kw = {}
-        kw['amount'] = payment
-        kw['affiliate'] = affiliate
-        kw['account'] = model.Account.get(373)
-        model.Deduced(**kw)
-        model.OtherDeduced(**kw)
-        loan.pay(payment, "Planilla", date.today())
         
         flash('Se ha posteado el prestamo')
         
@@ -528,7 +508,7 @@ class Affiliate(controllers.Controller):
         affiliate = model.Affiliate.get(affiliate)
         affiliate.pay_cuota(year, month)
         
-        kw = {}
+        kw = dict()
         query = "obligation.year = %s and obligation.month = %s" % (year, month)
         obligations = model.Obligation.select(query)
         
@@ -562,20 +542,6 @@ class Affiliate(controllers.Controller):
         
         affiliates = model.Affiliate.select(model.Affiliate.q.payment==str(payment))
         return dict(affiliates=affiliates, show=payment, count=affiliates.count())
-    
-    @identity.require(identity.not_anonymous())
-    @expose()
-    @validate(validators=dict(payment=validators.String(),year=validators.String()))
-    def massChange(self, payment, change):
-        
-        affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment)
-        
-        for affiliate in affiliates:
-            
-            affiliate.payment = change
-        
-        flash("Se han cambiado %s afiliados" % affiliates.count())
-        raise redirect('/affiliate')
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.show')

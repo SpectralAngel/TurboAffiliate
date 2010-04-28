@@ -39,6 +39,11 @@
                     <td><a class="show" href="${tg.url('/solicitud/eliminar/%s' % solicitud.id)}">Eliminar</a></td>
                 </tr>
             </tbody>
+            <tfoot>
+                <tr>
+                    <th></th>
+                </tr>
+            </tfoot>
         </table>
 	</body>
 </html>

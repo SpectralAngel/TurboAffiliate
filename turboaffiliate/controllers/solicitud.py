@@ -23,8 +23,7 @@
 from turbogears import controllers, flash, redirect, identity
 from turbogears import expose, validate, validators
 from turboaffiliate import model
-from decimal import *
-from datetime import date, datetime
+from decimal import Decimal
 
 class Solicitud(controllers.Controller):
     
@@ -38,6 +37,8 @@ class Solicitud(controllers.Controller):
         kw['affiliate'] = model.Affiliate.get(affiliate)
         kw['monto'] = Decimal(kw['monto'])
         model.Solicitud(**kw)
+        
+        flash('Agregada la solicitud')
         
         raise redirect('/affiliate/%s' % kw['affiliate'].id)
     
@@ -59,7 +60,7 @@ class Solicitud(controllers.Controller):
         affiliate = solicitud.affiliate
         solicitud.destroySelf()
         
-        raise redirect('/loan/%s' % affiliate.id)
+        raise redirect('/affiliate/%s' % affiliate.id)
     
     @expose(template='turboaffiliate.templates.solicitud.dia')
     @validate(validators=dict(dia=validators.DateTimeConverter(format='%Y-%m-%d')))
