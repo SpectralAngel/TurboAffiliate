@@ -1336,6 +1336,7 @@ class Solicitud(SQLObject):
         kw['startDate'] = self.entrega
         kw['letters'] = num2stres.parse(self.monto).capitalize()
         kw['number'] = 0
-        loan = Loan(**kw)
+        prestamo = Loan(**kw)
+        prestamo.start()
         
-        return loan
+        return prestamo

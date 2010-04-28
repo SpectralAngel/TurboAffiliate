@@ -43,6 +43,16 @@ class Solicitud(controllers.Controller):
     
     @expose()
     @validate(validators=dict(solicitud=validators.Int()))
+    def convertir(self, solicitud):
+        
+        solicitud = model.Solicitud.get(solicitud)
+        prestamo = solicitud.prestamo(identity.current.user)
+        solicitud.destroySelf()
+        
+        raise redirect('/loan/%s' % prestamo.id)
+    
+    @expose()
+    @validate(validators=dict(solicitud=validators.Int()))
     def eliminar(self, solicitud):
         
         solicitud = model.Solicitud.get(solicitud)
