@@ -22,11 +22,9 @@
 
 from turbogears import controllers, flash, redirect, identity
 from turbogears import expose, validate, validators, error_handler
-from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json
+from turboaffiliate import model
 from turboaffiliate.controllers import cuota, extra, billing, deduced, observacion
-from decimal import *
-from datetime import date, datetime
+from datetime import date
 from sqlobject.sqlbuilder import OR
 
 class Affiliate(controllers.Controller):
@@ -63,14 +61,14 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(cardID=validators.String()))
     def byCardID(self, cardID):
         
-        return dict(affiliates=model.Affiliate.select(model.Affiliate.q.cardID==cardID))
+        return dict(affiliates=model.Affiliate.selectBy(cardID=cardID))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.search')
     @validate(validators=dict(cobro=validators.String()))
     def cobro(self, cobro):
         
-        return dict(result=model.Affiliate.select(model.Affiliate.q.escalafon==cobro))
+        return dict(result=model.Affiliate.selectBy(escalafon=cobro))
     
     @error_handler(index)
     @identity.require(identity.not_anonymous())
@@ -85,7 +83,7 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(escalafon=validators.String()))
     def byEscalafon(self, escalafon):
         
-        return dict(affiliates=model.Affiliate.select(model.Affiliate.q.escalafon==escalafon))
+        return dict(affiliates=model.Affiliate.selectBy(escalafon=escalafon))
     
     @identity.require(identity.has_permission("afiliar"))
     @expose(template="turboaffiliate.templates.affiliate.add")
@@ -165,7 +163,6 @@ class Affiliate(controllers.Controller):
         
         if name == '':
             raise redirect('/affiliate')
-        name = name.replace('*', '%')
         affiliates = model.Affiliate.select(OR(model.Affiliate.q.firstName.contains(name),model.Affiliate.q.lastName.contains(name)))
         return dict(result=affiliates)
     
@@ -174,7 +171,7 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(cardID=validators.String()))
     def card(self, cardID):
         
-        affiliate = model.Affiliate.select(model.Affiliate.q.cardID==cardID)
+        affiliate = model.Affiliate.selectBy(cardID=cardID)
         
         if affiliate.count() == 0:
             flash(u'Número de identidad no encontrado')
@@ -244,7 +241,7 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(state=validators.String()))
     def department(self, state):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.state==state)
+        affiliates = model.Affiliate.selectBy(model.Affiliate.q.state==state)
         count = affiliates.count()
         return dict(affiliates=affiliates, state=state, count=count)
     

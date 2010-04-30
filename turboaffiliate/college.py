@@ -493,6 +493,7 @@ class Loan(SQLObject):
     months = IntCol()
     last = DateCol(default=datetime.now)
     number = IntCol(default=0)
+    offset = IntCol(default=0)
     
     startDate = DateCol(notNone=True, default=datetime.now)
     aproved = BoolCol(default=False)
@@ -671,7 +672,7 @@ class Loan(SQLObject):
             7:'Julio', 8:'Agosto', 9:'Septiembre', 
             10:'Octubre', 11:'Noviembre', 12:'Diciembre'
                 }
-        start = self.startDate.month
+        start = self.startDate.month + self.offset
         if self.startDate.day == 24 and self.startDate.month == 8:
             start += 1
         year = self.startDate.year

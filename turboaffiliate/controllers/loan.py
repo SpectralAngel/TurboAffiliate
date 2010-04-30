@@ -21,11 +21,10 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 from turbogears import controllers, flash, redirect, identity, url
-from turbogears import expose, validate, validators, error_handler
-from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json, num2stres
-from datetime import date, datetime
-from decimal import *
+from turbogears import expose, validate, validators
+from turboaffiliate import model, num2stres
+from datetime import date
+from decimal import Decimal
 import copy
 
 class Deduction(controllers.Controller):
@@ -422,7 +421,7 @@ class Loan(controllers.Controller):
 	@validate(validators=dict(day=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def day(self, day):
 		
-		loans = model.Loan.select(model.Loan.q.startDate==day)
+		loans = model.Loan.selectBy(startDate=day)
 		amount = sum(l.capital for l in loans)
 		return dict(amount=amount, loans=loans,day=day)
 	
@@ -546,7 +545,7 @@ class Loan(controllers.Controller):
 	@validate(validators=dict(payment=validators.String()))
 	def bypayment(self, payment):
 		
-		affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment)
+		affiliates = model.Affiliate.selectBy(payment=payment)
 		
 		loans = list()
 		for a in affiliates:
@@ -618,7 +617,7 @@ class Loan(controllers.Controller):
 	@validate(validators=dict(day=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def byCapital(self, day):
 		
-		pays = model.Pay.select(model.Pay.q.day==day)
+		pays = model.Pay.selectBy(day=day)
 		
 		capital = sum(pay.capital for pay in pays)
 		interest = sum(pay.interest for pay in pays)
