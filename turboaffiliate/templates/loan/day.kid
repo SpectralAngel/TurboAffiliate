@@ -10,36 +10,42 @@
 		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print"/>
 	</head>
 	<body>
-		<h1 py:content="'Prestamos Otorgados el dia ', day.strftime('%d de %B de %Y')" />
-		<div py:for="loan in loans">
-		<h3 py:content="'Pr&eacute;stamo N&uacute;mero ', loan.id" />
-			<ul>
-				<li>
-					<strong>Prestatario:</strong>
-					<span py:content="loan.affiliate.id" />
-					<span py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
-				</li>
-				<li>
-					<strong>Monto Original:</strong>
-					<span py:content="locale.currency(loan.capital, True, True)" />
-				</li>
-				<li>
-					<strong>Monto Neto:</strong>
-					<span py:content="locale.currency(loan.net(), True, True)" />
-				</li>
-				<li>
-					<strong>Deducciones:</strong>
-					<ul>
-						<li py:for="deduction in loan.deductions">
-							<strong py:content="deduction.account.name" />
-							<span py:content="locale.currency(deduction.amount, True, True)" />
-						</li>
-					</ul>
-				</li>
-			</ul>
-		</div>
-		<strong>Monto Total:</strong>
-		<span py:content="locale.currency(amount, True, True)" />
+	    <h1>Estad&iacute;sticas de Pr&eacute;stamos</h1>
+        <table>
+            <caption>Pr&eacute;stamos Otorgados el d&iacute;a ${day.strftime('%d de %B de %Y')}</caption>
+            <thead>
+                <tr>
+                    <th>Carnet</th>
+                    <th>Nombre</th>
+                    <th>Cotizaci&oacute;n</th>
+                    <th>Periodo</th>
+                    <th>Capital</th>
+                    <th>Liquidado</th>
+                    <th>Cuota</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <tr py:for="loan in loans">
+                    <td><a href="${tg.url('/affiliate/%s' % loan.affiliate.id)}">${loan.affiliate.id}</a></td>
+                    <td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
+                    <td>${loan.affiliate.payment}</td>
+                    <td>${loan.months} meses</td>
+                    <td>${locale.currency(loan.capital, True, True)}</td>
+                    <td>${locale.currency(loan.net(), True, True)}</td>
+                    <td>${locale.currency(loan.payment, True, True)}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="3">Totales</th>
+                    <th>${loans.count()} Pr&eacute;stamos</th>
+                    <th>${locale.currency(sum(l.capital for l in loans), True, True)}</th>
+                    <th>${locale.currency(sum(l.net() for l in loans), True, True)}</th>
+                    <th>${locale.currency(sum(l.payment for l in loans), True, True)}</th>
+                </tr>
+            </tfoot>
+        </table>
 	</body>
 </html>
 

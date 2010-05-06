@@ -11,26 +11,30 @@
 		<title>TurboAffiliate &bull; Pr&eacute;stamos</title>
 	</head>
 	<body>
-		<h1>Pr&eacute;stamos Activos Otorgados</h1>
+		<h1>Reporte de Pr&eacute;stamos Otorgados entre ${start.strftime('%d de %B de %Y')}
+        y ${end.strftime('%d de %B de %Y')}</h1>
 		<table>
 			<thead>
 				<tr>
 					<th>Mes</th>
 					<th>Cantidad</th>
-					<th>Monto</th>
+					<th>Capital</th>
+                    <th>Neto</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr py:for="month in months">
-					<td py:content="month['month']" />
-					<td py:content="month['number']" />
-					<td py:content="locale.currency(month['amount'])" />
+					<td>${month['month']}</td>
+					<td>${month['number']}</td>
+					<td>${locale.currency(month['amount'], True, True)}</td>
+                    <td>${locale.currency(month['net'], True, True)}</td>
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
 					<th colspan="2">Total:</th>
-					<th py:content="locale.currency(total)" />
+					<th>${locale.currency(total, True, True)}</th>
+                    <th>${locale.currency(total, True, True)}</th>
 				</tr>
 			</tfoot>
 		</table>

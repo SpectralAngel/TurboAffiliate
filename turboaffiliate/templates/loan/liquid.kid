@@ -27,8 +27,8 @@
 					<td py:content="loan.id" />
 					<td py:content="loan.affiliate.id" />
 					<td py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
-					<td py:content="locale.currency(loan.capital)" />
-					<td py:content="locale.currency(loan.net())" />
+					<td py:content="locale.currency(loan.capital, True, True)" />
+					<td py:content="locale.currency(loan.net(), True, True)" />
 					<td py:content="loan.startDate" />
 				</tr>
 			</tbody>
@@ -37,8 +37,8 @@
 					<td>Cantidad</td>
 					<td py:content="count" />
 					<td></td>
-					<td py:content="locale.currency(capital)" />
-					<td py:content="locale.currency(debt)" />
+					<td py:content="locale.currency(capital, True, True)" />
+					<td py:content="locale.currency(debt, True, True)" />
 					<td></td>
 				</tr>
 			</tfoot>

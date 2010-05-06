@@ -1341,3 +1341,90 @@ class Solicitud(SQLObject):
         prestamo.start()
         
         return prestamo
+
+class Reintegro(SQLObject):
+    
+    """Cobros mal efectuados a la Secretaria y que deben volverse a efectuar
+    
+    Funcionan de manera inversa la estado de cuenta de aportaciones, cualquier
+    marca de verdadero significa que la cuota de dicho mes debe cobrarse de nuevo
+    """
+    
+    affiliate = ForeignKey("Affiliate")
+    anio = IntCol()
+    mes1 = BoolCol(default=False)
+    mes2 = BoolCol(default=False)
+    mes3 = BoolCol(default=False)
+    mes4 = BoolCol(default=False)
+    mes5 = BoolCol(default=False)
+    mes6 = BoolCol(default=False)
+    mes7 = BoolCol(default=False)
+    mes8 = BoolCol(default=False)
+    mes9 = BoolCol(default=False)
+    mes10 = BoolCol(default=False)
+    mes11 = BoolCol(default=False)
+    mes12 = BoolCol(default=False)
+    
+    def obtener(self):
+        
+        """Obtiene el primer mes en el que no se haya efectuado un pago en las
+        aportaciones.
+        """
+        
+        inicio, fin = self.periodo()
+        for n in range(inicio, fin):
+            if getattr(self, 'mes%s' % n):
+                return n
+        return 0
+    
+    def pagar_mes(self, mes):
+        
+        """Permite marcar como pagado un mes de Reintegros."""
+        
+        setattr(self, 'mes%s' % mes, False)
+    
+    def quitar_mes(self, mes):
+        
+        """Permite marcar como debido un mes de Reintegros."""
+        
+        setattr(self, 'mes%s' % mes, True)
+    
+    def periodo(self):
+        
+        """Calcula el periodo de trabajo de este afiliado durante el año de
+        Reintegros.
+        """
+        
+        inicio, fin, hoy = (1, 13, date.today())
+        if self.anio == hoy.year:
+            fin = hoy.month
+        
+        if self.afiliado.afiliacion == None:
+            return inicio, fin
+        
+        if self.anio.anio == self.afiliado.afiliacion.year:
+            inicio = self.afiliado.afiliacion.month
+        
+        return inicio, fin
+    
+    def todos(self):
+        
+        """Verifica si el afiliado ha realizado todos los pagos del año"""
+        
+        inicio, fin = self.periodo()
+        for n in range(inicio, fin):
+            if getattr(self, 'mes%s' % n):
+                return False
+        
+        return True
+    
+    def vacio(self):
+        
+        """Responde si el afiliado no ha realizado pagos durante el año"""
+        
+        inicio, fin = self.periodo()
+        for n in range(inicio, fin):
+            if not getattr(self, 'mes%s' % n):
+                return False
+        
+        return True

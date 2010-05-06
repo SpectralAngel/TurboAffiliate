@@ -4,7 +4,7 @@
 	import locale
 	locale.setlocale(locale.LC_ALL, "")
 ?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#" py:extends="'../master.kid'">
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Afiliados</title>
@@ -23,19 +23,19 @@
 			</thead>
 			<tbody>
 				<tr py:for="pay in pays">
-					<td py:content="pay.loan.id" />
-					<td py:content="pay.loan.affiliate.id" />
-					<td py:content="pay.loan.affiliate.firstName, ' ', pay.loan.affiliate.lastName" />
-					<td py:content="locale.currency(pay.capital" />
-					<td py:content="locale.currency(pay.interest)" />
+					<td>${pay.loan.id}</td>
+					<td>${pay.loan.affiliate.id}</td>
+					<td>${pay.loan.affiliate.firstName} ${pay.loan.affiliate.lastName}</td>
+					<td>${locale.currency(pay.capital, True, True)}</td>
+					<td>${locale.currency(pay.interest, True, True)}</td>
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="2">Total</td>
-					<td py:content="locale.currency(capital + interest)" />
-					<td py:content="locale.currency(capital)" />
-					<td py:content="locale.currency(interest)" />
+					<th colspan="2">Total</td>
+					<th>${locale.currency(capital + interest, True, True)}</th>
+					<th>${locale.currency(capital, True, True)}</th>
+					<th>${locale.currency(interest, True, True)}</th>
 				</tr>
 			</tfoot>
 		</table>

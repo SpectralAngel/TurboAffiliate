@@ -12,9 +12,8 @@
 	</head>
 	<body>
 		<h1>Reporte de Deducciones de Pr&eacute;stamos</h1>
-		<strong py:content="'del ', start.strftime('%d de %B de %Y')" />
-		<strong py:content="'Al ', end.strftime('%d de %B de %Y')" />
 		<table width="100%">
+		    <caption>Del ${start.strftime('%d de %B de %Y')} al ${end.strftime('%d de %B de %Y')}</caption>
 			<thead>
 				<tr>
 					<th>Pr&eacute;stamo</th>
@@ -29,14 +28,14 @@
 			</thead>
 			<tbody>
 				<tr py:for="loan in loans">
-					<td py:content="loan.id" />
-					<td><a href="${tg.url('/affiliate/%s' % loan.afiliado.id)}" py:content="loan.afiliado.firstName, ' ', loan.afiliado.lastName" /></td>
-					<td py:content="locale.currency(loan.monto, True, True)" />
-					<td py:content="locale.currency(loan.intereses, True, True)" />
-					<td py:content="locale.currency(loan.papeleo, True, True)" />
-					<td py:content="locale.currency(loan.aportaciones, True, True)" />
-					<td py:content="locale.currency(loan.retencion, True, True)" />
-					<td py:content="locale.currency(loan.neto, True, True)" />
+					<td>${loan.id}</td>
+					<td><a href="${tg.url('/affiliate/%s' % loan.afiliado.id)}"> ${loan.afiliado.firstName} ${loan.afiliado.lastName}</a></td>
+					<td>${locale.currency(loan.monto, True, True)}</td>
+					<td>${locale.currency(loan.intereses, True, True)}</td>
+					<td>${locale.currency(loan.papeleo, True, True)}</td>
+					<td>${locale.currency(loan.aportaciones, True, True)</td>
+					<td>${locale.currency(loan.retencion, True, True)}</td>
+					<td>${locale.currency(loan.neto, True, True)}</td>
 				</tr>
 			</tbody>
 			<tfoot>

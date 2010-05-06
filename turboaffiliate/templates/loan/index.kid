@@ -163,7 +163,7 @@
 				<ul>
 					<li>
 						<label>Carnet:</label>
-						<input name="cardID" />
+						<input name="affiliate" />
 					</li>
 					<li>
 						<input type="submit" value="Buscar" />

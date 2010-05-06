@@ -25,7 +25,6 @@ from turbogears import expose, validate, validators
 from turboaffiliate import model, num2stres
 from datetime import date
 from decimal import Decimal
-import copy
 
 class Deduction(controllers.Controller):
 	
@@ -63,10 +62,10 @@ class Deduction(controllers.Controller):
 			log['action'] = "Deduccion de %s al prestamo %s" % (kw['amount'], kw['loan'].id)
 			model.Logger(**log)
 			
-			deduction = model.Deduction(**kw)
+			model.Deduction(**kw)
 		
 		except model.SQLObjectNotFound:
-			flash('El pr￩stamo no se ha encontrado')
+			flash('El préstamo no se ha encontrado')
 			raise redirect('/loan')
 		
 		except ValueError:
@@ -283,7 +282,7 @@ class Loan(controllers.Controller):
 
 		affiliate = model.Affiliate.get(affiliate)
 		#if (date.today() - affiliate.joined).days < 365:
-		#	flash(u"El afiliado a￺n no tiene un a￱o de afiliaci￳n")
+		#	flash(u"El afiliado a￺n no tiene un año de afiliación")
 		#	raise redirect('/affiliate/%s' % affiliate.id)
 		#if len(affiliate.loans) > 0:
 		#	
@@ -291,7 +290,7 @@ class Loan(controllers.Controller):
 		#		
 		#		if loan.percent() < 59:
 		#			
-		#			flash("El Afiliado no ha pagado el 60% del pr￩stamo anterior")
+		#			flash("El Afiliado no ha pagado el 60% del préstamo anterior")
 		#			raise redirect('/affiliate/%s' % affiliate.id)
 			
 		return dict(affiliate=affiliate)
@@ -533,12 +532,14 @@ class Loan(controllers.Controller):
 			month = dict()
 			month['month'] = n
 			month['amount'] = sum(l.capital for l in loans if l.startDate.month == n)
-			month['number'] = len(l for l in loans if l.startDate.month == n)
+			month['net'] = sum(l.net() for l in loans if l.startDate.month == n)
+			month['number'] = len(list(l for l in loans if l.startDate.month == n))
 			li.append(month)
 		
 		total = sum(m['amount'] for m in li)
+		net = sum(m['net'] for m in li)
 		
-		return dict(months=li, total=total)
+		return dict(months=li, total=total, start=start, end=end, net=net)
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.list')
