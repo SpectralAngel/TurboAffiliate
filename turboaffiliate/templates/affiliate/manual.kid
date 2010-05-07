@@ -11,7 +11,7 @@
 		<title>TurboAffiliate &bull; Afiliados</title>
 	</head>
 	<body>
-		 <h2 py:content="affiliate.id, ' ', affiliate.firstName, ' ', affiliate.lastName" />
+		 <h2>${affiliate.id} ${affiliate.firstName} ${affiliate.lastName}</h2>
 		 <p><strong>Monto Total: </strong><span py:content="locale.currency(obligation + affiliate.get_monthly(), True, True)" />
 		 <form action="${tg.url('/affiliate/complete')}" method="post">
 				<input name="year" value="${year}" type="hidden" />

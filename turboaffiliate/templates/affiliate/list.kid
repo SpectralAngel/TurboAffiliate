@@ -28,13 +28,17 @@
 				<tr py:for="affiliate in affiliates">
 				<!-- filtro para inprema <tr py:for="affiliate in affiliates" py:if="affiliate.total(month, year) != 250"> -->
 					<td><a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">${affiliate.id}</a></td>
-					<td py:content="affiliate.escalafon" />
-					<td py:content="affiliate.lastName, ' ', affiliate.firstName" />
-					<td py:content="locale.currency(affiliate.total(month, year), True, True)" />
+					<td>${affiliate.escalafon}</td>
+					<td>${affiliate.lastName} ${affiliate.firstName}</td>
+					<td>${locale.currency(affiliate.total(month, year), True, True)}</td>
 					<td class="noprint"><a href="${tg.url('/affiliate/posteo/?how=%s&amp;year=%s&amp;month=%s&amp;code=%s' % (self.payment, year, month, affiliate.id))}">X</a></td>
 				</tr>
 			</tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="5">Total de Afiliados: ${count}</th>
+                </tr>
+            </tfoot>
 		</table>
-		<strong>Total de Afiliados: </strong><span py:content="count"/>
 	</body>
 </html>

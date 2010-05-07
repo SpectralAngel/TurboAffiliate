@@ -35,8 +35,12 @@
 					<td py:content="affiliate.firstName" />
 				</tr>
 			</tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="3">Total de Afiliados: ${count}</th>
+                </tr>
+            </tfoot>
 		</table>
-		<strong>Total de Afiliados: </strong><span py:content="count"/>
 	</body>
 </html>
 

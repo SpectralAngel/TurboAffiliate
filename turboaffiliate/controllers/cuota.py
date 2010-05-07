@@ -38,7 +38,8 @@ class Cuota(controllers.Controller):
 		except model.SQLObjectNotFound:
 				flash('No existe el Afiliado con Identidad %s' % cardID)
 				redirect('/affiliate')
-
+				
+	# TODO: Check what this code does, document it and clean it
 	@identity.require(identity.not_anonymous())
 	@expose()
 	def save(self, **kw):

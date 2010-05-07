@@ -11,27 +11,34 @@
 		<title>TurboAffiliate &bull; Pr&eacute;stamos</title>
 	</head>
 	<body>
-		<h1 py:content="'Liquidaciones de Pr&eacute;stamos'" />
+		<h1>Liquidaciones de Pr&eacute;stamos</h1>
 		<table>
-			<tr>
-				<th>Prestamo</th>
-				<th>Afiliado</th>
-				<th>Afiliacion</th>
-				<th>Capital</th>
-				<th>Liquidado</th>
-			</tr>
-			<tr py:for="loan in loans">
-				<td py:content="loan.id" />
-				<td py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
-				<td py:content="loan.affiliate.id" />
-				<td py:content="loan.capital" />
-				<td py:content="locale.currency(loan.net(), True, True)" />
-			</tr>
+		    <thead>
+    			<tr>
+    				<th>Prestamo</th>
+    				<th>Afiliado</th>
+    				<th>Afiliacion</th>
+    				<th>Capital</th>
+    				<th>Liquidado</th>
+    			</tr>
+            </thead>
+            <tbody>
+    			<tr py:for="loan in loans">
+    				<td>${loan.id}</td>
+    				<td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
+    				<td>${loan.affiliate.id}</td>
+    				<td>${loan.capital}</td>
+    				<td>${locale.currency(loan.net(), True, True)}</td>
+    			</tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Monto Total:</th>
+                    <th>${locale.currency(amount, True, True)}</th>
+                    <th colspan="2">Otorgados:</th>
+                    <th>${count}</th>
+                </tr>
+            </tfoot>
 		</table>
-		<strong>Monto Total:</strong>
-		<span py:content="locale.currency(amount, True, True)" />
-		<br />
-		<strong>Prestamos Otorgados:</strong>
-		<span py:content="count" />
 	</body>
 </html>

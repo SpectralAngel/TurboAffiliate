@@ -41,8 +41,12 @@
 					<td><a href="${tg.url('/affiliate/manual?affiliate=%s&amp;year=%s&amp;month=%s&amp;day=%s' % (affiliate.id, year, month, day))}">X</a></td>
 				</tr>
 			</tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="4">Total de Afiliados: ${count}</th>
+                </tr>
+            </tfoot>
 		</table>
-		<strong>Total de Afiliados: </strong><span py:content="count"/>
 	</body>
 </html>
 

@@ -22,13 +22,13 @@
 			</thead>
 			<tbody>
 				<tr py:for="account in report.otherAccounts">
-					<td py:content="account.account.code"/>
-					<td py:content="account.account.name" />
-					<td py:content="account.quantity" />
-					<td py:content="locale.currency(account.amount, True, True)" />
+					<td>${account.account.code}</td>
+					<td>${account.account.name}</td>
+					<td>${account.quantity}</td>
+					<td>${locale.currency(account.amount, True, True)}</td>
 				</tr>
 			</tbody>
 		</table>
-		<h2>Total de Ingresos: <span py:replace="locale.currency(report.total(), True, True)" /></h2>
+		<h2>Total de Ingresos: ${locale.currency(report.total(), True, True)}</h2>
 	</body>
 </html>

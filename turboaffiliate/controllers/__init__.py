@@ -4,7 +4,7 @@
 # __init__.py
 # This file is part of Turboaffiliate
 #
-# Copyright (C) 2009 - Carlos Flores <cafg10@gmail.com>
+# Copyright (C) 2009 - 2010 Carlos Flores <cafg10@gmail.com>
 #
 # Turboaffiliate is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

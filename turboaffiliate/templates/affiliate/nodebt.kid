@@ -19,7 +19,7 @@
 	</head>
 	<body>
 		<h3>COPEMH</h3>
-		<h1>Afiliados por <span py:content="show" /></h1>
+		<h1>Afiliados por ${show}</h1>
 		<table width="100%">
 			<thead>
 				<tr>
@@ -31,11 +31,15 @@
 			<tbody>
 				<tr py:for="affiliate in affiliates">
 					<td><a href="${tg.url('/affiliate/%s' % affiliate.id)}">${affiliate.id}</a></td>
-					<td py:content="affiliate.lastName" />
-					<td py:content="affiliate.firstName" />
+					<td>${affiliate.lastName}</td>
+					<td>${affiliate.firstName}</td>
 				</tr>
 			</tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="3">Total de Afiliados: ${count}</th>
+                </tr>
+            </tfoot>
 		</table>
-		<strong>Total de Afiliados: </strong><span py:content="count"/>
 	</body>
 </html>

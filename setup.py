@@ -2,6 +2,7 @@
 
 from setuptools import setup, find_packages
 from turbogears.finddata import find_package_data
+from turboaffiliate import release
 
 import os
 execfile(os.path.join("turboaffiliate", "release.py"))
@@ -16,7 +17,7 @@ if os.path.isdir('locales'):
 
 setup(
     name="TurboAffiliate",
-    version=version,
+    version=release.version,
     # uncomment the following lines if you fill them out in release.py
     #description=description,
     #long_descriptopn=long_description,
@@ -27,7 +28,7 @@ setup(
     #license=license,
 
     install_requires=[
-        "TurboGears >= 1.1rc1",
+        "TurboGears >= 1.1",
         "WebTest",
         "SQLObject>=0.10.1"
     ],
@@ -54,14 +55,13 @@ setup(
         # 'turbogears.app',
     ],
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
-        'Framework :: TurboGears',
         # if this is an application that you'll distribute through
         # the Cheeseshop, uncomment the next line
-        # 'Framework :: TurboGears :: Applications',
+        'Framework :: TurboGears :: Applications',
 
         # if this is a package that includes widgets that you'll distribute
         # through the Cheeseshop, uncomment the next line
