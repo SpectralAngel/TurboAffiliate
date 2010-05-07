@@ -21,11 +21,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 from turbogears import controllers, flash, redirect, identity
-from turbogears import expose, validate, validators, error_handler
-from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json
-from datetime import date
-from decimal import *
+from turbogears import expose, validate, validators
+from turboaffiliate import model
 
 class Account(controllers.Controller):
 	
@@ -71,12 +68,6 @@ class Account(controllers.Controller):
 		
 		flash("La cuenta ha sido grabada")
 		raise redirect('/account/%s' % account.code)
-	
-	@identity.require(identity.not_anonymous())
-	#@expose(template="turboaffiliate.templates.account.resume")
-	def resume(self):
-		accounts = model.Account.select()
-		companies = model.Account.select()
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.account.retrasada")

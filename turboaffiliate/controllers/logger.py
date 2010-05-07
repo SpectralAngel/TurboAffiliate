@@ -20,12 +20,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, flash, redirect, identity, url
-from turbogears import expose, validate, validators, error_handler
-from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json, num2stres
-from datetime import date, datetime
-from decimal import *
+from turbogears import controllers, identity
+from turbogears import expose, validate, validators
+from turboaffiliate import model
 
 class Logger(controllers.Controller):
 	

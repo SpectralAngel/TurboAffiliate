@@ -60,51 +60,6 @@ class Flyer(controllers.Controller):
         return dict(total=total, month=month, year=year, report=report)
     
     @identity.require(identity.not_anonymous())
-    @expose()
-    @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
-    def export(self, year, month):
-    
-        model.Flyer.clearTable()
-        
-        affiliates = model.Affiliate.select(model.Affiliate.q.payment=="Escalafon")
-        obligations = model.Obligation.selectBy(month=month, year=year)
-        oblig = sum(o.amount for o in obligations)
-        
-        for affiliate in affiliates:
-            if not affiliate.active:
-                continue
-            kw = dict()
-            kw['amount'] = 0
-            kw['affiliate'] = affiliate
-            for e in affiliate.extras:
-                kw['amount'] += e.amount
-            if len(affiliate.refinancedLoans) > 0:
-                for loan in affiliate.refinancedLoans:
-                    kw['amount'] += loan.get_payment()
-            else:
-                for loan in affiliate.loans:
-                    kw['amount'] += loan.get_payment()
-            kw['amount'] += oblig
-            model.Flyer(**kw)
-        
-        return self.download(year, month)
-    
-    @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.escalafon.download")
-    @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
-    def download(self, year, month):
-        filename = "./turboaffiliate/static/%(year)s%(month)02dCOPEMH.txt" % {'year':year, 'month':month}
-        f = open(filename, 'w')
-        flyers = model.Flyer.select()
-        start = "%(year)s%(month)02d" % {'year':year, 'month':month}
-        for flyer in flyers:
-            if str(flyer) == "":
-                continue
-            l = start + str(flyer) + "\n"
-            f.write(l)
-        return dict(filename="static/%(year)s%(month)02dCOPEMH.txt" % {'year':year, 'month':month})
-    
-    @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.escalafon.report")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12),
                               payment=validators.String()))
@@ -138,7 +93,6 @@ class Flyer(controllers.Controller):
         for account in accounts:
             if kw[account]['amount'] == 0:
                 del kw[account]
-        
         
         return dict(deductions=kw, count=affiliates.count(), obligation=obligation, legend=payment, loans=loand, total=total)
     
@@ -183,8 +137,7 @@ class Flyer(controllers.Controller):
                               payment=validators.String()))
     def showReport(self, year, month, payment):
         
-        report = model.OtherReport.select(model.OtherReport.q.payment==payment)
-        report = [r for r in report if r.year == year and r.month == month][0]
+        report = model.OtherReport.selectBy(payment=payment).getOne()
         return dict(month=month, year=year, report=report, payment=payment)
     
     @identity.require(identity.not_anonymous())
@@ -192,7 +145,7 @@ class Flyer(controllers.Controller):
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
     def filiales(self, year, month):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.payment=="Escalafon")
+        affiliates = model.Affiliate.selectBy(payment="Escalafon")
         
         for affiliate in affiliates:
             if affiliate.get_month(year, month):
@@ -212,7 +165,7 @@ class Flyer(controllers.Controller):
     @expose(template="turboaffiliate.templates.escalafon.filiales")
     def filialesFive(self):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.payment=="Escalafon")
+        affiliates = model.Affiliate.selectBy(payment="Escalafon")
         
         for affiliate in affiliates:
             try:
@@ -237,9 +190,8 @@ class Flyer(controllers.Controller):
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
     def aportaciones(self, year, month):
         
-        query = "deduced.year = %s and deduced.month = %s and deduced.account_id = 1" % (int(year), int(month))
-        
-        deduced = model.Deduced.select(query)
+        account = model.Account.get(1)
+        deduced = model.Deduced.selectBy(year=year,month=month,account=account)
         
         return dict(deduced=deduced, year=year, month=month)
     
@@ -247,7 +199,7 @@ class Flyer(controllers.Controller):
     @expose(template="turboaffiliate.templates.escalafon.filiales")
     def filialesAll(self):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.payment=="Escalafon")
+        affiliates = model.Affiliate.selectBy(payment="Escalafon")
         
         for affiliate in affiliates:
             try:
@@ -340,7 +292,7 @@ class Flyer(controllers.Controller):
     @validate(validators=dict(year=validators.Int(), payment=validators.String()))
     def empty(self, year, payment):
         
-        tables = model.CuotaTable.select(model.CuotaTable.q.year==year)
+        tables = model.CuotaTable.selectBy(year=year)
         
         affiliates = list()
         for table in tables:
@@ -356,7 +308,7 @@ class Flyer(controllers.Controller):
     @validate(validators=dict(state=validators.String()))
     def filialesFiveListing(self, state):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.state==state)
+        affiliates = model.Affiliate.selectBy(state=state)
         
         schools = dict()
         for affiliate in affiliates:
@@ -379,7 +331,7 @@ class Flyer(controllers.Controller):
     @validate(validators=dict(state=validators.String()))
     def filialesFourListing(self, state):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.state==state)
+        affiliates = model.Affiliate.selectBy(state=state)
         
         schools = dict()
         for affiliate in affiliates:
@@ -401,10 +353,10 @@ class Flyer(controllers.Controller):
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
     def aportaron(self, year, month):
         
-        cuotas = model.CuotaTable.selectBy(month=month, year=year)
+        cuotas = model.CuotaTable.selectBy(year=year)
         show = "que Cotizaron en %s de %s" % (month, year)
         
-        affiliates = [c.affiliate for c in cuotas]
+        affiliates = [c.affiliate for c in cuotas if getattr(c, 'month%s' % month)]
         return dict(affiliates=affiliates,show=show, count=len(affiliates))
     
     @expose(template="turboaffiliate.templates.affiliate.show")
@@ -422,7 +374,7 @@ class Flyer(controllers.Controller):
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
     def conTabla(self, year, month):
         
-        cuotas = model.CuotaTable.select(model.CuotaTable.q.year==year)
+        cuotas = model.CuotaTable.selectBy(year=year)
         
         affiliates = [c.affiliate for c in cuotas if c.affiliate.active]
         show = "que Cotizaron en %s de %s" % (month, year)

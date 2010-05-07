@@ -13,11 +13,10 @@
 		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print"/>
 	</head>
 	<body>
-		<h1>Informe de Ingresos <span py:content="month" /> <span py:content="year" /></h1>
+		<h1>Informe de Ingresos ${month} de ${year}</h1>
 		<table class="pay">
 			<thead>
 				<tr>
-					<th>C&oacute;digo</th>
 					<th>Cuenta</th>
 					<th>Cantidad</th>
 					<th>Monto</th>
@@ -25,16 +24,15 @@
 			</thead>
 			<tbody>
 				<tr py:for="account in report.reportAccounts">
-					<td py:content="account.code" />
-					<td py:content="account.name" />
-					<td py:content="account.quantity" />
-					<td py:content="locale.currency(account.amount, True, True)" />
+					<td>${account.name}</td>
+					<td>${account.quantity}</td>
+					<td>${locale.currency(account.amount, True, True)}</td>
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
 					<th colspan="3">Total:</th>
-					<th py:content="locale.currency(total, True, True)" />
+					<th>${locale.currency(report.total(), True, True)}</th>
 				</tr>
 			</tfoot>
 		</table>

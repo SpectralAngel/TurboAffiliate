@@ -21,18 +21,19 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 from turbogears import controllers, expose, flash, identity, redirect
-from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json
-from decimal import *
-from datetime import datetime, date
+from turbogears import validate, validators
+from turboaffiliate import model
+from decimal import Decimal
+from datetime import datetime
 
 class Cuota(controllers.Controller):
 
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.cuota.add')
+	@validate(validators=dict(cardID=validators.Int()))
 	def pay(self, cardID):
 		try:
-			affiliate = model.Affiliate.get(int(cardID))
+			affiliate = model.Affiliate.get(cardID)
 			return dict(affiliate=affiliate)
 		except model.SQLObjectNotFound:
 				flash('No existe el Afiliado con Identidad %s' % cardID)
@@ -76,10 +77,11 @@ class Cuota(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
+	@validate(validators=dict(id=validators.Int()))
 	def remove(self, id):
 		
 		try:
-			table = model.CuotaTable.get(int(id))
+			table = model.CuotaTable.get(id)
 			affiliate = table.affiliate
 			table.destroySelf()
 			raise redirect('/affiliate/status/%s' % affiliate.id)
@@ -94,7 +96,7 @@ class Cuota(controllers.Controller):
 			return dict(table=table)
 		
 		except model.SQLObjectNotFound:
-			flash('No existe el Afiliado %s' % kw['affiliate'])
+			flash('No existe el Afiliado %s' % code)
 			
 		except ValueError:
 			flash(u'Numero de Afiliado invalido')
@@ -126,4 +128,3 @@ class Cuota(controllers.Controller):
 			raise redirect('/affiliate')
 		
 		raise redirect('/affiliate/status/%s' % table.affiliate.id)
-

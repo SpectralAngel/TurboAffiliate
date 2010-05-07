@@ -163,7 +163,8 @@ class Affiliate(controllers.Controller):
         
         if name == '':
             raise redirect('/affiliate')
-        affiliates = model.Affiliate.select(OR(model.Affiliate.q.firstName.contains(name),model.Affiliate.q.lastName.contains(name)))
+        affiliates = model.Affiliate.select(OR(model.Affiliate.q.firstName.contains(name),
+											   model.Affiliate.q.lastName.contains(name)))
         return dict(result=affiliates)
     
     @identity.require(identity.not_anonymous())
@@ -241,7 +242,7 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(state=validators.String()))
     def department(self, state):
         
-        affiliates = model.Affiliate.selectBy(model.Affiliate.q.state==state)
+        affiliates = model.Affiliate.selectBy(state=state)
         count = affiliates.count()
         return dict(affiliates=affiliates, state=state, count=count)
     
@@ -374,10 +375,10 @@ class Affiliate(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.show')
+    @validate(validators=dict(town=validators.UnicodeString()))
     def byTown(self, town):
         
-        town = str(town)
-        affiliates = model.Affiliate.select(model.Affiliate.q.town==town)
+        affiliates = model.Affiliate.selectBy(town=town)
         return dict(affiliates=affiliates, show="Municipio", count=affiliates.count())
     
     @identity.require(identity.not_anonymous())
@@ -394,7 +395,7 @@ class Affiliate(controllers.Controller):
     @expose(template='turboaffiliate.templates.affiliate.show')
     def disabled(self):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.active==False)
+        affiliates = model.Affiliate.selectBy(active=False)
         return dict(affiliates=affiliates, show="Inhabilitados", count=affiliates.count())
     
     @identity.require(identity.not_anonymous())
@@ -484,7 +485,6 @@ class Affiliate(controllers.Controller):
         payment = loan.get_payment()
         kw = dict()
         kw['amount'] = payment
-        affiliate = loan.affiliate
         kw['affiliate'] = loan.affiliate
         kw['account'] = model.Account.get(373)
         model.Deduced(**kw)
@@ -530,14 +530,15 @@ class Affiliate(controllers.Controller):
                               month=validators.Int(), day=validators.DateTimeConverter(format='%Y-%m-%d')))
     def listmanual(self, payment, month, year, day):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.payment==str(payment), orderBy="lastName")
+        affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment, orderBy="lastName")
         return dict(affiliates=affiliates, count=affiliates.count(), how=payment, year=year, month=month, day=day.date())
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.debt')
+    @validate(validators=dict(payment=validators.String()))
     def debt(self, payment):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.payment==str(payment))
+        affiliates = model.Affiliate.selectBy(payment=payment)
         return dict(affiliates=affiliates, show=payment, count=affiliates.count())
     
     @identity.require(identity.not_anonymous())
@@ -571,7 +572,7 @@ class Affiliate(controllers.Controller):
     @expose(template='turboaffiliate.templates.affiliate.show')
     def none(self):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.joined==None)
+        affiliates = model.Affiliate.selectBy(joined=None)
         show = "Sin Año de Afiliación"
         return dict(affiliates=affiliates, show=show, count=affiliates.count())
     
@@ -579,7 +580,7 @@ class Affiliate(controllers.Controller):
     @expose(template='turboaffiliate.templates.affiliate.show')
     def noCard(self):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.cardID==None)
+        affiliates = model.Affiliate.selectBy(cardID=None)
         show = "Sin N&uacute;mero de identidad"
         return dict(affiliates=affiliates, show=show, count=affiliates.count())
     
@@ -619,7 +620,7 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(payment=validators.String()))
     def delayed(self, payment):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment)
+        affiliates = model.Affiliate.selectBy(payment=payment)
         affiliates =[a for a in affiliates if a.get_delayed() != None]
         
         return dict(affiliates=affiliates,count=len(affiliates),payment=payment)
@@ -629,7 +630,7 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(state=validators.String()))
     def stateSchool(self, state):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.state==state)
+        affiliates = model.Affiliate.selectBy(state=state)
         
         schools = dict()
         for affiliate in affiliates:

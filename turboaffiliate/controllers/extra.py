@@ -20,11 +20,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, flash, redirect, identity
-from turbogears import expose, validate, validators, error_handler
-from cherrypy import request, response, NotFound, HTTPRedirect
+from turbogears import controllers, redirect, identity
+from turbogears import expose, validate, validators
 from turboaffiliate import model
-from decimal import *
+from decimal import Decimal
 
 class Extra(controllers.Controller):
 	
@@ -54,7 +53,7 @@ class Extra(controllers.Controller):
 		kw['affiliate'] = model.Affiliate.get(affiliate)
 		kw['account'] = model.Account.get(account)
 		kw['amount'] = Decimal(kw['amount'])
-		extra = model.Extra(**kw)
+		model.Extra(**kw)
 		raise redirect('/affiliate/%s' % kw['affiliate'].id)
 	
 	@identity.require(identity.not_anonymous())
@@ -67,7 +66,7 @@ class Extra(controllers.Controller):
 		kw['account'] = model.Account.get(account)
 		for n in range(first, last +1):
 			kw['affiliate'] = model.Affiliate.get(n)
-			extra = model.Extra(**kw)
+			model.Extra(**kw)
 		raise redirect('/affiliate')
 	
 	@identity.require(identity.not_anonymous())
@@ -98,6 +97,6 @@ class Extra(controllers.Controller):
 		for afiliado in afiliados:
 			
 			kw['affiliate'] = afiliado
-			extra = model.Extra(**kw)
+			model.Extra(**kw)
 		
 		raise redirect('/affiliate')

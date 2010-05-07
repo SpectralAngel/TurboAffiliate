@@ -21,10 +21,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 from turbogears import controllers, flash, redirect, identity, url
-from turbogears import expose, validate, validators, error_handler
-from turboaffiliate import model, json
-from datetime import date
-from decimal import *
+from turbogears import expose, validate, validators
+from turboaffiliate import model
 
 class Refinanced(controllers.Controller):
 	

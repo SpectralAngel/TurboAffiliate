@@ -22,10 +22,9 @@
 # Boston, MA  02110-1301  USA
 
 from turbogears import controllers, flash, redirect, identity
-from turbogears import expose, validate, validators, error_handler
-from turboaffiliate import model, json
-from decimal import *
-from datetime import date, datetime
+from turbogears import expose, validate, validators
+from turboaffiliate import model
+from decimal import Decimal
 
 class Deduced(controllers.Controller):
 	
@@ -34,7 +33,6 @@ class Deduced(controllers.Controller):
 	@validate(validators=dict(code=validators.Int()))
 	def default(self, code):
 		
-		affiliate = model.Affiliate.get(code)
 		return dict(affiliate=model.Affiliate.get(code))
 	
 	@identity.require(identity.not_anonymous())
@@ -65,6 +63,8 @@ class Deduced(controllers.Controller):
 		kw['amount'] = Decimal(kw['amount'])
 		kw['account'] = model.Account.get(account)
 		model.Deduced(**kw)
+		
+		flash("Agregado Detalle de Deducción")
 		
 		raise redirect("/affiliate/deduced/%s" % affiliate)
 	

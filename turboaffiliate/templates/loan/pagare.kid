@@ -12,27 +12,27 @@
 		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/pagare.css')}" />
 	</head>
 	<body>
-		<h1 style="text-align: center">Pagar&eacute; por <span py:content="locale.currency(loan.capital, True, True)" /></h1>
+		<h1 style="text-align: center">Pagar&eacute; por ${locale.currency(loan.capital, True, True)}</h1>
 		<p>
-			Yo, <strong py:content="loan.affiliate.firstName,' ', loan.affiliate.lastName" />,
+			Yo, ${loan.affiliate.firstName} ${loan.affiliate.lastName},
 			pagar&eacute; al Colegio de Profesores de Educaci&oacute;n de
-			Honduras. (COPEMH). La cantidad de <strong py:content="loan.letters, ' Lempiras'" />
-			(<span py:content="locale.currency(loan.capital, True, True)" />) que en esta
+			Honduras. (COPEMH). La cantidad de ${loan.letters} Lempiras
+			(${locale.currency(loan.capital, True, True)}) que en esta
 			fecha recibo a mi entera satisfacci&oacute;n y en calidad de
 			pr&eacute;stamo. Esta obligaci&oacute;n devengar&aacute; intereses a la tasa de
-			<span py:content="loan.interest" />% anual. El pago se har&aacute; en las
+			${loan.interest}% anual. El pago se har&aacute; en las
 			oficinas del COPEMH en esta ciudad, en Lempiras exclusivamente o en
 			moneda de curso legal en la Rep&uacute;blica de Honduras.
 		</p>
 		<p>
 			En fe de lo cual firmo este pagar&eacute; en la ciudad de Tegucigalpa
-			el d&iacute;a <span py:content="loan.startDate.strftime('%d de %B de %Y')" />
+			el d&iacute;a ${loan.startDate.strftime('%d de %B de %Y')}
 		</p>
 		<p class="center">Firma del Suscriptor</p>
 		<p>
-			Nombre del Afiliado: <strong py:content="loan.affiliate.firstName,' ', loan.affiliate.lastName" />
+			Nombre del Afiliado: <strong>${loan.affiliate.firstName} ${loan.affiliate.lastName}</strong>
 			<br />
-			Tarjeta de Identidad: <strong py:content="loan.affiliate.cardID" />
+			Tarjeta de Identidad: <strong>${loan.affiliate.cardID}</strong>
 		</p>
 		<!-- <div py:if="loan.aval != None">
 		<h2>Por Aval</h2>
@@ -41,7 +41,7 @@
 			incondicionalmente el pago inmediato del principal, intereses y
 			costes de la obligaci&oacute;n descrita en este documento, de acuerdo
 			con las condiciones pactadas. Autorizo(mos) cualquier extensi&oacute;n
-			o renovaci&oacute;n del plazo. En f&eacute; de lo cual firmo(mos) por
+			o renovaci&oacute;n del plazo. En fe de lo cual firmo(mos) por
 			Aval en la fecha arriba indicada.
 		</p>
 		<p class="center">Firma del Aval</p>

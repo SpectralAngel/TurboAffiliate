@@ -640,6 +640,10 @@ class Loan(SQLObject):
         
         return self.capital - sum(d.amount for d in self.deductions)
     
+    def total_deductions(self):
+        
+        return sum(d.amount for d in self.deductions)
+    
     def remove(self):
         
         kw = dict()

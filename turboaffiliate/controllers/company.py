@@ -21,8 +21,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 from turbogears import controllers, expose, flash, identity, redirect
-from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json
+from turboaffiliate import model
 from turboaffiliate.controllers import obligation
 
 class Company(controllers.Controller):
@@ -43,7 +42,7 @@ class Company(controllers.Controller):
 			company = model.Company.byRtn(rtn)
 			return dict(company=company)
 		except model.SQLObjectNotFound:
-			flash('La Compañía con RTN %s no se encontró.' % code)
+			flash('La Compañía con RTN %s no se encontró.' % rtn)
 			raise redirect('/company')
 	
 	@identity.require(identity.not_anonymous())

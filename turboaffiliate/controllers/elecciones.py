@@ -20,12 +20,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, flash, redirect, identity
-from turbogears import expose, validate, validators, error_handler
-from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json
-from decimal import *
-from datetime import date, datetime
+from turbogears import controllers, identity
+from turbogears import expose, validate, validators
+from turboaffiliate import model
 
 class Elecciones(controllers.Controller):
     
@@ -44,9 +41,10 @@ class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.institutoDepto')
+    @validate(validators=dict(state=validators.UnicodeString()))
     def stateSchool(self, state):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.state==state)
+        affiliates = model.Affiliate.selectBy(state=state)
         
         schools = dict()
         for affiliate in affiliates:
@@ -62,6 +60,7 @@ class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.urnas')
+    @validate(validators=dict(departamento=validators.UnicodeString()))
     def urnasDepartamentales(self, departamento):
         
         afiliados = model.Affiliate.selectBy(active=True,state=departamento)
@@ -92,6 +91,7 @@ class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.urnas')
+    @validate(validators=dict(departamento=validators.UnicodeString()))
     def urnasDepartamentalesCinco(self, departamento):
         
         afiliados = model.Affiliate.selectBy(active=True,state=departamento)
@@ -129,6 +129,7 @@ class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.acta')
+    @validate(validators=dict(departamento=validators.UnicodeString()))
     def actas(self, departamento):
         
         afiliados = model.Affiliate.selectBy(active=True,state=departamento)
@@ -166,6 +167,7 @@ class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.municipios')
+    @validate(validators=dict(departamento=validators.UnicodeString()))
     def urnasMunicipio(self, departamento):
         
         afiliados = model.Affiliate.selectBy(active=True,state=departamento)
@@ -177,15 +179,16 @@ class Elecciones(controllers.Controller):
                 urnas[afiliado.town] = dict()
             
             if afiliado.school in urnas[afiliado.town]:
-            	urnas[afiliado.town][afiliado.school].append(afiliado)
+                urnas[afiliado.town][afiliado.school].append(afiliado)
             else:
-            	urnas[afiliado.town][afiliado.school] = list()
-            	urnas[afiliado.town][afiliado.school].append(afiliado)
+                urnas[afiliado.town][afiliado.school] = list()
+                urnas[afiliado.town][afiliado.school].append(afiliado)
         
         return dict(urnas=urnas, departamento=departamento, cantidad=afiliados.count())
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.urnasMunicipios')
+    @validate(validators=dict(departamento=validators.UnicodeString()))
     def listaUrnasMunicipio(self, departamento):
         
         afiliados = model.Affiliate.selectBy(active=True,state=departamento)
@@ -197,10 +200,10 @@ class Elecciones(controllers.Controller):
                 urnas[afiliado.town] = dict()
             
             if afiliado.school in urnas[afiliado.town]:
-            	urnas[afiliado.town][afiliado.school].append(afiliado)
+                urnas[afiliado.town][afiliado.school].append(afiliado)
             else:
-            	urnas[afiliado.town][afiliado.school] = list()
-            	urnas[afiliado.town][afiliado.school].append(afiliado)
+                urnas[afiliado.town][afiliado.school] = list()
+                urnas[afiliado.town][afiliado.school].append(afiliado)
         
         return dict(urnas=urnas, departamento=departamento, cantidad=afiliados.count())
     
@@ -243,6 +246,7 @@ class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.listado')
+    @validate(validators=dict(cotizacion=validators.UnicodeString()))
     def cotizacion(self, cotizacion):
         
         afiliados = model.Affiliate.selectBy(active=True,payment=cotizacion)
@@ -251,6 +255,7 @@ class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.departamento')
+    @validate(validators=dict(departamento=validators.UnicodeString()))
     def departamento(self, departamento):
         
         afiliados = model.Affiliate.selectBy(active=True,state=departamento)

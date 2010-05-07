@@ -20,12 +20,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, flash, redirect, identity
-from turbogears import expose, validate, validators, error_handler
-from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json
-from decimal import *
-from datetime import date, datetime
+from turbogears import controllers, identity
+from turbogears import expose, validate, validators
+from turboaffiliate import model
+from datetime import date
 
 class Billing(controllers.Controller):
 	
@@ -40,7 +38,7 @@ class Billing(controllers.Controller):
 	@validate(validators=dict(state=validators.String()))
 	def state(self, state):
 		
-		affiliates = model.Affiliate.select(model.Affiliate.q.state==state)
+		affiliates = model.Affiliate.selectBy(state=state)
 		
 		return dict(affiliates=affiliates, day=date.today())
 	
@@ -49,7 +47,7 @@ class Billing(controllers.Controller):
 	@validate(validators=dict(payment=validators.String()))
 	def payment(self, payment):
 		
-		affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment)
+		affiliates = model.Affiliate.selectBy(payment=payment)
 		
 		affiliates = (a for a in affiliates if a.joined != None)
 		
@@ -60,7 +58,7 @@ class Billing(controllers.Controller):
 	@validate(validators=dict(school=validators.String()))
 	def school(self, school):
 		
-		affiliates = model.Affiliate.select(model.Affiliate.q.school==school)
+		affiliates = model.Affiliate.selectBy(school=school)
 		
 		affiliates = (a for a in affiliates if a.joined != None)
 		
@@ -84,7 +82,7 @@ class Billing(controllers.Controller):
 	@validate(validators=dict(state=validators.String()))
 	def loanState(self, state):
 		
-		affiliates = model.Affiliate.select(model.Affiliate.q.state==state)
+		affiliates = model.Affiliate.selectBy(state=state)
 		loans = list()
 		for affiliate in affiliates:
 			loans.extend(affiliate.loans)

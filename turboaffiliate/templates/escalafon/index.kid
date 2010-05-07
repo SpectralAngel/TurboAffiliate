@@ -11,24 +11,6 @@
 			<li><a href="${tg.url('filialesAll')}">Ver Filiales</a></li>
 			<li><a href="${tg.url('filialesFive')}">Ver Filiales con 5 afiliados o m&aacute;s</a></li>
 		</ul>
-		<form action="${tg.url('export')}">
-			<fieldset>
-				<legend>Generar Volante</legend>
-				<ul>
-					<li>
-						<label for="month">Mes:</label>
-						<input name="month" maxlength="2" />
-					</li>
-					<li>
-						<label for="year">A&ntilde;o:</label>
-						<input name="year" maxlength="4" />
-					</li>
-					<li>
-						<input type="submit" value="Exportar" />
-					</li>
-				</ul>
-			</fieldset>
-		</form>
 		<form action="${tg.url('postReport')}">
 			<fieldset>
 				<legend>Ver Reporte de Ingresos</legend>
@@ -47,7 +29,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('report')}" method="post">
+		<form action="${tg.url('report')}">
 			<fieldset>
 				<legend>Ver Reporte de Ingresos Previos</legend>
 				<ul>
@@ -73,7 +55,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('extra')}" method="post">
+		<form action="${tg.url('extra')}">
 			<fieldset>
 				<legend>Mostrar Cuentas por Cobrar</legend>
 				<ul>
@@ -89,7 +71,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('deduced')}" method="post">
+		<form action="${tg.url('deduced')}">
 			<fieldset>
 				<legend>Mostrar Cobros Efecutados</legend>
 				<ul>
@@ -139,7 +121,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('showReport')}" method="post">
+		<form action="${tg.url('showReport')}">
 			<fieldset>
 				<legend>Mostrar Otros Reportes - Paso 3</legend>
 				<ul>
@@ -165,7 +147,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('deduced')}" method="post">
+		<form action="${tg.url('deduced')}">
 			<fieldset>
 				<legend>Mostrar Reporte Por Cuenta</legend>
 				<ul>
@@ -189,7 +171,7 @@
 				</ul>
 			</fieldset>
 		</form>
-		<form action="${tg.url('deducedPayment')}" method="post">
+		<form action="${tg.url('deducedPayment')}">
 			<fieldset>
 				<legend>Mostrar Reporte Por Cuenta y Cotizaci&oacute;n</legend>
 				<ul>

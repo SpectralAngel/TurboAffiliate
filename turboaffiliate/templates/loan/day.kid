@@ -24,7 +24,6 @@
                     <th>Cuota</th>
                 </tr>
             </thead>
-            
             <tbody>
                 <tr py:for="loan in loans">
                     <td><a href="${tg.url('/affiliate/%s' % loan.affiliate.id)}">${loan.affiliate.id}</a></td>

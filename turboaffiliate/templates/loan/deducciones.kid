@@ -41,12 +41,12 @@
 			<tfoot>
 				<tr>
 					<th colspan="2">Total:</th>
-					<th py:content="locale.currency(monto, True, True)" />
-					<th py:content="locale.currency(intereses, True, True)" />
-					<th py:content="locale.currency(papeleo, True, True)" />
-					<th py:content="locale.currency(aportaciones, True, True)" />
-					<th py:content="locale.currency(retencion, True, True)" />
-					<th py:content="locale.currency(neto, True, True)" />
+					<th>${locale.currency(monto, True, True)}</th>
+					<th>${locale.currency(intereses, True, True)}</th>
+					<th>${locale.currency(papeleo, True, True)}</td>
+					<th>${locale.currency(aportaciones, True, True)}</th>>
+					<th>${locale.currency(retencion, True, True)}</th>
+					<th>${locale.currency(neto, True, True)}</th>
 				</tr>
 			</tfoot>
 		</table>

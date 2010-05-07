@@ -20,11 +20,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, flash, redirect, identity, url
-from turbogears import expose, validate, validators, error_handler
-from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json
-from datetime import date
+from turbogears import controllers, flash, redirect, identity
+from turbogears import expose, validate, validators
+from turboaffiliate import model
 
 class Obligation(controllers.Controller):
 	
@@ -81,7 +79,7 @@ class Obligation(controllers.Controller):
 	def view(self, company, year):
 		
 		company = model.Company.get(company)
-		obligations = model.Obligation.select(model.Obligation.q.year==year)
+		obligations = model.Obligation.selectBy(year=year)
 		return dict(obligations=obligations)
 	
 	@identity.require(identity.not_anonymous())

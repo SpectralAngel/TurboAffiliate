@@ -10,7 +10,7 @@
 		<title>TurboAffiliate &bull; Reporte de Ingresos</title>
 	</head>
 	<body>
-		<h1>Reporte de Ingresos <span py:content="payment" /> de <span py:content="month" /> <span py:content="year" /></h1>
+		<h1>Reporte de Ingresos ${payment} de ${month} de ${year}</h1>
 		<table class="pay">
 			<thead>
 				<tr>

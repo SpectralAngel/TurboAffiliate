@@ -24,7 +24,7 @@ from turbogears import controllers, expose
 from turbogears import identity, redirect
 from turbogears.toolbox.catwalk import CatWalk
 from cherrypy import request, response
-from turboaffiliate import json, model
+from turboaffiliate import model
 from turboaffiliate.controllers import (affiliate, loan, company, obligation,
                                         flyer, account, payed, refinanced,
                                         logger, elecciones, solicitud)

@@ -21,11 +21,10 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 from turbogears import controllers, flash, redirect, identity, url
-from turbogears import expose, validate, validators, error_handler
-from cherrypy import request, response, NotFound, HTTPRedirect
-from turboaffiliate import model, json, num2stres
-from datetime import date, datetime
-from decimal import *
+from turbogears import expose, validate, validators
+from turboaffiliate import model
+from datetime import date
+from decimal import Decimal
 
 class Pay(controllers.Controller):
 	
@@ -70,7 +69,7 @@ class Pay(controllers.Controller):
 		
 		log = dict()
 		log['user'] = identity.current.user
-		log['action'] = "Agregar pago al prestamo %s" % loan.id
+		log['action'] = "Agregar pago al prestamo %s" % payedLoan.id
 		model.Logger(**log)
 		
 		flash('El pago se ha efecutado')
@@ -164,4 +163,3 @@ class PayedLoan(controllers.Controller):
 		affiliate = loan.affiliate
 		loan.remove()
 		raise redirect(url('/affiliate/%s' % affiliate.id))
-
