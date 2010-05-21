@@ -22,7 +22,7 @@
 			</thead>
 			<tbody>
 				<tr py:for="d in deduced">
-					<td py:content="d.affiliate.id" />
+					<td><a href="${tg.url('/affiliate/%s' % d.affiliate.id)}">${d.affiliate.id}</a></td>
 					<td py:content="d.affiliate.firstName, ' ', d.affiliate.lastName" />
 					<td py:content="locale.currency(d.amount, True, True)" />
 				</tr>

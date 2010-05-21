@@ -83,7 +83,7 @@
 		    	</a>
 	    		<a class="menu" href="${tg.url('/escalafon')}">
 	    			<img src="${tg.url('/static/images/import.png')}" alt="Admin" width="48" height="48" />
-	    			<span>Volantes y Deducciones</span>
+	    			<span>Reportes y Deducciones</span>
 	    		</a>
 	    		<a class="menu" href="${tg.url('/affiliate/billing')}">
 	    			<img src="${tg.url('/static/images/import.png')}" alt="Admin" width="48" height="48" />

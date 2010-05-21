@@ -42,7 +42,8 @@ filiales = {"Atlantida":{'total':0},"Choluteca":{'total':0},"Colon":{'total':0},
 
 class Flyer(controllers.Controller):
     
-    """Exports the escalafon definition file for Affiliate cuota payment"""
+    """Muestra varios Reportes acerca de los pagos, cuotas y estados financieros
+    de los afiliados"""
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.escalafon.index")
@@ -54,17 +55,22 @@ class Flyer(controllers.Controller):
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
     def postReport(self, year, month):
         
-        report = model.PostReport.selectBy(month=month, year=year).getOne()
-        total = sum(r.amount for r in report.reportAccounts)
+        """Muestra el reporte de ingresos por los diferentes cargos en un mes
+        y año que se han adquirido desde Escalafón"""
         
-        return dict(total=total, month=month, year=year, report=report)
+        report = model.PostReport.selectBy(month=month, year=year).getOne()
+        
+        return dict(month=month, year=year, report=report)
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.escalafon.report")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12),
                               payment=validators.String()))
     def report(self, payment, year, month):
-    
+        
+        """Muestra los cobros a efectuar correspondientes a un mes y año con
+        respecto a un tipo de pago"""
+        
         affiliates = model.Affiliate.selectBy(payment=payment, active=True)
         
         obligations = model.Obligation.selectBy(month=month, year=year)
@@ -101,6 +107,8 @@ class Flyer(controllers.Controller):
     @validate(validators=dict(account=validators.Int()))
     def extra(self, account):
         
+        """Muestra los cobros a efectuar que corresponden a la cuenta especificada"""
+        
         account = model.Account.get(account)
         return dict(account=account, extras=account.extras)
     
@@ -108,6 +116,8 @@ class Flyer(controllers.Controller):
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12),
                               payment=validators.String()))
     def OtherReport(self, payment, month, year):
+        
+        """Genera un reporte para otras deducciones"""
         
         otherDeduced = model.OtherDeduced.select()
         otherDeduced = [o for o in otherDeduced if o.affiliate.payment == payment]
@@ -137,6 +147,9 @@ class Flyer(controllers.Controller):
                               payment=validators.String()))
     def showReport(self, year, month, payment):
         
+        """Muestra los cobros efectuados correspondientes a un mes y año con
+        respecto a un tipo de pago"""
+        
         report = model.OtherReport.selectBy(payment=payment).getOne()
         return dict(month=month, year=year, report=report, payment=payment)
     
@@ -165,6 +178,8 @@ class Flyer(controllers.Controller):
     @expose(template="turboaffiliate.templates.escalafon.filiales")
     def filialesFive(self):
         
+        """Muestra las Filiaes con 5 o mas afiliados"""
+        
         affiliates = model.Affiliate.selectBy(payment="Escalafon")
         
         for affiliate in affiliates:
@@ -190,6 +205,9 @@ class Flyer(controllers.Controller):
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
     def aportaciones(self, year, month):
         
+        """Muestra las deducciones realizadas por concepto de aportaciones
+        en un mes y año"""
+        
         account = model.Account.get(1)
         deduced = model.Deduced.selectBy(year=year,month=month,account=account)
         
@@ -198,6 +216,8 @@ class Flyer(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.escalafon.filiales")
     def filialesAll(self):
+        
+        """Muestra todas las Filiales con sus respectivos miembros"""
         
         affiliates = model.Affiliate.selectBy(payment="Escalafon")
         
@@ -219,6 +239,8 @@ class Flyer(controllers.Controller):
     @validate(validators=dict(state=validators.String(),year=validators.Int(),
                               month=validators.Int(min=1,max=12)))
     def filialesDept(self, state, month, year):
+        
+        """Muestra todas las Filiales de un Departamento con sus respectivos miembros"""
         
         afiliados = model.Affiliate.selectBy(payment="Escalafon",state=state)
         filiales = dict()

@@ -20,7 +20,7 @@
 	<p style="text-align: justify;">Recib&iacute; del Consejo Administrativo del
     Fondo del AutoSeguro, COPEMH, la cantidad de ${loan.letters}.
     (${locale.currency(loan.capital, True, True)}) por pr&eacute;stamo personal
-    que me fue entregado el d&iacute;a ${date.today().strftime('%d de %B de %Y')}
+    que me fue entregado el d&iacute;a ${loan.startDate.strftime('%d de %B de %Y')}
     Seg&uacute;n el detalle siguiente:</p>
 	<table width="100%">
 		<tr>
@@ -57,6 +57,9 @@
 	</ul>
 	<p class="center" style="text-align: center;"><strong>Recib&iacute; conforme:</strong></p>
 	<p class="center" style="text-align: center">Vo. Bo. Secretario de Finanzas</p>
-	<p py:if="not loan.aproval is None" style="text-align: center">Liquidado por: ${loan.aproval.display_name}</p>
+	<p style="text-align: center">Liquidado por:
+        <span py:if="not loan.aproval is None">${loan.aproval.display_name}</span>
+        Impreso por: ${tg.identity.user.display_name}
+    </p>
 </body>
 </html>
