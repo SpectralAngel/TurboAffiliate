@@ -54,7 +54,9 @@ class Reintegro(controllers.Controller):
     @validate(validators=dict(afiliado=validators.Int()))
     def afiliado(self, afiliado): 
         
-        return dict(afiliado=model.Affiliate.get(afiliado), cuenta=model.Account.get(678))
+        return dict(afiliado=model.Affiliate.get(afiliado),
+                    cuenta=model.Account.get(678),
+                    formas=model.FormaPago.select())
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.reintegro.afiliado')
