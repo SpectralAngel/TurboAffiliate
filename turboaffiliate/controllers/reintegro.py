@@ -54,14 +54,18 @@ class Reintegro(controllers.Controller):
     @validate(validators=dict(afiliado=validators.Int()))
     def afiliado(self, afiliado): 
         
+        """Muestra el estado de cuenta de reintegros de un afiliado"""
+        
         return dict(afiliado=model.Affiliate.get(afiliado),
                     cuenta=model.Account.get(678),
                     formas=model.FormaPago.select())
     
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.reintegro.afiliado')
+    @expose()
     @validate(validators=dict(reintegro=validators.Int()))
     def eliminar(self, reintegro):
+        
+        """Elimina un reintegro"""
         
         reintegro = model.Reintegro.get(reintegro)
         
@@ -72,10 +76,12 @@ class Reintegro(controllers.Controller):
         raise redirect(url('/reintegro/afiliado/%s' % afiliado.id))
     
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.reintegro.afiliado')
+    @expose()
     @validate(validators=dict(reintegro=validators.Int(),forma=validators.Int(),
                               fecha=validators.DateTimeConverter(format='%d/%m/%Y')))
     def pagar(self, reintegro, forma, fecha):
+        
+        """Registra un pago de reintegro"""
         
         reintegro = model.Reintegro.get(reintegro)
         
@@ -85,3 +91,35 @@ class Reintegro(controllers.Controller):
         flash("Se ha pagado el Reintegro")
         
         raise redirect(url('/reintegro/afiliado/%s' % reintegro.afiliado.id))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.reintegro.pagados')
+    @validate(validators=dict(inicio=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              fin=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def pagados(self, inicio, fin):
+        
+        """Muestra los reintegros pagados durante un periodo"""
+        
+        query = "reintegro.cancelacion >= %s and reintregro.cancelacion <= %s and pagado = true" (inicio, fin)
+        
+        return dict(reintegros=model.Reintegro.select(query))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.reintegro.emision')
+    @validate(validators=dict(inicio=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              fin=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def emision(self, inicio, fin):
+        
+        """Muestra los reintegros emitidos en un periodo"""
+        
+        query = "reintegro.emision >= %s and reintregro.emision <= %s" (inicio, fin)
+        
+        return dict(reintegros=model.Reintegro.select(query))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.reintegro.cobros')
+    def cobros(self):
+        
+        """Muestra los cobros a efectuar por concepto de reintegros"""
+        
+        return dict(reintegros=model.Reintegro.selectBy(pagado=False))

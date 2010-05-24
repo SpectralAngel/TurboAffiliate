@@ -632,33 +632,6 @@ class Loan(SQLObject):
     
         self.debt = self.capital
     
-    def refinance(self):
-        
-        kw = dict()
-        kw['id'] = self.id
-        kw['affiliate'] = self.affiliate
-        kw['capital'] = self.capital
-        kw['letters'] = self.letters
-        kw['debt'] = self.debt
-        kw['payment'] = self.payment
-        kw['interest'] = self.interest
-        kw['months'] = self.months
-        kw['last'] = self.last
-        kw['number'] = self.number
-        kw['startDate'] = self.startDate
-        
-        refinancedLoan = RefinancedLoan(**kw)
-        
-        for pay in self.pays:
-            pay.refinance(refinancedLoan)
-        
-        for deduction in self.deductions:
-            deduction.refinance(refinancedLoan)
-        
-        refinancedLoan.debt = refinancedLoan.get_payment()
-        
-        self.destroySelf()
-    
     def pay(self, amount, receipt, day=date.today()):
         
         """Charges a normal payment for the loan
@@ -789,7 +762,7 @@ class Loan(SQLObject):
             4:'Abril', 5:'Mayo', 6:'Junio', 
             7:'Julio', 8:'Agosto', 9:'Septiembre', 
             10:'Octubre', 11:'Noviembre', 12:'Diciembre'
-                }
+        }
         start = self.startDate.month + self.offset
         if self.startDate.day == 24 and self.startDate.month == 8:
             start += 1
@@ -826,20 +799,6 @@ class Pay(SQLObject):
     amount = CurrencyCol(default=0, notNone=True)
     receipt = StringCol()
     month = StringCol(default="")
-    
-    def refinance(self, refinancedLoan):
-        
-        kw = dict()
-        kw['refinancedLoan'] = refinancedLoan
-        kw['day'] = self.day
-        kw['capital'] = self.capital
-        kw['interest'] = self.interest
-        kw['amount'] = self.amount
-        kw['receipt'] = self.receipt
-        kw['month'] = self.month
-        
-        RefinancedPay(**kw)
-        self.destroySelf()
     
     def remove(self, payedLoan):
         
@@ -930,18 +889,6 @@ class Deduction(SQLObject):
     amount = CurrencyCol()
     account = ForeignKey("Account")
     description = StringCol()
-    
-    def refinance(self, refinancedLoan):
-        
-        kw = dict()
-        kw['refinancedLoan'] = refinancedLoan
-        kw['name'] = self.name
-        kw['amount'] = self.amount
-        kw['account'] = self.account
-        kw['description'] = self.description
-        
-        RefinancedDeduction(**kw)
-        self.destroySelf()
     
     def remove(self, payedLoan):
         
