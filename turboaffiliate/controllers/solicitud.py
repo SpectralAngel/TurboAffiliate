@@ -32,6 +32,7 @@ class Solicitud(controllers.Controller):
                               entrega=validators.DateTimeConverter(format='%Y-%m-%d'),
                               ingreso=validators.DateTimeConverter(format='%Y-%m-%d'),
                               monto=validators.String()))
+    @identity.require(identity.not_anonymous())
     def agregar(self, affiliate, **kw):
         
         kw['affiliate'] = model.Affiliate.get(affiliate)
@@ -53,6 +54,7 @@ class Solicitud(controllers.Controller):
         raise redirect('/loan/%s' % prestamo.id)
     
     @expose()
+    @identity.require(identity.not_anonymous())
     @validate(validators=dict(solicitud=validators.Int()))
     def eliminar(self, solicitud):
         
@@ -63,6 +65,7 @@ class Solicitud(controllers.Controller):
         raise redirect('/affiliate/%s' % affiliate.id)
     
     @expose(template='turboaffiliate.templates.solicitud.dia')
+    @identity.require(identity.not_anonymous())
     @validate(validators=dict(dia=validators.DateTimeConverter(format='%Y-%m-%d')))
     def dia(self, dia):
         
