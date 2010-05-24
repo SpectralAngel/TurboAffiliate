@@ -1039,7 +1039,7 @@ class PayedLoan(SQLObject):
     payment = CurrencyCol(default=0, notNone=True)
     interest = DecimalCol(default=20, notNone=True, size=4, precision=2)
     months = IntCol()
-    last = DateCol(default=datetime.now)
+    last = DateCol(default=date.today)
     startDate = DateCol(notNone=True, default=datetime.now)
     pays = MultipleJoin("OldPay")
     deductions = MultipleJoin("PayedDeduction")

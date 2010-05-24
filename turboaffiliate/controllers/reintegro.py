@@ -54,5 +54,32 @@ class Reintegro(controllers.Controller):
     @validate(validators=dict(afiliado=validators.Int()))
     def afiliado(self, afiliado): 
         
-        return dict(afiliado=model.Affiliate.get(afiliado), cuenta=model.Account.get())
+        return dict(afiliado=model.Affiliate.get(afiliado), cuenta=model.Account.get(678))
     
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.reintegro.afiliado')
+    @validate(validators=dict(reintegro=validators.Int()))
+    def eliminar(self, reintegro):
+        
+        reintegro = model.Reintegro.get(reintegro)
+        
+        afiliado = reintegro.afiliado
+        
+        reintegro.DestroySelf()
+        
+        raise redirect(url('/reintegro/afiliado/%s' % afiliado.id))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.reintegro.afiliado')
+    @validate(validators=dict(reintegro=validators.Int(),forma=validators.Int(),
+                              fecha=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def pagar(self, reintegro, forma, fecha):
+        
+        reintegro = model.Reintegro.get(reintegro)
+        
+        reintegro.formaPago = model.FormaPago.get(forma)
+        reintegro.cancelacion = fecha
+        
+        flash("Se ha pagado el Reintegro")
+        
+        raise redirect(url('/reintegro/afiliado/%s' % reintegro.afiliado.id))
