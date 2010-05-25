@@ -156,7 +156,7 @@
                     <td>Reintegro</td>
                     <td>No</td>
                     <td>${reintegro.motivo}</td>
-                    <td>${extra.fecha.strftime('%d/%m/%Y')}</td>
+                    <td>${reintegro.emision.strftime('%d/%m/%Y')}</td>
                     <td>${locale.currency(reintegro.monto, True, True)}</td>
                     <td>X</td>
                 </tr>

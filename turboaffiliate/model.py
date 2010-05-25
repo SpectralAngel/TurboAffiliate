@@ -199,14 +199,10 @@ class Affiliate(SQLObject):
     def get_monthly(self):
         
         extras = sum(e.amount for e in self.extras)
+        loans = sum(l.get_payment() for l in self.loans)
+        reintegros = sum(r.monto for r in self.reintegros if not r.pagado)
         
-        loans = Decimal(0)
-        
-        for loan in self.loans:
-            
-            loans += loan.get_payment()
-        
-        return extras + loans + self.get_cuota()
+        return extras + loans + reintegros + self.get_cuota()
     
     def get_cuota(self):
         

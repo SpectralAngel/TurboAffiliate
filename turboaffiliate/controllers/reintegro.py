@@ -49,7 +49,7 @@ class Reintegro(controllers.Controller):
         
         flash("Se agrego el reintegro al afiliado")
         
-        raise redirect(url('/reintegro/afiliado/%' % reintegro.affiliate.id))
+        raise redirect(url('/reintegro/afiliado/%s' % reintegro.affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.reintegro.afiliado')

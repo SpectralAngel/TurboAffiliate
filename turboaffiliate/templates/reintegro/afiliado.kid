@@ -15,7 +15,8 @@
     </head>
     <body>
         <h1>Estado de Cuenta de Reintegros</h1>
-        <h2>${afiliado.id} - ${afiliado.firstName} ${afiliado.lastName}</h2>
+        <h2><a href="${tg.url('/affiliate/%s' % afiliado.id)}">${afiliado.id}</a>
+        - ${afiliado.firstName} ${afiliado.lastName}</h2>
         <table>
             <caption>Reintegros por Efectuar</caption>
             <thead>
@@ -89,14 +90,14 @@
                     </li>
                     <li>
                         <label>Motivo:</label>
-                        <input name="motivo" />
+                        <textarea name="motivo" cols="18"></textarea>
                     </li>
                     <li>
-                        <label>Cheque</label>
+                        <label>Cheque:</label>
                         <input name="cheque" />
                     </li>
                     <li>
-                        <label>Planilla</label>
+                        <label>Planilla:</label>
                         <input name="planilla" />
                     </li>
                     <li>
@@ -117,7 +118,7 @@
                         </select>
                     </li>
                     <li>
-                        <label>Fecha de Pago</label>
+                        <label>Fecha de Pago:</label>
                         <input class="datepicker" name="fecha" />
                     </li>
                 </ul>
