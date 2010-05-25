@@ -19,7 +19,7 @@
                 dateFormat: 'yy-mm-dd',
                 changeMonth: true,
                 changeYear: true,
-                yearRange: '1940:2010'
+                yearRange: 'c-60:c+10'
             });
         });
         ]]>
@@ -52,12 +52,10 @@
             </li>
         </ul>
         <h1 class="afiliado">${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</h1>
-        <h3>ID: ${affiliate.cardID}   <span class="pago">${affiliate.payment}</span>
+        <h3 style="float: left;">ID: ${affiliate.cardID} <span class="pago">${affiliate.payment}</span>
         <span class="pago" py:if="affiliate.payment != 'Escalafon'">N&uacute;mero de Cobro:
-        ${affiliate.escalafon}</span>
-        </h3>
-        
-        <h3>Afiliado desde <span py:if="not affiliate.joined is None">${affiliate.joined.strftime('%d de %B de %Y')}</span>
+        ${affiliate.escalafon}</span> Afiliado desde <span py:if="not affiliate.joined is None">${affiliate.joined.strftime('%d de %B de %Y')}</span></h3>
+        <h3 class="clear">
             <a href="${tg.url('/affiliate/status/%s' % affiliate.id)}">Aportaciones</a> &bull;
             <a href="${tg.url('/reintegro/afiliado/%s' % affiliate.id)}">Reintegros</a>
         </h3>
@@ -65,7 +63,7 @@
         <h4 py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated != None">
                 Jubilado desde ${affiliate.jubilated.strftime('%d de %B de %Y')}
         </h4>
-        <span class="flas">
+        <span class="flash">
             <span py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated == None">
             Este Afiliado requiere Actualizar sus datos de Jubilaci&oacute;n haga
             <a href="${tg.url('/affiliate/jubilate/%s' % affiliate.id)}">click aqu&iacute;</a>
@@ -154,6 +152,14 @@
                     <td>${locale.currency(extra.amount, True, True)}</td>
                     <td><a href="${tg.url('/affiliate/extra/delete/%s' % extra.id)}">X</a></td>
                 </tr>
+                <tr py:for="reintegro in affiliate.reintegros" py:if="not reintegro.pagado">
+                    <td>Reintegro</td>
+                    <td>No</td>
+                    <td>${reintegro.motivo}</td>
+                    <td>${extra.fecha.strftime('%d/%m/%Y')}</td>
+                    <td>${locale.currency(reintegro.monto, True, True)}</td>
+                    <td>X</td>
+                </tr>
             </tbody>
             <tfoot>
                 <tr>
@@ -171,22 +177,20 @@
                     <th>Deuda</th>
                     <th>Cuota</th>
                     <th>Ultimo Pago</th>
-                    <th>Ver</th>
                 </tr>
             </thead>
             <tbody>
                 <tr py:for="loan in affiliate.loans">
-                    <td>${loan.id}</td>
+                    <td><a href="${tg.url('/loan/%s' % loan.id)}" >${loan.id}</a></td>
                     <td>${locale.currency(loan.capital, True, True)}</td>
                     <td>${locale.currency(loan.debt, True, True)}</td>
                     <td>${locale.currency(loan.payment, True, True)}</td>
                     <td>${loan.last.strftime('%d de %B de %Y')}</td>
-                    <td><a href="${tg.url('/loan/%s' % loan.id)}" >Ver</a></td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="6"><a href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a></th>
+                    <th colspan="5"><a href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a></th>
                 </tr>
             </tfoot>
         </table>

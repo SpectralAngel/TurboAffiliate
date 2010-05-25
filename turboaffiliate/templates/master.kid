@@ -9,7 +9,8 @@
 	<head py:match="item.tag=='{http://www.w3.org/1999/xhtml}head'" py:attrs="item.items()">
 	    <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
 	    <title py:replace="''">Your title goes here</title>
-	    <meta py:replace="item[:]"/>
+	    <meta py:replace="item[:]"/><script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
+        <script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
 	    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/smoothness/jquery-ui.css')}" media="screen" />
 	    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/style.css')}" media="screen" />
 	    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print" />

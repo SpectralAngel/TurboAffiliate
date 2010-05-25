@@ -103,6 +103,13 @@
                     <td>${extra.anio}</td>
                     <td>${locale.currency(extra.amount, True, True)}</td>
                 </tr>
+                <tr py:for="reintegro in affiliate.reintegros" py:if="not reintegro.pagado">
+                    <td>Reintegro</td>
+                    <td>No</td>
+                    <td>${reintegro.motivo}</td>
+                    <td>${extra.fecha.strftime('%d/%m/%Y')}</td>
+                    <td>${locale.currency(reintegro.monto, True, True)}</td>
+                </tr>
             </tbody>
             <tfoot>
                 <tr>
