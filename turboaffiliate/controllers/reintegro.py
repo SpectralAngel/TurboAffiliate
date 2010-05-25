@@ -31,15 +31,17 @@ class Reintegro(controllers.Controller):
     
     @expose()
     @identity.require(identity.not_anonymous())
-    @validate(validators=dict(afiliado=validators.Int(),cuenta=validators.Int(),
+    @validate(validators=dict(affiliate=validators.Int(),cuenta=validators.Int(),
                               emision=validators.DateTimeConverter(format='%d/%m/%Y'),
                               motivo=validators.UnicodeString(),
+                              cheque=validators.UnicodeString(),
+                              planilla=validators.UnicodeString(),
                               monto=validators.UnicodeString()))
-    def agregar(self, afiliado, cuenta, **kw):
+    def agregar(self, affiliate, cuenta, **kw):
         
         """Ingresa un nuevo reintegro a la base de datos"""
         
-        kw['afiliado'] = model.Affiliate.get(afiliado)
+        kw['affiliate'] = model.Affiliate.get(affiliate)
         kw['cuenta'] = model.Account.get(cuenta)
         kw['monto'] = Decimal(kw['monto'])
         

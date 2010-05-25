@@ -27,7 +27,7 @@ from cherrypy import request, response
 from turboaffiliate import model
 from turboaffiliate.controllers import (affiliate, loan, company, obligation,
                                         flyer, account, payed, logger,
-                                        elecciones, solicitud)
+                                        elecciones, solicitud, reintegro)
 
 # import logging
 # log = logging.getLogger("turboaffiliate.controllers")
@@ -45,6 +45,7 @@ class Root(controllers.RootController):
     logger = logger.Logger()
     elecciones = elecciones.Elecciones()
     solicitud = solicitud.Solicitud()
+    reintegro = reintegro.Reintegro()
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.welcome")

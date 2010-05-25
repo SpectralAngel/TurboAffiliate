@@ -15,7 +15,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 from decimal import Decimal
-from wording import num2word
+try:
+    from wording import num2word
+except ImportError:
+    import num2word
 
 def parse(number):
     entero = int(number)
