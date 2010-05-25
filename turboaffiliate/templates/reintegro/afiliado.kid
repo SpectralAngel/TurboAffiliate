@@ -24,17 +24,17 @@
                 </tr>
             </thead>
             <tbody>
-                <tr py:for="reintegro in afiliado.reintegros" pyif="not reintegro.pagado">
+                <tr py:for="reintegro in afiliado.reintegros" py:if="not reintegro.pagado">
                     <td>${reintegro.emision.strftime('%d/%m/%Y')}</td>
                     <td>${reintegro.cheque}</td>
                     <td>${reintegro.planilla}</td>
-                    <td>${locale.currency(reintegro.monto)}</td>
+                    <td>${locale.currency(reintegro.monto, True, True)}</td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <th colspan="3">Saldo en Reintegros:</th>
-                    <!-- <th>${locale.currency(sum(r.monto in afiliado.reintegros if not r.pagado))}</th> -->
+                    <th>${locale.currency(sum(r.monto for r in afiliado.reintegros if not r.pagado))}</th>
                 </tr>
             </tfoot>
         </table>
@@ -57,13 +57,13 @@
                     <td>${reintegro.planilla}</td>
                     <td>${reintegro.formaPago.nombre}</td>
                     <td>${reintegro.cancelacion.strftime('%d/%m/%Y')}</td>
-                    <td>${locale.currency(reintegro.monto)}</td>
+                    <td>${locale.currency(reintegro.monto, True, True)}</td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <th colspan="5">Total Cobrado:</th>
-                    <!-- <th>${locale.currency(sum(r.monto in afiliado.reintegros if r.pagado))}</th> -->
+                    <th>${locale.currency(sum(r.monto for r in afiliado.reintegros if r.pagado))}</th>
                 </tr>
             </tfoot>
         </table>

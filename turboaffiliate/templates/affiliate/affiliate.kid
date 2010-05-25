@@ -53,7 +53,7 @@
         </ul>
         <h1 class="afiliado">${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</h1>
         <h3>ID: ${affiliate.cardID}   <span class="pago">${affiliate.payment}</span>
-        <span class="pago" py:if="affiliate.payment == 'INPREMA'">N&uacute;mero de Cobro:
+        <span class="pago" py:if="affiliate.payment != 'Escalafon'">N&uacute;mero de Cobro:
         ${affiliate.escalafon}</span>
         </h3>
         
@@ -281,8 +281,21 @@
             </fieldset>
         </form>
         <div id="observaciones">
-            <h2>Observaciones</h2>
-            <p py:for="observacion in affiliate.observaciones" py:content="observacion.texto" />
+            <table>
+                <caption>Observaciones</caption>
+                <thead>
+                    <tr>
+                        <th>Descripci&oacute;n</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr py:for="observacion in affiliate.observaciones">
+                        <td>${observacion.texto}</td>
+                        <td py:if="observacion.fecha != None">${observacion.fecha.strftime('%d/%m/%Y')}</td>
+                    </tr>
+                </tbody>
+            </table>
             <form action="${tg.url('/affiliate/observacion/add')}">
                 <fieldset>
                     <legend>Agregar Observaci&oacute;n</legend>
