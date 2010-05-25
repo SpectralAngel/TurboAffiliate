@@ -28,6 +28,9 @@ History:
     0.2: n2w, to_card, to_ord, to_ordnum now imported correctly
 '''
 import locale as _locale
+import sys
+from os import path
+sys.path.append(path.dirname(__file__))
 
 # Correct omissions in locale:
 # Bugrep these...

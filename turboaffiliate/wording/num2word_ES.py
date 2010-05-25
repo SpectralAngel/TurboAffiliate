@@ -32,7 +32,8 @@ History:
 from num2word_EU import Num2Word_EU
 
 #//TODO: correct orthographics
-#//TODO: error messages
+#//TODO: error messages
+
 class Num2Word_ES(Num2Word_EU):
 
     #//CHECK: Is this sufficient??
@@ -114,7 +115,7 @@ class Num2Word_ES(Num2Word_EU):
         self.verify_ordinal(value)
         # Correct for fem?
         return "%s\xB0"%value
-	
+    
     def to_currency(self, val, longval=True, old=False):
         if old:
             return self.to_splitnum(val, hightxt="peso/s", lowtxt="peseta/s",
@@ -126,6 +127,7 @@ n2w = Num2Word_ES()
 to_card = n2w.to_cardinal
 to_ord = n2w.to_ordinal
 to_ordnum = n2w.to_ordinal_num
+to_year = n2w.to_year
 
 def main():
     for val in [ 1, 11, 12, 21, 31, 33, 71, 80, 81, 91, 99, 100, 101, 102, 155,

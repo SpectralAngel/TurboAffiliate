@@ -14,3 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+from decimal import Decimal
+from wording import num2word
+
+def parse(number):
+    entero = int(number)
+    cents = Decimal(str(number - entero))  * Decimal(100)
+    if cents != 0:
+        cents = " con " + num2word.to_card(int(cents))
+    else:
+        cents = " exactos"
+    return (num2word.to_card(entero) + cents).capitalize()

@@ -22,7 +22,7 @@
 
 from turbogears import controllers, flash, redirect, identity, url
 from turbogears import expose, validate, validators
-from turboaffiliate import model, num2stres
+from turboaffiliate import model, wording
 from datetime import date
 from decimal import Decimal
 
@@ -289,7 +289,7 @@ class Loan(controllers.Controller):
         affiliate = model.Affiliate.get(affiliate)
         kw['payment'] = Decimal(kw['payment']).quantize(Decimal("0.01"))
         kw['debt'] = kw['capital']
-        kw['letters'] = num2stres.parse(kw['capital']).capitalize()
+        kw['letters'] = wording.parse(kw['capital']).capitalize()
         
         if kw['id'] == '':
             del kw['id']
