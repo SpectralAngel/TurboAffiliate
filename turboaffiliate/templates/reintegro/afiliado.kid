@@ -11,18 +11,7 @@
         <title>TurboAffiliate &bull; Reintegros &bull; ${afiliado.id}</title>
         <script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
         <script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
-        <script type="text/javascript">
-        <![CDATA[
-        $(document).ready(function(e)
-        {
-            $('input.datepicker').datepicker({
-                dateFormat: 'dd/mm/yy',
-                changeMonth: true,
-                changeYear: true,
-            });
-        });
-        ]]>
-        </script>
+        <script src="${tg.url('/static/javascript/reintegro.js')}" type="text/javascript"></script>
     </head>
     <body>
         <h1>Estado de Cuenta de Reintegros</h1>
@@ -34,7 +23,9 @@
                     <th>Emisi&oacute;n</th>
                     <th>Cheque</th>
                     <th>Planilla</th>
+                    <th>Motivo</th>
                     <th>Monto</th>
+                    <th class="noprint">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,13 +33,17 @@
                     <td>${reintegro.emision.strftime('%d/%m/%Y')}</td>
                     <td>${reintegro.cheque}</td>
                     <td>${reintegro.planilla}</td>
+                    <td>${reintegro.motivo}</td>
                     <td>${locale.currency(reintegro.monto, True, True)}</td>
+                    <th class="noprint"><button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:pagarReintegro(${reintegro.id})">Pagar Reintegro</button></th>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
+                    <th><button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.AgregarReintegro').dialog('open');">Agregar Reintegro</button></th>
                     <th colspan="3">Saldo en Reintegros:</th>
                     <th>${locale.currency(sum(r.monto for r in afiliado.reintegros if not r.pagado))}</th>
+                    <th></th>
                 </tr>
             </tfoot>
         </table>
@@ -59,6 +54,7 @@
                     <th>Emisi&oacute;n</th>
                     <th>Cheque</th>
                     <th>Planilla</th>
+                    <th>Motivo</th>
                     <th>Forma de Pago</th>
                     <th>Fecha de Pago</th>
                     <th>Monto</th>
@@ -69,6 +65,7 @@
                     <td>${reintegro.emision.strftime('%d/%m/%Y')}</td>
                     <td>${reintegro.cheque}</td>
                     <td>${reintegro.planilla}</td>
+                    <td>${reintegro.motivo}</td>
                     <td>${reintegro.formaPago.nombre}</td>
                     <td>${reintegro.cancelacion.strftime('%d/%m/%Y')}</td>
                     <td>${locale.currency(reintegro.monto, True, True)}</td>
@@ -76,18 +73,18 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="5">Total Cobrado:</th>
+                    <th colspan="6">Total Cobrado:</th>
                     <th>${locale.currency(sum(r.monto for r in afiliado.reintegros if r.pagado))}</th>
                 </tr>
             </tfoot>
         </table>
         <form class="AgregarReintegro" action="${tg.url('/reintegro/agregar')}">
-            <fieldset>
+            <div>
                 <input type="hidden" value="${afiliado.id}" name="affiliate" />
                 <input type="hidden" value="${cuenta.id}" name="cuenta" />
-                <ol>
+                <ul>
                     <li>
-                        <label>Fecha de Emisi&oacute;n</label>
+                        <label>Emisi&oacute;n</label>
                         <input class="datepicker" name="emision" />
                     </li>
                     <li>
@@ -106,13 +103,13 @@
                         <label>Monto:</label>
                         <input name="monto" />
                     </li>
-                </ol>
-            </fieldset>
+                </ul>
+            </div>
         </form>
-        <form action="${tg.url('/reintegro/pagar')}">
-            <input type="hidden" name="reintegro" />
-            <fieldset>
-                <ol>
+        <form class="PagarReintegro" action="${tg.url('/reintegro/pagar')}">
+            <div>
+                <input type="hidden" name="reintegro" id="reintegro" />
+                <ul>
                     <li>
                         <label>Forma de Pago:</label>
                         <select name="forma">
@@ -123,8 +120,8 @@
                         <label>Fecha de Pago</label>
                         <input class="datepicker" name="fecha" />
                     </li>
-                </ol>
-            </fieldset>
+                </ul>
+            </div>
         </form>
     </body>
 </html>

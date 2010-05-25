@@ -52,10 +52,10 @@
             </li>
         </ul>
         <h1 class="afiliado">${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</h1>
-        <h3 style="float: left;">ID: ${affiliate.cardID} <span class="pago">${affiliate.payment}</span>
+        <h3>ID: ${affiliate.cardID} <span class="pago">${affiliate.payment}</span>
         <span class="pago" py:if="affiliate.payment != 'Escalafon'">N&uacute;mero de Cobro:
         ${affiliate.escalafon}</span> Afiliado desde <span py:if="not affiliate.joined is None">${affiliate.joined.strftime('%d de %B de %Y')}</span></h3>
-        <h3 class="clear">
+        <h3>
             <a href="${tg.url('/affiliate/status/%s' % affiliate.id)}">Aportaciones</a> &bull;
             <a href="${tg.url('/reintegro/afiliado/%s' % affiliate.id)}">Reintegros</a>
         </h3>

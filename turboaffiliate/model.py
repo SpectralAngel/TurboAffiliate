@@ -1131,7 +1131,7 @@ class Reintegro(SQLObject):
     """Codigo de la planilla enviado por el empleador"""
     motivo = UnicodeCol(length=100)
     """Razón por la cual se debe efectuar el cobro de nuevo"""
-    formaPago = ForeignKey("FormaPago")
+    formaPago = ForeignKey("FormaPago", default=FormaPago.get(1))
     """Modo en que se efectuó el cobro"""
     pagado = BoolCol(default=False)
     """Identifica si el reintegro ya ha sido pagado"""

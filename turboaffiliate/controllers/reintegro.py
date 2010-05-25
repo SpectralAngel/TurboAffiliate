@@ -45,11 +45,11 @@ class Reintegro(controllers.Controller):
         kw['cuenta'] = model.Account.get(cuenta)
         kw['monto'] = Decimal(kw['monto'])
         
-        model.Reintegro(**kw)
+        reintegro = model.Reintegro(**kw)
         
         flash("Se agrego el reintegro al afiliado")
         
-        raise redirect(url('/reintegro'))
+        raise redirect(url('/reintegro/afiliado/%' % reintegro.affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.reintegro.afiliado')
@@ -88,11 +88,12 @@ class Reintegro(controllers.Controller):
         reintegro = model.Reintegro.get(reintegro)
         
         reintegro.formaPago = model.FormaPago.get(forma)
+        reintegro.pagado = True
         reintegro.cancelacion = fecha
         
         flash("Se ha pagado el Reintegro")
         
-        raise redirect(url('/reintegro/afiliado/%s' % reintegro.afiliado.id))
+        raise redirect(url('/reintegro/afiliado/%s' % reintegro.affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.reintegro.pagados')
