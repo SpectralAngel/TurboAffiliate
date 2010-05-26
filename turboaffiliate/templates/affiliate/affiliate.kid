@@ -11,19 +11,7 @@
         <title>TurboAffiliate &bull; Afiliado ${affiliate.id}</title>
         <script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
         <script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
-        <script type="text/javascript">
-        <![CDATA[
-        $(document).ready(function(e)
-        {
-            $('input.date-picker').datepicker({
-                dateFormat: 'yy-mm-dd',
-                changeMonth: true,
-                changeYear: true,
-                yearRange: 'c-60:c+10'
-            });
-        });
-        ]]>
-        </script>
+        <script src="${tg.url('/static/javascript/afiliado.js')}" type="text/javascript"> </script>
     </head>
     <body>
         <div id="breadcrum">
@@ -32,23 +20,32 @@
         </div>
         <ul class="toolbox">
             <li>
-                <a class="edit" href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Editar</a>
+                <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.editar').dialog('open');">Editar</button>
             </li>
             <li py:if="'admin' in tg.identity.groups">
                 <a class="delete" href="${tg.url('/affiliate/remove/%s' % affiliate.id)}">Borrar</a>
             </li>
             <li>
-                <a class="add" href="${tg.url('/affiliate/extra/add/%s' % affiliate.id)}">A&ntilde;adir Deducci&oacute;n Extra</a>
+                <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.extra').dialog('open');">Agregar Deducci&oacute;n Extra</button>
             </li>
             <li>
                 <a class="add" href="${tg.url('/affiliate/jubilate/%s' % affiliate.id)}">Editar Fecha de Jubilaci&oacute;n</a>
             </li>
             <li>
-                <a py:if="affiliate.active" class="delete" href="${tg.url('/affiliate/deactivate/%s' % affiliate.id)}">Desactivar Afiliado</a>
+                 <button py:if="affiliate.active" class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.desactivar').dialog('open');">Desactivar</button>
                 <a py:if="not affiliate.active" class="delete" href="${tg.url('/affiliate/activate/%s' % affiliate.id)}">Activar Afiliado</a>
             </li>
             <li>
                 <a class="view" href="${tg.url('/affiliate/deduced/%s' % affiliate.id)}">Ver detalle de Deducciones</a>
+            </li>
+            <li>
+                 <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.agregarSolicitud').dialog('open');">Agregar Solicitud</button>
+            </li>
+            <li>
+                 <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.verDeducciones').dialog('open');">Mostrar Deducciones Realizadas</button>
+            </li>
+            <li>
+                 <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.agregarObservacion').dialog('open');">Agregar Observaci&oacute;n</button>
             </li>
         </ul>
         <h1 class="afiliado">${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</h1>
@@ -57,7 +54,7 @@
         ${affiliate.escalafon}</span> Afiliado desde <span py:if="not affiliate.joined is None">${affiliate.joined.strftime('%d de %B de %Y')}</span></h3>
         <h3>
             <a href="${tg.url('/affiliate/status/%s' % affiliate.id)}">Aportaciones</a> &bull;
-            <a href="${tg.url('/reintegro/afiliado/%s' % affiliate.id)}">Reintegros</a>
+            <a href="${tg.url('/reintegro/%s' % affiliate.id)}">Reintegros</a>
         </h3>
         
         <h4 py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated != None">
@@ -168,7 +165,7 @@
                 </tr>
             </tfoot>
         </table>
-        <table>
+        <table py:if="len(affiliate.loans) != 0">
             <caption>Pr&eacute;stamos Personales</caption>
             <thead>
                 <tr>
@@ -194,7 +191,8 @@
                 </tr>
             </tfoot>
         </table>
-        <table>
+        <a py:if="len(affiliate.loans) == 0" href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a>
+        <table py:if="len(affiliate.solicitudes) != 0">
             <caption>Solicitudes de Pr&eacute;stamo</caption>
             <thead>
                 <tr>
@@ -217,59 +215,42 @@
                 </tr>
             </tbody>
         </table>
-        <form action="${tg.url('/solicitud/agregar')}">
-                <fieldset>
-                    <legend>Agregar Solicitud</legend>
-                    <ol>
-                        <li>
-                            <input name="affiliate" value="${affiliate.id}" type="hidden" />
-                            <label>Monto</label>
-                            <input name="monto" />
-                        </li>
-                        <li>
-                            <label>Periodo</label>
-                            <input name="periodo" />
-                        </li>
-                        <li>
-                            <label>Entrega</label>
-                            <input name="entrega" class="date-picker" />
-                        </li>
-                        <li>
-                            <label>Ingreso</label>
-                            <input name="ingreso" class="date-picker" />
-                        </li>
-                        <li>
-                            <input type="submit" value="Agregar" />
-                        </li>
-                    </ol>
-                </fieldset>
-            </form>
-        <table>
-            <caption>Historial de Pr&eacute;stamos</caption>
+        <table py:if="len(affiliate.payedLoans) != 0">
+            <caption>Historial de Pr&eacute;stamos Cancelados</caption>
             <thead>
                 <tr>
                     <th>Solicitud</th>
                     <th>Monto</th>
-                    <th>Deuda</th>
                     <th>Cuota</th>
                     <th>Ultimo Pago</th>
-                    <th>Ver</th>
                 </tr>
             </thead>
             <tbody>
                 <tr py:for="loan in affiliate.payedLoans">
-                    <td>${loan.id}</td>
+                    <td><a href="${tg.url('/payed/%s' % loan.id)}">${loan.id}</a></td>
                     <td>${locale.currency(loan.capital, True, True)}</td>
-                    <td>${locale.currency(0)}</td>
                     <td>${locale.currency(loan.payment, True, True)}</td>
                     <td>${loan.last.strftime('%d de %B de %Y')}</td>
-                    <td><a href="${tg.url('/payed/%s' % loan.id)}" >Ver</a></td>
                 </tr>
             </tbody>
         </table>
-        <form action="${tg.url('/affiliate/deduced/mostrar')}" method="get">
-            <fieldset>
-                <legend>Ver Deducciones Realizadas</legend>
+        <table py:if="len(affiliate.observaciones) != 0">
+            <caption>Observaciones</caption>
+            <thead>
+                <tr>
+                    <th>Descripci&oacute;n</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr py:for="observacion in affiliate.observaciones">
+                    <td>${observacion.texto}</td>
+                    <td py:if="observacion.fecha != None">${observacion.fecha.strftime('%d/%m/%Y')}</td>
+                </tr>
+            </tbody>
+        </table>
+        <form class="verDeducciones" action="${tg.url('/affiliate/deduced/mostrar')}" method="get">
+            <div>
                 <ul>
                     <input type="hidden" value="${affiliate.id}" name="afiliado" />
                     <li>
@@ -280,41 +261,151 @@
                         <label>A&ntilde;o:</label>
                         <input name="anio" />
                     </li>
-                    <li><input value="Mostrar" type="submit" /></li>
                 </ul>
-            </fieldset>
+            </div>
         </form>
-        <div id="observaciones">
-            <table>
-                <caption>Observaciones</caption>
-                <thead>
-                    <tr>
-                        <th>Descripci&oacute;n</th>
-                        <th>Fecha</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr py:for="observacion in affiliate.observaciones">
-                        <td>${observacion.texto}</td>
-                        <td py:if="observacion.fecha != None">${observacion.fecha.strftime('%d/%m/%Y')}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <form action="${tg.url('/affiliate/observacion/add')}">
-                <fieldset>
-                    <legend>Agregar Observaci&oacute;n</legend>
-                    <ol>
-                        <li>
-                            <input name="affiliate" value="${affiliate.id}" type="hidden" />
-                            <label>Observaci&oacute;n</label>
-                            <textarea name="texto"></textarea>
-                        </li>
-                        <li>
-                            <input type="submit" value="Agregar" />
-                        </li>
-                    </ol>
-                </fieldset>
-            </form>
-        </div>
+        <form class="agregarSolicitud" action="${tg.url('/solicitud/agregar')}">
+            <div>
+                <ol>
+                    <li>
+                        <input name="affiliate" value="${affiliate.id}" type="hidden" />
+                        <label>Monto</label>
+                        <input name="monto" />
+                    </li>
+                    <li>
+                        <label>Periodo</label>
+                        <input name="periodo" />
+                    </li>
+                    <li>
+                        <label>Entrega</label>
+                        <input name="entrega" class="datepicker" />
+                    </li>
+                    <li>
+                        <label>Ingreso</label>
+                        <input name="ingreso" class="datepicker" />
+                    </li>
+                </ol>
+            </div>
+        </form>
+        <form class="agregarObservacion" action="${tg.url('/affiliate/observacion/add')}">
+            <div>
+                <ol>
+                    <li>
+                        <input name="affiliate" value="${affiliate.id}" type="hidden" />
+                        <label>Observaci&oacute;n</label>
+                        <textarea name="texto" cols="18"></textarea>
+                    </li>
+                </ol>
+            </div>
+        </form>
+        <form class="desactivar" action="${tg.url('/affiliate/deactivate')}" method="post">
+            <div>
+                <input value="${affiliate.id}" name="affiliate" type="hidden" />
+                <ul>
+                    <li>
+                        <label>Raz&oacute;n</label>
+                        <select name="reason">
+                            <option>Retiro</option>
+                            <option>Fallecimiento</option>
+                            <option>Renuncia</option>
+                            <option>No es Afiliado</option>
+                            <option>Suspendido</option>
+                        </select>
+                    </li>
+                </ul>
+            </div>
+        </form>
+        <form class="editar" action="${tg.url('/affiliate/save')}" method="post">
+            <div>
+                <input type="hidden" value="${affiliate.id}" name="affiliate" />
+                <ul>
+                    <li>
+                        <label for="firstName">Nombre:</label>
+                        <input name="firstName" value="${affiliate.firstName}" />
+                    </li>
+                    <li>
+                        <label for="lastName">Apellido:</label>
+                        <input name="lastName" value="${affiliate.lastName}" />
+                    </li>
+                    <li>
+                        <label for="birthPlace">Lugar de Nacimiento:</label>
+                        <input name= "birthPlace" value="${affiliate.birthPlace}" />
+                    </li>
+                    <li>
+                        <label for="phone">Tel&eacute;fono:</label>
+                        <input name="phone" value="${affiliate.phone}"/>
+                    </li>
+                    <li>
+                        <label>Identidad:</label>
+                        <input name="cardID" value="${affiliate.cardID}" maxlength="15"/>
+                    </li>
+                    <li>
+                        <label for="birthday">Fecha de Nacimiento</label>
+                        <input name="birthday" value="${affiliate.birthday.strftime('%d/%m/%Y')}" class="datepicker" />
+                    </li>
+                    <li>
+                        <label for="payment">Cotiza por:</label>
+                        <select name="payment">
+                            <option py:if="affiliate.payment == 'Escalafon'" selected="">Escalafon</option>
+                            <option py:if="not affiliate.payment == 'Escalafon'">Escalafon</option>
+                            <option py:if="affiliate.payment == 'UPN'" selected="">UPN</option>
+                            <option py:if="not affiliate.payment == 'UPN'">UPN</option>
+                            <option py:if="affiliate.payment == 'INPREMA'" selected="">INPREMA</option>
+                            <option py:if="not affiliate.payment == 'INPREMA'">INPREMA</option>
+                            <option py:if="affiliate.payment == 'Ventanilla'" selected="">Ventanilla</option>
+                            <option py:if="not affiliate.payment == 'Ventanilla'">Ventanilla</option>
+                            <option py:if="affiliate.payment == 'Ministerio'" selected="">Ministerio</option>
+                            <option py:if="not affiliate.payment == 'Ministerio'">Ministerio</option>
+                            <option py:if="affiliate.payment == 'Retirado'" selected="">Retirado</option>
+                            <option py:if="not affiliate.payment == 'Retirado'">Retirado</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label for="escalafon">Escalaf&oacute;n:</label>
+                        <input name="escalafon" value="${affiliate.escalafon}" />
+                    </li>
+                    <li>
+                        <label for="school">Instituto:</label>
+                        <input name="school" value="${affiliate.school}" />
+                    </li>
+                    <li>
+                        <label for="town">Municipio:</label>
+                        <input name="town" value="${affiliate.town}" />
+                    </li>
+                    <li>
+                        <label for="state">Departamento:</label>
+                        <input name="state" value="${affiliate.state}" />
+                    </li>
+                </ul>
+            </div>
+        </form>
+        <form class="extra" action="${tg.url('/affiliate/extra/save')}" method="post">
+            <div>
+                <input type="hidden" name="affiliate" value="${affiliate.id}" />
+                <ul>
+                    <li>
+                        <label for="amount">Cantidad:</label>
+                        <input name="amount" />
+                    </li>
+                    <li>
+                        <label for="account">Cuenta:</label>
+                        <select name="account">
+                            <option py:for="account in accounts" value="${account.id}">${account.name}</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label for="months">Meses</label>
+                        <input name="months" />
+                    </li>
+                    <li>
+                        <label>Es Retrasada</label>
+                        <input name="retrasada" type="checkbox" />
+                    </li>
+                    <li>
+                        <input type="submit" value="Guardar" />
+                    </li>
+                </ul>
+            </div>
+        </form>
     </body>
 </html>

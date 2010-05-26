@@ -77,7 +77,7 @@
                 <th>Concepto</th>
                 <th>Retrasada</th>
                 <th>Mes</th>
-                <th>Anio</th>
+                <th>A&ntilde;o</th>
                 <th>Cantidad</th>
             </thead>
             <tbody>
@@ -107,7 +107,7 @@
                     <td>Reintegro</td>
                     <td>No</td>
                     <td>${reintegro.motivo}</td>
-                    <td>${extra.fecha.strftime('%d/%m/%Y')}</td>
+                    <td>${reintegro.emision.strftime('%d/%m/%Y')}</td>
                     <td>${locale.currency(reintegro.monto, True, True)}</td>
                 </tr>
             </tbody>

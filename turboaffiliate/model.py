@@ -1147,6 +1147,7 @@ class Reintegro(SQLObject):
         """Efectua el pago del :class:`Reintegro` mediante una planilla"""
         
         self.cancelar(dia)
+        self.formaPago = FormaPago.get(1)
         
         kw = dict()
         kw['amount'] = self.monto

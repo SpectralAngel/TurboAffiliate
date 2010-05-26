@@ -54,7 +54,7 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(affiliate=validators.Int()))
     def default(self, affiliate):
         
-        return dict(affiliate=model.Affiliate.get(affiliate))
+        return dict(affiliate=model.Affiliate.get(affiliate),accounts=model.Account.select())
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.search')
@@ -94,7 +94,7 @@ class Affiliate(controllers.Controller):
     @expose()
     @validate(validators=dict(
             cardID=validators.String(),
-            birthday=validators.DateTimeConverter(format='%Y-%m-%d'),
+            birthday=validators.DateTimeConverter(format='%d/%m/%Y'),
             escalafon=validators.String(),
             phone=validators.String(),
             birthPlace=validators.String(),
@@ -295,19 +295,12 @@ class Affiliate(controllers.Controller):
     @expose(template='turboaffiliate.templates.affiliate.affiliate')
     def last(self):
         
-        return dict(affiliate=model.Affiliate.select(orderBy="-id")[0])
-    
-    @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.affiliate.deactivate')
-    @validate(validators=dict(affiliate=validators.Int()))
-    def deactivate(self, affiliate):
-        
-        return dict(affiliate=model.Affiliate.get(affiliate))
+        return dict(affiliate=model.Affiliate.select(orderBy="-id").limit(1).getOne())
     
     @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(affiliate=validators.Int(), reason=validators.String()))
-    def deactivateTrue(self, affiliate, reason):
+    def deactivate(self, affiliate, reason):
         
         affiliate = model.Affiliate.get(affiliate)
         affiliate.active = False

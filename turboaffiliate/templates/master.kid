@@ -44,9 +44,9 @@
     				<img src="${tg.url('/static/images/loan.png')}" alt="Afiliados" width="48" height="48" />
     				<span>Pr&eacute;stamos</span>
     			</a>
-    			<a class="menu" href="${tg.url('/company')}">
-    				<img src="${tg.url('/static/images/company.png')}" alt="Afiliados" width="48" height="48" />
-    				<span>Compa&ntilde;&iacute;as</span>
+    			<a class="menu" href="${tg.url('/reintegro')}">
+    				<img src="${tg.url('/static/images/company.png')}" alt="Reintegros" width="48" height="48" />
+    				<span>Reintegros</span>
     			</a>
     			<a class="menu" href="${tg.url('/obligation')}">
     				<img src="${tg.url('/static/images/affiliate.png')}" alt="Afiliados" width="48" height="48" />

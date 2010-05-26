@@ -29,8 +29,8 @@ class Solicitud(controllers.Controller):
     
     @expose()
     @validate(validators=dict(affiliate=validators.Int(), periodo=validators.Int(),
-                              entrega=validators.DateTimeConverter(format='%Y-%m-%d'),
-                              ingreso=validators.DateTimeConverter(format='%Y-%m-%d'),
+                              entrega=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              ingreso=validators.DateTimeConverter(format='%d/%m/%Y'),
                               monto=validators.String()))
     @identity.require(identity.not_anonymous())
     def agregar(self, affiliate, **kw):
@@ -66,7 +66,7 @@ class Solicitud(controllers.Controller):
     
     @expose(template='turboaffiliate.templates.solicitud.dia')
     @identity.require(identity.not_anonymous())
-    @validate(validators=dict(dia=validators.DateTimeConverter(format='%Y-%m-%d')))
+    @validate(validators=dict(dia=validators.DateTimeConverter(format='%d/%m/%Y')))
     def dia(self, dia):
         
         solicitudes = model.Solicitud.selectBy(entrega=dia)

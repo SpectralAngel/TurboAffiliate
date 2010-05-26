@@ -29,6 +29,11 @@ class Reintegro(controllers.Controller):
     
     """Permite realizar acciones sobre los Reintegros"""
     
+    @expose(template='turboaffiliate.templates.reintegro.index')
+    def index(self):
+        
+        return dict()
+    
     @expose()
     @identity.require(identity.not_anonymous())
     @validate(validators=dict(affiliate=validators.Int(),cuenta=validators.Int(),
@@ -49,12 +54,12 @@ class Reintegro(controllers.Controller):
         
         flash("Se agrego el reintegro al afiliado")
         
-        raise redirect(url('/reintegro/afiliado/%s' % reintegro.affiliate.id))
+        raise redirect(url('/reintegro/%s' % reintegro.affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.reintegro.afiliado')
     @validate(validators=dict(afiliado=validators.Int()))
-    def afiliado(self, afiliado): 
+    def default(self, afiliado): 
         
         """Muestra el estado de cuenta de reintegros de un afiliado"""
         
@@ -71,11 +76,11 @@ class Reintegro(controllers.Controller):
         
         reintegro = model.Reintegro.get(reintegro)
         
-        afiliado = reintegro.afiliado
+        afiliado = reintegro.affiliate
         
-        reintegro.DestroySelf()
+        reintegro.destroySelf()
         
-        raise redirect(url('/reintegro/afiliado/%s' % afiliado.id))
+        raise redirect(url('/reintegro/%s' % afiliado.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -93,7 +98,7 @@ class Reintegro(controllers.Controller):
         
         flash("Se ha pagado el Reintegro")
         
-        raise redirect(url('/reintegro/afiliado/%s' % reintegro.affiliate.id))
+        raise redirect(url('/reintegro/%s' % reintegro.affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.reintegro.pagados')
@@ -103,7 +108,7 @@ class Reintegro(controllers.Controller):
         
         """Muestra los reintegros pagados durante un periodo"""
         
-        query = "reintegro.cancelacion >= %s and reintregro.cancelacion <= %s and pagado = true" (inicio, fin)
+        query = "reintegro.cancelacion >= '%s' and reintegro.cancelacion <= '%s' and pagado = true" % (inicio, fin)
         
         return dict(reintegros=model.Reintegro.select(query))
     
@@ -115,7 +120,7 @@ class Reintegro(controllers.Controller):
         
         """Muestra los reintegros emitidos en un periodo"""
         
-        query = "reintegro.emision >= %s and reintregro.emision <= %s" (inicio, fin)
+        query = "reintegro.emision >= '%s' and reintegro.emision <= '%s'" % (inicio, fin)
         
         return dict(reintegros=model.Reintegro.select(query))
     

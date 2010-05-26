@@ -36,7 +36,10 @@
                     <td>${reintegro.planilla}</td>
                     <td>${reintegro.motivo}</td>
                     <td>${locale.currency(reintegro.monto, True, True)}</td>
-                    <th class="noprint"><button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:pagarReintegro(${reintegro.id})">Pagar Reintegro</button></th>
+                    <th class="noprint">
+                        <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:pagarReintegro(${reintegro.id})">Pagar</button>
+                        <a class="ui-button button-size ui-state-default ui-corner-all" href="${tg.url('/reintegro/eliminar/%s' % reintegro.id)}">Eliminar</a>
+                    </th>
                 </tr>
             </tbody>
             <tfoot>
