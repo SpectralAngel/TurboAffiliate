@@ -628,6 +628,59 @@ class Loan(SQLObject):
     
         self.debt = self.capital
     
+    def pagar(self, amount, receipt, day=date.today(), libre=False):
+        
+        """Carga un nuevo pago para el préstamo
+        
+        Dependiendo de si se marca como libre de intereses o no, calculará el
+        interés compuesto a pagar
+        """
+        
+        kw = dict()
+        kw['amount'] = Decimal(amount).quantize(dot01)
+        kw['day'] = day
+        kw['receipt'] = receipt
+        kw['loan'] = self
+        
+        # La cantidad a pagar es igual o mayor que la deuda del préstamo, por
+        # lo tanto se considera la ultima cuota y no se cargaran intereses
+        if(self.debt <= amount):
+            
+            self.last = kw['day']
+            kw['capital'] = kw['amount']
+            # Register the payment in the database
+            Pay(**kw)
+            # Remove the loan and convert it to PayedLoan
+            self.remove()
+            return True
+        
+        # Otherwise calculate interest for the loan's payment
+        if libre:
+            kw['interest'] = 0
+        else:
+            kw['interest'] = (self.debt * self.interest / 1200).quantize(dot01)
+        
+        # Increase the loans debt by the interest
+        self.debt += kw['interest']
+        # Decrease debt by the payment amount
+        self.debt -= kw['amount']
+        # Calculate how much money was used to pay the capital
+        kw['capital'] = kw['amount'] - kw['interest']
+        # Change the last payment date
+        self.last = day
+        # Register the payment in the database
+        Pay(**kw)
+        # Increase the number of payments by one
+        self.number += 1
+        
+        if self.debt == 0:
+            self.remove()
+            return True
+        
+        self.compensar()
+        
+        return False
+    
     def pay(self, amount, receipt, day=date.today()):
         
         """Charges a normal payment for the loan
@@ -785,6 +838,17 @@ class Loan(SQLObject):
             kw['payment'] = kw['interest'] + kw['capital']
             li.append(kw)
         return li
+    
+    def compensar(self):
+        
+        futuro = self.future()
+        if futuro == list():
+            continue
+        
+        ultimo_pago = futuro[-1]['payment']
+        ultimo_mes = futuro[-1]['enum']
+        if ultimo_pago < self.payment and ultimo_mes == self.months:
+            self.debt += ((self.payment - ultimo_pago) * 2 / 3).quantize(dot01)
 
 class Pay(SQLObject):
     
