@@ -32,7 +32,7 @@
 					<td py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
 					<td py:content="loan.affiliate.payment" />
 					<td py:content="locale.currency(loan.capital, True, True)" />
-					<td py:content="locale.currency(loan.debt, True, True)" />
+					<td py:content="locale.currency(loan.totaldebt(), True, True)" />
 					<td py:content="loan.startDate" />
 				</tr>
 			</tbody>

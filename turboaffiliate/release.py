@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Release information about TurboAffiliate
 
-version = "0.9m2"
+version = "0.9m3"
 
 # description = "Your plan to rule the world"
 # long_description = "More description about your plan"

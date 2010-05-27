@@ -1,5 +1,12 @@
 $(document).ready(function(e)
 {
+    $('.ui-button').hover(
+			function(){ $(this).addClass("ui-state-hover"); },
+			function(){ $(this).removeClass("ui-state-hover"); }
+		).mousedown(function(){ $(this).addClass("ui-state-active"); }
+		).mouseup(function(){ $(this).removeClass("ui-state-active"); }
+	);
+    
     $('input.datepicker').datepicker({
         dateFormat: 'dd/mm/yy',
         changeMonth: true,
@@ -76,6 +83,18 @@ $(document).ready(function(e)
         minWidth:480,
         buttons:{
                      'Agregar' : function() { $(this).submit() },
+                     Cancelar :  function() { $(this).dialog('close'); }
+                }
+    });
+    $('.jubilar').dialog(
+    {
+        title : "Jubilar o Cambiar Fecha de Jubilación",
+        modal:true,
+        autoOpen:false,
+        width:480,
+        minWidth:480,
+        buttons:{
+                     'Efectuar Cambio' : function() { $(this).submit() },
                      Cancelar :  function() { $(this).dialog('close'); }
                 }
     });

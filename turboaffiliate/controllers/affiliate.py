@@ -142,13 +142,6 @@ class Affiliate(controllers.Controller):
         raise redirect('/affiliate/%s' % affiliate.id)
     
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.affiliate.edit')
-    def edit(self, cardID):
-        
-        affiliate = model.Affiliate.get(int(cardID))
-        return dict(affiliate=affiliate)
-    
-    @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.status')
     @validate(validators=dict(affiliate=validators.Int()))
     def status(self, affiliate):
@@ -181,33 +174,6 @@ class Affiliate(controllers.Controller):
         raise redirect('/affiliate/%s' % affiliate[0].id)
         
         redirect('/affiliate')
-    
-    @identity.require(identity.not_anonymous())
-    @expose()
-    @validate(validators=dict(affiliate=validators.Int()))
-    def off(self, affiliate):
-        
-        affiliate = model.Affiliate.get(affiliate)
-        affiliate.active = False
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = "Desactivado el afiliado %s" % affiliate.id
-        model.Logger(**log)
-        raise redirect('/affiliate/%s' % affiliate.id)
-    
-    @identity.require(identity.not_anonymous())
-    @expose()
-    @validate(validators=dict(affiliate=validators.Int()))
-    def on(self, affiliate):
-        
-        affiliate = model.Affiliate.get(affiliate)
-        affiliate.active = True
-        
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = "Activado el afiliado %s" % affiliate.id
-        model.Logger(**log)
-        raise redirect('/affiliate/%s' % affiliate.id)
 
     @identity.require(identity.not_anonymous())
     @expose()
@@ -281,7 +247,7 @@ class Affiliate(controllers.Controller):
             loan.pay(loan.get_payment(), "Planilla", date.today())
         
         raise redirect('/affiliate/cotization/?how=%s&year=%s&month=%s' % (how, year, month))
-
+    
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.report')
     @validate(validators=dict(affiliate=validators.Int(),end=validators.Int(), begin=validators.Int()))
@@ -578,21 +544,15 @@ class Affiliate(controllers.Controller):
         return dict(affiliates=affiliates, show=show, count=affiliates.count())
     
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.affiliate.jubilate')
-    @validate(validators=dict(affiliate=validators.Int()))
-    def jubilate(self, affiliate):
-        
-        affiliate = model.Affiliate.get(affiliate)
-        return dict(affiliate=affiliate)
-    
-    @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(affiliate=validators.Int(),
-                              jubilated=validators.DateTimeConverter(format='%Y-%m-%d')))
-    def inprema(self, affiliate, jubilated):
+                              jubilated=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              cobro=validators.Int()))
+    def jubilar(self, affiliate, jubilated,cobro):
         
         affiliate = model.Affiliate.get(affiliate)
         affiliate.jubilated = jubilated
+        affiliate.escalafon = str(cobro)
         affiliate.payment = "INPREMA"
         return self.default(affiliate.id)
     

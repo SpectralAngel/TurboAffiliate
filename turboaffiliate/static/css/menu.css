@@ -1,0 +1,27 @@
+.toolbox {
+    padding: 5px;
+    margin: 0;
+}
+
+.toolbox ul {
+}
+
+.toolbox li {
+    list-style: none;
+}
+
+.toolbox li, .toolbox a {
+    display: inline-block;
+    padding: 2px 5px 2px 5px;
+}
+
+.toolbox a {
+    text-decoration: none;
+}
+.estado-cuenta {
+    padding: 2px;
+}
+a.ui-button {
+    text-decoration: none;
+    padding: 2px;
+}

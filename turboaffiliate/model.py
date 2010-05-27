@@ -843,12 +843,16 @@ class Loan(SQLObject):
         
         futuro = self.future()
         if futuro == list():
-            continue
+            return
         
         ultimo_pago = futuro[-1]['payment']
         ultimo_mes = futuro[-1]['enum']
         if ultimo_pago < self.payment and ultimo_mes == self.months:
             self.debt += ((self.payment - ultimo_pago) * 2 / 3).quantize(dot01)
+    
+    def totaldebt(self):
+        
+        return self.debt
 
 class Pay(SQLObject):
     
@@ -1006,6 +1010,10 @@ class PayedLoan(SQLObject):
         """Obtains the amount that was given to the affiliate in the check"""
         
         return self.capital - sum(d.amount for d in self.deductions)
+    
+    def totaldebt(self):
+        
+        return 0
 
 class OldPay(SQLObject):
     

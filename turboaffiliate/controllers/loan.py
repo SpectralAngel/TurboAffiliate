@@ -29,13 +29,6 @@ from decimal import Decimal
 class Deduction(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.loan.deduction.add")    
-    @validate(validators=dict(loan=validators.Int()))
-    def add(self, loan):
-        
-        return dict(loan=model.Loan.get(loan), accounts=model.Account.selectBy(loan=True))
-    
-    @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(loan=validators.Int(),account=validators.Int(),
                               amount=validators.String(),
@@ -74,20 +67,6 @@ class Deduction(controllers.Controller):
 class Pay(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.loan.pay.add")
-    @validate(validators=dict(code=validators.Int()))
-    def add(self, code):
-        
-        return dict(loan=model.Loan.get(code))
-    
-    @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.loan.pay.addfree")
-    @validate(validators=dict(code=validators.Int()))
-    def addfree(self, code):
-        
-        return dict(loan=model.Loan.get(code))
-    
-    @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(code=validators.Int()))
     def remove(self, code):
@@ -99,37 +78,13 @@ class Pay(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose()
-    @validate(validators=dict(amount=validators.String(),code=validators.Int(),
-                              receipt=validators.String(),
-                              day=validators.DateTimeConverter(format='%Y-%m-%d')))
-    def newfree(self, amount, day, code, receipt):
+    @validate(validators=dict(amount=validators.String(),loan=validators.Int(),
+                          receipt=validators.String(), free=validators.Bool(),
+                          day=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def agregar(self, amount, day, loan, receipt, free):
         
-        loan = model.Loan.get(code)
         amount = Decimal(amount)
-        id = loan.id
-        
-        if day == None:
-            day = date.today()
-        
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = "Pago de %s al prestamo %s" % (amount, loan.id)
-        
-        if loan.payfree(amount, receipt, day):
-            raise redirect('/payed/%s' % id)
-        
-        model.Logger(**log)
-        flash('El pago se ha efecutado')
-        raise redirect('/loan/%s' % loan.id)
-    
-    @identity.require(identity.not_anonymous())
-    @expose()
-    @validate(validators=dict(amount=validators.String(),code=validators.Int(),
-                          receipt=validators.String(),
-                          day=validators.DateTimeConverter(format='%Y-%m-%d')))
-    def new(self, amount, day, code, receipt):
-        amount = Decimal(amount)
-        loan = model.Loan.get(code)
+        loan = model.Loan.get(loan)
         id = loan.id
         
         if day == None:
@@ -140,12 +95,10 @@ class Pay(controllers.Controller):
         log['action'] = "Pago de %s al prestamo %s" % (amount, loan.id)
         model.Logger(**log)
         
-        if loan.pay(amount, receipt, day):
+        if loan.pagar(amount, receipt, day, free):
             raise redirect('/payed/%s' % id)
         
-        flash('El pago se ha efecutado')
-        
-        raise redirect('/loan/%s' % loan.id)
+        raise redirect(url('/loan/%s' % loan.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.pay.resume')
@@ -179,8 +132,8 @@ class Loan(controllers.Controller):
     @validate(validators=dict(code=validators.Int()))
     def default(self, code):
         
-        loan = model.Loan.get(code)
-        return dict(loan=loan, day=date.today())
+        return dict(loan=model.Loan.get(code), day=date.today(),
+                    accounts=model.Account.selectBy(loan=True))
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.loan.pay")
@@ -377,11 +330,16 @@ class Loan(controllers.Controller):
             loans.extend(loan for loan in adeudados if loan.startDate.day == n)
             loans.extend(loan for loan in pagados if loan.startDate.day == n)
         
-        return dict(loans=loans, count=loans.count(),
+        debt =0
+        for l in loans:
+            
+            debt += l.totaldebt()
+        
+        return dict(loans=loans, count=len(loans),
                     payment="Periodo del %s al %s" % (first.strftime('%d de %B de %Y'),
                                                         last.strftime('%d de %B de %Y')),
                     capital=sum(l.capital for l in loans),
-                    debt=sum(l.debt for l in loans))
+                    debt=debt)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.cartera')

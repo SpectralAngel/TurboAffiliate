@@ -11,8 +11,11 @@
 	    <title py:replace="''">Your title goes here</title>
 	    <meta py:replace="item[:]"/><script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
         <script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
+        <script src="${tg.url('/static/javascript/jquery.tabSlideOut.js')}" type="text/javascript"></script>
+        <script src="${tg.url('/static/javascript/menu.js')}" type="text/javascript"></script>
 	    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/smoothness/jquery-ui.css')}" media="screen" />
 	    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/style.css')}" media="screen" />
+        <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/menu.css')}" media="screen" />
 	    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print" />
 	</head>
 	<body py:match="item.tag=='{http://www.w3.org/1999/xhtml}body'" py:attrs="item.items()">
@@ -31,7 +34,7 @@
 	    </div>
 	    <div id="container">
 	    	<div id="content" class="column">
-				<div py:if="tg_flash" class="flash" py:content="tg_flash" />
+				<div py:if="tg_flash" class="ui-state-error" py:content="tg_flash" />
 	    		<div py:replace="[item.text]+item[:]"/>
 	    	</div>
 	    	<div id="sidebar-left" class="column">

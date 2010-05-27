@@ -27,7 +27,7 @@
 				</li>
 				<li>
 					<strong>Saldo Actual:</strong>
-					<span py:content="locale.currency(loan.debt, True, True)" />
+					<span py:content="locale.currency(loan.totaldebt(), True, True)" />
 				</li>
 				<li>
 					<strong>Fecha de Otorgamiento:</strong>
