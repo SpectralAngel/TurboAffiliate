@@ -709,3 +709,4 @@ class Loan(controllers.Controller):
         return dict(loans=prestamos, start=start, end=start, monto=monto,
                     neto=neto, papeleo=papeleo, aportaciones=aportaciones,
                     intereses=intereses, retencion=retencion)
+

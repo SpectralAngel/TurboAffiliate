@@ -4,7 +4,7 @@
 	import locale
 	locale.setlocale(locale.LC_ALL, "")
 ?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#" py:extends="'../master.kid'">
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
 		<title>TurboAffiliate &bull; Afiliados</title>
@@ -12,7 +12,7 @@
 		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" />
 	</head>
 	<body>
-		<h1>Solicitudes para ${dia}</h1>
+		<h1>Solicitudes para ${dia.strftime('%d de %B de %Y')}</h1>
 		<table>
             <caption>Solicitudes de Pr&eacute;stamo</caption>
             <thead>
@@ -41,7 +41,8 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th></th>
+                    <th colspan="7">Total de Solicitudes Pendientes</th>
+                    <th>${solicitudes.count()}</th>
                 </tr>
             </tfoot>
         </table>

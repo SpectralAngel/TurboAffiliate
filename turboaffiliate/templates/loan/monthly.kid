@@ -34,7 +34,7 @@
 				<tr>
 					<th colspan="2">Total:</th>
 					<th>${locale.currency(total, True, True)}</th>
-                    <th>${locale.currency(total, True, True)}</th>
+                    <th>${locale.currency(net, True, True)}</th>
 				</tr>
 			</tfoot>
 		</table>

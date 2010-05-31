@@ -6,6 +6,7 @@
         <title>TurboAffiliate &bull; Afiliados</title>
         <script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
         <script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
+        <script src="${tg.url('/static/javascript/prestamo.js')}" type="text/javascript"></script>
         <script type="text/javascript">
         <![CDATA[
         $(document).ready(function(e)
@@ -90,7 +91,7 @@
                 <ol>
                     <li>
                         <label>D&iacute;a</label>
-                        <input name="dia" class="date-picker" />
+                        <input name="dia" class="datepicker" />
                     </li>
                     <li>
                         <input type="submit" value="Mostrar" />
