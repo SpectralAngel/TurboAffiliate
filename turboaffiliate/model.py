@@ -820,6 +820,7 @@ class Loan(SQLObject):
             kw = dict()
             kw['number'] = "%s/%s" % (n + self.number, self.months)
             kw['month'] = self.number + n + start
+            kw['enum'] = self.number + n
             kw['year'] = year
             while kw['month'] > 12:
                 kw['month'] = kw['month'] - 12

@@ -154,24 +154,26 @@
                     <th>Deuda</th>
                     <th>Cuota</th>
                     <th>Ultimo Pago</th>
+                    <th>Ver</th>
                 </tr>
             </thead>
             <tbody>
                 <tr py:for="loan in affiliate.loans">
-                    <td><a class="ui-state-default ui-corner-all ui-button" href="${tg.url('/loan/%s' % loan.id)}" >${loan.id}</a></td>
+                    <td><a href="${tg.url('/loan/%s' % loan.id)}" >${loan.id}</a></td>
                     <td>${locale.currency(loan.capital, True, True)}</td>
                     <td>${locale.currency(loan.debt, True, True)}</td>
                     <td>${locale.currency(loan.payment, True, True)}</td>
                     <td>${loan.last.strftime('%d de %B de %Y')}</td>
+                    <td><a href="${tg.url('/loan/%s' % loan.id)}" >Ver</a></td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="5"><a class="ui-state-default ui-corner-all ui-button" href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a></th>
+                    <th colspan="6"><a href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a></th>
                 </tr>
             </tfoot>
         </table>
-        <a class="ui-state-default ui-corner-all ui-button" py:if="len(affiliate.loans) == 0" href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a>
+        <a py:if="len(affiliate.loans) == 0" href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a>
         <table py:if="len(affiliate.solicitudes) != 0">
             <caption>Solicitudes de Pr&eacute;stamo</caption>
             <thead>
@@ -190,8 +192,8 @@
                     <td>${solicitud.periodo}</td>
                     <td>${solicitud.ingreso.strftime('%d de %B de %Y')}</td>
                     <td>${solicitud.entrega.strftime('%d de %B de %Y')}</td>
-                    <td><a class="ui-state-default ui-corner-all ui-button"  href="${tg.url('/solicitud/convertir/%s' % solicitud.id)}">Liquidar</a></td>
-                    <td><a class="ui-state-default ui-corner-all ui-button"  href="${tg.url('/solicitud/eliminar/%s' % solicitud.id)}">Eliminar</a></td>
+                    <td><a href="${tg.url('/solicitud/convertir/%s' % solicitud.id)}">Liquidar</a></td>
+                    <td><a href="${tg.url('/solicitud/eliminar/%s' % solicitud.id)}">Eliminar</a></td>
                 </tr>
             </tbody>
         </table>
@@ -203,14 +205,16 @@
                     <th>Monto</th>
                     <th>Cuota</th>
                     <th>Ultimo Pago</th>
+                    <th>Ver</th>
                 </tr>
             </thead>
             <tbody>
                 <tr py:for="loan in affiliate.payedLoans">
-                    <td><a class="ui-state-default ui-corner-all ui-button" href="${tg.url('/payed/%s' % loan.id)}">${loan.id}</a></td>
+                    <td><a href="${tg.url('/payed/%s' % loan.id)}">${loan.id}</a></td>
                     <td>${locale.currency(loan.capital, True, True)}</td>
                     <td>${locale.currency(loan.payment, True, True)}</td>
                     <td>${loan.last.strftime('%d de %B de %Y')}</td>
+                    <td><a href="${tg.url('/payed/%s' % loan.id)}" >Ver</a></td>
                 </tr>
             </tbody>
         </table>

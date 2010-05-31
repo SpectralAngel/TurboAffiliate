@@ -11,12 +11,12 @@
 	    <title py:replace="''">Your title goes here</title>
 	    <meta py:replace="item[:]"/><script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
         <script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
-        <script src="${tg.url('/static/javascript/jquery.tabSlideOut.js')}" type="text/javascript"></script>
         <script src="${tg.url('/static/javascript/menu.js')}" type="text/javascript"></script>
 	    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/smoothness/jquery-ui.css')}" media="screen" />
 	    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/style.css')}" media="screen" />
         <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/menu.css')}" media="screen" />
 	    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print" />
+        <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/form.css')}" media="screen" />
 	</head>
 	<body py:match="item.tag=='{http://www.w3.org/1999/xhtml}body'" py:attrs="item.items()">
 	    <div id="header">

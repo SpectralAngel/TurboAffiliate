@@ -119,7 +119,6 @@
         </table>
         <form class="pagar" action="${tg.url('/loan/pay/agregar')}" method="post">
             <div>
-                <input type="hidden" name="code" value="${loan.id}" />
                 <ul>
                     <li>
                         <label for="amount">Monto:</label>
@@ -128,6 +127,7 @@
                     <li>
                         <label for="day">Fecha:</label>
                         <input name="day" class="datepicker" />
+                        <input type="hidden" name="loan" value="${loan.id}" />
                     </li>
                     <li>
                         <label for="receipt">Recibo:</label>

@@ -81,11 +81,16 @@ class Pay(controllers.Controller):
     @validate(validators=dict(amount=validators.String(),loan=validators.Int(),
                           receipt=validators.String(), free=validators.Bool(),
                           day=validators.DateTimeConverter(format='%d/%m/%Y')))
-    def agregar(self, amount, day, loan, receipt, free):
+    def agregar(self, amount, day, loan, receipt, **kw):
         
         amount = Decimal(amount)
         loan = model.Loan.get(loan)
         id = loan.id
+        
+        free = False;
+        
+        if 'free' in kw:
+            free = kw['free']
         
         if day == None:
             day = date.today()
