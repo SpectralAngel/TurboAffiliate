@@ -169,12 +169,13 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(cardID=validators.String()))
     def card(self, cardID):
         
-        try:
-            affiliate = model.Affiliate.selectBy(cardID=cardID).getOne()
-            raise redirect('/affiliate/%s' % affiliate.id)
-        except:
+        affiliate = model.Affiliate.selectBy(cardID=cardID)
+        
+        if affiliate.count() == 0:
             flash(u'Número de identidad no encontrado')
             raise redirect('/affiliate')
+        
+        raise redirect('/affiliate/%s' % affiliate[0].id)
         
         redirect('/affiliate')
 
