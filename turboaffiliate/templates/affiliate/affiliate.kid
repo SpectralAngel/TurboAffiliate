@@ -23,10 +23,11 @@
             <li py:if="'admin' in tg.identity.groups"><a class="ui-state-default ui-corner-all ui-button" href="${tg.url('/affiliate/remove/%s' % affiliate.id)}">Borrar</a></li>
             <li><a href="#" class="ui-state-default ui-corner-all ui-button" onclick="javascript:$('.extra').dialog('open');">Agregar Deducci&oacute;n</a></li>
             <li><a href="#" class="ui-state-default ui-corner-all ui-button" onclick="javascript:$('.jubilar').dialog('open');">Jubilar</a></li>
-            <li><a href="#" class="ui-state-default ui-corner-all ui-button" onclick="javascript:$('.desactivar').dialog('open');">Desactivar</a><a class="ui-state-default ui-corner-all ui-button" py:if="not affiliate.active" href="${tg.url('/affiliate/activate/%s' % affiliate.id)}">Activar Afiliado</a></li>
+            <li><a href="#" class="ui-state-default ui-corner-all ui-button" py:if="affiliate.active" onclick="javascript:$('.desactivar').dialog('open');">Desactivar</a><a class="ui-state-default ui-corner-all ui-button" py:if="not affiliate.active" href="${tg.url('/affiliate/activate/%s' % affiliate.id)}">Activar</a></li>
             <li><a href="#" class="ui-state-default ui-corner-all ui-button" onclick="javascript:$('.agregarSolicitud').dialog('open');">Agregar Solicitud</a></li>
             <li><a href="#" class="ui-state-default ui-corner-all ui-button" onclick="javascript:$('.verDeducciones').dialog('open');">Mostrar Deducciones</a></li>
             <li><a href="#" class="ui-state-default ui-corner-all ui-button" onclick="javascript:$('.agregarObservacion').dialog('open');">Observaci&oacute;n</a></li>
+            <li><a href="#" class="ui-state-default ui-corner-all ui-button" onclick="javascript:$('.muerte').dialog('open');">Reportar Fallecimiento</a></li>
         </ul>
         <h3>ID: ${affiliate.cardID} <span class="pago">${affiliate.payment}</span>
         <span class="pago" py:if="affiliate.payment != 'Escalafon'">N&uacute;mero de Cobro:
@@ -56,7 +57,7 @@
             tiene Ciudad
             <a class="ui-state-default ui-corner-all ui-button"  href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Ingresar</a></span>
         </span>
-        <h3 class="flash" py:if="not affiliate.active">Afiliado desactivado, razon:<strong><span class="flash" py:if="not affiliate.active" py:content="affiliate.reason" /></strong></h3>
+        <h3 class="flash" py:if="not affiliate.active">Afiliado desactivado, razon:<strong><span class="flash" py:if="not affiliate.active" py:content="affiliate.reason" /><span py:if="not affiliate.muerte == None">Fecha de Fallecimiento: ${affiliate.muerte.strftime('%d de %B de %Y')}</span></strong></h3>
         <h3>Informaci&oacute;n Personal</h3>
         <ul>
             <li>
@@ -404,5 +405,18 @@
 				</ul>
 			</div>
 		</form>
+        <form class="muerte" action="${tg.url('/affiliate/fallecimiento')}" method="post">
+            <div>
+                <input value="${affiliate.id}" name="affiliate" type="hidden" />
+                <ul>
+                    <li>
+                        <label>Fecha:</label>
+                        <input py:if="affiliate.muerte != None" name="muerte" value="${affiliate.jubilated.strftime('%d/%m/%Y')}" class="datepicker" />
+                        <input py:if="affiliate.muerte == None" name="muerte" class="datepicker" />
+                    </li>
+                </ul>
+            </div>
+        </form>
     </body>
 </html>
+

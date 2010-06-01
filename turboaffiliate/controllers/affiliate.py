@@ -54,6 +54,8 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(affiliate=validators.Int()))
     def default(self, affiliate):
         
+        """Permite mostrar un afiliado"""
+        
         return dict(affiliate=model.Affiliate.get(affiliate),accounts=model.Account.select())
     
     @identity.require(identity.not_anonymous())
@@ -75,6 +77,8 @@ class Affiliate(controllers.Controller):
     @expose(template='turboaffiliate.templates.affiliate.affiliate')
     @validate(validators=dict(copemh=validators.Int()))
     def byCopemh(self, copemh):
+        
+        """Permite utilizar un numero de afiliacion en un formulario"""
         
         return self.default(copemh)
     
@@ -165,13 +169,12 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(cardID=validators.String()))
     def card(self, cardID):
         
-        affiliate = model.Affiliate.selectBy(cardID=cardID)
-        
-        if affiliate.count() == 0:
+        try:
+            affiliate = model.Affiliate.selectBy(cardID=cardID).getOne()
+            raise redirect('/affiliate/%s' % affiliate.id)
+        except:
             flash(u'Número de identidad no encontrado')
             raise redirect('/affiliate')
-        
-        raise redirect('/affiliate/%s' % affiliate[0].id)
         
         redirect('/affiliate')
 
@@ -271,6 +274,27 @@ class Affiliate(controllers.Controller):
         affiliate = model.Affiliate.get(affiliate)
         affiliate.active = False
         affiliate.reason = reason
+        log = dict()
+        affiliate.desactivacion = date.today()
+        log['user'] = identity.current.user
+        log['action'] = "Desactivado el afiliado %s" % affiliate.id
+        model.Logger(**log)
+        raise redirect('/affiliate/%s' % affiliate.id)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int(),
+                              muerte=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def fallecimiento(self, affiliate, muerte):
+        
+        """Desactiva el Afiliado indicando la fecha de muerte y estableciendo la
+        fecha de proceso con el día en que se ingresa el incidente"""
+        
+        affiliate = model.Affiliate.get(affiliate)
+        affiliate.active = False
+        affiliate.reason = "Fallecimiento"
+        affiliate.muerte = muerte
+        affiliate.desactivacion = date.today()
         log = dict()
         log['user'] = identity.current.user
         log['action'] = "Desactivado el afiliado %s" % affiliate.id
@@ -602,3 +626,4 @@ class Affiliate(controllers.Controller):
     def solvencia(self, afiliado, mes, anio):
         
         return dict(afiliado=model.Affiliate.get(afiliado),mes=mes,anio=anio, dia=date.today())
+

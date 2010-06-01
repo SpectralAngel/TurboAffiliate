@@ -12,10 +12,10 @@
         $(document).ready(function(e)
         {
             $('input.date-picker').datepicker({
-                dateFormat: 'yy-mm-dd',
+                dateFormat: 'dd/mm/yy',
                 changeMonth: true,
                 changeYear: true,
-                yearRange: 'c-60:c+10'
+                yearRange: 'c-70:c+10'
             });
         });
         ]]>
@@ -123,3 +123,4 @@
         </form>
     </body>
 </html>
+

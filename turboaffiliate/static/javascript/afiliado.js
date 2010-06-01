@@ -97,5 +97,17 @@ $(document).ready(function(e)
                      'Efectuar Cambio' : function() { $(this).submit() },
                      Cancelar :  function() { $(this).dialog('close'); }
                 }
+    })
+    ;$('.muerte').dialog(
+    {
+        title : "Reportar Fallecimiento",
+        modal:true,
+        autoOpen:false,
+        width:480,
+        minWidth:480,
+        buttons:{
+                     'Efectuar Cambio' : function() { $(this).submit() },
+                     Cancelar :  function() { $(this).dialog('close'); }
+                }
     });
 });

@@ -194,7 +194,9 @@ class Affiliate(SQLObject):
     delayed = MultipleJoin("Delayed")
     observaciones = MultipleJoin('Observacion')
     solicitudes = MultipleJoin('Solicitud')
-    reintegros =MultipleJoin('Reintegro')
+    reintegros = MultipleJoin('Reintegro')
+    muerte = DateCol(default=date.today)
+    desactivacion = DateCol(default=date.today)
     
     def get_monthly(self):
         
