@@ -45,20 +45,20 @@
 			<tbody>
 				<tr py:for="table in affiliate.cuotaTables">
 					<td py:content="table.year" />
-					<td py:content="table.amount(1)" />
-					<td py:content="table.amount(2)" />
-					<td py:content="table.amount(3)" />
-					<td py:content="table.amount(4)" />
-					<td py:content="table.amount(5)" />
-					<td py:content="table.amount(6)" />
-					<td py:content="table.amount(7)" />
-					<td py:content="table.amount(8)" />
-					<td py:content="table.amount(9)" />
-					<td py:content="table.amount(10)" />
-					<td py:content="table.amount(11)" />
-					<td py:content="table.amount(12)" />
-					<td class="deuda" py:content="table.payed()" />
-					<td class="deuda" py:content="table.debt()" />
+					<td py:content="table.pago_mes(1)" />
+					<td py:content="table.pago_mes(2)" />
+					<td py:content="table.pago_mes(3)" />
+					<td py:content="table.pago_mes(4)" />
+					<td py:content="table.pago_mes(5)" />
+					<td py:content="table.pago_mes(6)" />
+					<td py:content="table.pago_mes(7)" />
+					<td py:content="table.pago_mes(8)" />
+					<td py:content="table.pago_mes(9)" />
+					<td py:content="table.pago_mes(10)" />
+					<td py:content="table.pago_mes(11)" />
+					<td py:content="table.pago_mes(12)" />
+					<td class="deuda" py:content="table.pagado()" />
+					<td class="deuda" py:content="table.deuda()" />
 					<td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/edit/%s' % table.id)}">X</a></td>
 					<td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/remove/%s' % table.id)}">X</a></td>
 				</tr>
@@ -66,8 +66,8 @@
 			<tfoot>
 				<tr class="total">
 					<td colspan="13">&nbsp;</td>
-					<td class="deuda" py:content="locale.currency(sum(table.payed() for table in affiliate.cuotaTables), True, True)" />
-					<td class="deuda" py:content="locale.currency(sum(table.debt() for table in affiliate.cuotaTables), True, True)" />
+					<td class="deuda" py:content="locale.currency(sum(table.pagado() for table in affiliate.cuotaTables), True, True)" />
+					<td class="deuda" py:content="locale.currency(sum(table.deuda() for table in affiliate.cuotaTables), True, True)" />
 				</tr>
 			</tfoot>
 		</table>

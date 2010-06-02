@@ -43,34 +43,81 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr py:for="table in affiliate.cuotaTables">
-						<td py:content="table.year" />
-						<td py:content="table.amount(1)" />
-						<td py:content="table.amount(2)" />
-						<td py:content="table.amount(3)" />
-						<td py:content="table.amount(4)" />
-						<td py:content="table.amount(5)" />
-						<td py:content="table.amount(6)" />
-						<td py:content="table.amount(7)" />
-						<td py:content="table.amount(8)" />
-						<td py:content="table.amount(9)" />
-						<td py:content="table.amount(10)" />
-						<td py:content="table.amount(11)" />
-						<td py:content="table.amount(12)" />
-						<td class="deuda" py:content="table.payed()" />
-						<td class="deuda" py:content="table.debt()" />
-						<td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/edit/%s' % table.id)}">X</a></td>
-						<td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/remove/%s' % table.id)}">X</a></td>
-					</tr>
-				</tbody>
-				<tfoot>
-					<tr class="total">
-						<td colspan="13">&nbsp;</td>
-						<td class="deuda" py:content="locale.currency(sum(table.payed() for table in affiliate.cuotaTables), True, True)" />
-						<td class="deuda" py:content="locale.currency(sum(table.debt() for table in affiliate.cuotaTables), True, True)" />
-					</tr>
-				</tfoot>
+    				<tr py:for="table in affiliate.cuotaTables">
+    					<td py:content="table.year" />
+    					<td py:content="table.pago_mes(1)" />
+    					<td py:content="table.pago_mes(2)" />
+    					<td py:content="table.pago_mes(3)" />
+    					<td py:content="table.pago_mes(4)" />
+    					<td py:content="table.pago_mes(5)" />
+    					<td py:content="table.pago_mes(6)" />
+    					<td py:content="table.pago_mes(7)" />
+    					<td py:content="table.pago_mes(8)" />
+    					<td py:content="table.pago_mes(9)" />
+    					<td py:content="table.pago_mes(10)" />
+    					<td py:content="table.pago_mes(11)" />
+    					<td py:content="table.pago_mes(12)" />
+    					<td class="deuda" py:content="table.pagado()" />
+    					<td class="deuda" py:content="table.deuda()" />
+    					<td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/edit/%s' % table.id)}">X</a></td>
+    					<td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/remove/%s' % table.id)}">X</a></td>
+    				</tr>
+    			</tbody>
+    			<tfoot>
+    				<tr class="total">
+    					<td colspan="13">&nbsp;</td>
+    					<td class="deuda" py:content="locale.currency(sum(table.pagado() for table in affiliate.cuotaTables), True, True)" />
+    					<td class="deuda" py:content="locale.currency(sum(table.deuda() for table in affiliate.cuotaTables), True, True)" />
+    				</tr>
+    			</tfoot>
 			</table>
+            <table style="width: 100%; text-align: center;">
+                <caption>Cobros a Efectuar</caption>
+                <thead>
+                    <th>Concepto</th>
+                    <th>Retrasada</th>
+                    <th>Mes</th>
+                    <th>A&ntilde;o</th>
+                    <th>Cantidad</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Aportaci&oacute;n Ordinaria</td>
+                        <td>No</td>
+                        <td></td>
+                        <td></td>
+                        <td>${locale.currency(affiliate.get_cuota(), True, True)}</td>
+                    </tr>
+                    <tr py:for="loan in affiliate.loans">
+                        <td>Cuota de Pr&eacute;stamo</td>
+                        <td>No</td>
+                        <td></td>
+                        <td></td>
+                        <td>${locale.currency(loan.get_payment(), True, True)}</td>
+                    </tr>
+                    <tr py:for="extra in affiliate.extras">
+                        <td>${extra.account.name}</td>
+                        <td py:if="extra.retrasada">S&iacute;</td>
+                        <td py:if="not extra.retrasada">No</td>
+                        <td>${extra.mes}</td>
+                        <td>${extra.anio}</td>
+                        <td>${locale.currency(extra.amount, True, True)}</td>
+                    </tr>
+                    <tr py:for="reintegro in affiliate.reintegros" py:if="not reintegro.pagado">
+                        <td>Reintegro</td>
+                        <td>No</td>
+                        <td>${reintegro.motivo}</td>
+                        <td>${reintegro.emision.strftime('%d/%m/%Y')}</td>
+                        <td>${locale.currency(reintegro.monto, True, True)}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="4">Total de Deducciones</th>
+                        <th>${locale.currency(affiliate.get_monthly(), True, True)}</th>
+                    </tr>
+                </tfoot>
+            </table>
 		</div>
 	</body>
 </html>

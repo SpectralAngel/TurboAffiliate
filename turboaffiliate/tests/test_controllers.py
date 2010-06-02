@@ -1,7 +1,7 @@
 import turbogears
 from nose import with_setup
 from turbogears import testutil
-from turboaffiliate.controllers import Root
+from turboaffiliate.controllers.root import Root
 import cherrypy
 
 def teardown_func():
