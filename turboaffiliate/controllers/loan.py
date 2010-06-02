@@ -562,6 +562,35 @@ class Loan(controllers.Controller):
         
         return dict(loans=[l for l in loans if l.affiliate.payment == payment])
     
+    def calcular_deducciones(self, loans):
+        
+        prestamos = list()
+        
+        for loan in loans:
+            papeleo = 0
+            intereses = 0
+            retencion = 0
+            aportaciones = 0
+            neto = loan.net()
+            monto = loan.capital
+            for d in loan.deductions:
+                if d.account.id == 660:
+                    papeleo = d.amount
+                elif d.account.id == 658:
+                    intereses = d.amount
+                elif d.account.id == 659:
+                    retencion = d.amount
+                elif d.account.id == 665:
+                    aportaciones = d.amount
+                elif d.account.id == 678:
+                    reintegros = d.amount
+            
+            afiliado = loan.affiliate
+            prestamo = model.AuxiliarPrestamo(loan.id, afiliado, monto, neto, papeleo, aportaciones, intereses, retencion, reintegros)
+            prestamos.append(prestamo)
+        
+        return prestamos
+    
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.deducciones')
     @validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
@@ -576,52 +605,14 @@ class Loan(controllers.Controller):
         
         prestamos = list()
         
-        for loan in loans:
-            papeleo = 0
-            intereses = 0
-            retencion = 0
-            aportaciones = 0
-            neto = loan.net()
-            monto = loan.capital
-            for d in loan.deductions:
-                if d.account.id == 660:
-                    papeleo = d.amount
-                elif d.account.id == 658:
-                    intereses = d.amount
-                elif d.account.id == 659:
-                    retencion = d.amount
-                elif d.account.id == 665:
-                    aportaciones = d.amount
-            
-            afiliado = loan.affiliate
-            prestamo = model.AuxiliarPrestamo(loan.id, afiliado, monto, neto, papeleo, aportaciones, intereses, retencion)
-            prestamos.append(prestamo)
-        
-        for loan in payedLoans:
-            papeleo = 0
-            intereses = 0
-            retencion = 0
-            aportaciones = 0
-            neto = loan.net()
-            monto = loan.capital
-            for d in loan.deductions:
-                if d.account.id == 660:
-                    papeleo = d.amount
-                elif d.account.id == 658:
-                    intereses = d.amount
-                elif d.account.id == 659:
-                    retencion = d.amount
-                elif d.account.id == 665:
-                    aportaciones = d.amount
-            
-            afiliado = loan.affiliate
-            prestamo = model.AuxiliarPrestamo(loan.id, afiliado, monto, neto, papeleo, aportaciones, intereses, retencion)
-            prestamos.append(prestamo)
+        prestamos.extend(self.calcular_deducciones(loans))
+        prestamos.extend(self.calcular_deducciones(payedLoans))
         
         papeleo = 0
         intereses = 0
         retencion = 0
         aportaciones = 0
+        reintegros =0 
         neto = 0
         monto = 0
         
@@ -632,11 +623,12 @@ class Loan(controllers.Controller):
             retencion += p.retencion
             aportaciones += p.aportaciones
             neto += p.neto
+            reintegros += p.reintegros
             monto += p.monto
         
         return dict(loans=prestamos, start=start, end=end, monto=monto,
                     neto=neto, papeleo=papeleo, aportaciones=aportaciones,
-                    intereses=intereses, retencion=retencion)
+                    intereses=intereses, retencion=retencion, reintegros=reintegros)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.deducciones')
@@ -648,52 +640,14 @@ class Loan(controllers.Controller):
         
         prestamos = list()
         
-        for loan in loans:
-            papeleo = 0
-            intereses = 0
-            retencion = 0
-            aportaciones = 0
-            neto = loan.net()
-            monto = loan.capital
-            for d in loan.deductions:
-                if d.account.id == 660:
-                    papeleo = d.amount
-                elif d.account.id == 658:
-                    intereses = d.amount
-                elif d.account.id == 659:
-                    retencion = d.amount
-                elif d.account.id == 665:
-                    aportaciones = d.amount
-            
-            afiliado = loan.affiliate 
-            prestamo = model.AuxiliarPrestamo(loan.id, afiliado, monto, neto, papeleo, aportaciones, intereses, retencion)
-            prestamos.append(prestamo)
-        
-        for loan in payedLoans:
-            papeleo = 0
-            intereses = 0
-            retencion = 0
-            aportaciones = 0
-            neto = loan.net()
-            monto = loan.capital
-            for d in loan.deductions:
-                if d.account.id == 660:
-                    papeleo = d.amount
-                elif d.account.id == 658:
-                    intereses = d.amount
-                elif d.account.id == 659:
-                    retencion = d.amount
-                elif d.account.id == 665:
-                    aportaciones = d.amount
-            
-            afiliado = loan.affiliate
-            prestamo = model.AuxiliarPrestamo(loan.id, afiliado, monto, neto, papeleo, aportaciones, intereses, retencion)
-            prestamos.append(prestamo)
+        prestamos.extend(self.calcular_deducciones(loans))
+        prestamos.extend(self.calcular_deducciones(payedLoans))
         
         papeleo = 0
         intereses = 0
         retencion = 0
         aportaciones = 0
+        reintegros =0 
         neto = 0
         monto = 0
         
@@ -704,9 +658,10 @@ class Loan(controllers.Controller):
             retencion += p.retencion
             aportaciones += p.aportaciones
             neto += p.neto
+            reintegros += p.reintegros
             monto += p.monto
         
         return dict(loans=prestamos, start=start, end=start, monto=monto,
                     neto=neto, papeleo=papeleo, aportaciones=aportaciones,
-                    intereses=intereses, retencion=retencion)
+                    intereses=intereses, retencion=retencion, reintegros=reintegros)
 

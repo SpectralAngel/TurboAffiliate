@@ -153,7 +153,30 @@ class Logger(SQLObject):
 
 class Affiliate(SQLObject):
 
-    """A person that is affiliated to a Company"""
+    """Representa un miembro de la institución, cada afiliado puede tener
+    Prestamos, tiene Cuota mensual que es Deducido por planilla o pagado en
+    ventanilla en algunos casos.
+    
+    Ademas, puede deducirsele por diferentes métodos, como ser:
+        
+        * Escalafon
+        * UPN
+        * INPREMA
+        * Ventanilla
+        * Ministerio de Educación.
+    
+    El afiliado puede asistir a diferentes eventos de la institucion como ser
+    asambleas, elecciones u otras actividades extraordinarias que se programen.
+    
+    Es necesario para efectuar los diversos cobros:
+        
+        1. Escalafon: Número de Identidad.
+        2. INPREMA: Número de cobro.
+        3. UPN: Número de empleado.
+    
+    Algunos datos son requeridos para obtener información estadistica acerca de
+    la institución.
+    """
 
     firstName = UnicodeCol(length="100")
     lastName = UnicodeCol(length="100")
@@ -162,7 +185,7 @@ class Affiliate(SQLObject):
     birthday = DateCol(default=date.today)
     birthPlace = UnicodeCol()
     
-    address = StringCol(default="")
+    address = UnicodeCol(default="")
     phone = UnicodeCol(default="")
     
     state = UnicodeCol(length=50, default="")
@@ -182,21 +205,26 @@ class Affiliate(SQLObject):
     
     payment = UnicodeCol(default="Ventanilla", length=20)
     
-    # History of cuota payment
     cuotaTables = MultipleJoin("CuotaTable", orderBy='year')
-    # Active loans
+    """Historial de aportaciones"""
     loans = MultipleJoin("Loan", orderBy='startDate')
-    # Payed loans
+    """Préstamos activos"""
     payedLoans = MultipleJoin("PayedLoan", orderBy='startDate')
+    """Préstamos cancelados"""
     extras = MultipleJoin("Extra")
-    flyers = MultipleJoin("Flyer")
+    """Deducciones extra a efectuar"""
     deduced = MultipleJoin("Deduced", orderBy=['year', 'month'])
-    delayed = MultipleJoin("Delayed")
+    """Deducciones efectuadas por planilla en un mes y año"""
     observaciones = MultipleJoin('Observacion')
+    """Observaciones acerca de actividad en un afiliado"""
     solicitudes = MultipleJoin('Solicitud')
+    """Solicitudes de Préstamo ingresada"""
     reintegros = MultipleJoin('Reintegro')
+    """Reintegros a efectuar"""
     muerte = DateCol(default=date.today)
+    """Fecha de Fallecimiento"""
     desactivacion = DateCol(default=date.today)
+    """Fecha de Desactivación"""
     
     def get_monthly(self):
         
@@ -271,11 +299,11 @@ class Affiliate(SQLObject):
         
         table.remove_month(month)
     
-    def aport(self):
+    def aportaciones(self):
     
-        return sum(table.payed() for table in self.cuotaTables)
+        return sum(table.pagado() for table in self.cuotaTables)
     
-    def loan(self):
+    def deuda_prestamo(self):
         
         """Returns the amount debt by payment"""
         
@@ -283,7 +311,7 @@ class Affiliate(SQLObject):
     
     def debt(self):
         
-        return sum(table.debt() for table in self.cuotaTables)
+        return sum(table.deuda() for table in self.cuotaTables)
     
     def solvent(self, year):
         
@@ -293,27 +321,22 @@ class Affiliate(SQLObject):
     
     def multisolvent(self, year):
         
-        for table in self.cuotaTables:
-            if table.year > year:
+        for cuota in self.cuotaTables:
+            if cuota.year > year:
                 break
-            if not table.all():
+            if not cuota.todos():
                 return False
         return True
     
     def remove(self):
         
-        [table.remove() for table in self.cuotaTables]
+        for table in self.cuotaTables:
+            table.destroySelf()
+        
         for loan in self.loans:
             loan.remove()
+        
         self.destroySelf()
-    
-    def total(self, month, year):
-
-        os = Obligation.selectBy(year=year, month=month)
-        obligations = sum(o.amount for o in os)
-        extras = sum(e.amount for e in self.extras)
-        loan = sum(loan.get_payment() for loan in self.loans)
-        return extras + loan + obligations
     
     def get_month(self, year, month):
         
@@ -1038,7 +1061,7 @@ class OtherDeduced(SQLObject):
 class AuxiliarPrestamo(object):
     
     def __init__(self, id, afiliado, monto, neto, papeleo, aportaciones,
-                 intereses, retencion):
+                 intereses, retencion, reintegros):
         
         self.id = id
         self.afiliado = afiliado
@@ -1048,6 +1071,7 @@ class AuxiliarPrestamo(object):
         self.aportaciones = aportaciones
         self.intereses = intereses
         self.retencion = retencion
+        self.reintegros = reintegros
 
 class Observacion(SQLObject):
     
