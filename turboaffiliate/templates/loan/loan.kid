@@ -17,6 +17,7 @@
         <ul class="toolbox ui-widget ui-widget-header ui-corner-all noprint">
             <li><a class="ui-state-default ui-corner-all ui-button" href="#" onclick="javascript:$('.pagar').dialog('open');">Agregar un Pago</a></li>
             <li><a class="ui-state-default ui-corner-all ui-button" href="#" onclick="javascript:$('.deduccion').dialog('open');">Agregar una Deducci&oacute;n</a></li>
+            <li><a class="ui-state-default ui-corner-all ui-button" href="#" onclick="javascript:$('#refinanciar').dialog('open');">Refinanciar</a></li>
             <li><a class="ui-state-default ui-corner-all ui-button" href="${tg.url('/loan/view/%s' % loan.id)}">Modificar Datos del Pr&eacute;stamo</a></li>
             <li><a class="ui-state-default ui-corner-all ui-button" href="${tg.url('/loan/pagare/%s' % loan.id)}">Ver Pagar&eacute;</a></li>
             <li><a class="ui-state-default ui-corner-all ui-button" href="${tg.url('/loan/receipt/%s' % loan.id)}">Ver Liquidaci&oacute;n</a></li>
@@ -27,36 +28,34 @@
         <div style="text-align: center;">
             <div style="font-weight: bold; font-size: 180%">COPEMH</div>
             <div style="font-weight: bold; font-size: 180%">Estado de Cuenta Pr&eacute;stamos</div>
-            <div py:content="'Pr&eacute;stamo N&uacute;mero ', loan.id" />
-            <span>Al: <span py:content="day.strftime('%d de %B de %Y')" /></span>
+            <div>Pr&eacute;stamo N&uacute;mero ${loan.id}</div>
+            <span>Al: ${day.strftime('%d de %B de %Y')}</span>
         </div>
         <ul>
             <li>
                 <strong>Prestatario:</strong>
-                <a href="${tg.url('/affiliate/%s' % loan.affiliate.id)}"><span py:content="loan.affiliate.id" /></a> <span py:content="loan.affiliate.firstName, ' ', loan.affiliate.lastName" />
+                <a href="${tg.url('/affiliate/%s' % loan.affiliate.id)}">${loan.affiliate.id}</a> ${loan.affiliate.firstName} ${loan.affiliate.lastName}
             </li>
             <li>
-                <strong>Fecha de Otorgamiento:</strong>
-                <span py:content="loan.startDate.strftime('%d de %B de %Y')" />
+                <strong>Fecha de Otorgamiento:</strong> ${loan.startDate.strftime('%d de %B de %Y')}
             </li>
             <li>
-                <strong>Monto Original:</strong>
-                <span py:content="locale.currency(loan.capital, True, True)" />
+                <strong>Monto Original:</strong> ${locale.currency(loan.capital, True, True)}
             </li>
         </ul>
         <table width="100%">
             <caption>Deducciones</caption>
             <tr py:for="d in loan.deductions">
-                <td py:content="d.name" />
-                <td py:content="locale.currency(d.amount, True, True)" />
+                <td>${d.name}</td>
+                <td>${locale.currency(d.amount, True, True)}</td>
             </tr>
             <tr>
                 <td>Total deducciones</td>
-                <td><strong py:content="locale.currency(sum(d.amount for d in loan.deductions), True, True)" /></td>
+                <td><strong>${locale.currency(sum(d.amount for d in loan.deductions), True, True)}</strong></td>
             </tr>
             <tr>
                 <td>Remanente o Monto Liquidado</td>
-                <td><strong py:content="locale.currency(loan.capital - sum(d.amount for d in loan.deductions), True, True)" /></td>
+                <td><strong>${locale.currency(loan.capital - sum(d.amount for d in loan.deductions), True, True)}</strong></td>
             </tr>
         </table>
         <table class="pay" py:if="len(loan.future()) != 0">
@@ -78,15 +77,15 @@
             <tbody>
                 <tr>
                     <td colspan="5">&nbsp;</td>
-                    <td><strong py:content="locale.currency(loan.debt, True, True)" /></td>
+                    <td><strong>${locale.currency(loan.debt, True, True)}</strong></td>
                 </tr>
                 <tr py:for="pay in loan.future()">
-                    <td py:content="pay['month']" />
-                    <td py:content="pay['number']" />
-                    <td py:content="locale.currency(pay['interest'], True, True)" />
-                    <td py:content="locale.currency(pay['payment'], True, True)" />
-                    <td py:content="locale.currency(pay['capital'], True, True)" />
-                    <td py:content="locale.currency(pay['amount'], True, True)" />
+                    <td>${pay['month']}</td>
+                    <td>${pay['number']}</td>
+                    <td>${locale.currency(pay['interest'], True, True)}</td>
+                    <td>${locale.currency(pay['payment'], True, True)}</td>
+                    <td>${locale.currency(pay['capital'], True, True)}</td>
+                    <td>${locale.currency(pay['amount'], True, True)}</td>
                 </tr>
             </tbody>
         </table>
@@ -106,13 +105,13 @@
             <tbody>
                 <?python i = 1 ?>
                 <tr py:for="pay in loan.pays">
-                    <td py:content="pay.day.strftime('%d/%m/%Y')" />
-                    <td py:content="i, '/', loan.months" />					
+                    <td py:content="pay.day.strftime('%d de %B de %Y')" />
+                    <td>${i}/${loan.months}</td>
                     <?python i += 1 ?>
-                    <td py:content="locale.currency(pay.interest, True, True)" />
-                    <td py:content="locale.currency(pay.capital, True, True)" />
-                    <td py:content="locale.currency(pay.amount, True, True)" />
-                    <td py:content="pay.receipt" />
+                    <td>${locale.currency(pay.interest, True, True)}</td>
+                    <td>${locale.currency(pay.capital, True, True)}</td>
+                    <td>${locale.currency(pay.amount, True, True)}</td>
+                    <td>${pay.receipt}</td>
                     <td class="noprint"><a href="${tg.url('/loan/pay/remove/%s' % pay.id)}">X</a></td>
                 </tr>
             </tbody>
@@ -161,6 +160,33 @@
                     <li>
                         <label for="description">Descripci&oacute;n:</label>
                         <textarea name="description" />
+                    </li>
+                </ul>
+            </div>
+        </form>
+        <form id="refinanciar" action="${tg.url('/loan/refinanciar')}" method="post">
+            <div>
+                <input type="hidden" name="loan" value="${loan.id}" />
+                <ul>
+                    <li>
+                        <label for="solicitud">Solicitud:</label>
+                        <select name="solicitud">
+                            <option py:for="s in loan.affiliate.solicitudes" value="${s.id}">N&ordm; ${s.id} - ${locale.currency(s.monto, True, True)} ${s.entrega.strftime('%d de %B de %Y')}</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label for="pago">Monto a Pagar:</label>
+                        <input name="pago" />
+                    </li>
+                    <li>
+                        <label for="cuenta">Cuenta para Deducir:</label>
+                        <select name="cuenta">
+                            <option py:for="account in accounts" py:content="account.code, ' - ', account.name" value="${account.id}" />
+                        </select>
+                    </li>
+                    <li>
+                        <label for="descripcion">Descripci&oacute;n deducci&oacute;n:</label>
+                        <textarea name="descripcion" />
                     </li>
                 </ul>
             </div>

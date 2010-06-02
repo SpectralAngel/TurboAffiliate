@@ -190,26 +190,6 @@ class Loan(controllers.Controller):
                 debt=sum(loan.debt for loan in l), capital=sum(loan.capital for loan in l))
     
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.loan.add')
-    @validate(validators=dict(affiliate=validators.Int()))
-    def add(self, affiliate):
-
-        affiliate = model.Affiliate.get(affiliate)
-        #if (date.today() - affiliate.joined).days < 365:
-        #    flash(u"El afiliado a￺n no tiene un año de afiliación")
-        #    raise redirect('/affiliate/%s' % affiliate.id)
-        #if len(affiliate.loans) > 0:
-        #    
-        #    for loan in affiliate.loans:
-        #        
-        #        if loan.percent() < 59:
-        #            
-        #            flash("El Afiliado no ha pagado el 60% del préstamo anterior")
-        #            raise redirect('/affiliate/%s' % affiliate.id)
-            
-        return dict(affiliate=affiliate)
-    
-    @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.edit')
     @validate(validators=dict(loan=validators.Int()))
     def edit(self, loan):
@@ -266,6 +246,23 @@ class Loan(controllers.Controller):
         model.Logger(**log)
         
         raise redirect(url("/loan/%s" % loan.id))
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(loan=validators.Int(),solicitud=validators.Int(),
+                              cuenta=validators.Int(),pago=validators.String(),
+                              descripcion=validators.UnicodeString()))
+    def refinanciar(self, loan, pago, solicitud, cuenta, descripcion):
+        
+        pago = Decimal(pago)
+        solicitud = model.Solicitud.get(solicitud)
+        cuenta = model.Account.get(cuenta)
+        loan = model.Loan.get(loan)
+        
+        prestamo = loan.refinanciar(pago, solicitud, cuenta, identity.current.user,
+                                    descripcion)
+        
+        raise redirect(url('/loan/%s' % prestamo.id))
     
     @identity.require(identity.All(identity.not_anonymous(),
                                    identity.has_permission("delete")))

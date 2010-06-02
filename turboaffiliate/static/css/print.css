@@ -86,4 +86,7 @@ caption
 	font-size: 125%;
 	padding: 5px;
 }
-
+form
+{
+    display: none;
+}

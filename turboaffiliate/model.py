@@ -613,94 +613,22 @@ class Loan(SQLObject):
         
         return False
     
-    def pay(self, amount, receipt, day=date.today()):
+    def refinanciar(self, pago, solicitud, cuenta, usuario, descripcion):
         
-        """Charges a normal payment for the loan
+        self.pagar(pago, "Liquidacion", solicitud.entrega, True)
         
-        Calculates the composite interest and acredits the made payment
-        """
-        
-        kw = dict()
-        kw['amount'] = Decimal(amount).quantize(dot01)
-        kw['day'] = day
-        kw['receipt'] = receipt
-        kw['loan'] = self
-        
-        # When the amount to pay is bigger or equal the debt, it is considered
-        # the last payment, so interests are not calculated
-        if(self.debt <= amount):
-            
-            self.last = kw['day']
-            kw['capital'] = kw['amount']
-            # Register the payment in the database
-            Pay(**kw)
-            # Remove the loan and convert it to PayedLoan
-            self.remove()
-            return True
-        
-        # Otherwise calculate interest for the loan's payment
-        kw['interest'] = (self.debt * self.interest / 1200).quantize(dot01)
-        # Increase the loans debt by the interest
-        self.debt += kw['interest']
-        # Decrease debt by the payment amount
-        self.debt -= kw['amount']
-        # Calculate how much money was used to pay the capital
-        kw['capital'] = kw['amount'] - kw['interest']
-        # Change the last payment date
-        self.last = day
-        # Register the payment in the database
-        Pay(**kw)
-        # Increase the number of payments by one
-        self.number += 1
-        
-        if self.debt == 0:
-            self.remove()
-            return True
-        
-        return False
-    
-    def payfree(self, amount, receipt, day=date.today()):
-        
-        """Creates a new payment for the loan without charging interest"""
+        prestamo = solicitud.prestamo(usuario)
         
         kw = dict()
-        kw['amount'] = Decimal(amount).quantize(dot01)
-        kw['day'] = day
-        kw['receipt'] = receipt
-        kw['loan'] = self
+        kw['account'] = cuenta
+        kw['amount'] = pago
+        kw['name'] = kw['account'].name
+        kw['loan'] = prestamo
+        kw['description'] = descripcion
         
-        # When the amount to pay is bigger or equal the debt, it is considered
-        # the last payment, so interests are not calculated
-        if(self.debt <= amount):
-            
-            self.last = kw['day']
-            kw['capital'] = kw['amount']
-            # Register the payment in the database
-            Pay(**kw)
-            # Remove the loan and convert it to PayedLoan
-            self.remove()
-            return True
+        Deduction(**kw)
         
-        # Otherwise calculate interest for the loan's payment
-        kw['interest'] = 0
-        # Increase the loans debt by the interest
-        self.debt += kw['interest']
-        # Decrease debt by the payment amount
-        self.debt -= kw['amount']
-        # Calculate how much money was used to pay the capital
-        kw['capital'] = kw['amount'] - kw['interest']
-        # Change the last payment date
-        self.last = day
-        # Register the payment in the database
-        Pay(**kw)
-        # Increase the number of payments by one
-        self.number += 1
-        
-        if self.debt == 0:
-            self.remove()
-            return True
-        
-        return False
+        return prestamo
     
     def net(self):
         
@@ -1159,6 +1087,8 @@ class Reintegro(SQLObject):
         kw['amount'] = self.monto
         kw['affiliate'] = self.afiliado
         kw['account'] = self.cuenta
+        kw['month'] = dia.month
+        kw['year'] = dia.year
         
         kw['detail'] = "Reintegro %s por %s" % (self.emision.strftime('%d/%m/%Y'), self.motivo)
         

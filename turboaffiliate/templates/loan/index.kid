@@ -7,69 +7,36 @@
         <script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
         <script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
         <script src="${tg.url('/static/javascript/prestamo.js')}" type="text/javascript"></script>
-        <script type="text/javascript">
-        <![CDATA[
-        $(document).ready(function(e)
-        {
-            $('input.date-picker').datepicker({
-                dateFormat: 'yy-mm-dd',
-                changeMonth: true,
-                changeYear: true,
-                yearRange: '1940:2010'
-            });
-        });
-        function showpay()
-        {
-        if(
-            (document.calc.loan.value == null || document.calc.loan.value.length == 0) ||
-            (document.calc.months.value == null || document.calc.months.value.length == 0) ||
-            (document.calc.rate.value == null || document.calc.rate.value.length == 0))
-        {
-            document.calc.pay.value = "Incomplete data";
-        }
-        else
-        {
-            var princ = document.calc.loan.value;
-            var term = document.calc.months.value;
-            var intr = document.calc.rate.value / 1200;
-            document.calc.pay.value = princ * intr / (1 - (Math.pow(1/(1 + intr), term)));
-        }
-        // payment = principle * monthly interest/(1 - (1/(1+MonthlyInterest)*Months))
-        }
-        ]]>
-        </script>
     </head>
     <body>
         <h1>Pr&eacute;stamos</h1>
         <a href="dobles">Ver Afiliados con multiples pr&eacute;stamos</a>
-        <form name="calc" method="post">
-            <table>
-                <caption>Calculadora de Pr&eacute;stamos</caption>
-                <tr>
-                    <th width="50%">Descripci&oacute;n</th>
-                    <th width="50%">Entrada de Datos</th>
-                </tr>
-                <tr>
-                    <td>Capital:</td>
-                    <td><input  name="loan" size="10" /></td>
-                </tr>
-                <tr>
-                    <td>Meses:</td>
-                    <td><input name="months" size="10" /></td>
-                </tr>
-                <tr>
-                    <td>Tasa de Inter&eacute;s</td>
-                    <td ><input name="rate" size="10" /></td>
-                </tr>
-                <tr>
-                    <td>Pago Mensual</td>
-                    <td><em>Calculado</em><input name="pay" size="10" /></td>
-                </tr>
-                <tr>
-                    <td align="center"><input type="button" onClick="javascript:showpay()" value="Calcular" /></td>
-                    <td align="center"><input type="reset" value="Reiniciar" /></td>
-                </tr>
-            </table>
+        <form>
+            <fieldset>
+                <legend>Calculadora de Pr&eacute;stamos</legend>
+                <ul>
+                    <li>
+                        <label>Capital:</label>
+                        <input id="capital" />
+                    </li>
+                    <li>
+                        <label>Meses:</label>
+                        <input id="tiempo" />
+                    </li>
+                    <li>
+                        <label>Inter&eacute;s</label>
+                        <input id="interes" />
+                    </li>
+                    <li>
+                        <label>Pago Mensual</label>
+                        <input id="cuota" />
+                    </li>
+                    <li>
+                        <input type="reset" value="Reiniciar" />
+                        <input type="button" id="calcular" value="Calcular" />
+                    </li>
+                </ul>
+            </fieldset>
         </form>
         <form action="search" method="post">
             <fieldset>
