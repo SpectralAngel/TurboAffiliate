@@ -1,17 +1,15 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
     import locale
     locale.setlocale(locale.LC_ALL, "")
 ?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#"
-    py:extends="'../master.kid'">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#" py:extends="'../master.kid'">
     <head>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
         <title>COPEMH &bull; Pr&eacute;stamo ${loan.id}</title>
         <script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
         <script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
-        <script src="${tg.url('/static/javascript/prestamo.js')}" type="text/javascript"> </script>
+        <script src="${tg.url('/static/javascript/prestamo.js')}" type="text/javascript"></script>
     </head>
     <body>
         <ul class="toolbox ui-widget ui-widget-header ui-corner-all noprint">
@@ -34,13 +32,16 @@
         <ul>
             <li>
                 <strong>Prestatario:</strong>
-                <a href="${tg.url('/affiliate/%s' % loan.affiliate.id)}">${loan.affiliate.id}</a> ${loan.affiliate.firstName} ${loan.affiliate.lastName}
+                <a href="${tg.url('/affiliate/%s' % loan.affiliate.id)}">${loan.affiliate.id}</a>
+                ${loan.affiliate.firstName} ${loan.affiliate.lastName}
             </li>
             <li>
-                <strong>Fecha de Otorgamiento:</strong> ${loan.startDate.strftime('%d de %B de %Y')}
+                <strong>Fecha de Otorgamiento:</strong>
+                ${loan.startDate.strftime('%d de %B de %Y')}
             </li>
             <li>
-                <strong>Monto Original:</strong> ${locale.currency(loan.capital, True, True)}
+                <strong>Monto Original:</strong>
+                ${locale.currency(loan.capital, True, True)}
             </li>
         </ul>
         <table width="100%">
@@ -63,7 +64,8 @@
             <thead>
                 <tr>
                     <th colspan="5">Abono</th>
-                    <th>&nbsp;</th>
+                    <th>&nbsp;
+                    </th>
                 </tr>
                 <tr>
                     <th>Mes</th>
@@ -90,7 +92,8 @@
             </tbody>
         </table>
         <table class="pay" py:if="len(loan.pays) != 0">
-            <caption>Pagos Efectuados</caption>
+            <caption>Pagos Efectuados
+            </caption>
             <thead>
                 <tr>
                     <th>Fecha</th>
@@ -125,15 +128,14 @@
                     </li>
                     <li>
                         <label for="day">Fecha:</label>
-                        <input name="day" class="datepicker" />
-                        <input type="hidden" name="loan" value="${loan.id}" />
+                        <input name="day" class="datepicker" /><input type="hidden" name="loan" value="${loan.id}" />
                     </li>
                     <li>
                         <label for="receipt">Recibo:</label>
                         <input name="receipt" />
                     </li>
                     <li>
-                        <label for="free">Cobrar Intereses:</label>
+                        <label for="free">Libre de Intereses:</label>
                         <input name="free" type="checkbox" />
                     </li>
                 </ul>

@@ -276,7 +276,7 @@ class Affiliate(SQLObject):
         table = None
         
         try:
-            table = CuotaTable.selectBy(afiliado=self,year=year).getOne()
+            table = CuotaTable.selectBy(affiliate=self,year=year).getOne()
         except SQLObjectNotFound:
             kw = dict()
             kw['affiliate'] = self
@@ -290,7 +290,7 @@ class Affiliate(SQLObject):
         table = None
         
         try:
-            table = CuotaTable.selectBy(afiliado=self,year=year).getOne()
+            table = CuotaTable.selectBy(affiliate=self,year=year).getOne()
         except SQLObjectNotFound:
             kw = dict()
             kw['affiliate'] = self
