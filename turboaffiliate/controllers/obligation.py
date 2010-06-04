@@ -25,69 +25,64 @@ from turbogears import expose, validate, validators
 from turboaffiliate import model
 
 class Obligation(controllers.Controller):
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.obligation.index")
-	def index(self):
-		
-		return dict(companies=model.Company.select(), accounts=model.Account.select(orderBy="code"))
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.obligation.obligation")
-	@expose("json")
-	@validate(validators=dict(code=validators.Int()))
-	def default(self, code):
-		
-		obligation =  model.Obligation.get(int(code))
-		return dict(obligation=model.Obligation.get(code))
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.obligation.add")
-	def add(self):
-		
-		return dict(companies=model.Company.select(), accounts=model.Account.select(orderBy="code"))
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.obligation.edit")
-	@validate(validators=dict(code=validators.Int()))
-	def edit(self, code):
-		try:
-			obligation = model.Obligation.get(int(code))
-			return dict(obligation=obligation)
-		except model.SQLObjectNotFound:
-			flash(u'La obligación no se encontró')
-			raise redirect('/obligation')
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(account=validators.Int(),company=validators.Int(),
-							  year=validators.Int(),month=validators.Int(),
-							  filiales=validators.Int(), inprema=validators.Number(),
-							  amount=validators.Number()))
-	def save(self, account, company, **kw):
-		
-		company = model.Company.get(company)
-		account = model.Account.get(account)
-		
-		obligation = model.Obligation(company=company, account=account, **kw)
-		flash('La obligación se ha añadido')
-		raise redirect('/obligation/%s' % obligation.id)
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.obligation.obligations")
-	@validate(validators=dict(company=validators.Int(), year=validators.Int()))
-	def view(self, company, year):
-		
-		company = model.Company.get(company)
-		obligations = model.Obligation.selectBy(year=year)
-		return dict(obligations=obligations)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(code=validators.Int()))
-	def remove(self, code):
-		
-		obligation =  model.Obligation.get(code)
-		obligation.destroySelf()
-		raise redirect('/obligation')
-
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.obligation.index")
+    def index(self):
+        
+        return dict(accounts=model.Account.select(orderBy="code"))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.obligation.obligation")
+    @expose("json")
+    @validate(validators=dict(code=validators.Int()))
+    def default(self, code):
+        
+        return dict(obligation=model.Obligation.get(code))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.obligation.add")
+    def add(self):
+        
+        return dict(accounts=model.Account.select(orderBy="code"))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.obligation.edit")
+    @validate(validators=dict(code=validators.Int()))
+    def edit(self, code):
+        try:
+            obligation = model.Obligation.get(int(code))
+            return dict(obligation=obligation)
+        except model.SQLObjectNotFound:
+            flash(u'La obligación no se encontró')
+            raise redirect('/obligation')
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(account=validators.Int(), year=validators.Int(),
+                            month=validators.Int(), filiales=validators.Int(),
+                            inprema=validators.Number(), amount=validators.Number()))
+    def save(self, account,  **kw):
+        
+        account = model.Account.get(account)
+        
+        obligation = model.Obligation(account=account, **kw)
+        flash('La obligación se ha añadido')
+        raise redirect('/obligation/%s' % obligation.id)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.obligation.obligations")
+    @validate(validators=dict(company=validators.Int(), year=validators.Int()))
+    def view(self, year):
+        
+        obligations = model.Obligation.selectBy(year=year)
+        return dict(obligations=obligations)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(code=validators.Int()))
+    def remove(self, code):
+        
+        obligation =  model.Obligation.get(code)
+        obligation.destroySelf()
+        raise redirect('/obligation')
