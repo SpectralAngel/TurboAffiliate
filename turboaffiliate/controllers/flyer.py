@@ -162,41 +162,12 @@ class Flyer(controllers.Controller):
         
         for affiliate in affiliates:
             if affiliate.get_month(year, month):
-                try:
+                if affiliate.school in filiales[affiliate.state]:
                     filiales[affiliate.state][affiliate.school] += 1
                     filiales[affiliate.state]['total'] += 1
-                except KeyError:
-                    try:
-                        filiales[affiliate.state][affiliate.school] = 1
-                        filiales[affiliate.state]['total'] += 1
-                    except:
-                        pass
-        
-        return dict(filiales=filiales)
-    
-    @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.escalafon.filiales")
-    def filialesFive(self):
-        
-        """Muestra las Filiaes con 5 o mas afiliados"""
-        
-        affiliates = model.Affiliate.selectBy(payment="Escalafon")
-        
-        for affiliate in affiliates:
-            try:
-                filiales[affiliate.state][affiliate.school] += 1
-                filiales[affiliate.state]['total'] += 1
-            except KeyError:
-                try:
+                else:
                     filiales[affiliate.state][affiliate.school] = 1
-                    filiales[affiliate.state]['total'] = 1
-                except:
-                    pass
-        
-        for dept in filiales.keys():
-            for school in filiales[dept].keys():
-                if filiales[dept][school] < 5 and school != 'total':
-                    del filiales[dept][school]
+                    filiales[affiliate.state]['total'] += 1
         
         return dict(filiales=filiales)
     
@@ -212,27 +183,6 @@ class Flyer(controllers.Controller):
         deduced = model.Deduced.selectBy(year=year,month=month,account=account)
         
         return dict(deduced=deduced, year=year, month=month)
-    
-    @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.escalafon.filiales")
-    def filialesAll(self):
-        
-        """Muestra todas las Filiales con sus respectivos miembros"""
-        
-        affiliates = model.Affiliate.selectBy(payment="Escalafon")
-        
-        for affiliate in affiliates:
-            try:
-                filiales[affiliate.state][affiliate.school] += 1
-                filiales[affiliate.state]['total'] += 1
-            except KeyError:
-                try:
-                    filiales[affiliate.state][affiliate.school] = 1
-                    filiales[affiliate.state]['total'] += 1
-                except:
-                    pass
-        
-        return dict(filiales=filiales)
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.escalafon.filialesdept")
@@ -254,36 +204,6 @@ class Flyer(controllers.Controller):
                     filiales[afiliado.school].append(afiliado)
         
         return dict(filiales=filiales, state=state)
-    
-    @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.escalafon.cuotas")
-    @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
-    def cuotas(self, year, month):
-        
-        if month == 6 and year == 2007:
-            
-            retrasada = {Decimal(10):10, Decimal("128.48"):512, Decimal("135.77"):725,
-                        Decimal("166.00"):812, Decimal("20.50"):153, Decimal("22"):120,
-                        Decimal("32"):211, Decimal("33"):178, Decimal("34"):138,
-                        Decimal(5):1, Decimal("50"):191, Decimal("55"):190, Decimal("62"):146,
-                        Decimal("65"):182, Decimal("78.90"):356, Decimal("92.53"):378,
-                        Decimal("39"):325, Decimal("250"):898}
-            total = sum(retrasada[valor] * valor for valor in retrasada)
-            return dict(retrasada=retrasada, total=total, year=year, month=month)
-        
-        retrasada = dict()
-        query = "deduced.year = %s and deduced.month = %s and deduced.account_id = 673" % (year, month)
-        deduced = model.Deduced.select(query)
-        for d in deduced:
-            
-            try:
-                retrasada[d.amount] += 1
-            
-            except KeyError:
-                retrasada[d.amount] = 1
-        total = sum(retrasada[valor] * valor for valor in retrasada)
-        
-        return dict(retrasada=retrasada, total=total, year=year, month=month)
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.escalafon.deduced")
@@ -325,60 +245,15 @@ class Flyer(controllers.Controller):
         
         return dict(affiliates=affiliates, show="Cotizan por %s y pagaron un mes en %s" % (payment, year), count=len(affiliates))
     
-    @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.escalafon.filialesListing')
-    @validate(validators=dict(state=validators.String()))
-    def filialesFiveListing(self, state):
-        
-        affiliates = model.Affiliate.selectBy(state=state)
-        
-        schools = dict()
-        for affiliate in affiliates:
-            if affiliate.school in schools:
-                schools[affiliate.school].append(affiliate)
-            else:
-                schools[affiliate.school] = list()
-                schools[affiliate.school].append(affiliate)
-        
-        for school in schools:
-            
-            if len(schools[school]) < 5:
-                
-                del schools[school]
-        
-        return dict(state=state, schools=schools)
-    
-    @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.escalafon.filialesListing')
-    @validate(validators=dict(state=validators.String()))
-    def filialesFourListing(self, state):
-        
-        affiliates = model.Affiliate.selectBy(state=state)
-        
-        schools = dict()
-        for affiliate in affiliates:
-            if affiliate.school in schools:
-                schools[affiliate.school].append(affiliate)
-            else:
-                schools[affiliate.school] = list()
-                schools[affiliate.school].append(affiliate)
-        
-        for school in schools:
-            
-            if len(schools[school]) >= 5:
-                
-                del schools[school]
-        
-        return dict(state=state, schools=schools)
-    
     @expose(template="turboaffiliate.templates.affiliate.show")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
     def aportaron(self, year, month):
         
-        cuotas = model.CuotaTable.selectBy(year=year)
+        query = "cuota_table.month%s = true AND cuota_table.year = %s" % (month, year)
+        cuotas = model.CuotaTable.select(query)
         show = "que Cotizaron en %s de %s" % (month, year)
         
-        affiliates = [c.affiliate for c in cuotas if getattr(c, 'month%s' % month)]
+        affiliates = [c.affiliate for c in cuotas]
         return dict(affiliates=affiliates,show=show, count=len(affiliates))
     
     @expose(template="turboaffiliate.templates.affiliate.show")

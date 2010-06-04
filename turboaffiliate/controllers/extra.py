@@ -26,77 +26,68 @@ from turboaffiliate import model
 from decimal import Decimal
 
 class Extra(controllers.Controller):
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.extra.index')
-	def index(self):
-		return dict(accounts=model.Account.select())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.extra.add')
-	@validate(validators=dict(affiliate=validators.Int()))
-	def add(self, affiliate):
-		
-		affiliate = model.Affiliate.get(affiliate)
-		accounts = model.Account.select()
-		return dict(affiliate=affiliate, accounts=accounts)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(affiliate=validators.Int(),
-							  account=validators.Int(),
-							  months=validators.Int(),
-							  retrasada=validators.Bool(),
-							  amount=validators.String()))
-	def save(self, affiliate, account, **kw):
-		
-		kw['affiliate'] = model.Affiliate.get(affiliate)
-		kw['account'] = model.Account.get(account)
-		kw['amount'] = Decimal(kw['amount'])
-		model.Extra(**kw)
-		raise redirect('/affiliate/%s' % kw['affiliate'].id)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(account=validators.Int(), months=validators.Int(),
-							  first=validators.Int(), last=validators.Int(),
-							  amount=validators.Number()))
-	def many(self, first, last, account, **kw):
-		
-		kw['account'] = model.Account.get(account)
-		for n in range(first, last +1):
-			kw['affiliate'] = model.Affiliate.get(n)
-			model.Extra(**kw)
-		raise redirect('/affiliate')
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(code=validators.Int()))
-	def delete(self, code):
-		
-		extra = model.Extra.get(code)
-		affiliate = extra.affiliate
-		extra.destroySelf()
-		
-		raise redirect('/affiliate/%s' % affiliate.id)
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(account=validators.Int(), months=validators.Int(),
-							  payment=validators.String(),
-							  amount=validators.String()))
-	def payment(self, payment, account, amount, months):
-		
-		kw = dict()
-		kw['account'] = model.Account.get(account)
-		kw['amount'] = Decimal(amount)
-		kw['months'] = months
-		
-		afiliados = model.Affiliate.selectBy(payment=payment)
-		
-		for afiliado in afiliados:
-			
-			kw['affiliate'] = afiliado
-			model.Extra(**kw)
-		
-		raise redirect('/affiliate')
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.extra.index')
+    def index(self):
+        return dict(accounts=model.Account.select())
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int(),
+                              account=validators.Int(),
+                              months=validators.Int(),
+                              retrasada=validators.Bool(),
+                              amount=validators.String()))
+    def save(self, affiliate, account, **kw):
+        
+        kw['affiliate'] = model.Affiliate.get(affiliate)
+        kw['account'] = model.Account.get(account)
+        kw['amount'] = Decimal(kw['amount'])
+        model.Extra(**kw)
+        raise redirect('/affiliate/%s' % kw['affiliate'].id)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(account=validators.Int(), months=validators.Int(),
+                              first=validators.Int(), last=validators.Int(),
+                              amount=validators.Number()))
+    def many(self, first, last, account, **kw):
+        
+        kw['account'] = model.Account.get(account)
+        for n in range(first, last +1):
+            kw['affiliate'] = model.Affiliate.get(n)
+            model.Extra(**kw)
+        raise redirect('/affiliate')
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(code=validators.Int()))
+    def delete(self, code):
+        
+        extra = model.Extra.get(code)
+        affiliate = extra.affiliate
+        extra.destroySelf()
+        
+        raise redirect('/affiliate/%s' % affiliate.id)
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(account=validators.Int(), months=validators.Int(),
+                              payment=validators.String(),
+                              amount=validators.String()))
+    def payment(self, payment, account, amount, months):
+        
+        kw = dict()
+        kw['account'] = model.Account.get(account)
+        kw['amount'] = Decimal(amount)
+        kw['months'] = months
+        
+        afiliados = model.Affiliate.selectBy(payment=payment)
+        
+        for afiliado in afiliados:
+            
+            kw['affiliate'] = afiliado
+            model.Extra(**kw)
+        
+        raise redirect('/affiliate')
