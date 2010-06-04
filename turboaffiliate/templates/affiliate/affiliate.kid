@@ -57,7 +57,7 @@
             tiene Ciudad
             <a class="ui-state-default ui-corner-all ui-button"  href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Ingresar</a></span>
         </span>
-        <h3 class="flash" py:if="not affiliate.active">Afiliado desactivado, razon:<strong><span class="flash" py:if="not affiliate.active" py:content="affiliate.reason" /><span py:if="not affiliate.muerte == None">Fecha de Fallecimiento: ${affiliate.muerte.strftime('%d de %B de %Y')}</span></strong></h3>
+        <h3 class="flash" py:if="not affiliate.active">Afiliado desactivado, razon:<strong><span class="flash" py:if="not affiliate.active" py:content="affiliate.reason" /><span py:if="not affiliate.muerte == None"> Fecha de Fallecimiento: ${affiliate.muerte.strftime('%d de %B de %Y')}</span></strong></h3>
         <h3>Informaci&oacute;n Personal</h3>
         <ul>
             <li>
@@ -74,24 +74,19 @@
                 <span py:if="affiliate.gender == 'F'">Femenino</span>
             </li>
             <li>
-                <strong>Tel&eacute;fono: </strong>
-                <span py:content="affiliate.phone" />
+                <strong>Tel&eacute;fono: </strong>${affiliate.phone}
             </li>
             <li>
-                <strong>Instituto: </strong>
-                <span py:content="affiliate.school" />
+                <strong>Instituto: </strong>${affiliate.school}
             </li>
             <li>
-                <strong>Instituto: </strong>
-                <span py:content="affiliate.school2" />
+                <strong>Instituto: </strong>${affiliate.school2}
             </li>
             <li>
-                <strong>Municipio: </strong>
-                <span py:content="affiliate.town" />
+                <strong>Municipio: </strong>${affiliate.town}
             </li>
             <li>
-                <strong>Departamento: </strong>
-                <span py:content="affiliate.state" />
+                <strong>Departamento: </strong>${affiliate.state}
             </li>
         </ul>
         <table>
@@ -411,7 +406,7 @@
                 <ul>
                     <li>
                         <label>Fecha:</label>
-                        <input py:if="affiliate.muerte != None" name="muerte" value="${affiliate.jubilated.strftime('%d/%m/%Y')}" class="datepicker" />
+                        <input py:if="affiliate.muerte != None" name="muerte" value="${affiliate.muerte.strftime('%d/%m/%Y')}" class="datepicker" />
                         <input py:if="affiliate.muerte == None" name="muerte" class="datepicker" />
                     </li>
                 </ul>

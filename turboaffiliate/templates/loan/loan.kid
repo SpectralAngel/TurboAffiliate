@@ -118,6 +118,16 @@
                     <td class="noprint"><a href="${tg.url('/loan/pay/remove/%s' % pay.id)}">X</a></td>
                 </tr>
             </tbody>
+            <tfoot class="noprint">
+                <tr>
+                    <th colspan="2">Total Pagado:</th>
+                    <th>${locale.currency(loan.interesesPagados(), True, True)}</th>
+                    <th>${locale.currency(loan.capitalPagado(), True, True)}</th>
+                    <th>${locale.currency(loan.pagado(), True, True)}</th>
+                    <th></th>
+                    <th class="noprint"></th>
+                </tr>
+            </tfoot>
         </table>
         <form class="pagar" action="${tg.url('/loan/pay/agregar')}" method="post">
             <div>

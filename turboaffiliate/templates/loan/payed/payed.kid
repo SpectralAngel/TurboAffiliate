@@ -81,6 +81,16 @@
                     <td>${pay.receipt}</td>
                 </tr>
             </tbody>
+            <tfoot class="noprint">
+                <tr>
+                    <th colspan="2">Total Pagado:</th>
+                    <th>${locale.currency(loan.interesesPagados(), True, True)}</th>
+                    <th>${locale.currency(loan.capitalPagado(), True, True)}</th>
+                    <th>${locale.currency(loan.pagado(), True, True)}</th>
+                    <th></th>
+                    <th class="noprint"></th>
+                </tr>
+            </tfoot>
         </table>
     </body>
 </html>
