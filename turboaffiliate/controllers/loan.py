@@ -38,7 +38,6 @@ class Deduction(controllers.Controller):
         kw['loan'] = model.Loan.get(kw['loan'])
         kw['account'] = model.Account.get(kw['account'])
         kw['amount'] = Decimal(kw['amount'])
-        kw['name'] = kw['account'].name
         
         log = dict()
         log['user'] = identity.current.user

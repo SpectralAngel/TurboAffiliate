@@ -455,7 +455,7 @@
                     </li>
                     <li>
                         <label for="startDate">Fecha de Inicio:</label>
-                        <input name="startDate" id="startDate" class="date-picker" />
+                        <input name="startDate" id="startDate" class="datepicker" />
                     </li>
                     <li>
                         <label for="cuota">Cuota:</label>

@@ -804,23 +804,13 @@ class Extra(SQLObject):
         
         Deduced(**kw)
     
-    def to_other(self):
-        
-        kw = dict()
-        kw['amount'] = self.amount
-        kw['affiliate'] = self.affiliate
-        kw['account'] = self.account
-        OtherDeduced(**kw)
-    
     def manual(self):
         
-        self.to_other()
         self.act()
 
 class Deduction(SQLObject):
     
     loan = ForeignKey("Loan")
-    name = UnicodeCol()
     amount = CurrencyCol()
     account = ForeignKey("Account")
     description = UnicodeCol()
@@ -943,7 +933,7 @@ class Obligation(SQLObject):
     
     """The description of the Cuota payment"""
     
-    name = UnicodeCol(length=100)
+    name = UnicodeCol(length=50)
     amount = CurrencyCol(default=0, notNone=True)
     inprema = CurrencyCol(default=0, notNone=True)
     month = IntCol()
@@ -1001,12 +991,6 @@ class OtherAccount(SQLObject):
     def add(self, amount):
         self.amount += amount
         self.quantity += 1
-
-class OtherDeduced(SQLObject):
-    
-    affiliate = ForeignKey("Affiliate")
-    amount = CurrencyCol(default=0)
-    account = ForeignKey("Account")
 
 class AuxiliarPrestamo(object):
     

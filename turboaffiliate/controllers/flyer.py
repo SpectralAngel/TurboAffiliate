@@ -119,7 +119,7 @@ class Flyer(controllers.Controller):
         
         """Genera un reporte para otras deducciones"""
         
-        otherDeduced = model.OtherDeduced.select()
+        otherDeduced = model.Deduced.selectBy(year=year,month=month)
         otherDeduced = [o for o in otherDeduced if o.affiliate.payment == payment]
         
         kw = dict()

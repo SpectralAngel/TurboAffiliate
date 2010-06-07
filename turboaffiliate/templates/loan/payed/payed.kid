@@ -42,7 +42,7 @@
             <caption>Deducciones</caption>
             <tbody>
                 <tr py:for="d in loan.deductions">
-                    <td>${d.name}</td>
+                    <td>${d.account.name}</td>
                     <td>${locale.currency(d.amount, True, True)}</td>
                 </tr>
             </tbody>

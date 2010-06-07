@@ -47,7 +47,7 @@
         <table width="100%">
             <caption>Deducciones</caption>
             <tr py:for="d in loan.deductions">
-                <td>${d.name}</td>
+                <td>${d.account.name}</td>
                 <td>${locale.currency(d.amount, True, True)}</td>
             </tr>
             <tr>
@@ -156,18 +156,14 @@
                 <input type="hidden" name="loan" value="${loan.id}" />
                 <ul>
                     <li>
-                        <label for="name">Concepto:</label>
-                        <input name="name" />
+                        <label for="account">Concepto:</label>
+                        <select name="account">
+                            <option py:for="account in accounts" py:content="account.code, ' - ', account.name" value="${account.id}" />
+                        </select>
                     </li>
                     <li>
                         <label for="amount">Monto:</label>
                         <input name="amount" />
-                    </li>
-                    <li>
-                        <label for="account">Cuenta:</label>
-                        <select name="account">
-                            <option py:for="account in accounts" py:content="account.code, ' - ', account.name" value="${account.id}" />
-                        </select>
                     </li>
                     <li>
                         <label for="description">Descripci&oacute;n:</label>
