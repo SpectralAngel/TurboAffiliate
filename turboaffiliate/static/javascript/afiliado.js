@@ -11,6 +11,14 @@ $(document).ready(function(e)
         dateFormat: 'dd/mm/yy',
         changeMonth: true,
         changeYear: true,
+        yearRange: 'c-70:c+5'
+    });
+    
+    $('input.date-picker').datepicker({
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: 'c-70:c+5'
     });
     
     $('.agregarSolicitud').dialog(
@@ -107,6 +115,18 @@ $(document).ready(function(e)
         minWidth:480,
         buttons:{
                      'Efectuar Cambio' : function() { $(this).submit() },
+                     Cancelar :  function() { $(this).dialog('close'); }
+                }
+    });
+    ;$('#Prestamo').dialog(
+    {
+        title : "Agregar Préstamo",
+        modal:true,
+        autoOpen:false,
+        width:480,
+        minWidth:480,
+        buttons:{
+                     'Agregar' : function() { $(this).submit() },
                      Cancelar :  function() { $(this).dialog('close'); }
                 }
     });

@@ -221,7 +221,8 @@ class Loan(controllers.Controller):
                               months=validators.Int(),
                               capital=validators.Number(),
                               payment=validators.String(),
-                              startDate=validators.DateTimeConverter(format='%Y-%m-%d'),
+                              interest=validators.Int(),
+                              startDate=validators.DateTimeConverter(format='%d/%m/%Y'),
                               id=validators.String()))
     def new(self, affiliate, **kw):
         

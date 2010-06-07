@@ -41,22 +41,42 @@
         <h4 py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated != None">
                 Jubilado desde ${affiliate.jubilated.strftime('%d de %B de %Y')}
         </h4>
-        <span class="flash">
-            <span py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated == None">
-            Este Afiliado requiere Actualizar sus datos de Jubilaci&oacute;n haga
-            <a class="ui-state-default ui-corner-all ui-button" href="${tg.url('/affiliate/jubilate/%s' % affiliate.id)}">click aqu&iacute;</a>
-            actualizarlos</span>
-            <span py:if="affiliate.cardID == None">Este afiliado no
-            tiene tarjeta de identidad ingresada haga
-            <a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">click aqu&iacute;</a>
-            para ingresarla</span>
-            <span py:if="affiliate.state == None or affiliate.state ==''">Este afiliado no
-            tiene Departamento
-            <a class="ui-state-default ui-corner-all ui-button"  href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Ingresar</a></span>
-            <span py:if="affiliate.town == None or affiliate.town ==''">Este afiliado no
-            tiene Ciudad
-            <a class="ui-state-default ui-corner-all ui-button"  href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">Ingresar</a></span>
-        </span>
+        <div py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated == None">
+            <div class="ui-state-error ui-corner-all" style="padding: 0.5em;">
+            <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+<strong>Este Afiliado requiere Actualizar sus datos de Jubilaci&oacute;n haga</strong>
+            <a class="ui-state-default ui-corner-all ui-button" href="${tg.url('/affiliate/jubilate/%s' % affiliate.id)}">Actualizar</a>
+            </p>
+            </div>
+        </div>
+        <div class="ui-widget" py:if="affiliate.cardID == None">
+            <div class="ui-state-error ui-corner-all" style="padding: 0.5em;">
+            <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+<strong>Este afiliado no tiene tarjeta de identidad ingresada,</strong>
+            <a class="ui-state-default ui-corner-all ui-button" href="#" onclick="javascript:$('.editar').dialog('open');">Ingresar</a></p>
+            </div>
+        </div>
+        <div class="ui-widget" py:if="affiliate.state == None or affiliate.state ==''">
+            <div class="ui-state-error ui-corner-all" style="padding: 0.5em;">
+            <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+<strong>Este afiliado no tiene Departamento,</strong>
+            <a class="ui-state-default ui-corner-all ui-button" href="#" onclick="javascript:$('.editar').dialog('open');">Ingresar</a></p>
+            </div>
+        </div>
+        <div class="ui-widget" py:if="affiliate.town == None or affiliate.town ==''">
+            <div class="ui-state-error ui-corner-all" style="padding: 0.5em;">
+            <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+<strong>Este afiliado no tiene Ciudad,</strong>
+            <a class="ui-state-default ui-corner-all ui-button" href="#" onclick="javascript:$('.editar').dialog('open');">Ingresar</a></p>
+            </div>
+        </div>
+        <div class="ui-widget" py:if="affiliate.birthday == None">
+            <div class="ui-state-error ui-corner-all" style="padding: 0.5em;">
+            <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+<strong>Este afiliado no tiene Fecha de nacimiento,</strong>
+            <a class="ui-state-default ui-corner-all ui-button" href="#" onclick="javascript:$('.editar').dialog('open');">Ingresar</a></p>
+            </div>
+        </div>
         <h3 class="flash" py:if="not affiliate.active">Afiliado desactivado, razon:<strong><span class="flash" py:if="not affiliate.active" py:content="affiliate.reason" /><span py:if="not affiliate.muerte == None"> Fecha de Fallecimiento: ${affiliate.muerte.strftime('%d de %B de %Y')}</span></strong></h3>
         <h3>Informaci&oacute;n Personal</h3>
         <ul>
@@ -165,11 +185,11 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="6"><a href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a></th>
+                    <th colspan="6"><a href="#" onclick="javascript:$('#Prestamo').dialog('open');">Agregar Pr&eacute;stamo</a></th>
                 </tr>
             </tfoot>
         </table>
-        <a py:if="len(affiliate.loans) == 0" href="${tg.url('/loan/add/%s' % affiliate.id)}">Agregar Pr&eacute;stamo</a>
+        <a py:if="len(affiliate.loans) == 0" href="#" onclick="javascript:$('#Prestamo').dialog('open');">Agregar Pr&eacute;stamo</a>
         <table py:if="len(affiliate.solicitudes) != 0">
             <caption>Solicitudes de Pr&eacute;stamo</caption>
             <thead>
@@ -321,7 +341,8 @@
                     </li>
                     <li>
                         <label for="birthday">Fecha de Nacimiento</label>
-                        <input name="birthday" value="${affiliate.birthday.strftime('%d/%m/%Y')}" class="datepicker" />
+                        <input name="birthday" py:if="affiliate.birthday != None" value="${affiliate.birthday.strftime('%d/%m/%Y')}" class="datepicker" />
+                        <input name="birthday" py:if="affiliate.birthday == None" class="datepicker" />
                     </li>
                     <li>
                         <label for="payment">Cotiza por:</label>
@@ -385,21 +406,21 @@
             </div>
         </form>
         <form class="jubilar" action="/affiliate/jubilar" method="post">
-			<div>
-				<ul>
-					<li>
-						<label for="jubilated">Fecha de Jubilaci&oacute;n</label>
-						<input py:if="affiliate.jubilated != None" name="jubilated" value="${affiliate.jubilated.strftime('%d/%m/%Y')}" class="datepicker" />
+            <div>
+                <ul>
+                    <li>
+                        <label for="jubilated">Fecha de Jubilaci&oacute;n</label>
+                        <input py:if="affiliate.jubilated != None" name="jubilated" value="${affiliate.jubilated.strftime('%d/%m/%Y')}" class="datepicker" />
                         <input py:if="affiliate.jubilated == None" name="jubilated" class="datepicker" />
-						<input type="hidden" value="${affiliate.id}" name="affiliate" />
-					</li>
+                        <input type="hidden" value="${affiliate.id}" name="affiliate" />
+                    </li>
                     <li>
                         <label for="cobro">N&uacute;mero de Cobro:</label>
                         <input name="cobro" value="${affiliate.escalafon}" />
                     </li>
-				</ul>
-			</div>
-		</form>
+                </ul>
+            </div>
+        </form>
         <form class="muerte" action="${tg.url('/affiliate/fallecimiento')}" method="post">
             <div>
                 <input value="${affiliate.id}" name="affiliate" type="hidden" />
@@ -408,6 +429,37 @@
                         <label>Fecha:</label>
                         <input py:if="affiliate.muerte != None" name="muerte" value="${affiliate.muerte.strftime('%d/%m/%Y')}" class="datepicker" />
                         <input py:if="affiliate.muerte == None" name="muerte" class="datepicker" />
+                    </li>
+                </ul>
+            </div>
+        </form>
+        <form id="Prestamo" action="${tg.url('/loan/new')}" method="post">
+            <div>
+                <input value="${affiliate.id}" name="affiliate" type="hidden" />
+                <ul>
+                    <li>
+                        <label for="id">Solicitud:</label>
+                        <input name="id" />
+                    </li>
+                    <li>
+                        <label for="capital">Monto:</label>
+                        <input name="capital" id="amount" />
+                    </li>
+                    <li>
+                        <label for="months">Meses:</label>
+                        <input name="months" id="months" />
+                    </li>
+                    <li>
+                        <label for="interest">Interes:</label>
+                        <input name="interest" id="interest" />
+                    </li>
+                    <li>
+                        <label for="startDate">Fecha de Inicio:</label>
+                        <input name="startDate" id="startDate" class="date-picker" />
+                    </li>
+                    <li>
+                        <label for="cuota">Cuota:</label>
+                        <input name="payment" id="payment" />
                     </li>
                 </ul>
             </div>

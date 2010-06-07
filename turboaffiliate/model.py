@@ -886,6 +886,18 @@ class PayedLoan(SQLObject):
     def totaldebt(self):
         
         return 0
+    
+    def capitalPagado(self):
+        
+        return sum(p.capital for p in self.pays)
+    
+    def pagado(self):
+        
+        return sum(p.amount for p in self.pays)
+    
+    def interesesPagados(self):
+        
+        return sum(p.interest for p in self.pays)
 
 class OldPay(SQLObject):
     
