@@ -271,9 +271,9 @@ class Loan(controllers.Controller):
     def remove(self, code):
         
         loan = model.Loan.get(code)
-        loan.remove()
+        loan = loan.remove()
         flash('El prestamo ha sido removido')
-        raise redirect('/payed/%s' % code)
+        raise redirect(url('/payed/%s' % loan.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -284,7 +284,7 @@ class Loan(controllers.Controller):
         loan = model.Loan.get(loan)
         loan.months = months
         loan.payment = Decimal(payment).quantize(Decimal("0.01"))
-        raise redirect('/loan/%s' % loan.id)
+        raise redirect(url('/loan/%s' % loan.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.pagare')
@@ -304,7 +304,7 @@ class Loan(controllers.Controller):
     @expose()
     @validate(validators=dict(loan=validators.Int()))
     def search(self, loan):
-        raise redirect('/loan/%s' % loan)
+        raise redirect(url('/loan/%s' % loan))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.day')
@@ -392,7 +392,7 @@ class Loan(controllers.Controller):
         
         loan = model.Loan.get(loan)
         loan.debt = Decimal(debt)
-        raise redirect('/loan/%s' % loan.id)
+        raise redirect(url('/loan/%s' % loan.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -490,7 +490,7 @@ class Loan(controllers.Controller):
         loan = model.Loan.get(loan)
         loan.offset += 1
         
-        return self.default(loan.id)
+        raise redirect(url('/loan/%s' % loan.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -499,7 +499,8 @@ class Loan(controllers.Controller):
         
         loan = model.Loan.get(loan)
         loan.offset -= 1
-        return self.default(loan.id)
+        
+        raise redirect(url('/loan/%s' % loan.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.bypay')
@@ -559,7 +560,7 @@ class Loan(controllers.Controller):
         
         return dict(loans=[l for l in loans if l.affiliate.payment == payment])
     
-    def calcular_deducciones(self, loans):
+    def calcularDeducciones(self, loans):
         
         prestamos = list()
         
@@ -602,8 +603,8 @@ class Loan(controllers.Controller):
         
         prestamos = list()
         
-        prestamos.extend(self.calcular_deducciones(loans))
-        prestamos.extend(self.calcular_deducciones(payedLoans))
+        prestamos.extend(self.calcularDeducciones(loans))
+        prestamos.extend(self.calcularDeducciones(payedLoans))
         
         papeleo = 0
         intereses = 0
@@ -637,8 +638,8 @@ class Loan(controllers.Controller):
         
         prestamos = list()
         
-        prestamos.extend(self.calcular_deducciones(loans))
-        prestamos.extend(self.calcular_deducciones(payedLoans))
+        prestamos.extend(self.calcularDeducciones(loans))
+        prestamos.extend(self.calcularDeducciones(payedLoans))
         
         papeleo = 0
         intereses = 0
@@ -661,4 +662,3 @@ class Loan(controllers.Controller):
         return dict(loans=prestamos, start=start, end=start, monto=monto,
                     neto=neto, papeleo=papeleo, aportaciones=aportaciones,
                     intereses=intereses, retencion=retencion, reintegros=reintegros)
-

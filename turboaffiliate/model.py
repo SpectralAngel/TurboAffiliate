@@ -599,7 +599,8 @@ class Loan(SQLObject):
         # Calculate how much money was used to pay the capital
         kw['capital'] = kw['amount'] - kw['interest']
         # Change the last payment date
-        self.last = day
+        if day > self.last:
+            self.last = day
         # Register the payment in the database
         Pay(**kw)
         # Increase the number of payments by one
@@ -661,6 +662,8 @@ class Loan(SQLObject):
             deduction.remove(payed)
         
         self.destroySelf()
+        
+        return payed
     
     def future(self):
         
@@ -819,7 +822,6 @@ class Deduction(SQLObject):
         
         kw = dict()
         kw['payedLoan'] = payedLoan
-        kw['name'] = self.name
         kw['amount'] = self.amount
         kw['account'] = self.account
         kw['description'] = self.description
@@ -913,7 +915,6 @@ class OldPay(SQLObject):
 class PayedDeduction(SQLObject):
     
     payedLoan = ForeignKey("PayedLoan")
-    name = StringCol()
     amount = CurrencyCol()
     account = ForeignKey("Account")
     description = StringCol()
@@ -922,7 +923,6 @@ class PayedDeduction(SQLObject):
         
         kw = dict()
         kw['loan'] = loan
-        kw['name'] = self.name
         kw['amount'] = self.amount
         kw['description'] = self.description
         kw['account'] = self.account

@@ -92,8 +92,7 @@
             </tbody>
         </table>
         <table class="pay" py:if="len(loan.pays) != 0">
-            <caption>Pagos Efectuados
-            </caption>
+            <caption>Pagos Efectuados</caption>
             <thead>
                 <tr>
                     <th>Fecha</th>
