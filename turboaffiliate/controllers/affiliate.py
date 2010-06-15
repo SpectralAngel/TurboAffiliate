@@ -295,6 +295,7 @@ class Affiliate(controllers.Controller):
         affiliate.active = False
         affiliate.reason = "Fallecimiento"
         affiliate.muerte = muerte
+        affiliate.payment = "Fallecido"
         affiliate.desactivacion = date.today()
         log = dict()
         log['user'] = identity.current.user
@@ -425,7 +426,6 @@ class Affiliate(controllers.Controller):
             kw['affiliate'] = affiliate
             kw['account'] = model.Account.get(373)
             model.Deduced(**kw)
-            model.OtherDeduced(**kw)
             loan.pay(payment, "Planilla", day)
         
         affiliate.pay_cuota(year, month)
@@ -441,7 +441,6 @@ class Affiliate(controllers.Controller):
         kw['affiliate'] = affiliate
         kw['account'] = model.Account.get(1)
         model.Deduced(**kw)
-        model.OtherDeduced(**kw)
         
         return self.listmanual(affiliate.payment, year, month, day)
     
@@ -472,7 +471,6 @@ class Affiliate(controllers.Controller):
         kw['affiliate'] = loan.affiliate
         kw['account'] = model.Account.get(373)
         model.Deduced(**kw)
-        model.OtherDeduced(**kw)
         loan.pay(payment, "Planilla", day)
         
         flash('Se ha posteado el prestamo')
@@ -502,7 +500,6 @@ class Affiliate(controllers.Controller):
         kw['account'] = model.Account.get(1)
         affiliate.pay_cuota(year, month)
         model.Deduced(**kw)
-        model.OtherDeduced(**kw)
         
         flash('Se ha posteado la obligacion')
         

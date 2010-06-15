@@ -389,7 +389,7 @@ class CuotaTable(SQLObject):
             start = self.affiliate.joined.month
         
         if self.year == date.today().year:
-            end = date.today().month
+            end = date.today().month + 1
         
         if end == 0:
             end = 1
