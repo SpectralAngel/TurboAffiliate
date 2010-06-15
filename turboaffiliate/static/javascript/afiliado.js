@@ -130,4 +130,11 @@ $(document).ready(function(e)
                      Cancelar :  function() { $(this).dialog('close'); }
                 }
     });
+    $('#calcular').click(function(e)
+    {
+    	var time = $('#tiempo').val();
+    	var type = $('#interes').val() / (1200);
+    	var capital = $('#capital').val();
+    	$('#cuota').val(capital * type / (1 - Math.pow(type + 1, -time))); 
+    });
 });

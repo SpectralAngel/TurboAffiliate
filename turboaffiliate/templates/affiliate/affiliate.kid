@@ -443,15 +443,15 @@
                     </li>
                     <li>
                         <label for="capital">Monto:</label>
-                        <input name="capital" id="amount" />
+                        <input name="capital" id="capital" />
                     </li>
                     <li>
                         <label for="months">Meses:</label>
-                        <input name="months" id="months" />
+                        <input name="months" id="tiempo" />
                     </li>
                     <li>
                         <label for="interest">Interes:</label>
-                        <input name="interest" id="interest" />
+                        <input name="interest" id="interes" />
                     </li>
                     <li>
                         <label for="startDate">Fecha de Inicio:</label>
@@ -459,7 +459,8 @@
                     </li>
                     <li>
                         <label for="cuota">Cuota:</label>
-                        <input name="payment" id="payment" />
+                        <input name="cuota" id="payment" />
+                        <button id="calcular">Calcular</button>
                     </li>
                 </ul>
             </div>
