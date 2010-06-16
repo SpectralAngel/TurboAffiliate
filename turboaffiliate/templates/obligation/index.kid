@@ -37,14 +37,14 @@
                     <li>
                         <label for="account">Cuenta:</label>
                         <select name="account">
-                            <option py:for="account in accounts" py:content="account.code, ' - ', account.name" value="${account.id}" />
+                            <option py:for="account in accounts" value="${account.id}">${account.code} - ${account.name}</option> 
                         </select>
                     </li>
                     <li><input type="submit" value="Guardar" /></li>
                 </ul>
             </fieldset>
         </form>
-        <form action="${tg.url('/obligation/view')}" method="post">
+        <form action="${tg.url('/obligation/view')}">
             <fieldset>
                 <legend>Ver Obligaciones</legend>
                 <ul>

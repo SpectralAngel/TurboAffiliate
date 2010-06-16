@@ -1,12 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:py="http://purl.org/kid/ns#">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#">
 <head>
-    <meta content="text/html; charset=UTF-8"
-        http-equiv="content-type" py:replace="''"/>
-    <title>Login</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+    <title>Iniciar Sesi&oacute;n</title>
     <style type="text/css">
         #loginBox
         {
@@ -68,13 +64,12 @@
         {
             text-align: right;
         }
-
     </style>
 </head>
 
 <body>
     <div id="loginBox">
-        <h1>Login</h1>
+        <h1>Iniciar Sesi&oacute;n</h1>
         <p>${message}</p>
         <form action="${previous_url}" method="post">
             <table>
@@ -100,12 +95,8 @@
                     </td>
                 </tr>
             </table>
-
-            <input py:if="forward_url" type="hidden" name="forward_url"
-                value="${forward_url}"/>
-                
-            <input py:for="name,value in original_parameters.items()"
-                type="hidden" name="${name}" value="${value}"/>
+            <input py:if="forward_url" type="hidden" name="forward_url" value="${forward_url}"/>
+            <input py:for="name,value in original_parameters.items()" type="hidden" name="${name}" value="${value}"/>
         </form>
     </div>
 </body>

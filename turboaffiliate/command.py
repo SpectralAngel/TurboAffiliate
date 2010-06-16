@@ -72,8 +72,7 @@ def _read_config(args):
     else:
         try:
             configfile = pkg_resources.resource_filename(
-              pkg_resources.Requirement.parse("turboaffiliate"),
-                "config/default.cfg")
+              pkg_resources.Requirement.parse("turboaffiliate"), "config/default.cfg")
         except pkg_resources.DistributionNotFound:
             raise ConfigurationError("Could not find default configuration.")
 
@@ -107,8 +106,8 @@ def bootstrap():
     if options.user:
         options.user = options.user.decode(sys.getfilesystemencoding())
     _read_config(args)
-    from turboaffiliate.model import bootstrap_model
-    bootstrap_model(options.clean, options.user)
+    # from turboaffiliate.model import bootstrap_model
+    # bootstrap_model(options.clean, options.user)
 
 def start():
     """Start the CherryPy application server."""

@@ -10,7 +10,7 @@
     </head>
     <body>
         <h1>Pr&eacute;stamos</h1>
-        <a href="dobles">Ver Afiliados con multiples pr&eacute;stamos</a>
+        <a href="${tg.url('dobles')}">Ver Afiliados con multiples pr&eacute;stamos</a>
         <form>
             <fieldset>
                 <legend>Calculadora de Pr&eacute;stamos</legend>
@@ -38,7 +38,7 @@
                 </ul>
             </fieldset>
         </form>
-        <form action="search" method="post">
+        <form action="search">
             <fieldset>
                 <legend>Buscar Pr&eacute;stamo</legend>
                 <ul>
@@ -126,7 +126,7 @@
                 </ul>
             </fieldset>
         </form>
-        <form action="/payed/payment">
+        <form action="${tg.url('/payed/payment')}">
             <fieldset>
                 <legend>Pr&eacute;stamos por Periodo y Cotizacion - Pagados </legend>
                 <ul>
@@ -154,7 +154,7 @@
                 </ul>
             </fieldset>
         </form>
-        <form action="/payed/period">
+        <form action="${tg.url('/payed/period')">
             <fieldset>
                 <legend>Pr&eacute;stamos por Periodo - Pagados</legend>
                 <ul>

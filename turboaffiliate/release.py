@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Release information about TurboAffiliate
 
-version = "0.9"
+version = "0.9.1"
 
 # description = "Your plan to rule the world"
 # long_description = "More description about your plan"
@@ -13,4 +13,3 @@ copyright = "Copyright Carlos Flores 2007 - 2010"
 # url = "http://yourcool.site/"
 download_url = "http://launchpad.net/turboaffiliate/download"
 license = "GPL"
-

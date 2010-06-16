@@ -7,19 +7,7 @@
         <title>TurboAffiliate &bull; A&ntilde;adir Afiliado</title>
         <script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
         <script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
-        <script type="text/javascript">
-        <![CDATA[
-        $(document).ready(function(e)
-        {
-            $('input.date-picker').datepicker({
-                dateFormat: 'dd/mm/yy',
-                changeMonth: true,
-                changeYear: true,
-                yearRange: 'c-70:c+10'
-            });
-        });
-        ]]>
-        </script>
+        <script src="${tg.url('/static/javascript/afiliado.js')}" type="text/javascript"></script>
     </head>
     <body>
         <h2>A&ntilde;adir un Afiliado</h2>

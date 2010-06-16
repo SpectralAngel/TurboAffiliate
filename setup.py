@@ -21,11 +21,11 @@ setup(
     # uncomment the following lines if you fill them out in release.py
     #description=description,
     #long_descriptopn=long_description,
-    #author=author,
-    #author_email=email,
+    author=release.author,
+    author_email=release.email,
     #url=url,
-    #download_url=download_url,
-    #license=license,
+    download_url=release.download_url,
+    license=license,
 
     install_requires=[
         "TurboGears >= 1.1",
@@ -52,7 +52,7 @@ setup(
         # 'python.templating.engines',
 
         # If this is a full application, uncomment the next line
-        # 'turbogears.app',
+        'turbogears.app',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -72,7 +72,7 @@ setup(
         'console_scripts': [
             'start-turboaffiliate = turboaffiliate.command:start',
             # See the turboaffiliate.command.bootstrap function for details
-            'bootstrap-turboaffiliate = turboaffiliate.command:bootstrap',
+            #'bootstrap-turboaffiliate = turboaffiliate.command:bootstrap',
         ],
     },
     # Uncomment next line and create a default.cfg file in your project dir
