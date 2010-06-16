@@ -20,12 +20,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, expose, flash, identity, redirect
+from turbogears import controllers, expose, flash, identity, redirect, url
 from turbogears import validate, validators
 from turboaffiliate import model
 from decimal import Decimal
 from datetime import datetime
 
+#TODO: Agregar validators a todos los metodos de este controlador 
 class Cuota(controllers.Controller):
 
 	@identity.require(identity.not_anonymous())
@@ -37,7 +38,7 @@ class Cuota(controllers.Controller):
 			return dict(affiliate=affiliate)
 		except model.SQLObjectNotFound:
 				flash('No existe el Afiliado con Identidad %s' % cardID)
-				redirect('/affiliate')
+				redirect(url('/affiliate'))
 				
 	# TODO: Check what this code does, document it and clean it
 	@identity.require(identity.not_anonymous())
@@ -47,7 +48,7 @@ class Cuota(controllers.Controller):
 		
 		if kw['amount'] == '':
 			flash('Cantidad incorrecta')
-			raise redirect('/affiliate/cuota/pay/%s' % kw['affiliate'])
+			raise redirect(url('/affiliate/cuota/pay/%s' % kw['affiliate']))
 		
 		kw['amount'] = Decimal(str(kw['amount']))
 		kw['day'] = datetime.strptime(kw['day'], "%Y-%m-%d").date()
@@ -67,14 +68,14 @@ class Cuota(controllers.Controller):
 			log['action'] = "Cambios de cuota en %s" % kw['affiliate'].id
 			model.Logger(**log)
 			
-			raise redirect('/affiliate')
+			raise redirect(url('/affiliate'))
 			
 		except model.SQLObjectNotFound:
 			flash('No existe el Afiliado %s' % kw['affiliate'])
 
 		except ValueError:
 			flash(u'Numero de Afiliado invalido')
-			raise redirect('/affiliate')
+			raise redirect(url('/affiliate'))
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
@@ -85,9 +86,9 @@ class Cuota(controllers.Controller):
 			table = model.CuotaTable.get(id)
 			affiliate = table.affiliate
 			table.destroySelf()
-			raise redirect('/affiliate/status/%s' % affiliate.id)
+			raise redirect(url('/affiliate/status/%s' % affiliate.id))
 		except:
-			raise redirect('/affiliate')
+			raise redirect(url('/affiliate'))
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.cuota.edit')
@@ -101,7 +102,7 @@ class Cuota(controllers.Controller):
 			
 		except ValueError:
 			flash(u'Numero de Afiliado invalido')
-			raise redirect('/affiliate')
+			raise redirect(url('/affiliate'))
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
@@ -126,6 +127,6 @@ class Cuota(controllers.Controller):
 		
 		except ValueError:
 			flash(u'Numero de Afiliado invalido')
-			raise redirect('/affiliate')
+			raise redirect(url('/affiliate'))
 		
-		raise redirect('/affiliate/status/%s' % table.affiliate.id)
+		raise redirect(url('/affiliate/status/%s' % table.affiliate.id))

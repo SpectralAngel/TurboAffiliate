@@ -61,7 +61,7 @@ class Deduction(controllers.Controller):
         log['action'] = "Eliminada deduccion prestamo %s" % loan.id
         model.Logger(**log)
         
-        raise redirect('/loan/%s' % loan.id)
+        raise redirect(url('/loan/%s' % loan.id))
 
 class Pay(controllers.Controller):
     
@@ -73,7 +73,7 @@ class Pay(controllers.Controller):
         pay = model.Pay.get(code)
         loan = pay.loan
         pay.revert()
-        raise redirect('/loan/%s' % loan.id)
+        raise redirect(url('/loan/%s' % loan.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -100,7 +100,7 @@ class Pay(controllers.Controller):
         model.Logger(**log)
         
         if loan.pagar(amount, receipt, day, free):
-            raise redirect('/payed/%s' % id)
+            raise redirect(url('/payed/%s' % id))
         
         raise redirect(url('/loan/%s' % loan.id))
     
@@ -234,7 +234,7 @@ class Loan(controllers.Controller):
             del kw['id']
             
         if kw['capital'] < 0:
-            raise redirect('/loan/add/%s' % affiliate.id)
+            raise redirect(url('/loan/add/%s' % affiliate.id))
         
         kw["aproval"] = identity.current.user
         
@@ -383,7 +383,7 @@ class Loan(controllers.Controller):
         log['action'] = "Cambio de cuota de prestamo %s a %s" % (loan.id, payment)
         model.Logger(**log)
         
-        raise redirect('/loan/%s' % loan.id)
+        raise redirect(url('/loan/%s' % loan.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -401,7 +401,7 @@ class Loan(controllers.Controller):
         
         loan = model.Loan.get(loan)
         loan.amount = Decimal(amount)
-        raise redirect('/loan/%s' % loan.id)
+        raise redirect(url('/loan/%s' % loan.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.monthly')

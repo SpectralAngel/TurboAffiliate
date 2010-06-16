@@ -20,7 +20,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, flash, redirect, identity
+from turbogears import controllers, flash, redirect, identity, url
 from turbogears import expose, validate, validators, error_handler
 from turboaffiliate import model
 from turboaffiliate.controllers import cuota, extra, billing, deduced, observacion
@@ -143,7 +143,7 @@ class Affiliate(controllers.Controller):
             
             flash('El afiliado ha sido guardado!')
         
-        raise redirect('/affiliate/%s' % affiliate.id)
+        raise redirect(url('/affiliate/%s' % affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.status')
@@ -159,7 +159,7 @@ class Affiliate(controllers.Controller):
     def search(self, name):
         
         if name == '':
-            raise redirect('/affiliate')
+            raise redirect(url('/affiliate'))
         affiliates = model.Affiliate.select(OR(model.Affiliate.q.firstName.contains(name),
 											   model.Affiliate.q.lastName.contains(name)))
         return dict(result=affiliates)
@@ -173,11 +173,11 @@ class Affiliate(controllers.Controller):
         
         if affiliate.count() == 0:
             flash(u'Número de identidad no encontrado')
-            raise redirect('/affiliate')
+            raise redirect(url('/affiliate'))
         
-        raise redirect('/affiliate/%s' % affiliate[0].id)
+        raise redirect(url('/affiliate/%s' % affiliate[0].id))
         
-        redirect('/affiliate')
+        redirect(url('/affiliate'))
 
     @identity.require(identity.not_anonymous())
     @expose()
@@ -187,7 +187,7 @@ class Affiliate(controllers.Controller):
         affiliate = model.Affiliate.get(affiliate)
         affiliate.complete(year)
         
-        raise redirect('/affiliate/status/%s' % affiliate.id)
+        raise redirect(url('/affiliate/status/%s' % affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -205,7 +205,7 @@ class Affiliate(controllers.Controller):
         affiliate.destroySelf()
         flash('El afiliado ha sido removido')
         
-        raise redirect('/affiliate')
+        raise redirect(url('/affiliate'))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.report')
@@ -250,7 +250,7 @@ class Affiliate(controllers.Controller):
         for loan in affiliate.loans:
             loan.pay(loan.get_payment(), "Planilla", date.today())
         
-        raise redirect('/affiliate/cotization/?how=%s&year=%s&month=%s' % (how, year, month))
+        raise redirect(url('/affiliate/cotization/?how=%s&year=%s&month=%s' % (how, year, month)))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.report')
@@ -280,7 +280,7 @@ class Affiliate(controllers.Controller):
         log['user'] = identity.current.user
         log['action'] = "Desactivado el afiliado %s" % affiliate.id
         model.Logger(**log)
-        raise redirect('/affiliate/%s' % affiliate.id)
+        raise redirect(url('/affiliate/%s' % affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -301,7 +301,7 @@ class Affiliate(controllers.Controller):
         log['user'] = identity.current.user
         log['action'] = "Desactivado el afiliado %s" % affiliate.id
         model.Logger(**log)
-        raise redirect('/affiliate/%s' % affiliate.id)
+        raise redirect(url('/affiliate/%s' % affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -314,7 +314,7 @@ class Affiliate(controllers.Controller):
         log['user'] = identity.current.user
         log['action'] = "Activado el afiliado %s" % affiliate.id
         model.Logger(**log)
-        raise redirect('/affiliate/%s' % affiliate.id)
+        raise redirect(url('/affiliate/%s' % affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.payment')

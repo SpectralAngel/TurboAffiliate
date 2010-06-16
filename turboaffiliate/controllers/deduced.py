@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, 
 # Boston, MA  02110-1301  USA
 
-from turbogears import controllers, flash, redirect, identity
+from turbogears import controllers, flash, redirect, identity, url
 from turbogears import expose, validate, validators
 from turboaffiliate import model
 from decimal import Decimal
@@ -66,7 +66,7 @@ class Deduced(controllers.Controller):
 		
 		flash("Agregado Detalle de Deducción")
 		
-		raise redirect("/affiliate/deduced/%s" % affiliate)
+		raise redirect(url("/affiliate/deduced/%s" % affiliate))
 	
 	@identity.require(identity.has_permission("Deductor"))
 	@expose()
@@ -77,5 +77,5 @@ class Deduced(controllers.Controller):
 		affiliate = deduced.affiliate
 		deduced.destroySelf()
 		
-		raise redirect("/affiliate/deduced/%s" % affiliate.id)
+		raise redirect(url("/affiliate/deduced/%s" % affiliate.id))
 

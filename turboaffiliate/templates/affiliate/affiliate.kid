@@ -10,7 +10,7 @@
         <title>TurboAffiliate &bull; Afiliado ${affiliate.id}</title>
         <script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
         <script src="${tg.url('/static/javascript/jquery-ui.js')}" type="text/javascript"></script>
-        <script src="${tg.url('/static/javascript/afiliado.js')}" type="text/javascript"> </script>
+        <script src="${tg.url('/static/javascript/afiliado.js')}" type="text/javascript"></script>
     </head>
     <body>
         <div class="noprint" id="breadcrum">

@@ -20,7 +20,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, flash, redirect, identity
+from turbogears import controllers, flash, redirect, identity, url
 from turbogears import expose, validate, validators
 from turboaffiliate import model
 
@@ -39,7 +39,7 @@ class Account(controllers.Controller):
 	@validate(validators=dict(code=validators.Int()))
 	def default(self, code):
 	
-		account = model.Account.byCode(code)
+		account = model.Account.get(code)
 		return dict(account=account)
 	
 	@identity.require(identity.not_anonymous())
@@ -52,7 +52,7 @@ class Account(controllers.Controller):
 							  name=validators.String()))
 	def save(self, **kw):
 		try:
-			account = model.Account.byCode(kw['code'])
+			account = model.Account.get(kw['code'])
 			account.name = kw['name']
 			account.amount = kw['amount']
 			
@@ -64,10 +64,10 @@ class Account(controllers.Controller):
 		except model.SQLObjectNotFound:
 			account = model.Account(**kw)
 		except ValueError:
-			raise redirect('/account/add')
+			raise redirect(url('/account/add'))
 		
 		flash("La cuenta ha sido grabada")
-		raise redirect('/account/%s' % account.code)
+		raise redirect(url('/account/%s' % account.code))
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.account.retrasada")
@@ -86,4 +86,4 @@ class Account(controllers.Controller):
 		retrasada = model.CuentaRetrasada(**kw)
 		retrasada.account = account
 		
-		raise redirect('/account/retrasada')
+		raise redirect(url('/account/retrasada'))

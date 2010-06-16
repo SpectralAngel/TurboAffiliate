@@ -20,7 +20,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, redirect, identity
+from turbogears import controllers, redirect, identity, url
 from turbogears import expose, validate, validators
 from turboaffiliate import model
 from decimal import Decimal
@@ -45,7 +45,7 @@ class Extra(controllers.Controller):
         kw['account'] = model.Account.get(account)
         kw['amount'] = Decimal(kw['amount'])
         model.Extra(**kw)
-        raise redirect('/affiliate/%s' % kw['affiliate'].id)
+        raise redirect(url('/affiliate/%s' % kw['affiliate'].id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -58,7 +58,7 @@ class Extra(controllers.Controller):
         for n in range(first, last +1):
             kw['affiliate'] = model.Affiliate.get(n)
             model.Extra(**kw)
-        raise redirect('/affiliate')
+        raise redirect(url('/affiliate'))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -69,7 +69,7 @@ class Extra(controllers.Controller):
         affiliate = extra.affiliate
         extra.destroySelf()
         
-        raise redirect('/affiliate/%s' % affiliate.id)
+        raise redirect(url('/affiliate/%s' % affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -90,4 +90,4 @@ class Extra(controllers.Controller):
             kw['affiliate'] = afiliado
             model.Extra(**kw)
         
-        raise redirect('/affiliate')
+        raise redirect(url('/affiliate'))

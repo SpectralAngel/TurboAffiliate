@@ -20,7 +20,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, expose, flash, identity, redirect
+from turbogears import controllers, expose, flash, identity, redirect, url
 from turbogears import validate, validators
 from turboaffiliate import model
 from decimal import Decimal
@@ -139,7 +139,7 @@ class Flyer(controllers.Controller):
             other.destroySelf()
         
         flash('Reporte Generado')
-        raise redirect('/escalafon')
+        raise redirect(url('/escalafon'))
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.escalafon.other")

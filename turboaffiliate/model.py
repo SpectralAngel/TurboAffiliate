@@ -599,8 +599,8 @@ class Loan(SQLObject):
         # Calculate how much money was used to pay the capital
         kw['capital'] = kw['amount'] - kw['interest']
         # Change the last payment date
-        if day > self.last:
-            self.last = day
+        #if day.date > self.last:
+        self.last = day
         # Register the payment in the database
         Pay(**kw)
         # Increase the number of payments by one

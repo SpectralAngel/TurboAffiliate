@@ -20,7 +20,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, flash, redirect, identity
+from turbogears import controllers, flash, redirect, identity, url
 from turbogears import expose, validate, validators
 from turboaffiliate import model
 
@@ -55,7 +55,7 @@ class Obligation(controllers.Controller):
             return dict(obligation=obligation)
         except model.SQLObjectNotFound:
             flash(u'La obligación no se encontró')
-            raise redirect('/obligation')
+            raise redirect(url('/obligation'))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -68,7 +68,7 @@ class Obligation(controllers.Controller):
         
         obligation = model.Obligation(account=account, **kw)
         flash('La obligación se ha añadido')
-        raise redirect('/obligation/%s' % obligation.id)
+        raise redirect(url('/obligation/%s' % obligation.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.obligation.obligations")
@@ -85,4 +85,4 @@ class Obligation(controllers.Controller):
         
         obligation =  model.Obligation.get(code)
         obligation.destroySelf()
-        raise redirect('/obligation')
+        raise redirect(url('/obligation'))
