@@ -2,7 +2,6 @@
     "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python
     import locale
-    locale.setlocale(locale.LC_ALL, "")
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#"
     py:extends="'../master.kid'">
@@ -19,7 +18,7 @@
                     <th>Afiliado</th>
                     <th>Afiliaci&oacute;n</th>
                     <th>Capital</th>
-                    <!-- <th>Saldo</th> -->
+                    <th>Saldo</th>
                     <th>Fecha Otorgado</th>
                 </tr>
             </thead>
@@ -29,7 +28,7 @@
                     <td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
                     <td>${loan.affiliate.id}</td>
                     <td>${locale.currency(loan.capital, True, True)}</td>
-                    <!-- <td py:content="locale.currency(loan.debt, True, True)" />  -->
+                    <td>${locale.currency(loan.debt, True, True)</td>
                     <td>${loan.startDate.strftime('%d/%m/%Y')}</td>
                 </tr>
             </tbody>

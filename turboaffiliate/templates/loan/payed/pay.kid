@@ -8,24 +8,6 @@
 		<script src="${tg.url('/static/javascript/jquery.js')}" type="text/javascript"></script>
 		<script src="${tg.url('/static/javascript/jquery.date.js')}" type="text/javascript"></script>
 		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/date.css')}" />
-		<script type="text/javascript">
-		<![CDATA[
-		$(document).ready(function(e)
-		{
-			$.datePicker.setLanguageStrings(['Domingo', 'Lunes', 'Martes',
-											 'Miércoles', 'Jueves', 'Viernes',
-											 'Sábado'],	['Enero', 'Febrero',
-											 'Marzo', 'Abril', 'Mayo', 'Junio',
-											 'Julio', 'Agosto', 'Septiembre',
-											 'Octubre', 'Noviembre', 'Diciembre'],
-											 {p:'Atras', n:'Siguiente',
-											 c:'Cierre', b:'Elija la fecha'}
-											);
-			$('input.date-picker').datePicker({startDate:'01/01/1950'});
-			$.datePicker.setDateFormat('ymd','-');
-		});
-		]]>
-		</script>
 	</head>
 	<body>
 		<h1>Pagar</h1>

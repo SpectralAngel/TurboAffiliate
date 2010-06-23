@@ -6,26 +6,14 @@
         <title>TurboAffiliate &bull; Obligaciones</title>
     </head>
     <body>
-        <h2>Obligaci&oacute;n N&uacute;mero  ${obligation.id}</h2>
+        <h2>Obligaci&oacute;n N&uacute;mero ${obligation.id}</h2>
         <ul>
-            <li>
-                <strong>Mes:</strong> ${obligation.month}
-            </li>
-            <li>
-                <strong>A&ntilde;o:</strong> ${obligation.year}
-            </li>
-            <li>
-                <strong>Monto: </strong>${obligation.amount}
-            </li>
-            <li>
-                <strong>Monto Jubilados: </strong>${obligation.inprema}
-            </li>
-            <li>
-                <strong>Cuenta: </strong>${obligation.account.name}
-            </li>
-            <li>
-                <a href="${tg.url('/obligation/remove/%s' % obligation.id')}">Remover</a>
-            </li>
+            <li><strong>Mes:</strong> ${obligation.month}</li>
+            <li><strong>A&ntilde;o:</strong> ${obligation.year}</li>
+            <li><strong>Monto: </strong>${obligation.amount}</li>
+            <li><strong>Monto Jubilados: </strong>${obligation.inprema}</li>
+            <li><strong>Cuenta: </strong>${obligation.account.name}</li>
+            <li><a href="${tg.url('/obligation/remove/%s' % obligation.id')}">Remover</a></li>
         </ul>
     </body>
 </html>
