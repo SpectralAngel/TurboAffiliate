@@ -1,14 +1,23 @@
 @CHARSET "UTF-8";
+form
+{
+  float: left;
+  min-width: 350px;
+  min-height: 120px;
+}
 form fieldset {
     margin-bottom: 10px;
+    border: none;
 }
 
 form legend {
     padding: 0 2px;
     font-weight: bold;
+    color: #804000;
 }
 
-form label {
+form label
+{
     display: inline-block;
     float: left;
     line-height: 1.8;
@@ -18,12 +27,12 @@ form label {
 
 form fieldset ul {
     margin: 0;
-    padding 0;
+    padding: 0;
 }
 
 form ul {
     margin: 0;
-    padding 0;
+    padding: 0;
 }
 
 form li {

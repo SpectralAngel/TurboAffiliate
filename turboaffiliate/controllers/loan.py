@@ -106,8 +106,8 @@ class Pay(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.pay.resume')
-    @validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
-                              end=validators.DateTimeConverter(format='%Y-%m-%d')))
+    @validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def resume(self, start, end):
         
         query = "pay.day >= '%s' and pay.day <= '%s'" % (start, end)
@@ -147,8 +147,8 @@ class Loan(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.loan.list")
-    @validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
-                              end=validators.DateTimeConverter(format='%Y-%m-%d'),
+    @validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              end=validators.DateTimeConverter(format='%d/%m/%Y'),
                               payment=validators.String()))
     def cotizacion(self, start, end, payment):
         
@@ -308,7 +308,7 @@ class Loan(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.day')
-    @validate(validators=dict(day=validators.DateTimeConverter(format='%Y-%m-%d')))
+    @validate(validators=dict(day=validators.DateTimeConverter(format='%d/%m/%Y')))
     def day(self, day):
         
         loans = model.Loan.selectBy(startDate=day)
@@ -317,8 +317,8 @@ class Loan(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.list')
-    @validate(validators=dict(first=validators.DateTimeConverter(format='%Y-%m-%d'),
-                              last=validators.DateTimeConverter(format='%Y-%m-%d')))
+    @validate(validators=dict(first=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              last=validators.DateTimeConverter(format='%d/%m/%Y')))
     def period(self, first, last):
                 
         loans = list()
@@ -345,8 +345,8 @@ class Loan(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.cartera')
-    @validate(validators=dict(first=validators.DateTimeConverter(format='%Y-%m-%d'),
-                              last=validators.DateTimeConverter(format='%Y-%m-%d')))
+    @validate(validators=dict(first=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              last=validators.DateTimeConverter(format='%d/%m/%Y')))
     def cartera(self, first, last):
         
         loans = list()
@@ -405,8 +405,8 @@ class Loan(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.monthly')
-    @validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
-                              end=validators.DateTimeConverter(format='%Y-%m-%d')))
+    @validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def monthly(self, start, end):
         
         query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (start, end)
@@ -449,8 +449,8 @@ class Loan(controllers.Controller):
         
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.list')
-    @validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
-                              end=validators.DateTimeConverter(format='%Y-%m-%d'),
+    @validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              end=validators.DateTimeConverter(format='%d/%m/%Y'),
                               payment=validators.String()))
     def paymentDate(self, payment, start, end):
         
@@ -469,8 +469,8 @@ class Loan(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.liquid')
-    @validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
-                              end=validators.DateTimeConverter(format='%Y-%m-%d')))
+    @validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def liquid(self, start, end):
         
         query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (start, end)
@@ -504,7 +504,7 @@ class Loan(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.bypay')
-    @validate(validators=dict(day=validators.DateTimeConverter(format='%Y-%m-%d')))
+    @validate(validators=dict(day=validators.DateTimeConverter(format='%d/%m/%Y')))
     def byCapital(self, day):
         
         pays = model.Pay.selectBy(day=day)
@@ -591,8 +591,8 @@ class Loan(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.deducciones')
-    @validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
-                              end=validators.DateTimeConverter(format='%Y-%m-%d')))
+    @validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def deducciones(self, start, end):
         
         query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (start, end)
@@ -630,7 +630,7 @@ class Loan(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.deducciones')
-    @validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d')))
+    @validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y')))
     def deduccionesDia(self, start):
         
         loans = model.Loan.selectBy(startDate=start)
