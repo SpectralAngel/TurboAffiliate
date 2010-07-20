@@ -178,29 +178,30 @@ class Affiliate(SQLObject):
     la institución.
     """
 
-    firstName = UnicodeCol(length="100")
-    lastName = UnicodeCol(length="100")
-    cardID = UnicodeCol(length=15, default="")
+    firstName = UnicodeCol(length=100)
+    lastName = UnicodeCol(length=100)
+    cardID = UnicodeCol(length=15, default=None)
     gender = UnicodeCol(length=1, varchar=False)
     birthday = DateCol(default=date.today)
-    birthPlace = UnicodeCol()
+    birthPlace = UnicodeCol(length=100, default=None)
     
-    address = UnicodeCol(default="")
-    phone = UnicodeCol(default="")
+    address = UnicodeCol(default=None)
+    phone = UnicodeCol(default=None)
     
-    state = UnicodeCol(length=50, default="")
-    school = UnicodeCol(length=255, default="")
-    school2 = UnicodeCol(length=255, default="")
-    town = UnicodeCol(length=50, default="")
+    state = UnicodeCol(length=50, default=None)
+    school = UnicodeCol(length=255, default=None)
+    school2 = UnicodeCol(length=255, default=None)
+    town = UnicodeCol(length=50, default=None)
     
     joined = DateCol(default=date.today)
+    """Fecha en que se unio a la organización"""
     active = BoolCol(default=True, notNone=True)
     
-    # Reason for deactivation
-    reason = UnicodeCol(default="Renuncia", length=50)
+    # Razon por la que fue desactivado
+    reason = UnicodeCol(default=None, length=50)
     
-    escalafon = UnicodeCol(length=11)
-    inprema = UnicodeCol(length=11)
+    escalafon = UnicodeCol(length=11, default=None)
+    inprema = UnicodeCol(length=11, default=None)
     jubilated = DateCol(default=date.today)
     
     payment = UnicodeCol(default="Ventanilla", length=20)
@@ -228,6 +229,8 @@ class Affiliate(SQLObject):
     
     def get_monthly(self):
         
+        """Obtiene el pago mensual que debe efectuar el afiliado"""
+        
         extras = sum(e.amount for e in self.extras)
         loans = sum(l.get_payment() for l in self.loans)
         reintegros = sum(r.monto for r in self.reintegros if not r.pagado)
@@ -235,6 +238,9 @@ class Affiliate(SQLObject):
         return extras + loans + reintegros + self.get_cuota()
     
     def get_cuota(self):
+        
+        """Obtiene la cuota de aportación que el afiliado debera pagar en el
+        mes actual"""
         
         hoy = date.today()
         obligations = Obligation.selectBy(month=hoy.month, year=hoy.year)
@@ -246,12 +252,16 @@ class Affiliate(SQLObject):
         return obligation
     
     def populate(self, year):
+        
         kw = dict()
         for n in range(1, 13):
             kw["month%s" % n] = False
         return kw
     
     def complete(self, year):
+        
+        """Agrega un año de aportaciones al estado de cuenta del afiliado"""
+        
         kw = dict()
         kw['affiliate'] = self
         kw['year'] = year
@@ -264,40 +274,28 @@ class Affiliate(SQLObject):
     def get_delayed(self):
         
         for cuota in self.cuotaTables:
-            
             if cuota.delayed() != Zero:
-                
                 return cuota
-        
         return None
+    
+    def obtenerAportaciones(self, year):
+        cuota = None
+        try:
+            cuota = CuotaTable.selectBy(affiliate=self, year=year).getOne()
+        except SQLObjectNotFound:
+            kw = dict()
+            kw['affiliate'] = self
+            kw['year'] = year
+            cuota = CuotaTable(**kw)
+        return cuota
     
     def pay_cuota(self, year, month):
         
-        table = None
-        
-        try:
-            table = CuotaTable.selectBy(affiliate=self,year=year).getOne()
-        except SQLObjectNotFound:
-            kw = dict()
-            kw['affiliate'] = self
-            kw['year'] = year
-            table = CuotaTable(**kw)
-        
-        table.pay_month(month)
+        self.obtenerAportaciones(year).pay_month(month)
     
     def remove_cuota(self, year, month):
         
-        table = None
-        
-        try:
-            table = CuotaTable.selectBy(affiliate=self,year=year).getOne()
-        except SQLObjectNotFound:
-            kw = dict()
-            kw['affiliate'] = self
-            kw['year'] = year
-            table = CuotaTable(**kw)
-        
-        table.remove_month(month)
+        self.obtenerAportaciones(year).remove_month(month)
     
     def aportaciones(self):
     
@@ -315,9 +313,7 @@ class Affiliate(SQLObject):
     
     def solvent(self, year):
         
-        table = [table for table in self.cuotaTables if table.year == year][0]
-        
-        return table.all()
+        return self.obtenerAportaciones(year).all()
     
     def multisolvent(self, year):
         
@@ -340,11 +336,8 @@ class Affiliate(SQLObject):
     
     def get_month(self, year, month):
         
-        try:
-            table = CuotaTable.selectBy(affiliate=self,year=year).getOne()
-            return getattr(table, "month%s" % month)
-        except:
-            return False
+        table = self.obtenerAportaciones(year)
+        return getattr(table, "month%s" % month)
     
     def link(self, year, month):
         
@@ -523,12 +516,13 @@ class CuotaTable(SQLObject):
 
 class Loan(SQLObject):
 
-    """Data concerning to Loans"""
+    """Guarda los datos que pertenecen a un préstamo personal otorgado a un
+    afiliado de la organización"""
     
     affiliate = ForeignKey("Affiliate")
     
     capital = CurrencyCol(default=0, notNone=True)
-    letters = UnicodeCol()
+    letters = UnicodeCol(default=None, length=100)
     debt = CurrencyCol(default=0, notNone=True)
     payment = CurrencyCol(default=0, notNone=True)
     interest = DecimalCol(default=20, notNone=True, size=4, precision=2)

@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
-table.striped { min-width: 550px; }
+table.striped { min-width: 500px; }
 .striped tr.odd { background-color: #def; }
 .striped tr.odd td, thead, tfoot  { border-bottom: 1px solid #cef; }
 .striped thead, .striped tfoot { background-color: #64b1ff; }

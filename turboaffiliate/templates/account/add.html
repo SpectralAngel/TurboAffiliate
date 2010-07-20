@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html" />
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+	<title>Pr&eacute;stamos &bull; A&ntilde;adir</title>
+</head>
+<body>
+	<h1>A&ntilde;adir una cuenta</h1>
+	<form action="${tg.url('/account/save')}" method="post">
+		<fieldset>
+			<legend>Informaci&oacute;n de la Cuenta</legend>
+			<ul>
+				<li>
+					<label for="code">Codigo:</label>
+					<input name="code" />
+				</li>
+				<li>
+					<label for="name">Nombre</label>
+					<input name="name" />
+				</li>
+				<li>
+					<label for="amount">Precio Unitario</label>
+					<input name="amount" />
+				</li>
+				<li>
+					<input type="submit" value="Guardar" />
+				</li>
+			</ul>
+		</fieldset>
+	</form>
+</body>
+</html>

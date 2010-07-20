@@ -81,12 +81,12 @@ class Affiliate(controllers.Controller):
     @error_handler(index)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.affiliate')
-    @validate(validators=dict(copemh=validators.Int()))
-    def byCopemh(self, copemh):
+    @validate(validators=dict(carnet=validators.Int()))
+    def carnet(self, carnet):
         
         """Permite utilizar un numero de afiliacion en un formulario"""
         
-        raise redirect(url('/affiliate/%s' % copemh))
+        raise redirect(url('/affiliate/%s' % carnet))
     
     @identity.require(identity.has_permission("afiliar"))
     @expose(template="turboaffiliate.templates.affiliate.add")
@@ -528,7 +528,7 @@ class Affiliate(controllers.Controller):
     
     @error_handler(index)
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.affiliate.payment2')
+    @expose(template='turboaffiliate.templates.affiliate.planilla')
     @validate(validators=dict(payment=validators.String(),year=validators.Int(),
                               month=validators.Int(), day=validators.DateTimeConverter(format='%Y-%m-%d')))
     def listmanual(self, payment, month, year, day):
@@ -588,7 +588,7 @@ class Affiliate(controllers.Controller):
     def noCard(self):
         
         affiliates = model.Affiliate.selectBy(cardID=None)
-        show = "Sin N&uacute;mero de identidad"
+        show = "Sin Número de identidad"
         return dict(affiliates=affiliates, show=show, count=affiliates.count())
     
     @error_handler(index)

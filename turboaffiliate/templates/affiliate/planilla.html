@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html" />
+<!--
+  TODO: Cambiar Por una página AJAX que permita postear a todos los afiliados
+  sin necesidad de salir de esta página.
+-->
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+    <title>TurboAffiliate &bull; </title>
+</head>
+<body>
+  <h1>Posteo Manual por Cotizaci&oacute;n: ${how}</h1>
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Carnet</th>
+        <th>Nombre</th>
+        <th>Deudas</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr py:for="affiliate in affiliates">
+        <td><a href="${tg.url('/affiliate/%s' % affiliate.id)}">${affiliate.id}</a></td>
+        <td>${affiliate.lastName} ${affiliate.firstName}</td>
+        <td></td>
+        <td><a href="${tg.url('/affiliate/manual?affiliate=%s&amp;year=%s&amp;month=%s&amp;day=%s' % (affiliate.id, year, month, day))}">X</a></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th colspan="4">Total de Afiliados: ${count}</th>
+      </tr>
+    </tfoot>
+  </table>
+</body>
+</html>
+

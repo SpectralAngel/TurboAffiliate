@@ -30,7 +30,7 @@ setup(
     install_requires=[
         "TurboGears >= 1.1",
         "WebTest",
-        "SQLObject>=0.10.1"
+        "SQLObject>=0.12.5"
     ],
     zip_safe=False,
     packages=packages,

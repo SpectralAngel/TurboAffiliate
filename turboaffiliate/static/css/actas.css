@@ -1,4 +1,6 @@
-﻿table{
+﻿@CHARSET "UTF-8";
+table
+{
 	width: 100%;
 	border: thin black solid;
 	border-collapse:collapse;

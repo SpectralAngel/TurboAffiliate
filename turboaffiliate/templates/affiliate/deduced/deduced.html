@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../../master.html" />
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Detalle de Deducciones ${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</title>
+</head>
+<body>
+  <table class="striped flotante-derecho">
+    <thead>
+      <tr>
+        <th>Deducci&oacute;n</th>
+        <th>Cantidad</th>
+        <th>Detalle</th>
+        <th>Mes</th>
+        <th>A&ntilde;o</th>
+        <th py:if="tg.identity.user.has_permission('Deductor')">Eliminar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="deduced-${d.account.id}" py:for="d in affiliate.deduced">
+        <td>${d.account.name}</td>
+        <td>${locale.currency(d.amount, True, True)}</td>
+        <td>${d.detail}</td>
+        <td>${d.month}</td>
+        <td>${d.year}</td>
+        <td py:if="tg.identity.user.has_permission('Deductor')">
+            <a href="${tg.url('/affiliate/deduced/delete/%s' % d.id)}" >X</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <form py:if="tg.identity.user.has_permission('Deductor')" action="${tg.url('/affiliate/deduced/save')}">
+    <fieldset>
+      <legend>Datos de la Deducci&oacute;n</legend>
+      <ul>
+        <li>
+          <label for="account">Cuenta:</label>
+          <select name="account">
+            <option py:for="account in accounts" py:content="account.code, ' - ', account.name" value="${account.id}" />
+          </select>
+          <input type="hidden" name="affiliate" value="${affiliate.id}" />
+        </li>
+        <li>
+          <label for="amount">Monto:</label>
+          <input name="amount" />
+        </li>
+        <li>
+          <label for="month">Mes:</label>
+          <input name="month" />
+        </li>
+        <li>
+          <label for="year">A&ntilde;o:</label>
+          <input name="year" />
+        </li>
+        <li>
+          <label for="detail">Detalle</label>
+          <input name="detail" />
+        </li>
+        <li><input type="submit" value="Agregar Deducci&oacute;n" /></li>
+      </ul>
+    </fieldset>
+  </form>
+</body>
+</html>
+

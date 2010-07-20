@@ -21,14 +21,19 @@ $(document).ready(function(e)
     yearRange: 'c-70:c+5'
   });
   
+  $('#AgregarAfiliado').dialog(
+  {
+    title : "Agregar un Afiliado",
+    modal:true,
+    autoOpen:false,
+    buttons :   {
+            'Agregar Afiliado' : function() { $(this).submit() },
+            'Cancelar' :  function() { $(this).dialog('close'); }
+          }
+  });
+  
   $(".striped tbody tr:odd").addClass("odd");
   $(".striped tbody tr:even").addClass("even");
+  $(".deduced-674").addClass("ui-state-error").addClass("ui-corner-all");
   
-  $('#calcular').click(function(e)
-  {
-    var time = $('#tiempo').val();
-    var type = $('#interes').val() / (1200);
-    var capital = $('#capital').val();
-    $('#cuota').val(capital * type / (1 - Math.pow(type + 1, -time))); 
-  });
 });

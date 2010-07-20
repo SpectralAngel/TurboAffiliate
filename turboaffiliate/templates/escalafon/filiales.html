@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html" />
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Filiales</title>
+</head>
+<body>
+  <h1>Filiales Departamentales</h1>
+  <div py:for="departmento in filiales">
+    <h2>${departmento}</h2>
+    <h3>Total departamento: ${filiales[departmento]['total']}</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Instituto</th>
+          <th>Afiliados</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr py:for="school in filiales[departmento]" py:if="school != 'total'">
+          <td>${school}</td>
+          <td>${filiales[departmento][school]}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

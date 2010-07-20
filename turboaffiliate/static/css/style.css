@@ -28,7 +28,7 @@ body {
   margin: 0;
 }
 #espaciador {
-  height: 30px;
+  height: 35px;
 }
 #contenedor {
   width: 100%;
@@ -65,7 +65,7 @@ h1, .enfasis {
   color: #804000;
 }
 #pie {
-  padding-bottom: 25px;
+  padding-bottom: 30px;
 }
 .flotante-derecho {
   float: left;
@@ -74,4 +74,17 @@ h1, .enfasis {
 .toolbox
 {
   margin-bottom: 5px;
+}
+#personal
+{
+  max-width: 300px;
+}
+.no-margin
+{
+  margin: 0;
+  padding: 3px;
+}
+#informacion
+{
+  margin: 0 5px;
 }

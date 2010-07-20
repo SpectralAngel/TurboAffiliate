@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html" />
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+	<title>Pr&eacute;stamos &bull; A&ntilde;adir</title>
+</head>
+<body>
+	<h1>A&ntilde;adir una cuenta</h1>
+	<form action="${tg.url('/account/agregarRetrasada')}" method="post">
+		<fieldset>
+			<legend>Informaci&oacute;n de la Cuenta</legend>
+			<ul>
+				<li>
+					<label>cuenta:</label>
+					<select name="account" >
+					  <option py:for="a in accounts" value="${a.id}">${a.name}</option>
+					</select>
+				</li>
+				<li>
+					<label for="mes">Mes</label>
+					<input name="mes" />
+				</li>
+				<li>
+					<label for="anio">A&ntilde;o</label>
+					<input name="anio" />
+				</li>
+				<li>
+					<input type="submit" value="Guardar" />
+				</li>
+			</ul>
+		</fieldset>
+	</form>
+</body>
+</html>

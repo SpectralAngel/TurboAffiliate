@@ -25,6 +25,20 @@ $(document).ready(function(e)
              Cancelar :  function() { $(this).dialog('close'); }
             }
   });
+  
+  
+  $('#deduccionAnual').dialog(
+  {
+    title : "Mostrar Deducciones",
+    modal:true,
+    autoOpen:false,
+    width:380,
+    minWidth:380,
+    buttons:{
+             'Mostrar' : function() { $(this).submit() },
+             'Cancelar' :  function() { $(this).dialog('close'); }
+            }
+  });
   $('.agregarObservacion').dialog(
   {
     title : "Agregar Observación",

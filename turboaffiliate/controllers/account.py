@@ -60,7 +60,7 @@ class Account(controllers.Controller):
 			log['user'] = identity.current.user
 			log['action'] = "Agregada cuenta de %s" % account.id
 			model.Logger(**log)
-			
+		
 		except model.SQLObjectNotFound:
 			account = model.Account(**kw)
 		except ValueError:
@@ -86,4 +86,5 @@ class Account(controllers.Controller):
 		retrasada = model.CuentaRetrasada(**kw)
 		retrasada.account = account
 		
+		flash("La cuenta para restradas ha sido grabada")
 		raise redirect(url('/account/retrasada'))

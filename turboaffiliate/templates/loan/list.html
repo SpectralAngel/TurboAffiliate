@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html" />
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Pr&eacute;stamos</title>
+  <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
+</head>
+<body>
+  <h1>Pr&eacute;stamos <span py:content="payment" /></h1>
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Pr&eacute;stamo</th>
+        <th>Afiliaci&oacute;n</th>
+        <th>Afiliado</th>
+        <th>Cotiza</th>
+        <th>Monto</th>
+        <th>Saldo</th>
+        <th>Otorgado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr py:for="loan in loans">
+        <td><a class="print" href="${tg.url('/loan/%s' % loan.id)}">${loan.id}</a></td>
+        <td><a class="print" href="${tg.url('/affiliate/%s' % loan.affiliate.id)}" py:content="loan.affiliate.id" /></td>
+        <td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
+        <td>${loan.affiliate.payment}</td>
+        <td>${locale.currency(loan.capital, True, True)}</td>
+        <td>${locale.currency(loan.totaldebt(), True, True)}</td>
+        <td>${loan.startDate}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Cantidad</th>
+        <th colspan="3">${count}</th>
+        <th>${locale.currency(capital, True, True)}</th>
+        <th>${locale.currency(debt, True, True)}</th>
+        <th></th>
+      </tr>
+    </tfoot>
+  </table>
+</body>
+</html>

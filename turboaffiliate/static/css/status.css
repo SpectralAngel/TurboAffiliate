@@ -1,26 +1,9 @@
-thead
+@CHARSET "UTF-8";
+table
 {
-	border-top: 1px solid;
-	border-bottom: 1px solid;	
-}
-.small
-{
-	font-size: 80%;
+  width: 100%;
 }
 .deuda
 {
-	width: 60px;
-	text-align: right;
-}
-a
-{
-	display: none;
-}
-#sidebar-left, #sidebar-right, #header
-{
-	display: none;
-}
-a.show
-{
-    display: inline;
+  text-align: right;
 }

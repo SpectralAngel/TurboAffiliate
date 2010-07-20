@@ -50,10 +50,22 @@ class Cuota(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose()
-    @validate(validators=dict(id=validators.Int()))
+    @validate(validators=dict(id=validators.Int(),
+                              month1=validators.Bool(),
+                              month2=validators.Bool(),
+                              month3=validators.Bool(),
+                              month4=validators.Bool(),
+                              month5=validators.Bool(),
+                              month6=validators.Bool(),
+                              month7=validators.Bool(),
+                              month8=validators.Bool(),
+                              month9=validators.Bool(),
+                              month10=validators.Bool(),
+                              month11=validators.Bool(),
+                              month12=validators.Bool()))
     def change(self, id, **kw):
         
-        table = model.CuotaTable.get('id')
+        table = model.CuotaTable.get(id)
         for n in range(1, 13):
             try:
                 setattr(table, "month%s" % n, kw['month%s' % n])

@@ -172,19 +172,6 @@ class Report(controllers.Controller):
         return dict(filiales=filiales)
     
     @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.escalafon.aportaciones")
-    @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
-    def aportaciones(self, year, month):
-        
-        """Muestra las deducciones realizadas por concepto de aportaciones
-        en un mes y año"""
-        
-        account = model.Account.get(1)
-        deduced = model.Deduced.selectBy(year=year,month=month,account=account)
-        
-        return dict(deduced=deduced, year=year, month=month)
-    
-    @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.escalafon.filialesdept")
     @validate(validators=dict(state=validators.String(),year=validators.Int(),
                               month=validators.Int(min=1,max=12)))

@@ -569,6 +569,7 @@ class Loan(controllers.Controller):
             intereses = 0
             retencion = 0
             aportaciones = 0
+            reintegros = 0
             neto = loan.net()
             monto = loan.capital
             for d in loan.deductions:

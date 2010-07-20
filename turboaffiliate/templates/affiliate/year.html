@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html" />
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Afiliados</title>
+  <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
+</head>
+<body>
+  <h3>COPEMH</h3>
+  <h1>Afiliados Solventes por A&ntilde;o</h1>
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>A&ntilde;0</th>
+        <th>Afiliados</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr py:for="year in years">
+        <td>${year}</td>
+        <td>${years[year]}</td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>

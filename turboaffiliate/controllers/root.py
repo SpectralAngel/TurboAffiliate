@@ -72,7 +72,7 @@ class Root(controllers.RootController):
                   "this resource.")
         else:
             msg=_("Please log in.")
-            forward_url= request.headers.get("Referer", "/")
+            forward_url= request.headers.get("Referer", url("/"))
         
         response.status=403
         return dict(message=msg, previous_url=previous_url, logging_in=True,

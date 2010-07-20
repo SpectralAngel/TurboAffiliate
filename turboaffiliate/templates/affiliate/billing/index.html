@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../../master.html" />
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Estados de Cuenta</title>
+  <script src="${tg.url('/static/javascript/afiliado.js')}" type="text/javascript"></script>
+</head>
+<body>
+  <h1>Estados de Cuenta</h1>
+  <form action="${tg.url('state')}">
+    <fieldset>
+      <legend>Por Departamento</legend>
+      <ul>
+        <li>
+          <label for="state">Departamento:</label>
+          <select name="state">
+            <option>Atlantida</option>
+            <option>Choluteca</option>
+            <option>Colon</option>
+            <option>Comayagua</option>
+            <option>Copan</option>
+            <option>Cortes</option>
+            <option>El Paraiso</option>
+            <option>Francisco Morazan</option>
+            <option>Gracias a Dios</option>
+            <option>Intibuca</option>
+            <option>Islas de la Bahia</option>
+            <option>La Paz</option>
+            <option>Lempira</option>
+            <option>Olancho</option>
+            <option>Ocotepeque</option>
+            <option>Santa Barbara</option>
+            <option>Valle</option>
+            <option>Yoro</option>
+          </select>
+        </li>
+        <li><input type="submit" value="Mostrar" /></li>
+      </ul>
+    </fieldset>
+  </form>
+  <form action="${tg.url('loanState')}">
+    <fieldset>
+      <legend>Pr&eacute;stamos por Departamento</legend>
+      <ul>
+        <li>
+          <label for="state">Departamento:</label>
+          <select name="state">
+            <option>Atlantida</option>
+            <option>Choluteca</option>
+            <option>Colon</option>
+            <option>Comayagua</option>
+            <option>Copan</option>
+            <option>Cortes</option>
+            <option>El Paraiso</option>
+            <option>Francisco Morazan</option>
+            <option>Gracias a Dios</option>
+            <option>Intibuca</option>
+            <option>Islas de la Bahia</option>
+            <option>La Paz</option>
+            <option>Lempira</option>
+            <option>Olancho</option>
+            <option>Ocotepeque</option>
+            <option>Santa Barbara</option>
+            <option>Valle</option>
+            <option>Yoro</option>
+          </select>
+        </li>
+        <li><input type="submit" value="Mostrar" /></li>
+      </ul>
+    </fieldset>
+  </form>
+  <form action="${tg.url('payment')}">
+    <fieldset>
+      <legend>Cotizaci&oacute;n</legend>
+      <ul>
+          <li>
+            <label for="payment">Cotiza por:</label>
+            <select name="payment">
+              <option>Escalafon</option>
+              <option>INPREMA</option>
+              <option>UPN</option>
+              <option>Ventanilla</option>
+            </select>
+          </li>
+          <li><input type="submit" value="Mostrar" /></li>
+      </ul>
+    </fieldset>
+  </form>
+  <form action="${tg.url('rango')}">
+    <fieldset>
+      <legend>Rango</legend>
+      <ul>
+        <li>
+          <label for="start">Inicio:</label>
+          <input name="start" />
+        </li>
+        <li>
+          <label for="end">Fin:</label>
+            <input name="end" />
+        </li>
+        <li>
+          <input type="submit" value="Mostrar" />
+        </li>
+      </ul>
+    </fieldset>
+  </form>
+  <form action="${tg.url('school')}">
+    <fieldset>
+      <legend>Instituto</legend>
+      <ul>
+        <li>
+            <label for="school">Instituto:</label>
+            <input name="school" />
+        </li>
+        <li><input type="submit" value="Mostrar" /></li>
+      </ul>
+    </fieldset>
+  </form>
+</body>
+</html>

@@ -7,7 +7,6 @@ body
 {
 	font-size: 75%;
 	font-family: sans-serif;
-	min-width: 550px; /* 2 x (LC fullwidth + CC padding) + RC fullwidth */
 	margin: 0;
 	padding: 0;
 }
@@ -24,24 +23,12 @@ table
 	width: 60px;
 	text-align: right;
 }
-#sidebar-left, #sidebar-right, #header, #footer
+#navegacion, #espaciador, #utilerias, #pie, form
 {
 	display: none;
 	width: 0;
+	height: 0;
 }
-#content
-{
-	width: 100%;
-	font-size: 100%;
-}
-/* Removing Holy Grail */
-#container
-{
-	clear: both;
-	padding-left: 0;
-	padding-right: 0;
-}
-
 .noprint
 {
 	display: none;
@@ -85,8 +72,4 @@ caption
 	font-weight: bold;
 	font-size: 125%;
 	padding: 5px;
-}
-form
-{
-    display: none;
 }

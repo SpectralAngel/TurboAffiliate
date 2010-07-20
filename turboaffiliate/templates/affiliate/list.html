@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html" />
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Afiliados</title>
+</head>
+<body>
+  <h3>COPEMH</h3>
+  <h4>Hoja de deducciones a Afiliados de Educaci&oacute;n Media Solicitamos deducir:</h4>
+  <h1>Planilla ${how}</h1>
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Carnet</th>
+        <th>N&ordm; Empleado</th>
+        <th>Nombre</th>
+        <th>Deducci&oacute;n</th>
+        <th class="noprint">Postear</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr py:for="affiliate in affiliates">
+        <td><a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">${affiliate.id}</a></td>
+        <td>${affiliate.escalafon}</td>
+        <td>${affiliate.lastName} ${affiliate.firstName}</td>
+        <td>${locale.currency(affiliate.get_monthly(), True, True)}</td>
+        <td class="noprint"><a href="${tg.url('/affiliate/posteo/?how=%s&amp;year=%s&amp;month=%s&amp;code=%s' % (self.payment, year, month, affiliate.id))}">X</a></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th colspan="5">Total de Afiliados: ${count}</th>
+      </tr>
+    </tfoot>
+  </table>
+</body>
+</html>

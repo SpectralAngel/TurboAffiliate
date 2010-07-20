@@ -9,7 +9,13 @@ $(document).ready(function(e)
       minWidth:380,
             
       buttons:{
-                 'Reiniciar' : function() { $(this).reset(); },
+                 'Reiniciar' : function()
+                 {
+                   $(':input','#calcular')
+                    .not(':button, :submit, :reset, :hidden')
+                    .val('').removeAttr('checked')
+                    .removeAttr('selected');
+                 },
                  'Calcular' : function() {
                    var time = $('#tiempoc').val();
                    var type = $('#interesc').val() / (1200);
