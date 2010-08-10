@@ -12,10 +12,10 @@
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/ui-lightness/jquery-ui.css')}" media="screen" />
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/menu.css')}" media="screen" />
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/tabla.css')}" media="screen" />
-  <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/style.css')}" media="screen" />
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/form.css')}" media="screen" />
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/navegacion.css')}" media="screen" />
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print" />
+  <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/style.css')}" media="screen" />
   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
   <meta py:replace="select('*')"/>
 </head>
@@ -48,6 +48,9 @@
   <div id="utilerias">
     <button onclick="javascript:$('.calculadora').dialog('open');">Calculadora de Pr&eacute;stamos</button>
     <button onclick="javascript:$('#AgregarAfiliado').dialog('open');">Agregar Afiliado</button>
+    <button onclick="javascript:$('#bAfiliacion').dialog('open');">Buscar Carnet</button>
+    <button onclick="javascript:$('#bID').dialog('open');">Buscar Identidad</button>
+    <button onclick="javascript:$('#bNombre').dialog('open');">Buscar Nombre</button>
   </div>
   <form class="calculadora">
     <div>
@@ -154,6 +157,39 @@
             <option>Yoro</option>
           </select>
         </li>
+      </ul>
+    </div>
+  </form>
+  <form id="bAfiliacion" class="ui-widget-content ui-corner-all" action="${tg.url('/affiliate/carnet')}" method="get">
+    <div>
+      <ul>
+        <li>
+          <label>Carnet:</label>
+          <input name="carnet" />
+        </li>
+        <li><input type="submit" value="Buscar" /></li>
+      </ul>
+    </div>
+  </form>
+  <form id="bNombre" class="ui-widget-content ui-corner-all" action="${tg.url('/affiliate/search')}">
+    <div>
+      <ul>
+        <li>
+          <label>Nombre o Apellido:</label>
+          <input name="name" />
+        </li>
+        <li><input type="submit" value="Buscar" /></li>
+      </ul>
+    </div>
+  </form>
+  <form id="bID" class="ui-widget-content ui-corner-all" action="${tg.url('/affiliate/card')}">
+    <div>
+      <ul>
+        <li>
+          <label>Identidad:</label>
+          <input name="cardID" />
+        </li>
+        <li><input type="submit" value="Buscar" /></li>
       </ul>
     </div>
   </form>

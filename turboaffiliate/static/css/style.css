@@ -71,20 +71,31 @@ h1, .enfasis {
   float: left;
   padding: 5px;
 }
-.toolbox
-{
+.toolbox {
   margin-bottom: 5px;
+  font-size: 85%;
 }
-#personal
-{
+#personal {
   max-width: 300px;
 }
-.no-margin
-{
+.no-margin {
   margin: 0;
   padding: 3px;
 }
-#informacion
-{
+#informacion {
   margin: 0 5px;
 }
+.cotizacion {
+  padding: 2px;
+}
+h1
+{
+  font-size: 1.5em;
+  margin: 0;
+}
+.enfasis
+{
+  font-size: 1.1em;
+}
+.ui-button-text
+{ padding: 0;}

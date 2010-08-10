@@ -46,12 +46,12 @@ class Report(controllers.Controller):
     de los afiliados"""
     
     @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.escalafon.index")
+    @expose(template="turboaffiliate.templates.report.index")
     def index(self):
         return dict(accounts=model.Account.select())
     
     @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.escalafon.post")
+    @expose(template="turboaffiliate.templates.report.post")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
     def postReport(self, year, month):
         
@@ -63,7 +63,7 @@ class Report(controllers.Controller):
         return dict(month=month, year=year, report=report)
     
     @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.escalafon.report")
+    @expose(template="turboaffiliate.templates.report.report")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12),
                               payment=validators.String()))
     def report(self, payment, year, month):
@@ -103,7 +103,7 @@ class Report(controllers.Controller):
         return dict(deductions=kw, count=affiliates.count(), obligation=obligation, legend=payment, loans=loand, total=total)
     
     @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.escalafon.extra")
+    @expose(template="turboaffiliate.templates.report.extra")
     @validate(validators=dict(account=validators.Int()))
     def extra(self, account):
         
@@ -142,7 +142,7 @@ class Report(controllers.Controller):
         raise redirect(url('/escalafon'))
     
     @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.escalafon.other")
+    @expose(template="turboaffiliate.templates.report.other")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12),
                               payment=validators.String()))
     def showReport(self, year, month, payment):
@@ -154,7 +154,7 @@ class Report(controllers.Controller):
         return dict(month=month, year=year, report=report, payment=payment)
     
     @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.escalafon.filiales")
+    @expose(template="turboaffiliate.templates.report.filiales")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
     def filiales(self, year, month):
         
@@ -172,7 +172,7 @@ class Report(controllers.Controller):
         return dict(filiales=filiales)
     
     @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.escalafon.filialesdept")
+    @expose(template="turboaffiliate.templates.report.filialesdept")
     @validate(validators=dict(state=validators.String(),year=validators.Int(),
                               month=validators.Int(min=1,max=12)))
     def filialesDept(self, state, month, year):
@@ -193,7 +193,15 @@ class Report(controllers.Controller):
         return dict(filiales=filiales, state=state)
     
     @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.escalafon.deduced")
+    @expose(template="turboaffiliate.templates.report.planilla")
+    @validate(validators=dict(cotizacion=validators.UnicodeString(),
+                              day=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def planilla(self, cotizacion, day):
+        
+        return dict(cotizacion=cotizacion, day=day, afiliados=model.Affiliate.selectBy(payment="Cotizacion",active=True))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.report.deduced")
     @validate(validators=dict(account=validators.Int(),year=validators.Int(),
                               month=validators.Int(min=1,max=12)))
     def deduced(self, account, month, year):
@@ -207,7 +215,7 @@ class Report(controllers.Controller):
         return dict(deduced=deduced, account=account, month=months[month], year=year, total=total)
     
     @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.escalafon.payment")
+    @expose(template="turboaffiliate.templates.report.payment")
     @validate(validators=dict(account=validators.Int(),year=validators.Int(),
                               month=validators.Int(min=1,max=12),payment=validators.String()))
     def deducedPayment(self, account, month, year, payment):

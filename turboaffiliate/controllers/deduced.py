@@ -28,6 +28,8 @@ from decimal import Decimal
 
 class Deduced(controllers.Controller):
 	
+	"""Permite administrar las deducciones realizadas a un afiliado"""
+	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.deduced.deduced')
 	@validate(validators=dict(code=validators.Int()))
@@ -52,7 +54,7 @@ class Deduced(controllers.Controller):
 		
 		afiliado = model.Affiliate.get(afiliado)
 		deducciones = model.Deduced.selectBy(affiliate=afiliado, year=anio)
-		return dict(affiliate=afiliado, deducciones=deducciones)
+		return dict(affiliate=afiliado, deducciones=deducciones, anio=anio)
 	
 	@identity.require(identity.has_permission("Deductor"))
 	@expose()
@@ -80,4 +82,3 @@ class Deduced(controllers.Controller):
 		deduced.destroySelf()
 		
 		raise redirect(url("/affiliate/deduced/%s" % affiliate.id))
-

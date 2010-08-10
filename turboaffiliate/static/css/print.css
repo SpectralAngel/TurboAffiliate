@@ -17,25 +17,17 @@ body
 table
 {
 	text-align: left;
+  width: 100%;
 }
 .deuda
 {
-	width: 60px;
 	text-align: right;
 }
-#navegacion, #espaciador, #utilerias, #pie, form
+#navegacion, #espaciador, #utilerias, #pie, form, .noprint
 {
 	display: none;
 	width: 0;
 	height: 0;
-}
-.noprint
-{
-	display: none;
-}
-table
-{
-	width: 100%;
 }
 th
 {
@@ -58,7 +50,6 @@ a
 {
 	text-decoration: none;
 }
-
 .numero
 {
 	width: 100px;

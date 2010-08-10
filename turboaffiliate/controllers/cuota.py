@@ -23,8 +23,29 @@
 from turbogears import controllers, expose, flash, identity, redirect, url
 from turbogears import validate, validators
 from turboaffiliate import model
+from datetime import date
 
 class Cuota(controllers.Controller):
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.cuota.affiliate')
+    @validate(validators=dict(affiliate=validators.Int()))
+    def default(self, affiliate):
+        
+        return dict(affiliate=model.Affiliate.get(affiliate), day=date.today())
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int(),start=validators.Int(),
+                              end=validators.Int()))
+    def fill(self, affiliate, start, end):
+        
+        affiliate = model.Affiliate.get(affiliate)
+        
+        for n in range(start, end + 1):
+            [affiliate.pay_cuota(n, month) for month in range(1, 13)]
+        
+        raise redirect(url('/affiliate/cuota/%s' % affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -35,7 +56,7 @@ class Cuota(controllers.Controller):
             table = model.CuotaTable.get(id)
             affiliate = table.affiliate
             table.destroySelf()
-            raise redirect(url('/affiliate/status/%s' % affiliate.id))
+            raise redirect(url('/affiliate/cuota/%s' % affiliate.id))
         except:
             raise redirect(url('/affiliate'))
     
@@ -77,4 +98,39 @@ class Cuota(controllers.Controller):
         log['action'] = "Cambio en aportaciones anio %s afiliado %s" % (table.year, table.affiliate.id)
         model.Logger(**log)
         
-        raise redirect(url('/affiliate/status/%s' % table.affiliate.id))
+        raise redirect(url('/affiliate/cuota/%s' % table.affiliate.id))
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int(),year=validators.Int()))
+    def addYear(self, affiliate, year):
+        
+        affiliate = model.Affiliate.get(affiliate)
+        affiliate.complete(year)
+        
+        raise redirect(url('/affiliate/cuota/%s' % affiliate.id))
+    
+    @identity.require(identity.not_anonymous())
+    @expose('json')
+    @validate(validators=dict(afiliado=validators.Int(),cuenta=validators.Int(),
+                              day=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def pagoPlanilla(self, afiliado, cuenta, day):
+        
+        affiliate = model.Affiliate.get(affiliate)
+        cuenta = model.Account.get(cuenta)
+        affiliate.pay_cuota(day.year, day.month)
+        
+        deduccion = dict()
+        deduccion['account'] = cuenta
+        deduccion['month'] = day.month
+        deduccion['year'] = day.month
+        deduccion['affiliate'] = affiliate
+        deduccion['amount'] = affiliate.get_cuota(day)
+        model.Deduced(**deduccion)
+        
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Pago por Planilla de cuota de aportaciones afiliado {0}".format(affiliate.id)
+        model.Logger(**log)
+        
+        return dict(mensaje="Pago Efectuado")

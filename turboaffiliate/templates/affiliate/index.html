@@ -18,7 +18,7 @@
     <li><a href="${tg.url('none')}">Ver Afiliados sin a&ntilde;o de Afiliaci&oacute;n</a></li>
     <li><a href="${tg.url('noCard')}">Ver Afiliados sin n&uacute;mero de Identidad</a></li>
   </ul>
-  <form action="${tg.url('carnet')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('carnet')}">
     <fieldset>
       <legend>Buscar Afiliado</legend>
       <ul>
@@ -30,7 +30,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('search')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('search')}">
     <fieldset>
       <legend>Buscar Afiliado</legend>
       <ul>
@@ -42,7 +42,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('card')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('card')}">
     <fieldset>
       <legend>Buscar Afiliado</legend>
       <ul>
@@ -54,7 +54,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('cobro')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('cobro')}">
     <fieldset>
       <legend>Buscar Afiliado Por N&uacute;mero de Cobro</legend>
       <ul>
@@ -66,7 +66,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="byRange">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('byRange')}">
     <fieldset>
       <legend>Buscar Afiliados por C&oacute;digo de Departamento</legend>
       <ul>
@@ -78,7 +78,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('department')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('department')}">
     <fieldset>
       <legend>Reporte por Departamento</legend>
       <ul>
@@ -109,7 +109,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('cotization')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('cotization')}">
     <fieldset>
       <legend>Ver Deducci&oacute;n por Cotizaci&oacute;n</legend>
       <ul>
@@ -136,7 +136,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('payment')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('payment')}">
     <fieldset>
       <legend>Ver Afiliados por Cotizaci&oacute;n</legend>
       <ul>
@@ -155,7 +155,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('age')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('age')}">
     <fieldset>
       <legend>Ver Afiliados por Edad</legend>
       <ul>
@@ -171,7 +171,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('byDate')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('byDate')}">
     <fieldset>
       <legend>Mostrar seg&uacute;n fecha de afiliaci&oacute;n</legend>
       <ul>
@@ -187,7 +187,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('byTown')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('byTown')}">
     <fieldset>
       <legend>Mostrar por Municipio</legend>
       <ul>
@@ -199,7 +199,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('bySchool')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('bySchool')}">
     <fieldset>
       <legend>Mostrar por Instituto</legend>
       <ul>
@@ -234,35 +234,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('listmanual')}">
-    <fieldset>
-      <legend>Pago Manual de Planillas</legend>
-      <ul>
-        <li>
-          <label for="payment">Cotiza por:</label>
-          <select name="payment">
-            <option>INPREMA</option>
-            <option>UPN</option>
-            <option>Ministerio</option>
-          </select>
-        </li>
-        <li>
-          <label>A&ntilde;o:</label>
-          <input name="year" />
-        </li>
-        <li>
-          <label>Mes:</label>
-          <input name="month" />
-        </li>
-        <li>
-          <label>D&iacute;a de Posteo:</label>
-          <input name="day" class="date-picker" />
-        </li>
-        <li><input type="submit" value="Ver" /></li>
-      </ul>
-    </fieldset>
-  </form>
-  <form action="${tg.url('stateSchool')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('stateSchool')}">
     <fieldset>
       <legend>Mostrar por Instituto</legend>
       <ul>
@@ -293,7 +265,35 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('solvent')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('listmanual')}">
+    <fieldset>
+      <legend>Pago Manual de Planillas</legend>
+      <ul>
+        <li>
+          <label for="payment">Cotiza por:</label>
+          <select name="payment">
+            <option>INPREMA</option>
+            <option>UPN</option>
+            <option>Ministerio</option>
+          </select>
+        </li>
+        <li>
+          <label>A&ntilde;o:</label>
+          <input name="year" />
+        </li>
+        <li>
+          <label>Mes:</label>
+          <input name="month" />
+        </li>
+        <li>
+          <label>D&iacute;a de Posteo:</label>
+          <input name="day" class="date-picker" />
+        </li>
+        <li><input type="submit" value="Ver" /></li>
+      </ul>
+    </fieldset>
+  </form>
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('solvent')}">
     <fieldset>
       <legend>Afiliados Solventes por A&ntilde;o</legend>
       <ul>

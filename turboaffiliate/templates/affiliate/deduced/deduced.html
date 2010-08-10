@@ -7,7 +7,9 @@
   <title>TurboAffiliate &bull; Detalle de Deducciones ${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</title>
 </head>
 <body>
-  <table class="striped flotante-derecho">
+  <h1>${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</h1>
+  <table class="striped flotante-derecho ui-widget-content">
+    <caption>Todas las Deducciones Efectuadas</caption>
     <thead>
       <tr>
         <th>Deducci&oacute;n</th>
@@ -31,7 +33,7 @@
       </tr>
     </tbody>
   </table>
-  <form py:if="tg.identity.user.has_permission('Deductor')" action="${tg.url('/affiliate/deduced/save')}">
+  <form class="ui-widget-content" py:if="tg.identity.user.has_permission('Deductor')" action="${tg.url('/affiliate/deduced/save')}">
     <fieldset>
       <legend>Datos de la Deducci&oacute;n</legend>
       <ul>

@@ -91,3 +91,14 @@ class Extra(controllers.Controller):
             model.Extra(**kw)
         
         raise redirect(url('/affiliate'))
+    
+    @identity.require(identity.not_anonymous())
+    @expose('json')
+    @validate(validators=dict(extra=validators.Int()))
+    def pagarPlanilla(self, extra):
+    
+        extra = model.Extra.get(extra)
+        afiliado = extra.affiliate
+        extra.act()
+        
+        return dict(mensaje="Pago Efectuado")

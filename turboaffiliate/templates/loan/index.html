@@ -11,7 +11,7 @@
     <h1>Pr&eacute;stamos</h1>
     <a href="${tg.url('dobles')}">Ver Afiliados con multiples pr&eacute;stamos</a>
   </div>
-  <form action="${tg.url('search')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('search')}">
     <fieldset>
       <legend>Buscar Pr&eacute;stamo</legend>
       <ul>
@@ -25,7 +25,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('/solicitud/dia')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/solicitud/dia')}">
     <fieldset>
       <legend>Solicitudes para una Fecha</legend>
       <ul>
@@ -39,7 +39,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('/payed')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/payed')}">
     <fieldset>
       <legend>Ver Pr&eacute;stamo Pagado</legend>
       <ul>
@@ -53,17 +53,17 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('period')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('cartera')}">
     <fieldset>
-      <legend>Mostrar Pr&eacute;stamos de un Periodo</legend>
+      <legend>Mostrar Cartera Pr&eacute;stamos</legend>
       <ul>
         <li>
           <label>Inicio:</label>
-          <input name="first" class="date-picker" />
+          <input name="first" class="datepicker" />
         </li>
         <li>
           <label>Final:</label>
-          <input name="last" class="date-picker" />
+          <input name="last" class="datepicker" />
         </li>
         <li>
           <input type="submit" value="Buscar" />
@@ -71,7 +71,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('cotizacion')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('cotizacion')}">
     <fieldset>
       <legend>Pr&eacute;stamos Otorgados por Periodo y Cotizacion</legend>
       <ul>
@@ -99,7 +99,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('/payed/payment')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/payed/payment')}">
     <fieldset>
       <legend>Pr&eacute;stamos por Periodo y Cotizacion - Pagados </legend>
       <ul>
@@ -127,7 +127,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('/payed/period')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/payed/period')}">
     <fieldset>
       <legend>Pr&eacute;stamos por Periodo - Pagados</legend>
       <ul>
@@ -145,7 +145,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('day')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('day')}">
     <fieldset>
       <legend>Mostrar Pr&eacute;stamos de un D&iacute;a</legend>
       <ul>
@@ -159,25 +159,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('cartera')}">
-    <fieldset>
-      <legend>Mostrar Cartera Pr&eacute;stamos</legend>
-      <ul>
-        <li>
-          <label>Inicio:</label>
-          <input name="first" class="date-picker" />
-        </li>
-        <li>
-          <label>Final:</label>
-          <input name="last" class="date-picker" />
-        </li>
-        <li>
-          <input type="submit" value="Buscar" />
-        </li>
-      </ul>
-    </fieldset>
-  </form>
-  <form action="${tg.url('monthly')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('monthly')}">
     <fieldset>
       <legend>Reporte de Pr&eacute;stamos Otorgados</legend>
       <ul>
@@ -195,7 +177,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('bypayment')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('bypayment')}">
     <fieldset>
       <legend>Pr&eacute;stamos por Tipo de Cotizaci&oacute;n</legend>
       <ul>
@@ -215,7 +197,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('paymentDate')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('paymentDate')}">
     <fieldset>
       <legend>Pr&eacute;stamos por Tipo de Cotizaci&oacute;n y Fecha</legend>
       <ul>
@@ -243,7 +225,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('liquid')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('liquid')}">
     <fieldset>
       <legend>Reporte de Liquidaci&oacute;n de Pr&eacute;stamos</legend>
       <ul>
@@ -261,7 +243,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('byCapital')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('byCapital')}">
     <fieldset>
       <legend>Reporte de Capital e Intereses</legend>
       <ul>
@@ -275,7 +257,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('resume')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('resume')}">
     <fieldset>
       <legend>Resumen de Capital e Intereses por Periodo</legend>
       <ul>
@@ -293,7 +275,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('pay/resume')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('pay/resume')}">
     <fieldset>
       <legend>Detalle de Pagos por Periodo</legend>
       <ul>
@@ -311,7 +293,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('diverge')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('diverge')}">
     <fieldset>
       <legend>Divergencia de Pr&eacute;stamos</legend>
       <ul>
@@ -339,7 +321,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('cotizacionDepto')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('cotizacionDepto')}">
     <fieldset>
       <legend>Pr&eacute;stamos por Cotizaci&oacute;n y Departamento</legend>
       <ul>
@@ -382,7 +364,7 @@
         </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('deducciones')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('deducciones')}">
     <fieldset>
       <legend>Deducciones de Pr&eacute;stamos</legend>
       <ul>
@@ -394,13 +376,11 @@
             <label>Final:</label>
           <input name="end" class="datepicker" />
         </li>
-        <li>
-          <input type="submit" value="Ver" />
-        </li>
+        <li><input type="submit" value="Ver" /></li>
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('deduccionesDia')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('deduccionesDia')}">
     <fieldset>
       <legend>Deducciones de Pr&eacute;stamos Diarios</legend>
       <ul>
@@ -408,9 +388,7 @@
           <label>Inicio:</label>
           <input name="start" class="date-picker" />
         </li>
-        <li>
-          <input type="submit" value="Ver" />
-        </li>
+        <li><input type="submit" value="Ver" /></li>
       </ul>
     </fieldset>
   </form>

@@ -29,7 +29,7 @@
     <li><strong>Fecha de Otorgamiento:</strong> ${loan.startDate}</li>
     <li><strong>Monto Original:</strong> ${locale.currency(loan.capital, True, True)}</li>
   </ul>
-  <table class="striped">
+  <table class="ui-widget-content striped">
     <caption>Deducciones</caption>
     <tbody>
       <tr py:for="d in loan.deductions">
@@ -48,7 +48,7 @@
       </tr>
     </tfoot>
   </table>
-  <table class="striped pay" py:if="len(loan.pays) != 0">
+  <table class="ui-widget-content striped pay" py:if="len(loan.pays) != 0">
       <caption>Pagos Efectuados</caption>
       <thead>
         <tr>

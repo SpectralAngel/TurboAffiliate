@@ -25,66 +25,57 @@ from turbogears import expose, validate, validators
 from turboaffiliate import model
 
 class Account(controllers.Controller):
-	
-	"""Controller for Accounts in Affiliate Program"""
-	
-	@identity.require(identity.not_anonymous())
-	#@expose(template="turboaffiliate.templates.account.index")
-	def index(self):
-		return dict()
-	
-	@identity.require(identity.not_anonymous())
-	#@expose(template="turboaffiliate.templates.account.account")
-	@expose("json")
-	@validate(validators=dict(code=validators.Int()))
-	def default(self, code):
-	
-		account = model.Account.get(code)
-		return dict(account=account)
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.account.add")
-	def add(self):
-		return dict()
-	
-	@expose()
-	@validate(validators=dict(amount=validators.Number(),code=validators.Int(),
-							  name=validators.String()))
-	def save(self, **kw):
-		try:
-			account = model.Account.get(kw['code'])
-			account.name = kw['name']
-			account.amount = kw['amount']
-			
-			log = dict()
-			log['user'] = identity.current.user
-			log['action'] = "Agregada cuenta de %s" % account.id
-			model.Logger(**log)
-		
-		except model.SQLObjectNotFound:
-			account = model.Account(**kw)
-		except ValueError:
-			raise redirect(url('/account/add'))
-		
-		flash("La cuenta ha sido grabada")
-		raise redirect(url('/account/%s' % account.code))
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.account.retrasada")
-	def retrasada(self):
-		
-		return dict(accounts=model.Account.select())
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(mes=validators.Int(), anio=validators.Int(),
-							  account=validators.Int()))
-	def agregarRetrasada(self, account, **kw):
-		
-		account = model.Account.get(account)
-		kw['account'] = account
-		retrasada = model.CuentaRetrasada(**kw)
-		retrasada.account = account
-		
-		flash("La cuenta para restradas ha sido grabada")
-		raise redirect(url('/account/retrasada'))
+    
+    """Controller for Accounts in Affiliate Program"""
+    
+    @identity.require(identity.not_anonymous())
+    #@expose(template="turboaffiliate.templates.account.index")
+    def index(self):
+        return dict()
+    
+    @identity.require(identity.not_anonymous())
+    #@expose(template="turboaffiliate.templates.account.account")
+    @expose("json")
+    @validate(validators=dict(code=validators.Int()))
+    def default(self, code):
+    
+        account = model.Account.get(code)
+        return dict(account=account)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.account.add")
+    def add(self):
+        return dict()
+    
+    @expose()
+    @validate(validators=dict(code=validators.Int(),name=validators.String()))
+    def save(self, **kw):
+        
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Agregada cuenta de %s" % account.id
+        model.Logger(**log)
+        
+        account = model.Account(**kw)
+        flash("La cuenta ha sido grabada")
+        raise redirect(url('/account/%s' % account.code))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.account.retrasada")
+    def retrasada(self):
+        
+        return dict(accounts=model.Account.select())
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(mes=validators.Int(), anio=validators.Int(),
+                              account=validators.Int()))
+    def agregarRetrasada(self, account, **kw):
+        
+        account = model.Account.get(account)
+        kw['account'] = account
+        retrasada = model.CuentaRetrasada(**kw)
+        retrasada.account = account
+        
+        flash("La cuenta para restradas ha sido grabada")
+        raise redirect(url('/account/retrasada'))

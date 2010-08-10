@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python import locale ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="../master.html" />
+<xi:include href="../../master.html" />
 <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
     <title>TurboAffiliate &bull; Estado de Cuenta &bull; ${affiliate.id} ${affiliate.firstName} ${affiliate.lastName}</title>
@@ -13,7 +13,6 @@
     <h4>Estado de Cuenta Aportaciones</h4>
     <div><strong>Al ${day.strftime('%d de %B de %Y')}</strong></div>
     <h4>${affiliate.id} ${affiliate.firstName} ${affiliate.lastName}</h4>
-    <span>Afiliado desde ${affiliate.joined.strftime('%d de %B de %Y')}</span>
     <div class="ui-widget" py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated is None">
       <div class="ui-state-error ui-corner-all advertencia" style="padding: 0.5em;">
         <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
@@ -21,7 +20,8 @@
       </div>
     </div>
   </div>
-  <table class="small striped">
+  <table class="small striped ui-widget-content">
+    <caption>Afiliado desde ${affiliate.joined.strftime('%d de %B de %Y')}</caption>
     <thead>
       <tr>
         <th>A&ntilde;o</th>
@@ -73,7 +73,7 @@
       </tr>
     </tfoot>
   </table>
-  <table class="striped">
+  <table class="striped ui-widget-content">
     <caption>Cobros a Efectuar</caption>
     <thead>
       <th>Concepto</th>
@@ -129,13 +129,11 @@
           <label for="year">A&ntilde;o</label>
           <input name="year" />
         </li>
-        <li>
-          <input type="submit" value="A&ntilde;adir" />
-        </li>
+        <li><input type="submit" value="A&ntilde;adir" /></li>
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('/affiliate/fill')}" method="post" class="noprint">
+  <form action="${tg.url('/affiliate/cuota/fill')}" method="post" class="noprint">
     <fieldset>
       <legend>Postear A&ntilde;os</legend>
       <input type="hidden" value="${affiliate.id}" name="affiliate" />
@@ -148,9 +146,7 @@
           <label for="end">A&ntilde;o Final</label>
           <input name="end" />
         </li>
-        <li>
-          <input type="submit" value="A&ntilde;adir" />
-        </li>
+        <li><input type="submit" value="A&ntilde;adir" /></li>
       </ul>
     </fieldset>
   </form>

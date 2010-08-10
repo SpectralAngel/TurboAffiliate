@@ -2,7 +2,10 @@
 table.striped { min-width: 500px; }
 .striped tr.odd { background-color: #def; }
 .striped tr.odd td, thead, tfoot  { border-bottom: 1px solid #cef; }
+.striped tr.even { background-color: white; }
 .striped thead, .striped tfoot { background-color: #64b1ff; }
 caption { font-weight: bold; }
 .blanco { background-color: white; }
 table.full-size { width: 100%; }
+table.ui-widget-content { margin-bottom: 10px; }
+.deuda { text-align: right; }

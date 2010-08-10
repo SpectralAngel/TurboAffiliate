@@ -48,3 +48,8 @@ form fieldset li {
     padding: 0;
     margin: 0;
 }
+
+form.ui-widget-content
+{
+  margin: 2px;
+}

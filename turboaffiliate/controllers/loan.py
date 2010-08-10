@@ -31,8 +31,8 @@ class Deduction(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(loan=validators.Int(),account=validators.Int(),
-                              amount=validators.String(),
-                              description=validators.String()))
+                              amount=validators.UnicodeString(),
+                              description=validators.UnicodeString()))
     def save(self, **kw):
         
         kw['loan'] = model.Loan.get(kw['loan'])
@@ -119,6 +119,44 @@ class Pay(controllers.Controller):
         
         return dict(start=start, end=end, pays=pays, count=count, capital=capital,
                     interest=interest)
+    
+    @identity.require(identity.not_anonymous())
+    @expose('json')
+    @validate(validators=dict(amount=validators.UnicodeString(),
+                              loan=validators.Int(),free=validators.Bool(),
+                              cuenta=validators.Int(),
+                              day=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def agregarPlanilla(self, loan, day, cuenta, amount, **kw):
+        
+        amount = Decimal(amount)
+        loan = model.Loan.get(loan)
+        cuenta = model.Cuenta.get(cuenta)
+        id = loan.id
+        
+        free = False;
+        
+        if 'free' in kw:
+            free = kw['free']
+        
+        if day == None:
+            day = date.today()
+        
+        deduccion = dict()
+        deduccion['account'] = cuenta
+        deduccion['month'] = day.month
+        deduccion['year'] = day.month
+        deduccion['affiliate'] = loan.affiliate
+        deduccion['amount'] = amount
+        model.Deduced(**deduccion)
+        
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Pago por Planilla de {0} al prestamo {1}".format(amount, loan.id)
+        model.Logger(**log)
+        
+        loan.pagar(amount, 'Planilla', day, free)
+        
+        return dict(mensaje="Pago Efectuado")
 
 class Loan(controllers.Controller):
     
@@ -167,7 +205,8 @@ class Loan(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.loan.list")
-    @validate(validators=dict(depto=validators.String(),cotizacion=validators.String()))
+    @validate(validators=dict(depto=validators.UnicodeString(),
+                              cotizacion=validators.UnicodeString()))
     def cotizacionDepto(self, depto, cotizacion):
         
         loans = model.Loan.select()
@@ -200,7 +239,7 @@ class Loan(controllers.Controller):
     @validate(validators=dict(loan=validators.Int(),
                               months=validators.Int(),
                               capital=validators.Number(),
-                              payment=validators.String()))
+                              payment=validators.UnicodeString()))
     def save(self, loan, capital, months, payment):
         
         log = dict()
@@ -219,7 +258,7 @@ class Loan(controllers.Controller):
     @validate(validators=dict(affiliate=validators.Int(),
                               months=validators.Int(),
                               capital=validators.Number(),
-                              payment=validators.String(),
+                              payment=validators.UnicodeString(),
                               interest=validators.Int(),
                               startDate=validators.DateTimeConverter(format='%d/%m/%Y'),
                               id=validators.String()))
@@ -250,7 +289,7 @@ class Loan(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(loan=validators.Int(),solicitud=validators.Int(),
-                              cuenta=validators.Int(),pago=validators.String(),
+                              cuenta=validators.Int(),pago=validators.UnicodeString(),
                               descripcion=validators.UnicodeString()))
     def refinanciar(self, loan, pago, solicitud, cuenta, descripcion):
         
@@ -316,34 +355,6 @@ class Loan(controllers.Controller):
         return dict(amount=amount, loans=loans,day=day)
     
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.loan.list')
-    @validate(validators=dict(first=validators.DateTimeConverter(format='%d/%m/%Y'),
-                              last=validators.DateTimeConverter(format='%d/%m/%Y')))
-    def period(self, first, last):
-                
-        loans = list()
-        query = "loan.start_date >= '%s' and loan.start_date <= '%s' order by start_date" % (first, last)
-        adeudados = [loan for loan in model.Loan.select(query)]
-        
-        query = "payed_loan.start_date >= '%s' and payed_loan.start_date <= '%s'" % (first, last)
-        pagados = [loan for loan in model.PayedLoan.select(query)]
-        
-        for n in range(first.day, last.day + 1):
-            loans.extend(loan for loan in adeudados if loan.startDate.day == n)
-            loans.extend(loan for loan in pagados if loan.startDate.day == n)
-        
-        debt =0
-        for l in loans:
-            
-            debt += l.totaldebt()
-        
-        return dict(loans=loans, count=len(loans),
-                    payment="Periodo del %s al %s" % (first.strftime('%d de %B de %Y'),
-                                                        last.strftime('%d de %B de %Y')),
-                    capital=sum(l.capital for l in loans),
-                    debt=debt)
-    
-    @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.cartera')
     @validate(validators=dict(first=validators.DateTimeConverter(format='%d/%m/%Y'),
                               last=validators.DateTimeConverter(format='%d/%m/%Y')))
@@ -361,7 +372,8 @@ class Loan(controllers.Controller):
             loans.extend(loan for loan in pagados if loan.startDate.day == n)
         
         amount = sum(l.capital for l in loans)
-        return dict(amount=amount, loans=loans, first=first, last=last, count=len(loans))
+        deuda = sum(l.debt for l in loans)
+        return dict(amount=amount, deuda=deuda, loans=loans, first=first, last=last, count=len(loans))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.view')
@@ -387,7 +399,7 @@ class Loan(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose()
-    @validate(validators=dict(loan=validators.Int(),debt=validators.String()))
+    @validate(validators=dict(loan=validators.Int(),debt=validators.UnicodeString()))
     def debt(self, loan, debt):
         
         loan = model.Loan.get(loan)
@@ -431,7 +443,7 @@ class Loan(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.list')
-    @validate(validators=dict(payment=validators.String()))
+    @validate(validators=dict(payment=validators.UnicodeString()))
     def bypayment(self, payment):
         
         affiliates = model.Affiliate.selectBy(payment=payment)
@@ -543,11 +555,9 @@ class Loan(controllers.Controller):
         query = "payed_loan.last >= '%s' and payed_loan.last <= '%s'" % (start, end)
         payed = model.PayedLoan.select(query)
         
-        payed = [p for p in payed if len(p.affiliate.loans) > 0]
+        payed = [p for p in payed if len(p.affiliate.loans) > 0 and p.affiliate.payment == payment]
         
         payed = [p for p in payed if p.affiliate.loans[0].get_payment() != p.payment]
-        
-        payed = [p for p in payed if p.affiliate.payment == payment]
         
         return dict(payed=payed)
     

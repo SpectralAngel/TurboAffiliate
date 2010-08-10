@@ -16,18 +16,18 @@
       <div class="ui-widget" py:if="not affiliate.active">
         <div class="ui-state-error ui-corner-all advertencia" style="padding: 0.5em;">
           <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-          Afiliado desactivado, razon: <strong><span py:content="affiliate.reason" />
-            <span py:if="not affiliate.muerte == None"> Fecha de Fallecimiento: ${affiliate.muerte.strftime('%d de %B de %Y')}
-          </span></strong>
+          Afiliado desactivado por <strong>${affiliate.reason}</strong>
+          <span py:if="not affiliate.muerte == None"> Fecha de Fallecimiento: ${affiliate.muerte.strftime('%d de %B de %Y')}</span>
+          <span py:if="not affiliate.desactivacion == None"> Fecha de Desactivaci&oacute;n: ${affiliate.desactivacion.strftime('%d de %B de %Y')}</span>
         </div>
       </div>
       <span class="ui-helper-clearfix" />
-      <h3>ID: ${affiliate.cardID} <span class="pago">${affiliate.payment}</span>
+      <h3>ID: ${affiliate.cardID} <span class="cotizacion ui-state-hover ui-widget-content ui-corner-all">${affiliate.payment}</span>
       <span class="pago" py:if="affiliate.payment != 'Escalafon'">N&uacute;mero de Cobro: ${affiliate.escalafon}</span></h3>
       <ul class="toolbox ui-widget ui-widget-header ui-corner-all noprint">
-        <li><a class="ui-state-default ui-corner-all ui-button" href="${tg.url('/affiliate/status/%s' % affiliate.id)}">Aportaciones</a></li>
-        <li><a class="ui-state-default ui-corner-all ui-button" href="${tg.url('/reintegro/%s' % affiliate.id)}">Reintegros</a></li>
-        <li><a class="ui-state-default ui-corner-all ui-button" href="${tg.url('/affiliate/deduced/%s' % affiliate.id)}">Deducciones</a></li>
+        <li><a class="button" href="${tg.url('/affiliate/cuota/%s' % affiliate.id)}">Aportaciones</a></li>
+        <li><a class="button" href="${tg.url('/reintegro/%s' % affiliate.id)}">Reintegros</a></li>
+        <li><a class="button" href="${tg.url('/affiliate/deduced/%s' % affiliate.id)}">Deducciones</a></li>
         <li><strong class="enfasis">Afiliado desde <span py:if="not affiliate.joined is None">${affiliate.joined.strftime('%d de %B de %Y')}</span></strong></li>
         <li py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated != None">
           <strong class="enfasis">Jubilado desde ${affiliate.jubilated.strftime('%d de %B de %Y')}</strong>
@@ -104,7 +104,7 @@
               <td>${extra.mes}</td>
               <td>${extra.anio}</td>
               <td>${locale.currency(extra.amount, True, True)}</td>
-              <td><a class="ui-state-default ui-corner-all ui-button" href="${tg.url('/affiliate/extra/delete/%s' % extra.id)}">Borrar</a></td>
+              <td><a class="button" href="${tg.url('/affiliate/extra/delete/%s' % extra.id)}">Borrar</a></td>
             </tr>
             <tr py:for="reintegro in affiliate.reintegros" py:if="not reintegro.pagado">
               <td>Reintegro</td>
@@ -186,7 +186,7 @@
             </tr>
           </tbody>
         </table>
-        <table class="ui-widget-content ui-corner-all stripped" py:if="len(affiliate.observaciones) != 0">
+        <table class="ui-widget-content ui-corner-all striped" py:if="len(affiliate.observaciones) != 0">
             <caption>Observaciones</caption>
             <thead>
               <tr>
@@ -218,6 +218,47 @@
           <li><strong>Municipio: </strong>${affiliate.town}</li>
           <li><strong>Departamento: </strong>${affiliate.state}</li>
         </ul>
+      </div>
+      <div id="egresos" class="flotante-derecho ui-corner-all">
+        <table class="ui-widget-content ui-corner-all striped">
+            <caption>Cheques Extendidos</caption>
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Fecha</th>
+                <th>Cheque</th>
+                <th>Banco</th>
+                <th>Detalle</th>
+                <th>Monto</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr py:for="s in affiliate.sobrevivencias">
+                <td>Beneficio de Sobrevivencia</td>
+                <td>${s.fecha.strftime('%d/%m/%Y')}</td>
+                <td>${s.cheque}</td>
+                <td>${s.banco}</td>
+                <td>&nbsp;</td>
+                <td>${locale.currency(s.monto, True, True)}</td>
+              </tr>
+              <tr py:for="s in affiliate.devoluciones">
+                <td>Devoluci&oacute;n</td>
+                <td>${s.fecha.strftime('%d/%m/%Y')}</td>
+                <td>${s.cheque}</td>
+                <td>${s.banco}</td>
+                <td>${s.concepto}</td>
+                <td>${locale.currency(s.monto, True, True)}</td>
+              </tr>
+              <tr py:for="s in affiliate.funebres">
+                <td>Ayuda Funebre</td>
+                <td>${s.fecha.strftime('%d/%m/%Y')}</td>
+                <td>${s.cheque}</td>
+                <td>${s.banco}</td>
+                <td>${s.pariente}</td>
+                <td>${locale.currency(s.monto, True, True)}</td>
+              </tr>
+            </tbody>
+        </table>
       </div>
       <form class="verDeducciones" action="${tg.url('/affiliate/deduced/mostrar')}" method="get">
         <div>
@@ -454,7 +495,8 @@
     <button py:if="'admin' in tg.identity.groups" class="ui-button button-size ui-state-default ui-corner-all" href="${tg.url('/affiliate/remove/%s' % affiliate.id)}">Borrar</button>
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.extra').dialog('open');">Agregar Deducci&oacute;n</button>
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.jubilar').dialog('open');">Jubilar</button>
-    <button class="ui-button button-size ui-state-default ui-corner-all" py:if="affiliate.active" onclick="javascript:$('.desactivar').dialog('open');">Desactivar</button><a class="ui-button button-size ui-state-default ui-corner-all" py:if="not affiliate.active" href="${tg.url('/affiliate/activate/%s' % affiliate.id)}">Activar</a>
+    <button class="ui-button button-size ui-state-default ui-corner-all" py:if="affiliate.active" onclick="javascript:$('.desactivar').dialog('open');">Desactivar</button>
+    <a class="ui-button button-size ui-state-default ui-corner-all" py:if="not affiliate.active" href="${tg.url('/affiliate/activate/%s' % affiliate.id)}">Activar</a>
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.agregarSolicitud').dialog('open');">Agregar Solicitud</button>
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.verDeducciones').dialog('open');">Mostrar Deducciones</button>
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('#deduccionAnual').dialog('open');">Mostrar Deducciones Anuales</button>

@@ -202,7 +202,7 @@ class Affiliate(SQLObject):
     
     escalafon = UnicodeCol(length=11, default=None)
     inprema = UnicodeCol(length=11, default=None)
-    jubilated = DateCol(default=date.today)
+    jubilated = DateCol(default=None)
     
     payment = UnicodeCol(default="Ventanilla", length=20)
     
@@ -226,6 +226,9 @@ class Affiliate(SQLObject):
     """Fecha de Fallecimiento"""
     desactivacion = DateCol(default=date.today)
     """Fecha de Desactivación"""
+    sobrevivencias = MultipleJoin("Sobrevivencia", joinColumn="afiliado_id")
+    devoluciones = MultipleJoin("Devolucion", joinColumn="afiliado_id")
+    funebres = MultipleJoin("Funebre", joinColumn="afiliado_id")
     
     def get_monthly(self):
         
@@ -237,12 +240,11 @@ class Affiliate(SQLObject):
         
         return extras + loans + reintegros + self.get_cuota()
     
-    def get_cuota(self):
+    def get_cuota(self, hoy=date.today()):
         
         """Obtiene la cuota de aportación que el afiliado debera pagar en el
         mes actual"""
         
-        hoy = date.today()
         obligations = Obligation.selectBy(month=hoy.month, year=hoy.year)
         
         obligation = Decimal(0)
@@ -570,17 +572,15 @@ class Loan(SQLObject):
         
         # La cantidad a pagar es igual o mayor que la deuda del préstamo, por
         # lo tanto se considera la ultima cuota y no se cargaran intereses
-        if(self.debt <= amount):
-            
-            self.last = kw['day']
-            kw['capital'] = kw['amount']
-            # Register the payment in the database
-            Pay(**kw)
-            # Remove the loan and convert it to PayedLoan
-            self.remove()
-            return True
-        
-        # Otherwise calculate interest for the loan's payment
+        #if(self.debt <= amount):
+        #   
+        #    self.last = kw['day']
+        #    kw['capital'] = kw['amount']
+        #    # Register the payment in the database
+        #    Pay(**kw)
+        #    # Remove the loan and convert it to PayedLoan
+        #    self.remove()
+        #    return True
         if libre:
             kw['interest'] = 0
         else:
@@ -774,7 +774,7 @@ class Extra(SQLObject):
     mes = IntCol(default=None)
     anio = IntCol(default=None)
     
-    def act(self, decrementar=True):
+    def act(self, decrementar=True, day=date.today()):
         
         if decrementar:
             self.months -= 1
@@ -788,6 +788,8 @@ class Extra(SQLObject):
         kw['amount'] = self.amount
         kw['affiliate'] = self.affiliate
         kw['account'] = self.account
+        kw['month'] = day.month
+        kw['year'] = day.year
         
         if self.retrasada:
             
@@ -810,7 +812,7 @@ class Deduction(SQLObject):
     loan = ForeignKey("Loan")
     amount = CurrencyCol()
     account = ForeignKey("Account")
-    description = UnicodeCol()
+    description = UnicodeCol(length=100)
     
     def remove(self, payedLoan):
         
@@ -834,6 +836,7 @@ class PayedLoan(SQLObject):
     startDate = DateCol(notNone=True, default=date.today)
     pays = MultipleJoin("OldPay")
     deductions = MultipleJoin("PayedDeduction")
+    debt = CurrencyCol(default=0, notNone=True)
     
     def remove(self):
         
@@ -1099,3 +1102,41 @@ class Reintegro(SQLObject):
         """Revierte el pago del :class:`Reintegro`"""
         
         self.pagado = False
+
+class Sobrevivencia(SQLObject):
+    
+    afiliado = ForeignKey("Affiliate")
+    fecha = DateCol(default=date.today)
+    monto = CurrencyCol(default=0)
+    cheque = UnicodeCol(length=20, default=None)
+
+class Devolucion(SQLObject):
+    
+    afiliado = ForeignKey("Affiliate")
+    """:class:`Afiliado` a quien se entrega"""
+    concepto = UnicodeCol(length=200)
+    """razon por la que se entrega la devolucion"""
+    fecha = DateCol(default=date.today)
+    """Día en cual se entrego el cheque"""
+    monto = CurrencyCol()
+    """Monto entregado"""
+    cheque = UnicodeCol(length=20)
+    """Referencia al cheque emitido"""
+
+class Funebre(SQLObject):
+    
+    """Ayuda funebre en caso de fallecimiento de un familiar"""
+    
+    class sqlmeta:
+        table = 'ayuda_funebre'
+    
+    afiliado = ForeignKey("Affiliate")
+    """:class:`Afiliado` a quien se entrega"""
+    fecha = DateCol(default=date.today)
+    """Día en cual se entrego el cheque"""
+    monto = CurrencyCol()
+    """Cantidad que se entrego"""
+    cheque = UnicodeCol(length=20)
+    """Referencia al cheque emitido"""
+    pariente = UnicodeCol(length=100)
+    """Familiar que fallecio"""

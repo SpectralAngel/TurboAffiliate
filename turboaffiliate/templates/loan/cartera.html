@@ -8,13 +8,14 @@
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
 </head>
 <body>
-  <h1 py:content="'Cartera Pr&eacute;stamos'" />
-  <table>
+  <h1>Cartera de Pr&eacute;stamos</h1>
+  <table class="striped ui-widget-content">
+    <caption>Del ${first.strftime('%d/%m/%Y')} al ${last.strftime('%d/%m/%Y')}</caption>
     <thead>
       <tr>
         <th>Prestamo</th>
+        <th>Carnet</th>
         <th>Afiliado</th>
-        <th>Afiliaci&oacute;n</th>
         <th>Capital</th>
         <th>Saldo</th>
         <th>Fecha Otorgado</th>
@@ -22,20 +23,19 @@
     </thead>
     <tbody>
       <tr py:for="loan in loans">
-        <td><a href="${tg.url('/loan/%s' % loan.id)}">${loan.id}</td>
+        <td><a href="${tg.url('/loan/%s' % loan.id)}">${loan.id}</a></td>
+        <td><a href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}">${loan.affiliate.id}</a></td>
         <td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
-        <td>${loan.affiliate.id}</td>
         <td>${locale.currency(loan.capital, True, True)}</td>
-        <td>${locale.currency(loan.debt, True, True)</td>
+        <td>${locale.currency(loan.debt, True, True)}</td>
         <td>${loan.startDate.strftime('%d/%m/%Y')}</td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
-        <th>Monto Total:</th>
-        <th>${locale.currency(amount, True, True)}</th>
-        <th>Pr&eacute;stamos Otorgados</th>
-        <th>${count}</th>
+        <th colspan="2">Pr&eacute;stamos: ${count}</th>
+        <th colspan="2">Monto Otorgado: ${locale.currency(amount, True, True)}</th>
+        <th colspan="2">Saldo: ${locale.currency(deuda, True, True)}</th>
       </tr>
     </tfoot>
   </table>

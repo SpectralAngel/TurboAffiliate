@@ -4,12 +4,11 @@
 <xi:include href="../master.html" />
 <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-  <title>TurboAffiliate &bull; Afiliados</title>
+  <title>TurboAffiliate &bull; Afiliados ${show}</title>
 </head>
 <body>
-  <h3>COPEMH</h3>
   <h1>Afiliados ${show}</h1>
-  <table class="striped">
+  <table class="striped ui-widget-content">
     <thead>
       <tr>
         <th>Carnet</th>
@@ -26,7 +25,12 @@
         <td>${affiliate.cardID}</td>
       </tr>
     </tbody>
+    <tfoot>
+      <tr>
+        <th colspan="3">Total de Afiliados:</th>
+        <th>${count}</th>
+      </tr>
+    </tfoot>
   </table>
-  <strong>Total de Afiliados: </strong>${count}
 </body>
 </html>

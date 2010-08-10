@@ -7,9 +7,9 @@
     <script src="${tg.url('/static/javascript/reintegro.js')}" type="text/javascript"></script>
   </head>
 <body>
+  <h1>Control de Reintegros</h1>
   <a href="${tg.url('/reintegro/cobros')}">Mostrar Reintegros por Efectuar</a>
-  <span class="ui-helper-clearfix" />
-  <form action="${tg.url('/reintegro/emision')}">
+  <form class="ui-widget-content ui-corner-all"  action="${tg.url('/reintegro/emision')}">
     <fieldset>
       <legend>Mostrar Reintegros por Fecha de Emisi&oacute;n</legend>
       <ul>
@@ -27,7 +27,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('/reintegro/pagados')}">
+  <form class="ui-widget-content ui-corner-all"  action="${tg.url('/reintegro/pagados')}">
     <fieldset>
       <legend>Mostrar Reintegros Pagados en un periodo</legend>
       <ul>
