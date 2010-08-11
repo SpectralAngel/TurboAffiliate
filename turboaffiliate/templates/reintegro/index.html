@@ -7,41 +7,47 @@
     <script src="${tg.url('/static/javascript/reintegro.js')}" type="text/javascript"></script>
   </head>
 <body>
-  <h1>Control de Reintegros</h1>
-  <a href="${tg.url('/reintegro/cobros')}">Mostrar Reintegros por Efectuar</a>
-  <form class="ui-widget-content ui-corner-all"  action="${tg.url('/reintegro/emision')}">
-    <fieldset>
-      <legend>Mostrar Reintegros por Fecha de Emisi&oacute;n</legend>
-      <ul>
-        <li>
-          <label>Inicio:</label>
-          <input name="inicio" class="datepicker" />
-        </li>
-        <li>
-          <label>Final:</label>
-          <input name="fin" class="datepicker" />
-        </li>
-        <li>
-          <input type="submit" value="Mostrar" />
-        </li>
-      </ul>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all"  action="${tg.url('/reintegro/pagados')}">
-    <fieldset>
-      <legend>Mostrar Reintegros Pagados en un periodo</legend>
-      <ul>
-        <li>
-          <label>Inicio:</label>
-          <input name="inicio" class="datepicker" />
-        </li>
-        <li>
-          <label>Final:</label>
-          <input name="fin" class="datepicker" />
-        </li>
-        <li><input type="submit" value="Mostrar" /></li>
-      </ul>
-    </fieldset>
-  </form>
+  <div id="contenedor">
+    <div id="contenido">
+    <h1>Control de Reintegros</h1>
+    <form class="ui-widget-content ui-corner-all"  action="${tg.url('/reintegro/emision')}">
+      <fieldset>
+        <legend>Mostrar Reintegros por Fecha de Emisi&oacute;n</legend>
+        <ul>
+          <li>
+            <label>Inicio:</label>
+            <input name="inicio" class="datepicker" />
+          </li>
+          <li>
+            <label>Final:</label>
+            <input name="fin" class="datepicker" />
+          </li>
+          <li>
+            <input type="submit" value="Mostrar" />
+          </li>
+        </ul>
+      </fieldset>
+    </form>
+    <form class="ui-widget-content ui-corner-all"  action="${tg.url('/reintegro/pagados')}">
+      <fieldset>
+        <legend>Mostrar Reintegros Pagados en un periodo</legend>
+        <ul>
+          <li>
+            <label>Inicio:</label>
+            <input name="inicio" class="datepicker" />
+          </li>
+          <li>
+            <label>Final:</label>
+            <input name="fin" class="datepicker" />
+          </li>
+          <li><input type="submit" value="Mostrar" /></li>
+        </ul>
+      </fieldset>
+    </form>
+    </div>
+  </div>
+  <div id="lateral">
+    <a class="button button-size" href="${tg.url('/reintegro/cobros')}">Mostrar Reintegros por Efectuar</a>
+  </div>
 </body>
 </html>

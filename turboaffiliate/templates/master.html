@@ -20,7 +20,7 @@
   <meta py:replace="select('*')"/>
 </head>
 <body py:match="body" py:attrs="select('@*')">
-  <div id="navegacion">
+  <div id="navegacion" class="ui-widget-header">
     <ul id="menu">
       <li><a href="${tg.url('/')}">Inicio</a></li>
       <li><a href="${tg.url('/affiliate')}">Afiliados</a></li>
@@ -45,7 +45,7 @@
     <span class="ui-helper-clearfix" />
     <div id="pie">Copyright &copy; Carlos Flores 2007 - 2010</div>
   </div>
-  <div id="utilerias">
+  <div id="utilerias" >
     <button onclick="javascript:$('.calculadora').dialog('open');">Calculadora de Pr&eacute;stamos</button>
     <button onclick="javascript:$('#AgregarAfiliado').dialog('open');">Agregar Afiliado</button>
     <button onclick="javascript:$('#bAfiliacion').dialog('open');">Buscar Carnet</button>

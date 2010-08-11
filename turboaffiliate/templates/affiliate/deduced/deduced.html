@@ -40,7 +40,7 @@
         <li>
           <label for="account">Cuenta:</label>
           <select name="account">
-            <option py:for="account in accounts" py:content="account.code, ' - ', account.name" value="${account.id}" />
+            <option py:for="account in accounts" value="${account.id}">${account.id} - ${account.name}</option>
           </select>
           <input type="hidden" name="affiliate" value="${affiliate.id}" />
         </li>

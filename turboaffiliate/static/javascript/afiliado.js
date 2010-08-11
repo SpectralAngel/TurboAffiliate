@@ -16,7 +16,6 @@ $(document).ready(function(e)
   $('.verDeducciones').dialog(
   {
     title : "Mostrar Deducciones",
-    modal:true,
     autoOpen:false,
     width:380,
     minWidth:380,
@@ -30,7 +29,6 @@ $(document).ready(function(e)
   $('#deduccionAnual').dialog(
   {
     title : "Mostrar Deducciones",
-    modal:true,
     autoOpen:false,
     width:380,
     minWidth:380,
@@ -78,7 +76,6 @@ $(document).ready(function(e)
   $('.extra').dialog(
   {
     title : "Añadir Deducción Extra",
-    modal:true,
     autoOpen:false,
     width:480,
     minWidth:480,
@@ -114,7 +111,6 @@ $(document).ready(function(e)
   ;$('#Prestamo').dialog(
   {
     title : "Agregar Préstamo",
-    modal:true,
     autoOpen:false,
     width:480,
     minWidth:480,

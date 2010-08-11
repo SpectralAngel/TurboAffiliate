@@ -46,7 +46,7 @@ class Affiliate(controllers.Controller):
                       tg_errors.items()]
             flash(errors)
         
-        return dict()
+        return dict(cuentas=model.Account.select())
     
     @error_handler(index)
     @identity.require(identity.not_anonymous())
@@ -202,18 +202,8 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(affiliate=validators.UnicodeString()))
     def byRange(self, cardID):
         
-        affiliates = model.Affiliate.select("affiliate.card_id like '%%%s%%'" % cardID)
+        affiliates = model.Affiliate.select("affiliate.card_id like '%{0}%'".format(cardID))
         return dict(affiliates=affiliates, cardID=cardID, count=affiliates.count())
-    
-    @error_handler(index)
-    @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.affiliate.list')
-    @validate(validators=dict(year=validators.Int(),month=validators.Int(), how=validators.UnicodeString()))
-    def cotization(self, how, year, month):
-        
-        affiliates = model.Affiliate.select(model.Affiliate.q.payment==how, orderBy="lastName")
-        total = sum(a.total(year, month) for a in affiliates)
-        return dict(affiliates=affiliates, count=affiliates.count(), year=year, month=month, how=how, total=total)
     
     @error_handler(index)
     @identity.require(identity.not_anonymous())
@@ -353,38 +343,22 @@ class Affiliate(controllers.Controller):
     
     @error_handler(index)
     @identity.require(identity.not_anonymous())
-    @expose()
-    @validate(validators=dict(affiliate=validators.Int(),how=validators.UnicodeString(),
-                              year=validators.Int(),month=validators.Int()))
-    def posteo(self, affiliate, how, year, month):
-        
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = "Posteado el afiliado %s" % affiliate.id
-        model.Logger(**log)
-        
-        affiliate = model.Affiliate.get(affiliate)
-        affiliate.pay_cuota(year, month)
-        
-        for loan in affiliate.loans:
-            loan.pay(loan.get_payment(), "Planilla", date.today())
-        
-        raise redirect(url('/affiliate/cotization/?how=%s&year=%s&month=%s' % (how, year, month)))
-    
-    @error_handler(index)
-    @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.planilla')
-    @validate(validators=dict(payment=validators.String(),year=validators.Int(),
-                              month=validators.Int(), day=validators.DateTimeConverter(format='%Y-%m-%d')))
-    def listmanual(self, payment, month, year, day):
+    @validate(validators=dict(payment=validators.UnicodeString(),
+                              prestamos=validators.Int(),
+                              aportaciones=validators.Int(),
+                              day=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def planilla(self, payment, day, aportaciones, prestamos):
         
         affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment, orderBy="lastName")
-        return dict(affiliates=affiliates, count=affiliates.count(), how=payment, year=year, month=month, day=day.date())
+        
+        return dict(afiliados=affiliates, cotizacion=payment,
+                    aportaciones=aportaciones, prestamos=prestamos,day=day)
     
     @error_handler(index)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.debt')
-    @validate(validators=dict(payment=validators.String()))
+    @validate(validators=dict(payment=validators.UnicodeString()))
     def debt(self, payment):
         
         affiliates = model.Affiliate.selectBy(payment=payment)

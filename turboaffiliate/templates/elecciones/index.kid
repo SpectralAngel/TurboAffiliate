@@ -14,7 +14,7 @@
       <li><a href="${tg.url('all')}">Ver Todos los Afiliados</a></li>
       <li><a href="${tg.url('totalUrnas')}">Total de Urnas</a></li>
     </ul>
-    <form action="${tg.url('stateSchool')}">
+    <form class="ui-widget-content ui-corner-all" action="${tg.url('stateSchool')}">
       <fieldset>
         <legend>Padr&oacute;n Electoral Departamental</legend>
         <ul>
@@ -47,7 +47,7 @@
         </ul>
       </fieldset>
     </form>
-    <form action="${tg.url('departamento')}">
+    <form class="ui-widget-content ui-corner-all" action="${tg.url('departamento')}">
       <fieldset>
         <legend>Padr&oacute;n Electoral Departamental sin Instituto</legend>
         <ul>
@@ -80,7 +80,7 @@
         </ul>
       </fieldset>
     </form>
-    <form action="${tg.url('urnasDepartamentales')}">
+    <form class="ui-widget-content ui-corner-all" action="${tg.url('urnasDepartamentales')}">
       <fieldset>
         <legend>Listado de Instituto para Urnas por Departamento</legend>
         <ul>
@@ -113,7 +113,7 @@
         </ul>
       </fieldset>
     </form>
-    <form action="${tg.url('urnasDepartamentalesCinco')}">
+    <form class="ui-widget-content ui-corner-all" action="${tg.url('urnasDepartamentalesCinco')}">
       <fieldset>
         <legend>Listado de Instituto con cinco Afiliados o m&aacute;s</legend>
         <ul>
@@ -146,7 +146,7 @@
         </ul>
       </fieldset>
     </form>
-    <form action="${tg.url('urnasMunicipio')}">
+    <form class="ui-widget-content ui-corner-all" action="${tg.url('urnasMunicipio')}">
       <fieldset>
         <legend>Listado de Centros Por Municipio</legend>
         <ul>
@@ -179,7 +179,7 @@
         </ul>
       </fieldset>
     </form>
-    <form action="${tg.url('listaUrnasMunicipio')}">
+    <form class="ui-widget-content ui-corner-all" action="${tg.url('listaUrnasMunicipio')}">
       <fieldset>
         <legend>Listado de Urnas Por Municipio</legend>
         <ul>
@@ -212,7 +212,7 @@
         </ul>
       </fieldset>
     </form>
-    <form action="${tg.url('actas')}">
+    <form class="ui-widget-content ui-corner-all" action="${tg.url('actas')}">
       <fieldset>
         <legend>Actas de Resultado Departamental</legend>
         <ul>
@@ -245,7 +245,7 @@
         </ul>
       </fieldset>
     </form>
-    <form action="${tg.url('cotizacion')}">
+    <form class="ui-widget-content ui-corner-all" action="${tg.url('cotizacion')}">
       <fieldset>
         <legend>Padr&oacute;n Electoral por Cotizaci&oacute;n</legend>
         <ul>

@@ -2,39 +2,62 @@
 <?python import locale ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="../master.html" />
-<!--
-  TODO: Cambiar Por una página AJAX que permita postear a todos los afiliados
-  sin necesidad de salir de esta página.
--->
 <head>
-    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-    <title>TurboAffiliate &bull; </title>
+	<title>TurboAffiliate &bull; Planilla de ${cotizacion}</title>
 </head>
 <body>
-  <h1>Posteo Manual por Cotizaci&oacute;n: ${how}</h1>
-  <table class="striped">
+  <h1>Planilla de ${cotizacion}</h1>
+  <table class="full-size striped">
+    <caption>Lista de Afiliados</caption>
     <thead>
       <tr>
-        <th>Carnet</th>
+        <th>Afiliaci&oacute;n</th>
         <th>Nombre</th>
-        <th>Deudas</th>
         <th>Acciones</th>
+        <th>Total Deducci&oacute;n</th>
       </tr>
     </thead>
     <tbody>
-      <tr py:for="affiliate in affiliates">
-        <td><a href="${tg.url('/affiliate/%s' % affiliate.id)}">${affiliate.id}</a></td>
-        <td>${affiliate.lastName} ${affiliate.firstName}</td>
-        <td></td>
-        <td><a href="${tg.url('/affiliate/manual?affiliate=%s&amp;year=%s&amp;month=%s&amp;day=%s' % (affiliate.id, year, month, day))}">X</a></td>
+      <tr py:for="afiliado in afiliados">
+        <td>${afiliado.id}</td>
+        <td>${afiliado.lastName} ${afiliado.firstName}</td>
+        <td>
+          <form action="${tg.url('/affiliate/cuota/pagoPlanilla')}">
+            <fieldset>
+              <legend>Aportaciones ${locale.currency(afiliado.get_cuota(), True, True)}</legend>
+              <input name="afiliado" value="${afiliado.id}" type="hidden" />
+              <input name="day" value="${day.strftime('%d/%m/%Y')}" type="hidden" />
+              <input name="cuenta" value="{aportaciones}" type="hidden" />
+              <input type="submit" value="Pagar" />
+            </fieldset>
+          </form>
+          <form py:for="loan in afiliado.loans" action="${tg.url('/loan/pay/agregarPlanilla')}">
+            <fieldset>
+              <legend>Pr&eacute;stamo ${loan.id}</legend>
+              <input name="loan" value="${loan.id}" type="hidden" />
+              <input name="day" value="${day.strftime('%d/%m/%Y')}" type="hidden" />
+              <input name="cuenta" value="{prestamos}" type="hidden" />
+              <li>
+                <label>Pago: </label>
+                <input name="amount" value="${loan.get_payment()}" />
+               </li>
+               <li>
+              </li>
+              <li><input type="submit" value="pagar" /></li>
+            </fieldset>
+          </form>
+          <form py:for="extra in afiliado.extras" action="${tg.url('/affiliate/')}">
+            <fieldset>
+              <legend>${extra.account.name}</legend>
+              <strong>Cantidad: ${locale.currency()}</strong>
+              <input type="hidden" name="extra" value="${extra.id}" />
+              <input type="submit" value="Pagar" />
+            </fieldset>
+          </form>
+        </td>
+        <td>${afiliado.get_monthly()}</td>
       </tr>
     </tbody>
-    <tfoot>
-      <tr>
-        <th colspan="4">Total de Afiliados: ${count}</th>
-      </tr>
-    </tfoot>
   </table>
 </body>
 </html>
-

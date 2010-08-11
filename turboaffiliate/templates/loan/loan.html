@@ -179,7 +179,7 @@
         <li>
           <label for="account">Concepto:</label>
           <select name="account">
-            <option py:for="account in accounts" py:content="account.code, ' - ', account.name" value="${account.id}" />
+            <option py:for="account in accounts" value="${account.id}">${account.name}</option>
           </select>
         </li>
         <li>
@@ -210,7 +210,7 @@
         <li>
           <label for="cuenta">Cuenta para Deducir:</label>
           <select name="cuenta">
-            <option py:for="account in accounts" value="${account.id}">${account.code} - ${account.name}</option>
+            <option py:for="account in accounts" value="${account.id}">${account.id} - ${account.name}</option>
           </select>
         </li>
         <li>

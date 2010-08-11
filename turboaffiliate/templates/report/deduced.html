@@ -8,7 +8,8 @@
 </head>
 <body>
 <h1>Deducciones de ${account.name} para el mes ${month} de ${year}</h1>
-<table>
+<table class="full-size striped">
+  <caption>Deducciones Aplicadas</caption>
   <thead>
     <tr>
       <th>N&uacute;mero</th>
@@ -26,7 +27,7 @@
   <tfoot>
     <tr>
       <th colspan="2">Total:</th>
-      <th>${py:content="locale.currency(total, True, True)}</th>
+      <th>${locale.currency(total, True, True)}</th>
     </tr>
   </tfoot>
 </table>

@@ -33,12 +33,12 @@ body {
 #contenedor {
   width: 100%;
   float: left;
-  margin-right: -200px;
+  margin-right: -160px;
 }
 #lateral {
   margin-top: 25px;
   font-size: 75%;
-  width: 200px;
+  width: 150px;
   float: right;
 }
 #pie {
@@ -48,10 +48,10 @@ body {
   text-align: center;
 }
 #contenido {
-  margin-right: 210px;
+  margin-right: 160px;
 }
 .button-size {
-  width: 190px;
+  width: 140px;
   margin-bottom: 5px;
 }
 .flash {
@@ -60,9 +60,6 @@ body {
 .advertencia {
   margin: 5px 5px 5px 0px;
   float: left;
-}
-h1, .enfasis {
-  color: #804000;
 }
 #pie {
   padding-bottom: 30px;
@@ -96,6 +93,7 @@ h1
 .enfasis
 {
   font-size: 1.1em;
+  color: white;
 }
 .ui-button-text
 { padding: 0;}

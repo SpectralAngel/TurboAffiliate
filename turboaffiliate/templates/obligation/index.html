@@ -8,7 +8,7 @@
 </head>
 <body>
   <h1>Obligaciones</h1>
-  <form action="${tg.url('/obligation/save')}" method="post">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/obligation/save')}" method="post">
     <fieldset>
       <legend>A&ntilde;adir</legend>
       <ul>
@@ -39,14 +39,14 @@
         <li>
           <label for="account">Cuenta:</label>
           <select name="account">
-            <option py:for="account in accounts" value="${account.id}">${account.code} - ${account.name}</option> 
+            <option py:for="account in accounts" value="${account.id}">${account.id} - ${account.name}</option> 
           </select>
         </li>
         <li><input type="submit" value="Guardar" /></li>
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('/obligation/view')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/obligation/view')}">
     <fieldset>
       <legend>Ver Obligaciones</legend>
       <ul>
