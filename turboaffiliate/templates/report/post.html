@@ -3,33 +3,33 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="../master.html" />
 <head>
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-	<title>TurboAffiliate &bull; Reporte de Ingresos</title>
-	<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" media="print"/>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Reporte de Ingresos</title>
+  <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" media="print"/>
 </head>
 <body>
-	<h1>Informe de Ingresos ${month} de ${year}</h1>
-	<table class="striped full-size">
-		<thead>
-			<tr>
-				<th>Cuenta</th>
-				<th>Cantidad</th>
-				<th>Monto</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr py:for="account in report.reportAccounts">
-				<td>${account.name}</td>
-				<td>${account.quantity}</td>
-				<td>${locale.currency(account.amount, True, True)}</td>
-			</tr>
-		</tbody>
-		<tfoot>
-			<tr>
-				<th colspan="2">Total:</th>
-				<th>${locale.currency(report.total(), True, True)}</th>
-			</tr>
-		</tfoot>
-	</table>
+  <h1>Informe de Ingresos ${month} de ${year}</h1>
+  <table class="striped full-size ui-widget-content">
+    <thead>
+      <tr>
+        <th>Cuenta</th>
+        <th>Cantidad</th>
+        <th>Monto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr py:for="account in report.reportAccounts">
+        <td>${account.name}</td>
+        <td>${account.quantity}</td>
+        <td>${locale.currency(account.amount, True, True)}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th colspan="2">Total:</th>
+        <th>${locale.currency(report.total(), True, True)}</th>
+      </tr>
+    </tfoot>
+  </table>
 </body>
 </html>

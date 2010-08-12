@@ -673,28 +673,36 @@ class Loan(SQLObject):
         if self.startDate.day == 24 and self.startDate.month == 8:
             start += 1
         year = self.startDate.year
-        for n in range(1, self.months - self.number + 2):
+        n = 1
+        while debt > 0:
             kw = dict()
-            kw['number'] = "%s/%s" % (n + self.number, self.months)
+            kw['number'] = "{0}/{1}".format(n + self.number, self.months)
             kw['month'] = self.number + n + start
             kw['enum'] = self.number + n
             kw['year'] = year
+            
+            # Normalizar Meses
             while kw['month'] > 12:
                 kw['month'] = kw['month'] - 12
                 kw['year'] += 1
-            kw['month'] = "%s %s" % (months[kw['month']], kw['year'])
+            
+            kw['month'] = "{0} {1}".format(months[kw['month']], kw['year'])
             kw['interest'] = Decimal(debt * self.interest / 1200).quantize(dot01)
+            
             if debt <= self.payment:
                 kw['amount'] = 0
                 kw['capital'] = debt
                 kw['payment'] = kw['interest'] + kw['capital']
                 li.append(kw)
                 break
+            
             kw['capital'] = self.payment - kw['interest']
             debt = debt + kw['interest'] - self.payment
             kw['amount'] = debt
             kw['payment'] = kw['interest'] + kw['capital']
             li.append(kw)
+            n += 1
+            
         return li
     
     def compensar(self):

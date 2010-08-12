@@ -39,16 +39,22 @@ class Affiliate(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.index')
-    def index(self, tg_errors=None):
-        
-        if tg_errors:
-            errors = [(param,inv.msg,inv.value) for param, inv in
-                      tg_errors.items()]
-            flash(errors)
+    def index(self):
         
         return dict(cuentas=model.Account.select())
     
-    @error_handler(index)
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.error')
+    def error(self, tg_errors=None):
+        
+       if tg_errors:
+            errors = [(param,inv.msg,inv.value) for param, inv in
+                      tg_errors.items()]
+            return dict(errors=errors)
+        
+       return dict(errors="Desconocido")
+    
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.affiliate')
     @validate(validators=dict(affiliate=validators.Int()))
@@ -58,7 +64,7 @@ class Affiliate(controllers.Controller):
         
         return dict(affiliate=model.Affiliate.get(affiliate),accounts=model.Account.select())
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(cardID=validators.String()))
@@ -66,9 +72,9 @@ class Affiliate(controllers.Controller):
         
         affiliate = model.Affiliate.selectBy(cardID=cardID).limit(1).getOne()
         
-        raise redirect(url('/affiliate/%s' % affiliate.id))
+        raise redirect(url('/affiliate/{0}'.format(affiliate.id)))
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.search')
     @validate(validators=dict(cobro=validators.String()))
@@ -78,7 +84,7 @@ class Affiliate(controllers.Controller):
         
         return dict(result=model.Affiliate.selectBy(escalafon=cobro))
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.affiliate')
     @validate(validators=dict(carnet=validators.Int()))
@@ -86,14 +92,9 @@ class Affiliate(controllers.Controller):
         
         """Permite utilizar un numero de afiliacion en un formulario"""
         
-        raise redirect(url('/affiliate/%s' % carnet))
+        raise redirect(url('/affiliate/{0}'.format(carnet)))
     
-    @identity.require(identity.has_permission("afiliar"))
-    @expose(template="turboaffiliate.templates.affiliate.add")
-    def add(self):
-        return dict()
-    
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(
@@ -143,9 +144,9 @@ class Affiliate(controllers.Controller):
             
             flash('El afiliado ha sido guardado!')
         
-        raise redirect(url('/affiliate/%s' % affiliate.id))
+        raise redirect(url('/affiliate/{0}'.format(affiliate.id)))
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(affiliate=validators.Int()))
@@ -164,7 +165,7 @@ class Affiliate(controllers.Controller):
         
         raise redirect(url('/affiliate'))
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.search')
     @validate(validators=dict(name=validators.UnicodeString()))
@@ -176,7 +177,7 @@ class Affiliate(controllers.Controller):
 											   model.Affiliate.q.lastName.contains(name)))
         return dict(result=affiliates)
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.search')
     @validate(validators=dict(cardID=validators.String()))
@@ -186,7 +187,7 @@ class Affiliate(controllers.Controller):
         
         return dict(affiliates=model.Affiliate.selectBy(cardID=cardID))
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.report')
     @validate(validators=dict(state=validators.UnicodeString()))
@@ -196,7 +197,7 @@ class Affiliate(controllers.Controller):
         count = affiliates.count()
         return dict(affiliates=affiliates, state=state, count=count)
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.card')
     @validate(validators=dict(affiliate=validators.UnicodeString()))
@@ -205,7 +206,7 @@ class Affiliate(controllers.Controller):
         affiliates = model.Affiliate.select("affiliate.card_id like '%{0}%'".format(cardID))
         return dict(affiliates=affiliates, cardID=cardID, count=affiliates.count())
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.report')
     @validate(validators=dict(affiliate=validators.Int(),end=validators.Int(), begin=validators.Int()))
@@ -222,7 +223,7 @@ class Affiliate(controllers.Controller):
         
         return dict(affiliate=model.Affiliate.select(orderBy="-id").limit(1).getOne())
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(affiliate=validators.Int(), reason=validators.UnicodeString()))
@@ -234,11 +235,11 @@ class Affiliate(controllers.Controller):
         log = dict()
         affiliate.desactivacion = date.today()
         log['user'] = identity.current.user
-        log['action'] = "Desactivado el afiliado %s" % affiliate.id
+        log['action'] = "Desactivado el afiliado {0}".format(affiliate.id)
         model.Logger(**log)
-        raise redirect(url('/affiliate/%s' % affiliate.id))
+        raise redirect(url('/affiliate/{0}'.format(affiliate.id)))
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(affiliate=validators.Int(),
@@ -255,11 +256,11 @@ class Affiliate(controllers.Controller):
         affiliate.desactivacion = date.today()
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Desactivado el afiliado %s" % affiliate.id
+        log['action'] = "Afiliado {0} reportado como fallecido".format(affiliate.id)
         model.Logger(**log)
-        raise redirect(url('/affiliate/%s' % affiliate.id))
+        raise redirect(url('/affiliate/{0}'.format(affiliate.id)))
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(affiliate=validators.Int()))
@@ -269,11 +270,11 @@ class Affiliate(controllers.Controller):
         affiliate.active = True
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Activado el afiliado %s" % affiliate.id
+        log['action'] = "Activado el afiliado {0}".format(affiliate.id)
         model.Logger(**log)
-        raise redirect(url('/affiliate/%s' % affiliate.id))
+        raise redirect(url('/affiliate/{0}'.format(affiliate.id)))
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.payment')
     @validate(validators=dict(how=validators.UnicodeString()))
@@ -282,7 +283,7 @@ class Affiliate(controllers.Controller):
         affiliates = model.Affiliate.select(model.Affiliate.q.payment==how, orderBy="lastName")
         return dict(affiliates=affiliates, count=affiliates.count(), how=how)
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.age')
     @validate(validators=dict(joined=validators.Int(),age=validators.Int()))
@@ -294,18 +295,19 @@ class Affiliate(controllers.Controller):
         
         return dict(affiliates=affiliate)
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.show')
     @validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
                               end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def byDate(self, start, end):
         
+        #TODO usar SQLBuilder
         query = "affiliate.joined >= '%s' and affiliate.joined <= '%s'" % (start, end)
         affiliates = model.Affiliate.select(query)
         return dict(affiliates=affiliates, start=start, end=end, show="Fecha de Afiliaci&oacute;n", count=affiliates.count())
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.show')
     @validate(validators=dict(town=validators.UnicodeString()))
@@ -314,18 +316,19 @@ class Affiliate(controllers.Controller):
         affiliates = model.Affiliate.selectBy(town=town)
         return dict(affiliates=affiliates, show="Municipio", count=affiliates.count())
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.show')
     @validate(validators=dict(school=validators.UnicodeString(),state=validators.UnicodeString()))
     def bySchool(self, school, state):
         
+        #TODO usar SQLBuilder
         query = "affiliate.school = '%s' or affiliate.school2 = '%s'" % (school, school)
         affiliates = model.Affiliate.select(query)
         affiliates = [a for a in affiliates if a.state == state]
         return dict(affiliates=affiliates, show="Instituto", count=len(affiliates))
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.show')
     def disabled(self):
@@ -333,7 +336,7 @@ class Affiliate(controllers.Controller):
         affiliates = model.Affiliate.selectBy(active=False)
         return dict(affiliates=affiliates, show="Inhabilitados", count=affiliates.count())
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.show')
     def all(self):
@@ -341,7 +344,7 @@ class Affiliate(controllers.Controller):
         affiliates = model.Affiliate.select()
         return dict(affiliates=affiliates, show="Todos", count=affiliates.count())
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.planilla')
     @validate(validators=dict(payment=validators.UnicodeString(),
@@ -355,7 +358,7 @@ class Affiliate(controllers.Controller):
         return dict(afiliados=affiliates, cotizacion=payment,
                     aportaciones=aportaciones, prestamos=prestamos,day=day)
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.debt')
     @validate(validators=dict(payment=validators.UnicodeString()))
@@ -364,7 +367,7 @@ class Affiliate(controllers.Controller):
         affiliates = model.Affiliate.selectBy(payment=payment)
         return dict(affiliates=affiliates, show=payment, count=affiliates.count())
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.show')
     @validate(validators=dict(year=validators.Int()))
@@ -375,7 +378,7 @@ class Affiliate(controllers.Controller):
         show = "Solventes al %s" % year
         return dict(affiliates=affiliates, show=show, count=len(affiliates))
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.year')
     def solventYear(self):
@@ -392,7 +395,7 @@ class Affiliate(controllers.Controller):
         
         return dict(years=years)
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.show')
     def none(self):
@@ -401,7 +404,7 @@ class Affiliate(controllers.Controller):
         show = "Sin Año de Afiliación"
         return dict(affiliates=affiliates, show=show, count=affiliates.count())
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.show')
     def noCard(self):
@@ -410,7 +413,7 @@ class Affiliate(controllers.Controller):
         show = "Sin Número de identidad"
         return dict(affiliates=affiliates, show=show, count=affiliates.count())
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(affiliate=validators.Int(),
@@ -424,7 +427,7 @@ class Affiliate(controllers.Controller):
         affiliate.payment = "INPREMA"
         return self.default(affiliate.id)
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.delayed')
     @validate(validators=dict(payment=validators.String()))
@@ -435,7 +438,7 @@ class Affiliate(controllers.Controller):
         
         return dict(affiliates=affiliates,count=len(affiliates),payment=payment)
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.stateSchool')
     @validate(validators=dict(state=validators.UnicodeString()))
@@ -453,7 +456,7 @@ class Affiliate(controllers.Controller):
         
         return dict(state=state, schools=schools)
     
-    @error_handler(index)
+    @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.solvencia')
     @validate(validators=dict(mes=validators.UnicodeString(),anio=validators.Int(),

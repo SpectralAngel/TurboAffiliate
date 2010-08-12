@@ -8,6 +8,11 @@
   <h1>Se ha encontrado un Error Interno</h1>
   <p>Lo siento pero su petici&oacute;n no se ha podido completar, para más
     información observe el log de errores siguiente:</p>
-  <p class="errors">${errors}</p>
+  <div py:for="error in errors" class="ui-widget">
+    <div class="ui-state-highlight ui-corner-all flash" style="padding: 0.5em;">
+      <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+      <strong>${error[0].capitalize()} - ${error[1]}: ${error[2]}</strong>
+    </div>
+  </div>
 </body>
 </html>

@@ -261,7 +261,7 @@ class Loan(controllers.Controller):
                               payment=validators.UnicodeString(),
                               interest=validators.Int(),
                               startDate=validators.DateTimeConverter(format='%d/%m/%Y'),
-                              id=validators.String()))
+                              id=validators.Int()))
     def new(self, affiliate, **kw):
         
         affiliate = model.Affiliate.get(affiliate)
@@ -273,7 +273,7 @@ class Loan(controllers.Controller):
             del kw['id']
             
         if kw['capital'] < 0:
-            raise redirect(url('/loan/add/%s' % affiliate.id))
+            raise redirect(url('/loan/add/{0}'.format(affiliate.id)))
         
         kw["aproval"] = identity.current.user
         
@@ -281,10 +281,10 @@ class Loan(controllers.Controller):
         
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Otorgar prestamo al afiliado %s" % affiliate.id
+        log['action'] = "Otorgar prestamo al afiliado {0}".format(affiliate.id)
         model.Logger(**log)
         
-        raise redirect(url("/loan/%s" % loan.id))
+        raise redirect(url("/loan/{0}".format(loan.id)))
     
     @identity.require(identity.not_anonymous())
     @expose()

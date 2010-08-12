@@ -8,7 +8,7 @@
 </head>
 <body>
   <h1>${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</h1>
-  <table class="striped flotante-derecho ui-widget-content">
+  <table class="striped flotante-derecho ui-widget-content ui-corner-all">
     <caption>Todas las Deducciones Efectuadas</caption>
     <thead>
       <tr>
@@ -33,7 +33,7 @@
       </tr>
     </tbody>
   </table>
-  <form class="ui-widget-content" py:if="tg.identity.user.has_permission('Deductor')" action="${tg.url('/affiliate/deduced/save')}">
+  <form class="ui-widget-content ui-corner-all" py:if="tg.identity.user.has_permission('Deductor')" action="${tg.url('/affiliate/deduced/save')}">
     <fieldset>
       <legend>Datos de la Deducci&oacute;n</legend>
       <ul>

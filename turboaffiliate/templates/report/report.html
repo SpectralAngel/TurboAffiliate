@@ -9,7 +9,7 @@
 </head>
 <body>
   <h1>Reporte de Ingresos ${legend}</h1>
-  <table>
+  <table class="striped full-size ui-widget-content">
     <thead>
       <tr>
         <th>Concepto</th>
@@ -31,7 +31,7 @@
       </tr>
       <tr py:for="deduccion in deductions">
         <td>${deduccion.name}</td>
-        <td>${deductions[deduccion]['count']" />
+        <td>${deductions[deduccion]['count']}</td>
         <td>${locale.currency(deductions[deduccion]['amount'], True, True)}</td>
       </tr>
     </tbody>
