@@ -29,6 +29,9 @@
       <li><a href="${tg.url('/obligation')}">Obligaciones</a></li>
       <li><a href="${tg.url('/report')}">Reportes</a></li>
       <li><a href="${tg.url('/affiliate/billing')}">Estados de Cuenta</a></li>
+      <li><a href="http://172.16.10.68:8040">Caja SPS</a></li>
+      <li><a href="http://172.16.10.68:8000">Caja Ceiba</a></li>
+      <li><a href="http://172.16.10.68:8050">Egresos</a></li>
     </ul>
   </div>
   <div id="espaciador">
@@ -48,7 +51,7 @@
   <div id="utilerias" >
     <button onclick="javascript:$('.calculadora').dialog('open');">Calculadora de Pr&eacute;stamos</button>
     <button onclick="javascript:$('#AgregarAfiliado').dialog('open');">Agregar Afiliado</button>
-    <button onclick="javascript:$('#bAfiliacion').dialog('open');">Buscar Carnet</button>
+    <button onclick="javascript:$('#bAfiliacion').dialog('open');">Buscar Afiliaci&oacute;n</button>
     <button onclick="javascript:$('#bID').dialog('open');">Buscar Identidad</button>
     <button onclick="javascript:$('#bNombre').dialog('open');">Buscar Nombre</button>
   </div>
@@ -164,7 +167,7 @@
     <div>
       <ul>
         <li>
-          <label>Carnet:</label>
+          <label>Afiliaci&oacute;n:</label>
           <input name="carnet" />
         </li>
         <li><input type="submit" value="Buscar" /></li>

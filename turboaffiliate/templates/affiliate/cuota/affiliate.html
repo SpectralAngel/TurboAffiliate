@@ -20,7 +20,7 @@
       </div>
     </div>
   </div>
-  <table class="small striped ui-widget-content">
+  <table class="small striped ui-widget-content ui-corner-all">
     <caption>Afiliado desde ${affiliate.joined.strftime('%d de %B de %Y')}</caption>
     <thead>
       <tr>
@@ -73,7 +73,7 @@
       </tr>
     </tfoot>
   </table>
-  <table class="striped ui-widget-content">
+  <table class="striped ui-widget-content" py:if="affiliate.active">
     <caption>Cobros a Efectuar</caption>
     <thead>
       <th>Concepto</th>
@@ -120,7 +120,7 @@
       </tr>
     </tfoot>
   </table>
-  <form action="${tg.url('/affiliate/populate')}" method="post" class="noprint">
+  <form action="${tg.url('/affiliate/cuota/addYear')}" method="post" class="ui-widget-content ui-corner-all noprint">
     <fieldset>
       <legend>A&ntilde;adir A&ntilde;o</legend>
       <input type="hidden" value="${affiliate.id}" name="affiliate" />
@@ -133,7 +133,7 @@
       </ul>
     </fieldset>
   </form>
-  <form action="${tg.url('/affiliate/cuota/fill')}" method="post" class="noprint">
+  <form action="${tg.url('/affiliate/cuota/fill')}" method="post" class="ui-widget-content ui-corner-all noprint">
     <fieldset>
       <legend>Postear A&ntilde;os</legend>
       <input type="hidden" value="${affiliate.id}" name="affiliate" />

@@ -53,12 +53,12 @@ class Account(controllers.Controller):
         
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Agregada cuenta de %s" % account.id
+        log['action'] = u"Agregada cuenta {0} {1}".format(account.id, account.name)
         model.Logger(**log)
         
         account = model.Account(**kw)
-        flash("La cuenta ha sido grabada")
-        raise redirect(url('/account/%s' % account.code))
+        flash(u"La cuenta ha sido grabada")
+        raise redirect('/account/{0}'.format(account.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.account.retrasada")
@@ -77,5 +77,5 @@ class Account(controllers.Controller):
         retrasada = model.CuentaRetrasada(**kw)
         retrasada.account = account
         
-        flash("La cuenta para restradas ha sido grabada")
-        raise redirect(url('/account/retrasada'))
+        flash(u"La cuenta para restradas ha sido grabada")
+        raise redirect('/account/retrasada')

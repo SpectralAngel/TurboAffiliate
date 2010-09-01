@@ -54,7 +54,7 @@ class Reintegro(controllers.Controller):
         
         flash("Se agrego el reintegro al afiliado")
         
-        raise redirect(url('/reintegro/%s' % reintegro.affiliate.id))
+        raise redirect('/reintegro/%s' % reintegro.affiliate.id)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.reintegro.afiliado')
@@ -80,7 +80,7 @@ class Reintegro(controllers.Controller):
         
         reintegro.destroySelf()
         
-        raise redirect(url('/reintegro/%s' % afiliado.id))
+        raise redirect('/reintegro/%s' % afiliado.id)
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -98,7 +98,7 @@ class Reintegro(controllers.Controller):
         
         flash("Se ha pagado el Reintegro")
         
-        raise redirect(url('/reintegro/%s' % reintegro.affiliate.id))
+        raise redirect('/reintegro/%s' % reintegro.affiliate.id)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.reintegro.pagados')

@@ -35,7 +35,6 @@ $(document).ready(function(e)
   $('#bID').dialog(
   {
     title : "Buscar Por Identidad",
-    modal:true,
     autoOpen:false,
     buttons :   {
             'Buscar' : function() { $(this).submit() },
@@ -46,7 +45,6 @@ $(document).ready(function(e)
   $('#bAfiliacion').dialog(
   {
     title : "Buscar Por Carnet",
-    modal:true,
     autoOpen:false,
     buttons :   {
             'Buscar' : function() { $(this).submit() },
@@ -57,7 +55,6 @@ $(document).ready(function(e)
   $('#bNombre').dialog(
   {
     title : "Buscar Por Nombre",
-    modal:true,
     autoOpen:false,
     buttons :   {
             'Buscar' : function() { $(this).submit() },

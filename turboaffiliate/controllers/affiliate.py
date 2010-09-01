@@ -52,7 +52,7 @@ class Affiliate(controllers.Controller):
                       tg_errors.items()]
             return dict(errors=errors)
         
-       return dict(errors="Desconocido")
+       return dict(errors=u"Desconocido")
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
@@ -72,7 +72,7 @@ class Affiliate(controllers.Controller):
         
         affiliate = model.Affiliate.selectBy(cardID=cardID).limit(1).getOne()
         
-        raise redirect(url('/affiliate/{0}'.format(affiliate.id)))
+        raise redirect('/affiliate/{0}'.format(affiliate.id))
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
@@ -92,7 +92,7 @@ class Affiliate(controllers.Controller):
         
         """Permite utilizar un numero de afiliacion en un formulario"""
         
-        raise redirect(url('/affiliate/{0}'.format(carnet)))
+        raise redirect('/affiliate/{0}'.format(carnet))
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
@@ -122,7 +122,7 @@ class Affiliate(controllers.Controller):
             # Logs del sistema
             log = dict()
             log['user'] = identity.current.user
-            log['action'] = "Modificado el afiliado %s" % affiliate.id
+            log['action'] = u"Modificado el afiliado {0}".format(affiliate.id)
             model.Logger(**log)
             
             del kw['affiliate']
@@ -130,7 +130,7 @@ class Affiliate(controllers.Controller):
             for key in kw.keys():
                 setattr(affiliate, key, kw[key])
             
-            flash('El afiliado ha sido actualizado!')
+            flash(u'¡El afiliado ha sido actualizado!')
         
         except KeyError:
             
@@ -139,12 +139,12 @@ class Affiliate(controllers.Controller):
             
             log = dict()
             log['user'] = identity.current.user
-            log['action'] = "Agregado el afiliado %s" % affiliate.id
+            log['action'] = u"Agregado el afiliado {0}".format(affiliate.id)
             model.Logger(**log)
             
-            flash('El afiliado ha sido guardado!')
+            flash(u'¡El afiliado ha sido guardado!')
         
-        raise redirect(url('/affiliate/{0}'.format(affiliate.id)))
+        raise redirect('/affiliate/{0}'.format(affiliate.id))
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
@@ -161,9 +161,9 @@ class Affiliate(controllers.Controller):
             cuota.destroySelf()
         
         affiliate.destroySelf()
-        flash('El afiliado ha sido removido')
+        flash(u'El afiliado ha sido removido!')
         
-        raise redirect(url('/affiliate'))
+        raise redirect('/affiliate')
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
@@ -172,7 +172,7 @@ class Affiliate(controllers.Controller):
     def search(self, name):
         
         if name == '':
-            raise redirect(url('/affiliate'))
+            raise redirect('/affiliate')
         affiliates = model.Affiliate.select(OR(model.Affiliate.q.firstName.contains(name),
 											   model.Affiliate.q.lastName.contains(name)))
         return dict(result=affiliates)
@@ -212,7 +212,7 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(affiliate=validators.Int(),end=validators.Int(), begin=validators.Int()))
     def aList(self, begin, end):
         
-        query = "affiliate.id <= %s and affiliate.id >= %s" % (begin, end)
+        query = "affiliate.id <= ${0} and affiliate.id >= {1}".format(begin, end)
         affiliates = model.Affiliate.select(query)
         return dict(affiliates=affiliates, count=affiliates.count())
     
@@ -235,9 +235,9 @@ class Affiliate(controllers.Controller):
         log = dict()
         affiliate.desactivacion = date.today()
         log['user'] = identity.current.user
-        log['action'] = "Desactivado el afiliado {0}".format(affiliate.id)
+        log['action'] = u"Desactivado el afiliado {0}".format(affiliate.id)
         model.Logger(**log)
-        raise redirect(url('/affiliate/{0}'.format(affiliate.id)))
+        raise redirect('/affiliate/{0}'.format(affiliate.id))
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
@@ -256,9 +256,9 @@ class Affiliate(controllers.Controller):
         affiliate.desactivacion = date.today()
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Afiliado {0} reportado como fallecido".format(affiliate.id)
+        log['action'] = u"Afiliado {0} reportado como fallecido".format(affiliate.id)
         model.Logger(**log)
-        raise redirect(url('/affiliate/{0}'.format(affiliate.id)))
+        raise redirect('/affiliate/{0}'.format(affiliate.id))
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
@@ -272,7 +272,7 @@ class Affiliate(controllers.Controller):
         log['user'] = identity.current.user
         log['action'] = "Activado el afiliado {0}".format(affiliate.id)
         model.Logger(**log)
-        raise redirect(url('/affiliate/{0}'.format(affiliate.id)))
+        raise redirect('/affiliate/{0}'.format(affiliate.id))
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
@@ -303,7 +303,7 @@ class Affiliate(controllers.Controller):
     def byDate(self, start, end):
         
         #TODO usar SQLBuilder
-        query = "affiliate.joined >= '%s' and affiliate.joined <= '%s'" % (start, end)
+        query = "affiliate.joined >= ${0} and affiliate.joined <= ${0}".format(start, end)
         affiliates = model.Affiliate.select(query)
         return dict(affiliates=affiliates, start=start, end=end, show="Fecha de Afiliaci&oacute;n", count=affiliates.count())
     
@@ -323,10 +323,10 @@ class Affiliate(controllers.Controller):
     def bySchool(self, school, state):
         
         #TODO usar SQLBuilder
-        query = "affiliate.school = '%s' or affiliate.school2 = '%s'" % (school, school)
+        query = "affiliate.school = '${0}' or affiliate.school2 = '${0}'".format(school, school)
         affiliates = model.Affiliate.select(query)
         affiliates = [a for a in affiliates if a.state == state]
-        return dict(affiliates=affiliates, show="Instituto", count=len(affiliates))
+        return dict(affiliates=affiliates, show=u"Instituto", count=len(affiliates))
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())

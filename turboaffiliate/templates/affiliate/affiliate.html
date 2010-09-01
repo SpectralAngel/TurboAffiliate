@@ -48,24 +48,24 @@
       <div class="ui-widget" py:if="affiliate.state == None or affiliate.state ==''">
         <div class="ui-state-error ui-corner-all advertencia" style="padding: 0.5em;">
           <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-          <strong>Este afiliado no tiene Departamento,</strong>
+          <strong>Este afiliado no tiene Departamento</strong>
         </div>
       </div>
       <div class="ui-widget" py:if="affiliate.town == None or affiliate.town ==''">
         <div class="ui-state-error ui-corner-all advertencia" style="padding: 0.5em;">
           <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-          <strong>Este afiliado no tiene Ciudad,</strong>
+          <strong>Este afiliado no tiene Ciudad</strong>
         </div>
       </div>
       <div class="ui-widget" py:if="affiliate.birthday == None">
         <div class="ui-state-error ui-corner-all advertencia" style="padding: 0.5em;">
           <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-          <strong>Este afiliado no tiene Fecha de nacimiento,</strong>
+          <strong>Este afiliado no tiene Fecha de nacimiento</strong>
         </div>
       </div>
       <span class="ui-helper-clearfix" />
       <div id="informacion" class="flotante-derecho ui-corner-all">
-        <table class="ui-widget-content ui-corner-all striped">
+        <table class="ui-widget-content ui-corner-all striped" py:if="affiliate.active">
           <caption>Cobros a Efectuar</caption>
           <thead>
             <th>Concepto</th>
@@ -499,4 +499,3 @@
   </div>
 </body>
 </html>
-

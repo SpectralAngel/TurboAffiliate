@@ -70,7 +70,7 @@ class Deduced(controllers.Controller):
 		
 		flash("Agregado Detalle de Deducción")
 		
-		raise redirect(url("/affiliate/deduced/%s" % affiliate))
+		raise redirect("/affiliate/deduced/{0}".format(affiliate))
 	
 	@identity.require(identity.has_permission("Deductor"))
 	@expose()
@@ -81,4 +81,4 @@ class Deduced(controllers.Controller):
 		affiliate = deduced.affiliate
 		deduced.destroySelf()
 		
-		raise redirect(url("/affiliate/deduced/%s" % affiliate.id))
+		raise redirect("/affiliate/deduced/{0}".format(affiliate.id))

@@ -38,4 +38,4 @@ class Observacion(controllers.Controller):
         affiliate = model.Affiliate.get(affiliate)
         model.Observacion(affiliate=affiliate, texto=texto)
         
-        raise redirect(url('/affiliate/%s' % affiliate.id))
+        raise redirect('/affiliate/{0}'.format(affiliate.id))

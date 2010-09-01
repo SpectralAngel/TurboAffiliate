@@ -9,7 +9,8 @@
 </head>
 <body>
   <h1>Filiales Departamentales ${state}</h1>
-  <table class="striped full-size ui-widget-content" py:for="school in filiales">
+  <strong>Total de Afiliados: ${sum(len(filiales[school]) for school in filiales)}</strong>
+  <table class="striped full-size ui-widget-content ui-corner-all" py:for="school in filiales">
     <caption>${school}</caption>
     <thead>
       <tr>

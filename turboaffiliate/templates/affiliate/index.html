@@ -102,33 +102,6 @@
         </ul>
       </fieldset>
     </form>
-    <form class="ui-widget-content ui-corner-all" action="${tg.url('cotization')}">
-      <fieldset>
-        <legend>Ver Deducci&oacute;n por Cotizaci&oacute;n</legend>
-        <ul>
-          <li>
-            <label for="how">Cotiza por:</label>
-            <select name="how">
-              <option>Escalafon</option>
-              <option>INPREMA</option>
-              <option>UPN</option>
-              <option>Ventanilla</option>
-              <option>Ministerio</option>
-              <option>Retirado</option>
-            </select>
-          </li>
-          <li>
-            <label>A&ntilde;o:</label>
-            <input name="year" />
-          </li>
-          <li>
-            <label>Mes:</label>
-            <input name="month" />
-          </li>
-          <li><input type="submit" value="Buscar" /></li>
-        </ul>
-      </fieldset>
-    </form>
     <form class="ui-widget-content ui-corner-all" action="${tg.url('payment')}">
       <fieldset>
         <legend>Ver Afiliados por Cotizaci&oacute;n</legend>
@@ -153,7 +126,7 @@
         <legend>Ver Afiliados por Edad</legend>
         <ul>
           <li>
-            <label for="how">Edad:</label>
+            <label for="age">Edad:</label>
             <input name="age" />
           </li>
           <li>

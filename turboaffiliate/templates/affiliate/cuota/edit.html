@@ -7,7 +7,7 @@
 	<title>TurboAffiliate &bull; Editar Cuota</title>
 </head>
 <body>
-	<h2>Editar Cuota de <span py:replace="table.affiliate.firstName, ' ', table.affiliate.lastName" /> A&ntilde;o <span py:replace="table.year" /></h2>
+	<h2>Editar Cuota de ${table.affiliate.firstName} ${table.affiliate.lastName} A&ntilde;o ${table.year}</h2>
 	<form action="${tg.url('/affiliate/cuota/change')}" method="post">
 		<fieldset>
 			<input type="hidden" name="id" value="${table.id}" />

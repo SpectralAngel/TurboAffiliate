@@ -52,7 +52,7 @@ class Pay(controllers.Controller):
 		log['action'] = "Eliminar pago del prestamo %s" % loan.id
 		model.Logger(**log)
 		
-		raise redirect(url('/payed/%s' % loan.id))
+		raise redirect('/payed/%s' % loan.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
@@ -72,8 +72,8 @@ class Pay(controllers.Controller):
 		log['action'] = "Agregar pago al prestamo %s" % payedLoan.id
 		model.Logger(**log)
 		
-		flash('El pago se ha efecutado')
-		raise redirect(url('/payed/%s' % payedLoan.id))
+		flash(u'El pago se ha efecutado')
+		raise redirect('/payed/%s' % payedLoan.id)
 
 class PayedLoan(controllers.Controller):
 	
@@ -134,7 +134,7 @@ class PayedLoan(controllers.Controller):
 		
 		loan = model.PayedLoan.get(loan)
 		loan.payment = Decimal(payment)
-		raise redirect(url('/payed/%s' % loan.id))
+		raise redirect('/payed/%s' % loan.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
@@ -143,7 +143,7 @@ class PayedLoan(controllers.Controller):
 		
 		loan = model.PayedLoan.get(loan)
 		loan.debt = debt
-		raise redirect(url('/payed/%s' % loan.id))
+		raise redirect('/payed/%s' % loan.id)
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
@@ -152,7 +152,7 @@ class PayedLoan(controllers.Controller):
 		
 		loan = model.PayedLoan.get(loan)
 		loan = loan.to_loan(identity.current.user)
-		raise redirect(url('/loan/%s' % loan.id))
+		raise redirect('/loan/%s' % loan.id)
 	
 	@identity.require(identity.All(identity.not_anonymous(), identity.has_permission("delete")))
 	@expose()
@@ -162,4 +162,4 @@ class PayedLoan(controllers.Controller):
 		loan = model.PayedLoan.get(loan)
 		affiliate = loan.affiliate
 		loan.remove()
-		raise redirect(url('/affiliate/%s' % affiliate.id))
+		raise redirect('/affiliate/%s' % affiliate.id)

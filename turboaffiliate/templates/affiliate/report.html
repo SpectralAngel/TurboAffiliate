@@ -7,7 +7,7 @@
         <title>TurboAffiliate &bull; Afiliados</title>
     </head>
     <body>
-        <h1> Reporte de Afiliados del Departamento de ${state}</h1>
+        <h1>Reporte de Afiliados del Departamento de ${state}</h1>
         <table>
             <thead>
                 <tr>
@@ -19,7 +19,7 @@
             <tbody>
                 <tr py:for="affiliate in affiliates">
                     <td><a href="${tg.url('/affiliate/%s' % affiliate.id)}" py:content="affiliate.id" /></td>
-                    <td>${affiliate.firstName affiliate.lastName}</td>
+                    <td>${affiliate.firstName} ${affiliate.lastName}</td>
                     <td>${affiliate.joined}</td>
                 </tr>
             </tbody>

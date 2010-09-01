@@ -45,7 +45,7 @@ class Cuota(controllers.Controller):
         for n in range(start, end + 1):
             [affiliate.pay_cuota(n, month) for month in range(1, 13)]
         
-        raise redirect(url('/affiliate/cuota/%s' % affiliate.id))
+        raise redirect('/affiliate/cuota/{0}'.format(affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -56,9 +56,9 @@ class Cuota(controllers.Controller):
             table = model.CuotaTable.get(id)
             affiliate = table.affiliate
             table.destroySelf()
-            raise redirect(url('/affiliate/cuota/%s' % affiliate.id))
+            raise redirect('/affiliate/cuota/{0}'.format(affiliate.id))
         except:
-            raise redirect(url('/affiliate'))
+            raise redirect('/affiliate')
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.cuota.edit')
@@ -95,10 +95,10 @@ class Cuota(controllers.Controller):
         
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Cambio en aportaciones anio %s afiliado %s" % (table.year, table.affiliate.id)
+        log['action'] = u"Cambio en aportaciones anio %s afiliado %s" % (table.year, table.affiliate.id)
         model.Logger(**log)
         
-        raise redirect(url('/affiliate/cuota/%s' % table.affiliate.id))
+        raise redirect('/affiliate/cuota/{0}'.format(table.affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -108,7 +108,7 @@ class Cuota(controllers.Controller):
         affiliate = model.Affiliate.get(affiliate)
         affiliate.complete(year)
         
-        raise redirect(url('/affiliate/cuota/%s' % affiliate.id))
+        raise redirect('/affiliate/cuota/{0}'.format(affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose('json')

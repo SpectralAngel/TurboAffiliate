@@ -55,7 +55,7 @@ class Obligation(controllers.Controller):
             return dict(obligation=obligation)
         except model.SQLObjectNotFound:
             flash(u'La obligación no se encontró')
-            raise redirect(url('/obligation'))
+            raise redirect('/obligation')
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -67,8 +67,8 @@ class Obligation(controllers.Controller):
         account = model.Account.get(account)
         
         obligation = model.Obligation(account=account, **kw)
-        flash('La obligación se ha añadido')
-        raise redirect(url('/obligation/%s' % obligation.id))
+        flash(u'La obligación se ha añadido')
+        raise redirect('/obligation/%s'.format(obligation.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.obligation.obligations")
@@ -85,4 +85,4 @@ class Obligation(controllers.Controller):
         
         obligation =  model.Obligation.get(code)
         obligation.destroySelf()
-        raise redirect(url('/obligation'))
+        raise redirect('/obligation')

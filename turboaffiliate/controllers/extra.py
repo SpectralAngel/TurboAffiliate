@@ -45,7 +45,7 @@ class Extra(controllers.Controller):
         kw['account'] = model.Account.get(account)
         kw['amount'] = Decimal(kw['amount'])
         model.Extra(**kw)
-        raise redirect(url('/affiliate/%s' % kw['affiliate'].id))
+        raise redirect('/affiliate/{0}'.format(kw['affiliate'].id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -58,7 +58,7 @@ class Extra(controllers.Controller):
         for n in range(first, last +1):
             kw['affiliate'] = model.Affiliate.get(n)
             model.Extra(**kw)
-        raise redirect(url('/affiliate'))
+        raise redirect('/affiliate')
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -69,7 +69,7 @@ class Extra(controllers.Controller):
         affiliate = extra.affiliate
         extra.destroySelf()
         
-        raise redirect(url('/affiliate/%s' % affiliate.id))
+        raise redirect('/affiliate/{0}'.format(affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -90,7 +90,7 @@ class Extra(controllers.Controller):
             kw['affiliate'] = afiliado
             model.Extra(**kw)
         
-        raise redirect(url('/affiliate'))
+        raise redirect('/affiliate')
     
     @identity.require(identity.not_anonymous())
     @expose('json')
