@@ -1,5 +1,6 @@
 $(document).ready(function(e)
 {
+  $('#menu').ptMenu();
   $('.ui-button').hover(
       function(){ $(this).addClass("ui-state-hover"); },
       function(){ $(this).removeClass("ui-state-hover"); }

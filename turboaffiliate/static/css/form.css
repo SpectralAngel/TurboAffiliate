@@ -53,3 +53,5 @@ form.ui-widget-content
 {
   margin: 2px;
 }
+
+form.reducido { min-height:0px; min-width:0px; }

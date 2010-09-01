@@ -3,33 +3,20 @@
 {
   margin: 0;
   padding-top: 5px;
-  width: 100%;
   color: white;
   font-weight: bold;
-  position:fixed;
   height:25px;
-  z-index: 1000;
   min-width: 750px;
 }
 #utilerias
 {
-  background-color: #ddd;
   bottom:0;
   padding-bottom: 3px;
   font-size: 75%;
+  position: fixed;
+  width:100%;
 }
-#navegacion ul, #utilerias ul
-{
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-#navegacion ul li, #utilerias ul li
-{
-  display:inline-block;
-  float: left;
-  padding: 0 5px;
-}
+
 #navegacion a, #utilerias a
 {
   color: white;

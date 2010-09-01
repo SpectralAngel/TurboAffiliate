@@ -33,13 +33,13 @@
             ${locale.currency(loan.capital, True, True)}
         </li>
       </ul>
-      <table class="striped ui-widget-content full-size">
+      <table class="ui-widget-content ui-corner-all striped full-size">
         <caption>Deducciones</caption>
         <thead>
           <tr>
             <th>Concepto</th>
             <th>Monto</th>
-            <th class="noprint" py:if="tg.identity.user.has_permission('delete')">Borrar</th>
+            <th class="noprint" py:if="tg.identity.user.has_permission('delete')">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -47,29 +47,29 @@
             <td>${d.account.name}</td>
             <td>${locale.currency(d.amount, True, True)}</td>
             <td class="noprint" py:if="'delete' in tg.identity.permissions">
-              <a href="${tg.url('/loan/deduction/remove/%s' % d.id)}">Borrar</a>
+              <a class="" href="${tg.url('/loan/deduction/remove/%s' % d.id)}">Borrar</a>
             </td>
           </tr>
           <tr>
             <td>Total deducciones</td>
             <td><strong>${locale.currency(sum(d.amount for d in loan.deductions), True, True)}</strong></td>
-            <td class="noprint blanco">&nbsp;</td>
+            <td py:if="'delete' in tg.identity.permissions" class="noprint">&nbsp;</td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
             <th>Remanente o Monto Liquidado</th>
             <th>${locale.currency(loan.capital - sum(d.amount for d in loan.deductions), True, True)}</th>
-            <td class="noprint blanco">&nbsp;</td>
+            <td py:if="'delete' in tg.identity.permissions" class="noprint">&nbsp;</td>
           </tr>
         </tfoot>
       </table>
-      <table class="striped ui-widget-content pay">
+      <table class="ui-widget-content ui-corner-all striped full-size pay">
         <caption>Pagos a Efectuar</caption>
         <thead>
           <tr>
             <th colspan="5">Abono</th>
-            <td class="blanco">&nbsp;</td>
+            <td>&nbsp;</td>
           </tr>
           <tr>
             <th>Mes</th>
@@ -96,7 +96,7 @@
           </tr>
         </tbody>
       </table>
-      <table class="striped ui-widget-content pay" py:if="len(loan.pays) != 0">
+      <table class="ui-widget-content ui-corner-all striped full-size" py:if="len(loan.pays) != 0">
         <caption>Pagos Efectuados</caption>
         <thead>
           <tr>
