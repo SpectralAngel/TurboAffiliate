@@ -130,7 +130,7 @@
             <input name="age" />
           </li>
           <li>
-            <label>A&ntilde;o M&aacute;ximo de Afiliaci&oacute;n:</label>
+            <label>A&ntilde;o de Afiliaci&oacute;n:</label>
             <input name="joined" />
           </li>
           <li><input type="submit" value="Buscar" /></li>
@@ -231,6 +231,18 @@
         </ul>
       </fieldset>
     </form>
+    <form class="ui-widget-content ui-corner-all" action="${tg.url('solvent')}">
+      <fieldset>
+        <legend>Afiliados Solventes por A&ntilde;o</legend>
+        <ul>
+          <li>
+            <label>A&ntilde;o:</label>
+            <input name="year" />
+          </li>
+          <li><input type="submit" value="Ver" /></li>
+        </ul>
+      </fieldset>
+    </form>
     <form class="ui-widget-content ui-corner-all" action="${tg.url('planilla')}">
       <fieldset>
         <legend>Pago Manual de Planillas</legend>
@@ -258,18 +270,6 @@
             <select name="prestamos">
               <option py:for="cuenta in cuentas" value="${cuenta.id}">${cuenta.name}</option>
             </select>
-          </li>
-          <li><input type="submit" value="Ver" /></li>
-        </ul>
-      </fieldset>
-    </form>
-    <form class="ui-widget-content ui-corner-all" action="${tg.url('solvent')}">
-      <fieldset>
-        <legend>Afiliados Solventes por A&ntilde;o</legend>
-        <ul>
-          <li>
-            <label>A&ntilde;o:</label>
-            <input name="year" />
           </li>
           <li><input type="submit" value="Ver" /></li>
         </ul>
