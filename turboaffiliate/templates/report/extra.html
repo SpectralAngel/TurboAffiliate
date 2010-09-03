@@ -8,7 +8,7 @@
 </head>
 <body>
   <h1>Deducciones de la cuenta ${account.name}</h1>
-  <table class="striped full-size ui-widget-content">
+  <table class="striped full-size ui-corner-all ui-widget-content">
     <thead>
       <tr>
         <th>N&uacute;mero</th>
@@ -21,7 +21,7 @@
     </thead>
     <tbody>
       <tr py:for="extra in extras">
-        <td>${extra.affiliate.id}</td>
+        <td><a href="${tg.url('/affiliate/{0}'.format(extra.affiliate.id))}">${extra.affiliate.id}</a></td>
         <td>${extra.affiliate.firstName} ${extra.affiliate.lastName}</td>
         <td py:if="extra.retrasada">S&iacute;</td>
         <td py:if="not extra.retrasada">No</td>

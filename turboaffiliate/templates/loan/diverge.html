@@ -8,29 +8,29 @@
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
 </head>
 <body>
-  <table class="striped full-size ui-widget-content">
-      <thead>
-        <tr>
-          <th>Pr&eacute;stamo</th>
-          <th>COPEMH</th>
-          <th>Afiliado</th>
-          <th>Cuota Pr&eacute;stamo Anterior</th>
-          <th>Cuota Pr&eacute;stamo Nuevo</th>
-          <th>Otorgado Anterior</th>
-          <th>Otorgado Nuevo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr py:for="p in payed">
-          <td><a class="print" href="${tg.url('/payed/%s' % p.id)}" py:content="p.id"  /></td>
-          <td><a class="print" href="${tg.url('/affiliate/%s' % p.affiliate.id)}" py:content="p.affiliate.id" /></td>
-          <td>${p.affiliate.firstName}${p.affiliate.lastName}</td>
-          <td>${locale.currency(p.payment, True, True)}</td>
-          <td>${locale.currency(p.affiliate.loans[0].get_payment(), True, True)}</td>
-          <td>${p.startDate}</td>
-          <td>${p.affiliate.loans[0].startDate}</td>
-        </tr>
-      </tbody>
+  <table class="striped full-size ui-corner-all ui-widget-content">
+    <thead>
+      <tr>
+        <th>Pr&eacute;stamo</th>
+        <th>COPEMH</th>
+        <th>Afiliado</th>
+        <th>Cuota Pr&eacute;stamo Anterior</th>
+        <th>Cuota Pr&eacute;stamo Nuevo</th>
+        <th>Otorgado Anterior</th>
+        <th>Otorgado Nuevo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr py:for="p in payed">
+        <td><a class="print" href="${tg.url('/payed/%s' % p.id)}" py:content="p.id"  /></td>
+        <td><a class="print" href="${tg.url('/affiliate/%s' % p.affiliate.id)}" py:content="p.affiliate.id" /></td>
+        <td>${p.affiliate.firstName}${p.affiliate.lastName}</td>
+        <td>${locale.currency(p.payment, True, True)}</td>
+        <td>${locale.currency(p.affiliate.loans[0].get_payment(), True, True)}</td>
+        <td>${p.startDate}</td>
+        <td>${p.affiliate.loans[0].startDate}</td>
+      </tr>
+    </tbody>
   </table>
 </body>
 </html>

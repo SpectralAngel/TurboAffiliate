@@ -10,7 +10,7 @@
   <h3>COPEMH</h3>
   <h4>Hoja de deducciones a Afiliados de Educaci&oacute;n Media Solicitamos deducir:</h4>
   <h1>Planilla ${how}</h1>
-  <table class="striped">
+  <table class="ui-corner-all striped full-size ui-widget-content">
     <thead>
       <tr>
         <th>Carnet</th>
@@ -22,7 +22,7 @@
     </thead>
     <tbody>
       <tr py:for="affiliate in affiliates">
-        <td><a href="${tg.url('/affiliate/edit/%s' % affiliate.id)}">${affiliate.id}</a></td>
+        <td><a href="${tg.url('/affiliate/%s' % affiliate.id)}">${affiliate.id}</a></td>
         <td>${affiliate.escalafon}</td>
         <td>${affiliate.lastName} ${affiliate.firstName}</td>
         <td>${locale.currency(affiliate.get_monthly(), True, True)}</td>

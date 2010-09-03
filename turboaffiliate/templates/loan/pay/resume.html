@@ -2,40 +2,40 @@
 <?python import locale ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="../master.html" />
-	<head>
-		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-		<title>TurboAffiliate &bull; Afiliados</title>
-		<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
-	</head>
-	<body>
-		<h1>Pagos de Pr&eacute;stamos Efectuados ${start} y ${end.month}</h1>
-		<table class="striped">
-			<thead>
-				<tr>
-					<th>Pr&eacute;stamo</th>
-					<th>COPEMH</th>
-					<th>Afiliado</th>
-					<th>Capital</th>
-					<th>Intereses</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr py:for="pay in pays">
-					<td py:content="pay.loan.id" />
-					<td py:content="pay.loan.affiliate.id" />
-					<td py:content="pay.loan.affiliate.firstName, ' ', pay.loan.affiliate.lastName" />
-					<td py:content="locale.format('%s', pay.capital, True)" />
-					<td py:content="locale.format('%s', pay.interest, True)" />
-				</tr>
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="2">Total</td>
-					<td py:content="locale.format('%s', capital + interest, True)" />
-					<td py:content="locale.format('%s', capital, True)" />
-					<td py:content="locale.format('%s', interest, True)" />
-				</tr>
-			</tfoot>
-		</table>
-	</body>
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+	<title>TurboAffiliate &bull; Afiliados</title>
+	<link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
+</head>
+<body>
+	<h1>Pagos de Pr&eacute;stamos Efectuados ${start} y ${end.month}</h1>
+	<table class="striped full-size ui-corner-all ui-widget-content">
+		<thead>
+			<tr>
+				<th>Pr&eacute;stamo</th>
+				<th>COPEMH</th>
+				<th>Afiliado</th>
+				<th>Capital</th>
+				<th>Intereses</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr py:for="pay in pays">
+				<td>${pay.loan.id}</td>
+				<td>${pay.loan.affiliate.id}</td>
+				<td>${pay.loan.affiliate.firstName} ${pay.loan.affiliate.lastName}</td>
+				<td>${locale.currency(pay.capital, True, True)}</td>
+				<td>${locale.currency(pay.interest, True, True)}</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="2">Total</td>
+				<td>${locale.currency(capital + interest, True, True)}</td>
+				<td>${locale.currency(capital, True, True)}</td>
+				<td>${locale.currency(interest, True, True)}</td>
+			</tr>
+		</tfoot>
+	</table>
+</body>
 </html>

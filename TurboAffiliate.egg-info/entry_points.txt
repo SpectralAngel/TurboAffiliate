@@ -1,0 +1,3 @@
+[console_scripts]
+start-turboaffiliate = turboaffiliate.command:start
+
