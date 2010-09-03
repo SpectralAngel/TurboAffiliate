@@ -113,10 +113,6 @@ $(document).ready(function(e)
     title : "Agregar Préstamo",
     autoOpen:false,
     width:480,
-    minWidth:480,
-    buttons:{
-               'Agregar' : function() { $(this).submit() },
-               Cancelar :  function() { $(this).dialog('close'); }
-            }
+    minWidth:480
   });
 });

@@ -5,31 +5,7 @@ body {
   font-size: small;
   min-width: 750px;
 }
-#encabezado {
-}
-.left-border {
-  margin: 0 5px;
-}
-#logo {
-  position: absolute;
-  left: 50px;
-  top: 45px;
-}
-#encabezado h1 {
-  font-size: 30px;
-  /* padding: 0 0 0 150px; */
-  text-align: center;
-  margin-bottom: 0;
-}
-#encabezado h2 {
-  /* font-size: 36px; */
-  /* padding: 0 0 0 200px; */
-  text-align: center;
-  margin: 0;
-}
-#espaciador {
-  height: 35px;
-}
+.left-border { margin: 0 5px; }
 #contenedor {
   width: 100%;
   float: left;
@@ -37,7 +13,7 @@ body {
 }
 #lateral {
   margin-top: 25px;
-  font-size: 75%;
+  font-size: 0.75em;
   width: 150px;
   float: right;
 }
@@ -47,50 +23,16 @@ body {
   clear: both;
   text-align: center;
 }
-#contenido {
-  margin-right: 160px;
-}
-.button-size {
-  width: 140px;
-  margin-bottom: 5px;
-}
-.flash {
-  margin: 5px 5px 5px 0px;
-}
-.advertencia {
-  margin: 5px 5px 5px 0px;
-  float: left;
-}
-.flotante-derecho {
-  float: left;
-  padding: 5px;
-}
-.toolbox {
-  margin-bottom: 5px;
-  font-size: 85%;
-}
-#personal {
-  max-width: 300px;
-}
-.no-margin {
-  margin: 0;
-  padding: 3px;
-}
-#informacion {
-  margin: 0 5px;
-}
-.cotizacion {
-  padding: 2px;
-}
-h1
-{
-  font-size: 1.5em;
-  margin: 0;
-}
-.enfasis
-{
-  font-size: 1.1em;
-  color: white;
-}
-.ui-button-text
-{ padding: 0;}
+#contenido { margin-right: 160px; }
+.button-size { width: 140px; margin-bottom: 5px; }
+.flash { margin: 5px 5px 5px 0px; }
+.advertencia { margin: 5px 5px 5px 0px; float: left; }
+.flotante-derecho { float: left; padding: 5px; }
+.toolbox { margin-bottom: 5px; font-size: 0.85em; }
+#personal { max-width: 300px; }
+.no-margin { margin: 0; padding: 3px; }
+#informacion { margin: 0 5px; }
+.cotizacion { padding: 0.2em; }
+h1 { font-size: 1.5em; margin: 5px 0 0 0; }
+.enfasis { font-size: 1.1em; color: white; }
+.inline .ui-button-text { padding: 0 0.5em; font-size: 0.9em; }

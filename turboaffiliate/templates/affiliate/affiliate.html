@@ -97,7 +97,7 @@
               <td>${extra.mes}</td>
               <td>${extra.anio}</td>
               <td>${locale.currency(extra.amount, True, True)}</td>
-              <td><a class="button" href="${tg.url('/affiliate/extra/delete/%s' % extra.id)}">Borrar</a></td>
+              <td><a class="button inline" href="${tg.url('/affiliate/extra/delete/%s' % extra.id)}">Borrar</a></td>
             </tr>
             <tr py:for="reintegro in affiliate.reintegros" py:if="not reintegro.pagado">
               <td>Reintegro</td>
@@ -475,7 +475,9 @@
             <li>
               <label for="payment">Cuota:</label>
               <input name="payment" id="payment" />
+              <a href="#" id="paymentCalc" class="button">calcular</a>
             </li>
+            <li><input type="submit" value="Agregar Pr&eacute;stamo" /></li>
           </ul>
         </div>
       </form>

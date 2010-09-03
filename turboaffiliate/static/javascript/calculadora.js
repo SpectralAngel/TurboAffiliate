@@ -25,4 +25,11 @@ $(document).ready(function(e)
                 'Cerrar' : function(){ $(this).dialog('close'); }
               },
   });
+  $('#paymentCalc').bind('click',function()
+  {
+   var time = $('#tiempo').val();
+   var type = $('#interes').val() / (1200);
+   var capital = $('#capital').val();
+   $('#payment').val(capital * type / (1 - Math.pow(type + 1, -time)));
+ });
 });

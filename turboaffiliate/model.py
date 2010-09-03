@@ -214,7 +214,7 @@ class Affiliate(SQLObject):
     """Préstamos cancelados"""
     extras = MultipleJoin("Extra")
     """Deducciones extra a efectuar"""
-    deduced = MultipleJoin("Deduced", orderBy=['year', 'month'])
+    deduced = MultipleJoin("Deduced", orderBy=['-year', '-month'])
     """Deducciones efectuadas por planilla en un mes y año"""
     observaciones = MultipleJoin('Observacion')
     """Observaciones acerca de actividad en un afiliado"""

@@ -6,21 +6,34 @@
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
   <title>Pr&eacute;stamos &bull; Pagar&eacute; ${loan.id}</title>
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/pagare.css')}" />
+  <style type="text/css" media="print">
+    #recibo
+    {
+      margin-top: 2em;
+      font-size: 1.2em;
+    }
+  </style>
 </head>
 <body>
-  <h1 style="text-align: center">Pagar&eacute; por ${locale.currency(loan.capital, True, True)}</h1>
-  <p>Yo, <strong>${loan.affiliate.firstName} ${loan.affiliate.lastName}</strong>,
-    con n&uacute;mero de Identidad <strong>${loan.affiliate.cardID}</strong>
-    pagar&eacute; al Colegio de Profesores de Educaci&oacute;n de
-    Honduras (COPEMH). La cantidad de ${loan.letters} Lempiras
-    (${locale.currency(loan.capital, True, True)}) que en esta
-    fecha recibo a mi entera satisfacci&oacute;n y en calidad de
-    pr&eacute;stamo. Esta obligaci&oacute;n devengar&aacute; intereses a la tasa de
-    ${loan.interest}% anual. El pago se har&aacute; en las
-    oficinas del COPEMH en esta ciudad, en Lempiras exclusivamente o en
-    moneda de curso legal en la Rep&uacute;blica de Honduras.</p>
-  <p>En fe de lo cual firmo este pagar&eacute; en la ciudad de Tegucigalpa
-      el d&iacute;a ${loan.startDate.strftime('%d de %B de %Y')}</p>
-  <p class="center">Firma del Suscriptor</p>
+  <div id="recibo">
+    <h1 style="text-align: center">Pagar&eacute; por ${locale.currency(loan.capital, True, True)}</h1>
+    <p>Yo, <strong>${loan.affiliate.firstName} ${loan.affiliate.lastName}</strong>,
+      con n&uacute;mero de Identidad <strong>${loan.affiliate.cardID}</strong>
+      pagar&eacute; al Colegio de Profesores de Educaci&oacute;n de
+      Honduras (COPEMH). La cantidad de ${loan.letters} Lempiras
+      (${locale.currency(loan.capital, True, True)}) que en esta
+      fecha recibo a mi entera satisfacci&oacute;n y en calidad de
+      pr&eacute;stamo. Esta obligaci&oacute;n devengar&aacute; intereses a la tasa de
+      ${loan.interest}% anual. El pago se har&aacute; en las
+      oficinas del COPEMH en esta ciudad, en Lempiras exclusivamente o en
+      moneda de curso legal en la Rep&uacute;blica de Honduras.</p>
+    <p>En fe de lo cual firmo este pagar&eacute; en la ciudad de Tegucigalpa
+        el d&iacute;a ${loan.startDate.strftime('%d de %B de %Y')}</p>
+    <p class="center">
+      <strong>${loan.affiliate.firstName} ${loan.affiliate.lastName}</strong>
+      <br />
+      Firma del Suscriptor
+    </p>
+  </div>
 </body>
 </html>
