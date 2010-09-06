@@ -1,66 +1,20 @@
-thead
-{
-	border-top: 1px solid;
-	border-bottom: 1px solid;	
-}
-body
-{
-	font-size: 75%;
-	font-family: sans-serif;
-	margin: 0;
-	padding: 0;
-}
-.small
-{
-	font-size: 80%;
-}
-table
-{
-	text-align: left;
-  width: 100%;
-}
-.deuda
-{
-	text-align: right;
-}
-#navegacion, #espaciador, #utilerias, #pie, form, .noprint
-{
-	display: none;
-	width: 0;
-	height: 0;
-}
-th
-{
-	text-align: center;
-}
-thead th
-{
-	border-bottom: 1px solid;
-}
-tfoot th
-{
-	border-top: 1px solid;
-	border-bottom: 0;
-}
-.print
-{
-	display: inline;
-}
-a
-{
-	text-decoration: none;
-}
-.numero
-{
-	width: 100px;
-}
-.nombre
-{
-	width: 300px;
-}
-caption
-{
-	font-weight: bold;
-	font-size: 125%;
-	padding: 5px;
-}
+body { font-size:0.75em; font-family: sans-serif; margin:0; padding:0; }
+.small { font-size:0.8em; }
+table { text-align: left; width:100%; }
+.deuda { text-align:right; }
+#navegacion, #espaciador, #utilerias, #pie, form,.noprint{ display:none; width:0; height:0; }
+th{text-align:center;}
+thead { border-top: 1px solid; border-bottom: 1px solid; }
+thead th { border-bottom: 1px solid;}
+tfoot th { border-top: 1px solid; border-bottom:0; }
+.print{display: inline;}
+a{ text-decoration: none; }
+.numero{ width: 100px; }
+.nombre{ width: 300px; }
+caption { font-weight: bold; font-size: 1.25em; padding: 5px; }
+h4.flotante-izquierdo { margin:0; padding: 5px; }
+h4.flotante-derecho { margin:0; padding: 5px; }
+.flotante-derecho { float: right; padding: 5px; }
+.flotante-izquierdo { float: left; padding: 5px; }
+.centrado { text-align: center; }
+#titulo-prestamo h1 { font-size: 1.6em; margin: 5px 0 0 0; }

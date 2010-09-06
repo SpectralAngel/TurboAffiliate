@@ -1,9 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<?python
-  import locale
-?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://purl.org/kid/ns#">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html" />
   <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
     <title>TurboAffiliate &bull; Padr&oacute;n Electoral Departamento de ${state}</title>
@@ -26,8 +24,8 @@
       <tbody>
         <tr py:for="affiliate in schools[school]">
           <td class="numero">${affiliate.id}</td>
-          <td py:content="affiliate.lastName" />
-          <td py:content="affiliate.firstName" />
+          <td>${affiliate.lastName}</td>
+          <td>${affiliate.firstName}</td>
           <td></td>
         </tr>
       </tbody>

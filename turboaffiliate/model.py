@@ -1116,6 +1116,7 @@ class Sobrevivencia(SQLObject):
     fecha = DateCol(default=date.today)
     monto = CurrencyCol(default=0)
     cheque = UnicodeCol(length=20, default=None)
+    banco = UnicodeCol(length=50)
 
 class Devolucion(SQLObject):
     
@@ -1129,6 +1130,7 @@ class Devolucion(SQLObject):
     """Monto entregado"""
     cheque = UnicodeCol(length=20)
     """Referencia al cheque emitido"""
+    banco = UnicodeCol(length=50)
 
 class Funebre(SQLObject):
     
@@ -1147,3 +1149,4 @@ class Funebre(SQLObject):
     """Referencia al cheque emitido"""
     pariente = UnicodeCol(length=100)
     """Familiar que fallecio"""
+    banco = UnicodeCol(length=50)

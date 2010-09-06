@@ -12,27 +12,18 @@
   <div id="contenedor">
     <div id="contenido">
       <div class="noprint">&nbsp;</div>
-      <div style="text-align: center;">
-        <div style="font-weight: bold; font-size: 180%">COPEMH</div>
-        <div style="font-weight: bold; font-size: 180%">Estado de Cuenta Pr&eacute;stamos</div>
+      <div class="centrado" id="titulo-prestamo">
+        <h1>COPEMH</h1>
+        <h1>Estado de Cuenta Pr&eacute;stamos</h1>
         <div>Pr&eacute;stamo N&uacute;mero ${loan.id}</div>
         <span>Al: ${day.strftime('%d de %B de %Y')}</span>
       </div>
-      <ul>
-        <li>
-            <strong>Prestatario:</strong>
-            <a href="${tg.url('/affiliate/%s' % loan.affiliate.id)}">${loan.affiliate.id}</a>
-            ${loan.affiliate.firstName} ${loan.affiliate.lastName}
-        </li>
-        <li>
-            <strong>Fecha de Otorgamiento:</strong>
-            ${loan.startDate.strftime('%d de %B de %Y')}
-        </li>
-        <li>
-            <strong>Capital Otorgado:</strong>
-            ${locale.currency(loan.capital, True, True)}
-        </li>
-      </ul>
+      <h3 class="centrado">Capital Prestado: ${locale.currency(loan.capital, True, True)}</h3>
+      <h4 class="flotante-izquierdo"> Prestatario:
+          <a class="print" href="${tg.url('/affiliate/%s' % loan.affiliate.id)}">${loan.affiliate.id}</a>
+          ${loan.affiliate.firstName} ${loan.affiliate.lastName}
+      </h4>
+      <h4 class="flotante-derecho">Fecha de Otorgamiento: ${loan.startDate.strftime('%d de %B de %Y')}</h4>
       <table class="ui-widget-content ui-corner-all striped full-size">
         <caption>Deducciones</caption>
         <thead>
@@ -143,7 +134,7 @@
     <button class="button-size" onclick="javascript:print();">Imprimir</button>
     <a class="button button-size" href="${tg.url('/loan/pagare/%s' % loan.id)}">Ver Pagar&eacute;</a>
     <a class="button button-size" href="${tg.url('/loan/receipt/%s' % loan.id)}">Ver Liquidaci&oacute;n</a>
-    <a class="button button-size" href="${'/loan/remove/%s' % loan.id}">Eliminar</a>
+    <a class="button button-size" href="${'/loan/remove/%s' % loan.id}">Enviar a Pagados</a>
     <a class="button button-size" href="${tg.url('/loan/increase/%s' % loan.id)}">Corregir Mes +1</a>
     <a class="button button-size" href="${tg.url('/loan/decrease/%s' % loan.id)}">Corregir Mes -1</a>
     <button class="button-size" onclick="javascript:$('#cambiarSaldo').dialog('open');">Cambiar Saldo</button>

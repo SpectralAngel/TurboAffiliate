@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python import locale ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="../master.html" />
+<xi:include href="../../master.html" />
 <head>
   <meta content="text/html; charset=uft-8" http-equiv="Content-Type" py:replace="''" />
   <title>Pr&eacute;stamos &bull; Recibo</title>
@@ -37,7 +37,7 @@
     </tr>
     <tr>
       <td>Total deducciones</td>
-      <th style="text-align: left;">${locale.currency(loan.total_deductions(), True, True)}</th>
+      <th style="text-align: left;">${locale.currency(loan.capital - sum(d.amount for d in loan.deductions), True, True)}</th>
     </tr>
     <tr>
       <td>Remanente o Monto Liquidado</td>
@@ -60,9 +60,6 @@
   <br />
   <br />
   <p class="center" style="text-align: center">Vo. Bo. Secretario de Finanzas</p>
-  <p style="text-align: center">Liquidado por:
-      <span py:if="not loan.aproval is None">${loan.aproval.display_name}</span>
-      Impreso por: ${tg.identity.user.display_name}
-  </p>
+  <p style="text-align: center">Impreso por: ${tg.identity.user.display_name}</p>
 </body>
 </html>

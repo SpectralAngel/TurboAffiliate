@@ -121,6 +121,20 @@ class PayedLoan(controllers.Controller):
 					capital=sum(l.capital for l in loans))
 	
 	@identity.require(identity.not_anonymous())
+	@expose(template='turboaffiliate.templates.loan.payed.pagare')
+	@validate(validators=dict(loan=validators.Int()))
+	def pagare(self, loan):
+		
+		return dict(loan=model.PayedLoan.get(loan))
+	
+	@identity.require(identity.not_anonymous())
+	@expose(template='turboaffiliate.templates.loan.payed.receipt')
+	@validate(validators=dict(loan=validators.Int()))
+	def recibo(self, loan):
+		
+		return dict(loan=model.PayedLoan.get(loan))
+	
+	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.loan.payed.view')
 	@validate(validators=dict(loan=validators.Int()))
 	def view(self, loan):
