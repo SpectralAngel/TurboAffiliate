@@ -19,7 +19,7 @@
     </thead>
     <tbody>
       <tr py:for="afiliado in afiliados">
-        <td>${afiliado.id}</td>
+        <td><a href="${tg.url('/affiliate/{0}'.format(afiliado.id))}">${afiliado.id}</a></td>
         <td>${afiliado.lastName} ${afiliado.firstName}</td>
         <td>
           <form class="ui-widget-content reducido ui-corner-all" action="${tg.url('/affiliate/cuota/pagoPlanilla')}">
@@ -27,7 +27,7 @@
               <legend>Aportaciones ${locale.currency(afiliado.get_cuota(), True, True)}</legend>
               <input name="afiliado" value="${afiliado.id}" type="hidden" />
               <input name="day" value="${day.strftime('%d/%m/%Y')}" type="hidden" />
-              <input name="cuenta" value="{aportaciones}" type="hidden" />
+              <input name="cuenta" value="${aportaciones}" type="hidden" />
               <input type="submit" value="Pagar" />
             </fieldset>
           </form>
@@ -36,7 +36,7 @@
               <legend>Pr&eacute;stamo ${loan.id}</legend>
               <input name="loan" value="${loan.id}" type="hidden" />
               <input name="day" value="${day.strftime('%d/%m/%Y')}" type="hidden" />
-              <input name="cuenta" value="{prestamos}" type="hidden" />
+              <input name="cuenta" value="${prestamos}" type="hidden" />
               <li>
                 <label>Pago: </label>
                 <input name="amount" value="${loan.get_payment()}" />
@@ -51,6 +51,7 @@
               <legend>${extra.account.name}</legend>
               <strong>Cantidad: ${locale.currency(extra.amount)}</strong>
               <input type="hidden" name="extra" value="${extra.id}" />
+              <input name="day" value="${day.strftime('%d/%m/%Y')}" type="hidden" />
               <input type="submit" value="Pagar" />
             </fieldset>
           </form>

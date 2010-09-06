@@ -30,12 +30,12 @@
           <td>${d.account.name}</td>
           <td>${locale.currency(d.amount, True, True)}</td>
         </tr>
-      </tbody>
-      <tfoot>
         <tr>
           <td>Total deducciones</td>
           <td><strong>${locale.currency(sum(d.amount for d in loan.deductions), True, True)}</strong></td>
         </tr>
+      </tbody>
+      <tfoot>
         <tr>
           <td>Remanente o Monto Liquidado</td>
           <td><strong>${locale.currency(loan.capital - sum(d.amount for d in loan.deductions), True, True)}</strong></td>

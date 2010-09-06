@@ -94,11 +94,12 @@ class Extra(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose('json')
-    @validate(validators=dict(extra=validators.Int()))
-    def pagarPlanilla(self, extra):
+    @validate(validators=dict(extra=validators.Int(),
+                              day=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def pagarPlanilla(self, extra, day):
     
         extra = model.Extra.get(extra)
         afiliado = extra.affiliate
-        extra.act()
+        extra.act(day=day)
         
         return dict(mensaje="Pago Efectuado")

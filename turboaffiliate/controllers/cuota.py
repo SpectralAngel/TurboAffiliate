@@ -116,14 +116,14 @@ class Cuota(controllers.Controller):
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))
     def pagoPlanilla(self, afiliado, cuenta, day):
         
-        affiliate = model.Affiliate.get(affiliate)
+        affiliate = model.Affiliate.get(afiliado)
         cuenta = model.Account.get(cuenta)
         affiliate.pay_cuota(day.year, day.month)
         
         deduccion = dict()
         deduccion['account'] = cuenta
         deduccion['month'] = day.month
-        deduccion['year'] = day.month
+        deduccion['year'] = day.year
         deduccion['affiliate'] = affiliate
         deduccion['amount'] = affiliate.get_cuota(day)
         model.Deduced(**deduccion)

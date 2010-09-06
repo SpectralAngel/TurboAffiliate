@@ -785,11 +785,11 @@ class Extra(SQLObject):
         
         if decrementar:
             self.months -= 1
-        self.to_deduced()
+        self.to_deduced(day=day)
         if self.months == 0:
             self.destroySelf()
     
-    def to_deduced(self):
+    def to_deduced(self, day=date.today()):
         
         kw = dict()
         kw['amount'] = self.amount

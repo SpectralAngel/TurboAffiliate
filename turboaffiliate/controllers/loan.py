@@ -130,7 +130,7 @@ class Pay(controllers.Controller):
         
         amount = Decimal(amount)
         loan = model.Loan.get(loan)
-        cuenta = model.Cuenta.get(cuenta)
+        cuenta = model.Account.get(cuenta)
         id = loan.id
         
         free = False;
@@ -144,7 +144,7 @@ class Pay(controllers.Controller):
         deduccion = dict()
         deduccion['account'] = cuenta
         deduccion['month'] = day.month
-        deduccion['year'] = day.month
+        deduccion['year'] = day.year
         deduccion['affiliate'] = loan.affiliate
         deduccion['amount'] = amount
         model.Deduced(**deduccion)
