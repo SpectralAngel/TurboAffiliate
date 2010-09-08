@@ -150,7 +150,7 @@ class Report(controllers.Controller):
         """Muestra los cobros efectuados correspondientes a un mes y año con
         respecto a un tipo de pago"""
         
-        report = model.OtherReport.selectBy(payment=payment).getOne()
+        report = model.OtherReport.selectBy(payment=payment,year=year,month=month).getOne()
         return dict(month=month, year=year, report=report, payment=payment)
     
     @identity.require(identity.not_anonymous())

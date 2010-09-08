@@ -572,15 +572,15 @@ class Loan(SQLObject):
         
         # La cantidad a pagar es igual o mayor que la deuda del préstamo, por
         # lo tanto se considera la ultima cuota y no se cargaran intereses
-        #if(self.debt <= amount):
+        if(self.debt <= amount):
         #   
-        #    self.last = kw['day']
-        #    kw['capital'] = kw['amount']
-        #    # Register the payment in the database
-        #    Pay(**kw)
-        #    # Remove the loan and convert it to PayedLoan
-        #    self.remove()
-        #    return True
+            self.last = kw['day']
+            kw['capital'] = kw['amount']
+            # Register the payment in the database
+            Pay(**kw)
+            # Remove the loan and convert it to PayedLoan
+            self.remove()
+            return True
         if libre:
             kw['interest'] = 0
         else:
@@ -600,7 +600,7 @@ class Loan(SQLObject):
         # Increase the number of payments by one
         self.number += 1
         
-        if self.debt == 0:
+        if self.debt <= 0:
             self.remove()
             return True
         
