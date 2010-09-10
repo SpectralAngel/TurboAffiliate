@@ -133,4 +133,4 @@ class Cuota(controllers.Controller):
         log['action'] = "Pago por Planilla de cuota de aportaciones afiliado {0}".format(affiliate.id)
         model.Logger(**log)
         
-        return dict(mensaje="Pago Efectuado")
+        return dict(pago=affiliate.get_monthly())

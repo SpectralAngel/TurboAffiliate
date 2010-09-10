@@ -102,4 +102,4 @@ class Extra(controllers.Controller):
         afiliado = extra.affiliate
         extra.act(day=day)
         
-        return dict(mensaje="Pago Efectuado")
+        return dict(pago=loan.affiliate.get_monthly())

@@ -156,7 +156,7 @@ class Pay(controllers.Controller):
         
         loan.pagar(amount, 'Planilla', day, free)
         
-        return dict(mensaje="Pago Efectuado")
+        return dict(pago=loan.affiliate.get_monthly())
 
 class Loan(controllers.Controller):
     
