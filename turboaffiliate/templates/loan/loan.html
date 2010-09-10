@@ -218,12 +218,15 @@
       <ul>
         <li>
           <label for="months">Meses:</label>
-          <input name="months" id="months" />
+          <input name="months" id="tiempo" />
           <input type="hidden" name="loan" value="${loan.id}" />
+          <input type="hidden" id="interes" value="${loan.interest}" />
+          <input type="hidden" id="capital" value="${loan.capital}" />
         </li>
         <li>
           <label for="payment">Cuota:</label>
           <input name="payment" id="payment" />
+          <a href="#" id="paymentCalc" class="button">calcular</a>
         </li>
         <li>
           <input value="Modificar"  type="submit" />
