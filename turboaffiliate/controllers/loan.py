@@ -20,7 +20,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, flash, redirect, identity, url
+from turbogears import controllers, flash, redirect, identity
 from turbogears import expose, validate, validators
 from turboaffiliate import model, wording
 from datetime import date
@@ -273,7 +273,7 @@ class Loan(controllers.Controller):
             del kw['id']
             
         if kw['capital'] < 0:
-            raise redirect(url('/loan/add/{0}'.format(affiliate.id)))
+            raise redirect('/loan/add/{0}'.format(affiliate.id))
         
         kw["aproval"] = identity.current.user
         
@@ -502,7 +502,7 @@ class Loan(controllers.Controller):
         loan = model.Loan.get(loan)
         loan.offset += 1
         
-        raise redirect(url('/loan/%s' % loan.id))
+        raise redirect('/loan/%s' % loan.id)
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -512,7 +512,7 @@ class Loan(controllers.Controller):
         loan = model.Loan.get(loan)
         loan.offset -= 1
         
-        raise redirect(url('/loan/%s' % loan.id))
+        raise redirect('/loan/%s' % loan.id)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.bypay')
