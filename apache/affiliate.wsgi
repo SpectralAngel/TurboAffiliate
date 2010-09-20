@@ -13,8 +13,7 @@ if os.name == 'nt':
 else:
     locale_name = "es_HN.utf8"
 
-import os
-os.environ['PYTHON_EGG_CACHE'] = program
+os.environ['PYTHON_EGG_CACHE'] = program 
 
 import atexit
 import cherrypy

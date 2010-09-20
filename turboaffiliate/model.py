@@ -151,6 +151,20 @@ class Logger(SQLObject):
 # Clases Especificas del Negocio
 ################################################################################
 
+class Departamento(SQLObject):
+    
+    nombre = UnicodeCol(length=50,default=None)
+    
+    municipios = MultipleJoin('Municipio')
+    afiliados = MultipleJoin('Affiliate')
+
+class Municipio(SQLObject):
+    
+    departamento = ForeignKey('Departamento')
+    nombre = UnicodeCol(length=50,default=None)
+    
+    afiliados = MultipleJoin('Affiliate')
+
 class Affiliate(SQLObject):
 
     """Representa un miembro de la institución, cada afiliado puede tener
@@ -188,6 +202,7 @@ class Affiliate(SQLObject):
     address = UnicodeCol(default=None)
     phone = UnicodeCol(default=None)
     
+    departamento = ForeignKey('departamento')
     state = UnicodeCol(length=50, default=None)
     school = UnicodeCol(length=255, default=None)
     school2 = UnicodeCol(length=255, default=None)
