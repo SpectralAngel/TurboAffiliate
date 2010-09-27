@@ -100,7 +100,15 @@ class Report(controllers.Controller):
             if kw[account]['amount'] == 0:
                 del kw[account]
         
-        return dict(deductions=kw, count=affiliates.count(), obligation=obligation, legend=payment, loans=loand, total=total)
+        reintegros = model.Reintegro.selectBy(pagado=False)
+        reintegro = dict() 
+        reintegro['count'] = reintegros.count()
+        reintegro['amount'] = sum(r.monto for r in reintegros) 
+        total += reintegro['amount']
+        
+        return dict(deductions=kw, count=affiliates.count(),
+                    obligation=obligation, legend=payment, loans=loand,
+                    total=total, reintegro=reintegro)
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.extra")
