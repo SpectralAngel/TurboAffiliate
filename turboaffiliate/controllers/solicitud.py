@@ -41,7 +41,7 @@ class Solicitud(controllers.Controller):
         
         flash('Agregada la solicitud')
         
-        raise redirect(url('/affiliate/%s' % kw['affiliate'].id))
+        raise redirect('/affiliate/%s' % kw['affiliate'].id)
     
     @expose()
     @validate(validators=dict(solicitud=validators.Int()))
@@ -51,7 +51,7 @@ class Solicitud(controllers.Controller):
         prestamo = solicitud.prestamo(identity.current.user)
         solicitud.destroySelf()
         
-        raise redirect(url('/loan/%s' % prestamo.id))
+        raise redirect('/loan/%s' % prestamo.id)
     
     @expose()
     @identity.require(identity.not_anonymous())
@@ -62,7 +62,7 @@ class Solicitud(controllers.Controller):
         affiliate = solicitud.affiliate
         solicitud.destroySelf()
         
-        raise redirect(url('/affiliate/%s' % affiliate.id))
+        raise redirect('/affiliate/%s' % affiliate.id)
     
     @expose(template='turboaffiliate.templates.solicitud.dia')
     @identity.require(identity.not_anonymous())

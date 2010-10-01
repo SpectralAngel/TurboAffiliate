@@ -350,12 +350,13 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(payment=validators.UnicodeString(),
                               prestamos=validators.Int(),
                               aportaciones=validators.Int(),
+                              excedente=validators.Int(),
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))
-    def planilla(self, payment, day, aportaciones, prestamos):
+    def planilla(self, payment, day, aportaciones, prestamos, excendente):
         
         affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment, orderBy="lastName")
         
-        return dict(afiliados=affiliates, cotizacion=payment,
+        return dict(afiliados=affiliates, cotizacion=payment, excedente=excedente,
                     aportaciones=aportaciones, prestamos=prestamos,day=day)
     
     @error_handler(error)
@@ -464,3 +465,31 @@ class Affiliate(controllers.Controller):
     def solvencia(self, afiliado, mes, anio):
         
         return dict(afiliado=model.Affiliate.get(afiliado),mes=mes,anio=anio, dia=date.today())
+    
+    
+    @identity.require(identity.not_anonymous())
+    @expose('json')
+    @validate(validators=dict(amount=validators.UnicodeString(),
+                              loan=validators.Int(),free=validators.Bool(),
+                              cuenta=validators.Int(),
+                              day=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def devolucionPlanilla(self, afiliado, cuenta, day):
+        
+        affiliate = model.Affiliate.get(afiliado)
+        cuenta = model.Account.get(cuenta)
+        affiliate.pay_cuota(day.year, day.month)
+        
+        deduccion = dict()
+        deduccion['account'] = cuenta
+        deduccion['month'] = day.month
+        deduccion['year'] = day.year
+        deduccion['affiliate'] = loan.affiliate
+        deduccion['amount'] = amount
+        model.Deduced(**deduccion)
+        
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Excedente Deducido por planilla afiliado {0}".format(affiliate.id)
+        model.Logger(**log)
+        
+        return dict(pago=affiliate.get_monthly())

@@ -90,8 +90,13 @@ class Report(controllers.Controller):
         total = Decimal(0)
         accounts = model.Account.select()
         for account in accounts:
+            
             kw[account] = dict()
-            li = [extra for extra in account.extras if extra.affiliate.payment==payment]
+            
+            li = [extra for extra in account.extras
+                  if extra.affiliate.payment==payment and
+                  extra.affiliate.active == True]
+            
             kw[account]['amount'] = sum(e.amount for e in li)
             kw[account]['count'] = len(li)
             total += kw[account]['amount']
