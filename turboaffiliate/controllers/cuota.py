@@ -52,13 +52,10 @@ class Cuota(controllers.Controller):
     @validate(validators=dict(id=validators.Int()))
     def remove(self, id):
         
-        try:
-            table = model.CuotaTable.get(id)
-            affiliate = table.affiliate
-            table.destroySelf()
-            raise redirect('/affiliate/cuota/{0}'.format(affiliate.id))
-        except:
-            raise redirect('/affiliate')
+        table = model.CuotaTable.get(id)
+        affiliate = table.affiliate
+        table.destroySelf()
+        raise redirect('/affiliate/cuota/{0}'.format(affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.cuota.edit')

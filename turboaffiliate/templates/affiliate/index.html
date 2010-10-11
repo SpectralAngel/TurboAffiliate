@@ -65,7 +65,7 @@
         <ul>
           <li>
             <label>Identificador:</label>
-            <input name="code" />
+            <input name="cardID" />
           </li>
           <li><input type="submit" value="Buscar" /></li>
         </ul>
@@ -262,6 +262,12 @@
           <li>
             <label for="account">Aportaciones:</label>
             <select name="aportaciones">
+              <option py:for="cuenta in cuentas" value="${cuenta.id}">${cuenta.name}</option>
+            </select>
+          </li>
+          <li>
+            <label for="account">Devoluciones:</label>
+            <select name="excedente">
               <option py:for="cuenta in cuentas" value="${cuenta.id}">${cuenta.name}</option>
             </select>
           </li>

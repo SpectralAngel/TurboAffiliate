@@ -25,7 +25,7 @@ from turbogears import expose, validate, validators, error_handler
 from turboaffiliate import model
 from turboaffiliate.controllers import cuota, extra, billing, deduced, observacion
 from datetime import date
-from sqlobject.sqlbuilder import OR
+from sqlobject.sqlbuilder import OR, AND
 
 class Affiliate(controllers.Controller):
     
@@ -212,8 +212,7 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(affiliate=validators.Int(),end=validators.Int(), begin=validators.Int()))
     def aList(self, begin, end):
         
-        query = "affiliate.id <= ${0} and affiliate.id >= {1}".format(begin, end)
-        affiliates = model.Affiliate.select(query)
+        affiliates = model.Affiliate.select(AND(model.Affiliate.q.id>=begin,model.Affiliate.q.id<=end))
         return dict(affiliates=affiliates, count=affiliates.count())
     
     @error_handler(index)
@@ -293,7 +292,7 @@ class Affiliate(controllers.Controller):
         affiliates = model.Affiliate.select(model.Affiliate.birthday>=day)
         affiliates = [affiliate for affiliate in affiliates if affiliate.joined.year <= joined]
         
-        return dict(affiliates=affiliate)
+        return dict(affiliates=affiliates)
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
@@ -302,9 +301,7 @@ class Affiliate(controllers.Controller):
                               end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def byDate(self, start, end):
         
-        #TODO usar SQLBuilder
-        query = "affiliate.joined >= ${0} and affiliate.joined <= ${0}".format(start, end)
-        affiliates = model.Affiliate.select(query)
+        affiliates = model.Affiliate.select(AND(model.Affiliate.q.joined>=start,model.Affiliate.q.joined<=end))
         return dict(affiliates=affiliates, start=start, end=end, show="Fecha de Afiliaci&oacute;n", count=affiliates.count())
     
     @error_handler(error)
@@ -322,9 +319,7 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(school=validators.UnicodeString(),state=validators.UnicodeString()))
     def bySchool(self, school, state):
         
-        #TODO usar SQLBuilder
-        query = "affiliate.school = '${0}' or affiliate.school2 = '${0}'".format(school, school)
-        affiliates = model.Affiliate.select(query)
+        affiliates = model.Affiliate.select(OR(model.Affiliate.school==school,model.Affiliate.school2==school))
         affiliates = [a for a in affiliates if a.state == state]
         return dict(affiliates=affiliates, show=u"Instituto", count=len(affiliates))
     
@@ -350,12 +345,13 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(payment=validators.UnicodeString(),
                               prestamos=validators.Int(),
                               aportaciones=validators.Int(),
+                              excedente=validators.Int(),
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))
-    def planilla(self, payment, day, aportaciones, prestamos):
+    def planilla(self, payment, day, aportaciones, prestamos, excendente):
         
         affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment, orderBy="lastName")
         
-        return dict(afiliados=affiliates, cotizacion=payment,
+        return dict(afiliados=affiliates, cotizacion=payment, excedente=excedente,
                     aportaciones=aportaciones, prestamos=prestamos,day=day)
     
     @error_handler(error)
@@ -464,3 +460,31 @@ class Affiliate(controllers.Controller):
     def solvencia(self, afiliado, mes, anio):
         
         return dict(afiliado=model.Affiliate.get(afiliado),mes=mes,anio=anio, dia=date.today())
+    
+    
+    @identity.require(identity.not_anonymous())
+    @expose('json')
+    @validate(validators=dict(amount=validators.UnicodeString(),
+                              loan=validators.Int(),free=validators.Bool(),
+                              cuenta=validators.Int(),
+                              day=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def devolucionPlanilla(self, afiliado, cuenta, day):
+        
+        affiliate = model.Affiliate.get(afiliado)
+        cuenta = model.Account.get(cuenta)
+        affiliate.pay_cuota(day.year, day.month)
+        
+        deduccion = dict()
+        deduccion['account'] = cuenta
+        deduccion['month'] = day.month
+        deduccion['year'] = day.year
+        deduccion['affiliate'] = loan.affiliate
+        deduccion['amount'] = amount
+        model.Deduced(**deduccion)
+        
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Excedente Deducido por planilla afiliado {0}".format(affiliate.id)
+        model.Logger(**log)
+        
+        return dict(pago=affiliate.get_monthly())

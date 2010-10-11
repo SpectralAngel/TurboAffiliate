@@ -20,11 +20,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, flash, redirect, identity, url
+from turbogears import controllers, flash, redirect, identity
 from turbogears import expose, validate, validators
 from turboaffiliate import model, wording
 from datetime import date
 from decimal import Decimal
+from sqlobject.sqlbuilder import AND, OR
 
 class Deduction(controllers.Controller):
     
@@ -273,7 +274,7 @@ class Loan(controllers.Controller):
             del kw['id']
             
         if kw['capital'] < 0:
-            raise redirect(url('/loan/add/{0}'.format(affiliate.id)))
+            raise redirect('/loan/add/{0}'.format(affiliate.id))
         
         kw["aproval"] = identity.current.user
         
@@ -361,11 +362,12 @@ class Loan(controllers.Controller):
     def cartera(self, first, last):
         
         loans = list()
-        query = "loan.start_date >= '%s' and loan.start_date <= '%s' order by start_date" % (first, last)
-        adeudados = [loan for loan in model.Loan.select(query)]
+        adeudados = [loan for loan in model.Loan.select(AND(model.Loan.q.startDate>=first,
+                                                            model.Loan.q.startDate<=last))]
         
         query = "payed_loan.start_date >= '%s' and payed_loan.start_date <= '%s'" % (first, last)
-        pagados = [loan for loan in model.PayedLoan.select(query)]
+        pagados = [loan for loan in model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=first,
+                                                               model.PayedLoan.q.startDate<=last))]
         
         for n in range(first.day, last.day + 1):
             loans.extend(loan for loan in adeudados if loan.startDate.day == n)
@@ -421,9 +423,8 @@ class Loan(controllers.Controller):
                               end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def monthly(self, start, end):
         
-        query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (start, end)
-        
-        loans = model.Loan.select(query)
+        loans = model.Loan.select(AND(model.Loan.q.startDate>=start,
+                                      model.Loan.q.startDate<=end))
         
         li = list()
         
@@ -457,7 +458,8 @@ class Loan(controllers.Controller):
         
         count = len(loans)
         
-        return dict(loans=loans, count=count, debt=debt, capital=capital, payment=payment)
+        return dict(loans=loans, count=count, debt=debt, capital=capital,
+                    payment=payment)
         
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.list')
@@ -466,9 +468,8 @@ class Loan(controllers.Controller):
                               payment=validators.String()))
     def paymentDate(self, payment, start, end):
         
-        query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (start, end)
-        
-        loans = model.Loan.select(query)
+        loans = model.Loan.select(AND(model.Loan.q.startDate>=start,
+                                      model.Loan.q.startDate<=end))
         
         loans = [l for l in loans if l.affiliate.payment==payment]
         
@@ -477,7 +478,8 @@ class Loan(controllers.Controller):
         
         count = len(loans)
         
-        return dict(loans=loans, count=count, debt=debt, capital=capital, payment=payment)
+        return dict(loans=loans, count=count, debt=debt, capital=capital,
+                    payment=payment)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.liquid')
@@ -485,14 +487,13 @@ class Loan(controllers.Controller):
                               end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def liquid(self, start, end):
         
-        query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (start, end)
-        
-        loans = model.Loan.select(query)
+        loans = model.Loan.select(AND(model.Loan.q.startDate>=start,
+                                      model.Loan.q.startDate<=end))
         debt = sum(l.net() for l in loans)
         capital = sum(l.capital for l in loans)
         count = loans.count()
         
-        return dict(loans=loans, count=count, debt=debt, capital=capital, payment="")
+        return dict(loans=loans,count=count,debt=debt,capital=capital,payment="")
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -502,7 +503,7 @@ class Loan(controllers.Controller):
         loan = model.Loan.get(loan)
         loan.offset += 1
         
-        raise redirect(url('/loan/%s' % loan.id))
+        raise redirect('/loan/%s' % loan.id)
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -512,7 +513,7 @@ class Loan(controllers.Controller):
         loan = model.Loan.get(loan)
         loan.offset -= 1
         
-        raise redirect(url('/loan/%s' % loan.id))
+        raise redirect('/loan/%s' % loan.id)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.bypay')
@@ -532,14 +533,11 @@ class Loan(controllers.Controller):
                               end=validators.DateTimeConverter(format='%Y-%m-%d')))
     def resume(self, start, end):
         
-        query = "pay.day >= '%s' and pay.day <= '%s'" % (start, end)
-        
-        pays = model.Pay.select(query)
+        pays = model.Pay.select(AND(model.Pay.q.day>=start,model.Pay.q.day<=end))
         capital = sum(pay.capital for pay in pays)
         interest = sum(pay.interest for pay in pays)
         
-        query = "old_pay.day >= '%s' and old_pay.day <= '%s'" % (start, end)
-        pays = model.OldPay.select(query)
+        pays = model.OldPay.select(AND(model.OldPay.q.day>=start,model.OldPay.q.day<=end))
         capital += sum(pay.capital for pay in pays)
         interest += sum(pay.interest for pay in pays)
         
@@ -552,8 +550,8 @@ class Loan(controllers.Controller):
                               end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def diverge(self, payment, start, end):
         
-        query = "payed_loan.last >= '%s' and payed_loan.last <= '%s'" % (start, end)
-        payed = model.PayedLoan.select(query)
+        payed = model.PayedLoan.select(AND(model.PayedLoan.q.last>=start,
+                                           model.PayedLoan.q.last<=end))
         
         payed = [p for p in payed if len(p.affiliate.loans) > 0 and p.affiliate.payment == payment]
         
@@ -606,11 +604,10 @@ class Loan(controllers.Controller):
                               end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def deducciones(self, start, end):
         
-        query = "loan.start_date >= '%s' and loan.start_date <= '%s'" % (start, end)
-        query2 = "payed_loan.start_date >= '%s' and payed_loan.start_date <= '%s'" % (start, end)
-        
-        loans = model.Loan.select(query)
-        payedLoans = model.PayedLoan.select(query2)
+        loans = model.Loan.select(AND(model.Loan.q.startDate>=start,
+                                           model.Loan.q.startDate<=end))
+        payedLoans = model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=start,
+                                           model.PayedLoan.q.startDate<=end))
         
         prestamos = list()
         

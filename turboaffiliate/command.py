@@ -13,7 +13,7 @@ from os.path import dirname, exists, join
 
 import pkg_resources
 try:
-    pkg_resources.require("TurboGears>=1.1rc1")
+    pkg_resources.require("TurboGears>=1.1")
 except pkg_resources.DistributionNotFound:
     print """\
 This is a TurboGears (http://www.turbogears.org) application. It seems that
@@ -24,7 +24,7 @@ http://docs.turbogears.org/Install and follow the instructions there. If you
 are stuck, visit http://docs.turbogears.org/GettingHelp for support options."""
     sys.exit(1)
 try:
-    pkg_resources.require("SQLObject>=0.10.1")
+    pkg_resources.require("SQLObject>=0.13")
 except pkg_resources.DistributionNotFound:
     from turbogears.util import missing_dependency_error
     print missing_dependency_error('SQLObject')

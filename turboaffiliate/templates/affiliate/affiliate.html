@@ -2,6 +2,10 @@
 <?python import locale ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="../master.html" />
+<?python
+  import locale
+  locale.setlocale(locale.LC_ALL, '')
+?>
 <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
   <title>TurboAffiliate &bull; ${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</title>
@@ -421,7 +425,7 @@
           </ul>
         </div>
       </form>
-      <form class="jubilar" action="/affiliate/jubilar" method="post">
+      <form class="jubilar" action="${tg.url('/affiliate/jubilar')}" method="post">
         <div>
           <ul>
             <li>

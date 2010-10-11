@@ -39,7 +39,7 @@ class Root(controllers.RootController):
     report = report.Report()
     obligation = obligation.Obligation()
     account = account.Account()
-    catwalk = CatWalk(model)
+    #catwalk = CatWalk(model)
     payed = payed.PayedLoan()
     logger = logger.Logger()
     elecciones = elecciones.Elecciones()

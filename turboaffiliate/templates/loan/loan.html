@@ -134,7 +134,7 @@
     <button class="button-size" onclick="javascript:print();">Imprimir</button>
     <a class="button button-size" href="${tg.url('/loan/pagare/%s' % loan.id)}">Ver Pagar&eacute;</a>
     <a class="button button-size" href="${tg.url('/loan/receipt/%s' % loan.id)}">Ver Liquidaci&oacute;n</a>
-    <a class="button button-size" href="${'/loan/remove/%s' % loan.id}">Enviar a Pagados</a>
+    <a class="button button-size" href="${tg.url('/loan/remove/%s' % loan.id)}">Enviar a Pagados</a>
     <a class="button button-size" href="${tg.url('/loan/increase/%s' % loan.id)}">Corregir Mes +1</a>
     <a class="button button-size" href="${tg.url('/loan/decrease/%s' % loan.id)}">Corregir Mes -1</a>
     <button class="button-size" onclick="javascript:$('#cambiarSaldo').dialog('open');">Cambiar Saldo</button>

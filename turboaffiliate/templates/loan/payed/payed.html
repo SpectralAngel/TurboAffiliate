@@ -83,7 +83,7 @@
     <a class="button-size button" href="${tg.url('/payed/recibo/%s' % loan.id)}">Mostrar Recibo</a>
     <a class="button-size button" href="${tg.url('/payed/toLoan/%s' % loan.id)}">Enviar a Pr&eacute;stamos Normales</a>
     <a class="button-size button" href="javascript:print();">Imprimir</a>
-    <a class="button-size button" href="${'/payed/remove/%s' % loan.id}" py:if="'delete' in tg.identity.permissions">Eliminar</a>
+    <a class="button-size button" href="${tg.url('/payed/remove/%s' % loan.id)}" py:if="'delete' in tg.identity.permissions">Eliminar</a>
   </div>
 </body>
 </html>

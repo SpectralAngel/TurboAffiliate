@@ -93,9 +93,8 @@ class PayedLoan(controllers.Controller):
 							  end=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def payment(self, start, end, payment):
 		
-		query = "payed_loan.last >= '%s' and payed_loan.last <= '%s'" % (start, end)
-		
-		loans = model.PayedLoan.select(query)
+		loans = model.PayedLoan.select(AND(model.PayedLoan.q.last>=start,
+                                      model.PayedLoan.q.last<=end))
 		
 		loans = [l for l in loans if l.affiliate.payment==payment]
 		
@@ -113,7 +112,8 @@ class PayedLoan(controllers.Controller):
 		
 		query = "payed_loan.last >= '%s' and payed_loan.last <= '%s'" % (start, end)
 		
-		loans = model.PayedLoan.select(query)
+		loans = model.PayedLoan.select(AND(model.PayedLoan.q.last>=start,
+                                      model.PayedLoan.q.last<=end))
 		
 		return dict(loans=loans, count=loans.count(),
 					payment="Periodo del %s al %s" % (start.strftime('%d de %B de %Y'),

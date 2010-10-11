@@ -23,6 +23,7 @@
 from turbogears import controllers, identity
 from turbogears import expose, validate, validators
 from turboaffiliate import model
+from sqlobject.sqlbuilder import OR, AND
 
 class Logger(controllers.Controller):
 	
@@ -38,9 +39,7 @@ class Logger(controllers.Controller):
 							  end=validators.DateTimeConverter(format='%Y-%m-%d')))
 	def day(self, start, end):
 		
-		query = "logger.day >= '%s' and logger.day <= '%s'" % (start, end)
-		
-		logs = model.Logger.select(query)
+		logs = model.Logger.select(AND(model.Logger.q.day>=start,model.Logger.q.day<=end))
 		
 		return dict(logs=logs,start=start,end=end)
 

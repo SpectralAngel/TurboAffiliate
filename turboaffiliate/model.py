@@ -151,6 +151,20 @@ class Logger(SQLObject):
 # Clases Especificas del Negocio
 ################################################################################
 
+class Departamento(SQLObject):
+    
+    nombre = UnicodeCol(length=50,default=None)
+    
+    municipios = MultipleJoin('Municipio')
+    #afiliados = MultipleJoin('Affiliate')
+
+class Municipio(SQLObject):
+    
+    departamento = ForeignKey('Departamento')
+    nombre = UnicodeCol(length=50,default=None)
+    
+    #afiliados = MultipleJoin('Affiliate')
+
 class Affiliate(SQLObject):
 
     """Representa un miembro de la institución, cada afiliado puede tener
@@ -188,6 +202,7 @@ class Affiliate(SQLObject):
     address = UnicodeCol(default=None)
     phone = UnicodeCol(default=None)
     
+    #departamento = ForeignKey('departamento')
     state = UnicodeCol(length=50, default=None)
     school = UnicodeCol(length=255, default=None)
     school2 = UnicodeCol(length=255, default=None)
@@ -489,7 +504,7 @@ class CuotaTable(SQLObject):
         """
         
         inicio, fin = self.periodo()
-        for n in range(inicio, fin):
+        for n in range(inicio, fin - 1):
             if not getattr(self, 'month%s' % n):
                 return n
         
@@ -1085,6 +1100,7 @@ class Reintegro(SQLObject):
         """Marca el :class:`Reintegro` como pagado"""
         
         self.pagado = True
+        self.cancelacion = dia
     
     def deduccion(self, dia=date.today()):
         

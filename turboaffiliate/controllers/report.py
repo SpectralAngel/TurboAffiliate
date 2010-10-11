@@ -90,8 +90,13 @@ class Report(controllers.Controller):
         total = Decimal(0)
         accounts = model.Account.select()
         for account in accounts:
+            
             kw[account] = dict()
-            li = [extra for extra in account.extras if extra.affiliate.payment==payment]
+            
+            li = [extra for extra in account.extras
+                  if extra.affiliate.payment==payment and
+                  extra.affiliate.active == True]
+            
             kw[account]['amount'] = sum(e.amount for e in li)
             kw[account]['count'] = len(li)
             total += kw[account]['amount']
@@ -100,7 +105,15 @@ class Report(controllers.Controller):
             if kw[account]['amount'] == 0:
                 del kw[account]
         
-        return dict(deductions=kw, count=affiliates.count(), obligation=obligation, legend=payment, loans=loand, total=total)
+        reintegros = model.Reintegro.selectBy(pagado=False)
+        reintegro = dict() 
+        reintegro['count'] = reintegros.count()
+        reintegro['amount'] = sum(r.monto for r in reintegros) 
+        total += reintegro['amount']
+        
+        return dict(deductions=kw, count=affiliates.count(),
+                    obligation=obligation, legend=payment, loans=loand,
+                    total=total, reintegro=reintegro)
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.extra")
@@ -244,9 +257,8 @@ class Report(controllers.Controller):
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
     def aportaron(self, year, month):
         
-        query = "cuota_table.month%s = true AND cuota_table.year = %s" % (month, year)
-        cuotas = model.CuotaTable.select(query)
-        show = "que Cotizaron en %s de %s" % (month, year)
+        cuotas = model.CuotaTable.selectBy(year=year,month=month)
+        show = u"que Cotizaron en {0} de {1}".format(month, year)
         
         affiliates = [c.affiliate for c in cuotas]
         return dict(affiliates=affiliates,show=show, count=len(affiliates))
@@ -255,9 +267,8 @@ class Report(controllers.Controller):
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
     def noAportaron(self, year, month):
         
-        query = "cuota_table.month%s = 0 AND cuota_table.year = %s" % (month, year)
-        cuotas = model.CuotaTable.select(query)
-        show = "que no Cotizaron en %s de %s" % (month, year)
+        cuotas = model.CuotaTable.selectBy(year=year,month=month)
+        show = u"que no Cotizaron en {0} de {1}".format(month, year)
         
         affiliates = [c.affiliate for c in cuotas]
         return dict(affiliates=affiliates,show=show, count=len(affiliates))
