@@ -69,9 +69,8 @@ class Billing(controllers.Controller):
 	@validate(validators=dict(start=validators.Int(), end=validators.Int))
 	def rango(self, start, end):
 		
-		query = "affiliate.id >= %s and affiliate.id <= %s" % (start, end)
-		
-		affiliates = model.Affiliate.select(query)
+		affiliates = model.Affiliate.select(AND(model.Affiliate.q.id>=start,
+											model.Affiliate.q.id<=end))
 		
 		affiliates = (a for a in affiliates if a.joined != None)
 		

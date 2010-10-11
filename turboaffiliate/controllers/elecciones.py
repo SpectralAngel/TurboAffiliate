@@ -35,8 +35,9 @@ class Elecciones(controllers.Controller):
     @expose(template='turboaffiliate.templates.elecciones.listado')
     def all(self):
         
-        query = "affiliate.first_name is not null and affiliate.last_name is not null and  affiliate.active = %s" % True
-        affiliates = model.Affiliate.select(query)
+        affiliates = model.Affiliate.select(AND(model.Affiliate.q.firstName!=None,
+                                                model.Affiliate.q.lastName!=None,
+                                                model.Affiliate.q.active==True))
         return dict(affiliates=affiliates, count=affiliates.count())
     
     @identity.require(identity.not_anonymous())

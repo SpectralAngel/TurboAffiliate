@@ -25,7 +25,7 @@ from turbogears import expose, validate, validators, error_handler
 from turboaffiliate import model
 from turboaffiliate.controllers import cuota, extra, billing, deduced, observacion
 from datetime import date
-from sqlobject.sqlbuilder import OR
+from sqlobject.sqlbuilder import OR, AND
 
 class Affiliate(controllers.Controller):
     
@@ -212,8 +212,7 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(affiliate=validators.Int(),end=validators.Int(), begin=validators.Int()))
     def aList(self, begin, end):
         
-        query = "affiliate.id <= ${0} and affiliate.id >= {1}".format(begin, end)
-        affiliates = model.Affiliate.select(query)
+        affiliates = model.Affiliate.select(AND(model.Affiliate.q.id>=begin,model.Affiliate.q.id<=end))
         return dict(affiliates=affiliates, count=affiliates.count())
     
     @error_handler(index)
@@ -293,7 +292,7 @@ class Affiliate(controllers.Controller):
         affiliates = model.Affiliate.select(model.Affiliate.birthday>=day)
         affiliates = [affiliate for affiliate in affiliates if affiliate.joined.year <= joined]
         
-        return dict(affiliates=affiliate)
+        return dict(affiliates=affiliates)
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
@@ -302,9 +301,7 @@ class Affiliate(controllers.Controller):
                               end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def byDate(self, start, end):
         
-        #TODO usar SQLBuilder
-        query = "affiliate.joined >= ${0} and affiliate.joined <= ${0}".format(start, end)
-        affiliates = model.Affiliate.select(query)
+        affiliates = model.Affiliate.select(AND(model.Affiliate.q.joined>=start,model.Affiliate.q.joined<=end))
         return dict(affiliates=affiliates, start=start, end=end, show="Fecha de Afiliaci&oacute;n", count=affiliates.count())
     
     @error_handler(error)
@@ -322,9 +319,7 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(school=validators.UnicodeString(),state=validators.UnicodeString()))
     def bySchool(self, school, state):
         
-        #TODO usar SQLBuilder
-        query = "affiliate.school = '${0}' or affiliate.school2 = '${0}'".format(school, school)
-        affiliates = model.Affiliate.select(query)
+        affiliates = model.Affiliate.select(OR(model.Affiliate.school==school,model.Affiliate.school2==school))
         affiliates = [a for a in affiliates if a.state == state]
         return dict(affiliates=affiliates, show=u"Instituto", count=len(affiliates))
     

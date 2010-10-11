@@ -257,9 +257,8 @@ class Report(controllers.Controller):
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
     def aportaron(self, year, month):
         
-        query = "cuota_table.month%s = true AND cuota_table.year = %s" % (month, year)
-        cuotas = model.CuotaTable.select(query)
-        show = "que Cotizaron en %s de %s" % (month, year)
+        cuotas = model.CuotaTable.selectBy(year=year,month=month)
+        show = u"que Cotizaron en {0} de {1}".format(month, year)
         
         affiliates = [c.affiliate for c in cuotas]
         return dict(affiliates=affiliates,show=show, count=len(affiliates))
@@ -268,9 +267,8 @@ class Report(controllers.Controller):
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
     def noAportaron(self, year, month):
         
-        query = "cuota_table.month%s = 0 AND cuota_table.year = %s" % (month, year)
-        cuotas = model.CuotaTable.select(query)
-        show = "que no Cotizaron en %s de %s" % (month, year)
+        cuotas = model.CuotaTable.selectBy(year=year,month=month)
+        show = u"que no Cotizaron en {0} de {1}".format(month, year)
         
         affiliates = [c.affiliate for c in cuotas]
         return dict(affiliates=affiliates,show=show, count=len(affiliates))
