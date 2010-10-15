@@ -25,7 +25,7 @@ from turbogears.database import PackageHub
 from sqlobject import (SQLObject, UnicodeCol, StringCol, DateCol, CurrencyCol,
                        MultipleJoin, ForeignKey, IntCol, DecimalCol, BoolCol,
                        DatabaseIndex, DateTimeCol, RelatedJoin,
-                       SQLObjectNotFound)
+                       SQLObjectNotFound, BigIntCol)
 from decimal import Decimal
 from datetime import date, datetime
 from turboaffiliate import wording
@@ -244,6 +244,7 @@ class Affiliate(SQLObject):
     sobrevivencias = MultipleJoin("Sobrevivencia", joinColumn="afiliado_id")
     devoluciones = MultipleJoin("Devolucion", joinColumn="afiliado_id")
     funebres = MultipleJoin("Funebre", joinColumn="afiliado_id")
+    inscripciones = MultipleJoin("Inscripcion", joinColumn="afiliado_id")
     
     def get_monthly(self):
         
@@ -1166,3 +1167,41 @@ class Funebre(SQLObject):
     pariente = UnicodeCol(length=100)
     """Familiar que fallecio"""
     banco = UnicodeCol(length=50)
+
+class Asamblea(SQLObject):
+    
+    """Representación de asambleas efectuadas por la organización"""
+    
+    numero = IntCol()
+    nombre = UnicodeCol(length=100)
+    departamento = ForeignKey('Departamento')
+    municipio = ForeignKey('Municipio')
+
+class Banco(SQLObject):
+    
+    """Instituciones bancarías a través de las cuales se efectuan los pagos de
+    :class:`Viaticos`"""
+    
+    nombre = UnicodeCol(length=100)
+
+class Viatico(SQLObject):
+    
+    """Describe las cantidades a pagar por departamento para cada
+    :class:`Asamblea`"""
+    
+    asamblea = ForeignKey('Asamblea')
+    departamento = ForeignKey('Departamento')
+    monto = CurrencyCol()
+
+class Inscripcion(SQLObject):
+    
+    """Pagos a efectuar por concepto de :class:`Viaticos` a un
+    :class:`Affiliate`"""
+    
+    afiliado = ForeignKey('Affiliate')
+    """:class:`Afiliado` a quien se entrega"""
+    asamblea = ForeignKey('Asamblea')
+    departamento = ForeignKey('Departamento')
+    cuenta = BigIntCol()
+    enviado = BoolCol(default=False)
+    envio = DateCol(default=date.today)

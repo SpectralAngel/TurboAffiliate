@@ -22,12 +22,12 @@
 
 from turbogears import controllers, expose
 from turbogears import identity, redirect, url
-from turbogears.toolbox.catwalk import CatWalk
+# from turbogears.toolbox.catwalk import CatWalk
 from cherrypy import request, response
-from turboaffiliate import model
+# from turboaffiliate import model
 from turboaffiliate.controllers import (affiliate, loan, obligation, report,
                                         account, payed, logger, elecciones,
-                                        solicitud, reintegro)
+                                        solicitud, reintegro, asamblea)
 
 # import logging
 # log = logging.getLogger("turboaffiliate.controllers")
@@ -45,6 +45,7 @@ class Root(controllers.RootController):
     elecciones = elecciones.Elecciones()
     solicitud = solicitud.Solicitud()
     reintegro = reintegro.Reintegro()
+    asamblea = asamblea.Asamblea()
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.welcome")
