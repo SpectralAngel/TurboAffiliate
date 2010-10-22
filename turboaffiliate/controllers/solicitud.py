@@ -20,7 +20,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, flash, redirect, identity, url
+from turbogears import controllers, flash, redirect, identity
 from turbogears import expose, validate, validators
 from turboaffiliate import model
 from decimal import Decimal
@@ -41,7 +41,7 @@ class Solicitud(controllers.Controller):
         
         flash('Agregada la solicitud')
         
-        raise redirect('/affiliate/%s' % kw['affiliate'].id)
+        raise redirect('/affiliate/{0}'.format(kw['affiliate'].id))
     
     @expose()
     @validate(validators=dict(solicitud=validators.Int()))
@@ -51,7 +51,7 @@ class Solicitud(controllers.Controller):
         prestamo = solicitud.prestamo(identity.current.user)
         solicitud.destroySelf()
         
-        raise redirect('/loan/%s' % prestamo.id)
+        raise redirect('/loan/{0}'.format(prestamo.id))
     
     @expose()
     @identity.require(identity.not_anonymous())
@@ -62,7 +62,7 @@ class Solicitud(controllers.Controller):
         affiliate = solicitud.affiliate
         solicitud.destroySelf()
         
-        raise redirect('/affiliate/%s' % affiliate.id)
+        raise redirect('/affiliate/{0}'.format(affiliate.id))
     
     @expose(template='turboaffiliate.templates.solicitud.dia')
     @identity.require(identity.not_anonymous())

@@ -39,7 +39,6 @@ class Billing(controllers.Controller):
 	def state(self, state):
 		
 		affiliates = model.Affiliate.selectBy(state=state)
-		
 		return dict(affiliates=affiliates, day=date.today())
 	
 	@identity.require(identity.not_anonymous())
@@ -48,7 +47,6 @@ class Billing(controllers.Controller):
 	def payment(self, payment):
 		
 		affiliates = model.Affiliate.selectBy(payment=payment)
-		
 		affiliates = (a for a in affiliates if a.joined != None)
 		
 		return dict(affiliates=affiliates, day=date.today())
@@ -59,7 +57,6 @@ class Billing(controllers.Controller):
 	def school(self, school):
 		
 		affiliates = model.Affiliate.selectBy(school=school)
-		
 		affiliates = (a for a in affiliates if a.joined != None)
 		
 		return dict(affiliates=affiliates, day=date.today())
@@ -71,7 +68,6 @@ class Billing(controllers.Controller):
 		
 		affiliates = model.Affiliate.select(AND(model.Affiliate.q.id>=start,
 											model.Affiliate.q.id<=end))
-		
 		affiliates = (a for a in affiliates if a.joined != None)
 		
 		return dict(affiliates=affiliates, day=date.today())

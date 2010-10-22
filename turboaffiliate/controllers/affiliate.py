@@ -20,12 +20,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, flash, redirect, identity, url
+from turbogears import controllers, flash, redirect, identity
 from turbogears import expose, validate, validators, error_handler
 from turboaffiliate import model
 from turboaffiliate.controllers import cuota, extra, billing, deduced, observacion
 from datetime import date
 from sqlobject.sqlbuilder import OR, AND
+from decimal import Decimal
 
 class Affiliate(controllers.Controller):
     
@@ -47,12 +48,12 @@ class Affiliate(controllers.Controller):
     @expose(template='turboaffiliate.templates.error')
     def error(self, tg_errors=None):
         
-       if tg_errors:
+        if tg_errors:
             errors = [(param,inv.msg,inv.value) for param, inv in
                       tg_errors.items()]
             return dict(errors=errors)
         
-       return dict(errors=u"Desconocido")
+        return dict(errors=u"Desconocido")
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
@@ -174,7 +175,7 @@ class Affiliate(controllers.Controller):
         if name == '':
             raise redirect('/affiliate')
         affiliates = model.Affiliate.select(OR(model.Affiliate.q.firstName.contains(name),
-											   model.Affiliate.q.lastName.contains(name)))
+                                               model.Affiliate.q.lastName.contains(name)))
         return dict(result=affiliates)
     
     @error_handler(error)
@@ -279,7 +280,7 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(how=validators.UnicodeString()))
     def payment(self, how):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.payment==how, orderBy="lastName")
+        affiliates = model.Affiliate.selectBy(model.Affiliate.q.payment==how, orderBy="lastName")
         return dict(affiliates=affiliates, count=affiliates.count(), how=how)
     
     @error_handler(error)
@@ -347,7 +348,7 @@ class Affiliate(controllers.Controller):
                               aportaciones=validators.Int(),
                               excedente=validators.Int(),
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))
-    def planilla(self, payment, day, aportaciones, prestamos, excendente):
+    def planilla(self, payment, day, aportaciones, prestamos, excedente):
         
         affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment, orderBy="lastName")
         
@@ -461,14 +462,14 @@ class Affiliate(controllers.Controller):
         
         return dict(afiliado=model.Affiliate.get(afiliado),mes=mes,anio=anio, dia=date.today())
     
-    
     @identity.require(identity.not_anonymous())
     @expose('json')
-    @validate(validators=dict(amount=validators.UnicodeString(),
-                              loan=validators.Int(),free=validators.Bool(),
+    @validate(validators=dict(afiliado=validators.Int(),
+                              amount=validators.UnicodeString(),
+                              loan=validators.Int(),
                               cuenta=validators.Int(),
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))
-    def devolucionPlanilla(self, afiliado, cuenta, day):
+    def devolucionPlanilla(self, afiliado, cuenta, day, amount):
         
         affiliate = model.Affiliate.get(afiliado)
         cuenta = model.Account.get(cuenta)
@@ -478,8 +479,8 @@ class Affiliate(controllers.Controller):
         deduccion['account'] = cuenta
         deduccion['month'] = day.month
         deduccion['year'] = day.year
-        deduccion['affiliate'] = loan.affiliate
-        deduccion['amount'] = amount
+        deduccion['affiliate'] = affiliate
+        deduccion['amount'] = Decimal(amount)
         model.Deduced(**deduccion)
         
         log = dict()

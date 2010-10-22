@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, 
 # Boston, MA  02110-1301  USA
 
-from turbogears import controllers, flash, redirect, identity, url
+from turbogears import controllers, flash, redirect, identity
 from turbogears import expose, validate, validators
 from turboaffiliate import model
 from decimal import Decimal

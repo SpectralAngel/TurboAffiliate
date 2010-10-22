@@ -20,7 +20,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, redirect, identity, url
+from turbogears import controllers, redirect, identity
 from turbogears import expose, validate, validators
 from turboaffiliate import model
 from decimal import Decimal
@@ -99,7 +99,7 @@ class Extra(controllers.Controller):
     def pagarPlanilla(self, extra, day):
     
         extra = model.Extra.get(extra)
-        afiliado = extra.affiliate
+        pago = extra.amount
         extra.act(day=day)
         
-        return dict(pago=loan.affiliate.get_monthly())
+        return dict(pago=pago)

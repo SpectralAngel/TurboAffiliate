@@ -20,7 +20,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-import copy
 from turbogears.database import PackageHub
 from sqlobject import (SQLObject, UnicodeCol, StringCol, DateCol, CurrencyCol,
                        MultipleJoin, ForeignKey, IntCol, DecimalCol, BoolCol,
@@ -28,8 +27,8 @@ from sqlobject import (SQLObject, UnicodeCol, StringCol, DateCol, CurrencyCol,
                        SQLObjectNotFound, BigIntCol)
 from decimal import Decimal
 from datetime import date, datetime
-from turboaffiliate import wording
-import math
+import wording
+import math, copy
 
 from turbogears import identity
 
@@ -301,6 +300,11 @@ class Affiliate(SQLObject):
         try:
             cuota = CuotaTable.selectBy(affiliate=self, year=year).getOne()
         except SQLObjectNotFound:
+            
+            # Esto evita crear un año de aportaciones incorrecto
+            if year > self.joined.year:
+                return None
+            
             kw = dict()
             kw['affiliate'] = self
             kw['year'] = year
@@ -355,11 +359,13 @@ class Affiliate(SQLObject):
     def get_month(self, year, month):
         
         table = self.obtenerAportaciones(year)
-        return getattr(table, "month%s" % month)
-    
-    def link(self, year, month):
         
-        return "/affiliate/posteo/?how=%s&year=%s&month=%s&code=%s" % (self.payment, year, month, self.id)
+        # en caso que el afiliado sea de afiliación más reciente que el año
+        # solicitado
+        if table == None:
+            return False
+        
+        return getattr(table, "month%s" % month)
     
     def get_age(self):
         
@@ -413,7 +419,7 @@ class CuotaTable(SQLObject):
         
         inicio, fin = self.periodo()
         for n in range(inicio, fin):
-            if not getattr(self, 'mes%s' % n):
+            if not getattr(self, 'month{0}'.format(n)):
                 return False
         
         return True
@@ -424,7 +430,7 @@ class CuotaTable(SQLObject):
         
         inicio, fin = self.periodo()
         for n in range(inicio, fin):
-            if getattr(self, 'mes%s' % n):
+            if getattr(self, 'month{0}'.format(n)):
                 return False
         
         return True
@@ -435,13 +441,17 @@ class CuotaTable(SQLObject):
         os = Obligation.selectBy(year=self.year,month=mes)
         
         if self.affiliate.payment == "INPREMA" and not self.affiliate.jubilated is None:
+        
             if self.affiliate.jubilated.year < self.year:
                 total = sum(o.inprema for o in os)
+            
             elif self.affiliate.jubilated.year == self.year:
                 total += sum(o.amount for o in os if mes < self.affiliate.jubilated.month)
                 total += sum(o.inprema for o in os if mes >= self.affiliate.jubilated.month)
+            
             elif self.affiliate.jubilated.year > self.year:
                 total = sum(o.amount for o in os)
+        
         else:
             total = sum(o.amount for o in os)
         
@@ -458,7 +468,7 @@ class CuotaTable(SQLObject):
         if not mes in periodo:
             return Zero
         
-        if not getattr(self, 'month%s' % mes):
+        if not getattr(self, 'month{0}'.format(mes)):
             return Zero
         
         return self.cantidad(mes)
@@ -474,7 +484,7 @@ class CuotaTable(SQLObject):
         if not mes in periodo:
             return Zero
         
-        if getattr(self, 'month%s' % mes):
+        if getattr(self, 'month{0}'.format(mes)):
             return Zero
         
         return self.cantidad(mes)
@@ -506,23 +516,23 @@ class CuotaTable(SQLObject):
         
         inicio, fin = self.periodo()
         for n in range(inicio, fin - 1):
-            if not getattr(self, 'month%s' % n):
+            if not getattr(self, 'month{0}'.format(n)):
                 return n
         
         return Zero
     
     def edit_line(self, month):
-        text = ' name="month%s"' % month
-        if getattr(self, "month%s" % month):
+        text = ' name="month{0}"'.format(month)
+        if getattr(self, 'month{0}'.format(month)):
             return text + ' checked'
         else:
             return text + ' '
     
     def pay_month(self, month):
-        setattr(self, "month%s" % month, True)
+        setattr(self, 'month{0}'.format(month), True)
     
     def remove_month(self, month):
-        setattr(self, "month%s" % month, False)
+        setattr(self, 'month{0}'.format(month), False)
     
     def all(self):
         
@@ -1202,6 +1212,7 @@ class Inscripcion(SQLObject):
     """:class:`Afiliado` a quien se entrega"""
     asamblea = ForeignKey('Asamblea')
     departamento = ForeignKey('Departamento')
+    viatico = ForeignKey('Viatico')
     cuenta = BigIntCol()
     enviado = BoolCol(default=False)
     envio = DateCol(default=date.today)

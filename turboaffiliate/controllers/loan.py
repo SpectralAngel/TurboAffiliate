@@ -365,7 +365,6 @@ class Loan(controllers.Controller):
         adeudados = [loan for loan in model.Loan.select(AND(model.Loan.q.startDate>=first,
                                                             model.Loan.q.startDate<=last))]
         
-        query = "payed_loan.start_date >= '%s' and payed_loan.start_date <= '%s'" % (first, last)
         pagados = [loan for loan in model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=first,
                                                                model.PayedLoan.q.startDate<=last))]
         

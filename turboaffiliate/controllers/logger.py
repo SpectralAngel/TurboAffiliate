@@ -23,7 +23,7 @@
 from turbogears import controllers, identity
 from turbogears import expose, validate, validators
 from turboaffiliate import model
-from sqlobject.sqlbuilder import OR, AND
+from sqlobject.sqlbuilder import AND
 
 class Logger(controllers.Controller):
 	

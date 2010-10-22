@@ -7,41 +7,35 @@
   <title>TurboAffiliate &bull; Asambleas</title>
 </head>
 <body>
-  <form action="${tg.url('/asamblea/agregar')}">
+  <form action="${tg.url('agregar')}">
     <fieldset>
-      <legend>Registrar Asamblea</legend>
+      <legend>Registrar Banco</legend>
       <ol>
         <li>
           <label for="nombre">Nombre:</label>
           <input name="nombre" />
         </li>
         <li>
-          <label for="numero">N&uacute;mero:</label>
-          <input name="numero" />
+          <label for="id">C&oacute;digo:</label>
+          <input name="id" />
         </li>
-        <li>
-          <label for="departamento">N&uacute;mero:</label>
-          <select name="numero">
-            <option py:for="d in departamentos" value="${d.id}">
-          </select>
-        </li>
-        <li><input type="submit" value="Registrar" /></li>
+        <li><input type="submit" value="Agregar" /></li>
       </ol>
     </fieldset>
   </form>
-  <form action="${tg.url('/asamblea/asamblea')}">
+  <form action="${tg.url('/asamblea/banco')}">
     <fieldset>
-      <legend>Inscribir Afiliados a una Asamblea</legend>
+      <legend>Mostrar un Banco</legend>
       <ol>
         <li>
           <label>Asamblea:</label>
-          <select name="asamblea">
-            <option value="${a.id}" py:for="a in asambleas">
-              ${a.numero} - ${a.nombre}
+          <select name="banco">
+            <option value="${b.id}" py:for="b in bancos">
+              ${b.id} - ${b.nombre}
             </option>
           </select>
         </li>
-        <li><input type="submit" value="Mostrar Formulario" /></li>
+        <li><input type="submit" value="Mostrar" /></li>
       </ol>
     </fieldset>
   </form>

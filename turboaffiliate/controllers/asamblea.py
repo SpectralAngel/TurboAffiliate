@@ -50,11 +50,14 @@ class Viatico(controllers.Controller):
                     asambleas=model.Asamblea.select())
     
     @identity.require(identity.not_anonymous())
-    @expose()
+    @expose(template='turboaffiliate.templates.affiliate.asamblea.viatico.asamblea')
     @validate(validators=dict(asamblea=validators.Int()))
-    def default(self, viatico):
+    def asamblea(self, asamblea):
         
-        return dict(viatico=model.Viatico.get(viatico))
+        asamblea = model.Asamblea.get(asamblea)
+        
+        return dict(viaticos=model.Viatico.selectBy(asamblea=asamblea),
+                    asamblea=asamblea)
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -81,8 +84,19 @@ class Asamblea(controllers.Controller):
     
     banco = Banco()
     viatico = Viatico()
+    
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.asamblea.index')
+    def index(self):
+        
+        return dict(asambleas=model.Asamblea.select())
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(asamblea=validators.Int()))
+    def asamblea(self, asamblea):
+        
+        raise redirect('/asamblea'.format(asamblea))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.asamblea.asamblea')
@@ -90,14 +104,16 @@ class Asamblea(controllers.Controller):
     def default(self, asamblea):
         
         return dict(departamentos=model.Departamento.select(),
-                    bancos=model.Banco.select(),asamblea=model.Asamblea.get(asamblea))
+                    bancos=model.Banco.select(),
+                    asamblea=model.Asamblea.get(asamblea))
     
     @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(afiliado=validators.Int(),
                               banco=validators.Int(),
                               departamento=validators.Int(),
-                              cuenta=validators.Int(),asamblea=validators.Int()))
+                              cuenta=validators.Int(),
+                              asamblea=validators.Int()))
     def inscribir(self, afiliado, banco, departamento, cuenta, asamblea):
         
         kw = dict()
@@ -106,6 +122,10 @@ class Asamblea(controllers.Controller):
         kw['departamento'] = model.Departamento.get(departamento)
         kw['cuenta'] = cuenta
         kw['asamblea'] = model.Asamblea.get(asamblea)
+        
+        kw['viatico'] = model.Viatico.selectBy(asamblea=kw['asamblea'],
+                            departamento=kw['departamento']).limit(1).getOne()
+        
         model.Inscripcion(**kw)
         
         raise redirect('/asamblea/{0}'.format(asamblea.id))
@@ -127,6 +147,8 @@ class Asamblea(controllers.Controller):
                                             asamblea=asamblea).limit(1).getOne()
             inscripcion.banco = banco
             inscripcion.departamento = departamento
+            inscripcion.viatico = model.Viatico.selectBy(asamblea=asamblea,
+                            departamento=departamento).limit(1).getOne()
             inscripcion.cuenta = cuenta
         
         except:
@@ -136,8 +158,10 @@ class Asamblea(controllers.Controller):
             kw['departamento'] = model.Departamento.get(departamento)
             kw['cuenta'] = cuenta
             kw['asamblea'] = model.Asamblea.get(asamblea)
+            kw['viatico'] = model.Viatico.selectBy(asamblea=kw['asamblea'],
+                            departamento=kw['departamento']).limit(1).getOne()
             model.Inscripcion(**kw)
         
         flash('Corregida la inscripcion del afiliado {0}'.format(afiliado.id))
         
-        raise redirect('/asamblea')
+        raise redirect('/asamblea/')

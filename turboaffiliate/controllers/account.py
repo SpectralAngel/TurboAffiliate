@@ -20,7 +20,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, flash, redirect, identity, url
+from turbogears import controllers, flash, redirect, identity
 from turbogears import expose, validate, validators
 from turboaffiliate import model
 
@@ -51,13 +51,13 @@ class Account(controllers.Controller):
     @validate(validators=dict(code=validators.Int(),name=validators.String()))
     def save(self, **kw):
         
+        account = model.Account(**kw)
+        flash(u"La cuenta ha sido grabada")
+        
         log = dict()
         log['user'] = identity.current.user
         log['action'] = u"Agregada cuenta {0} {1}".format(account.id, account.name)
         model.Logger(**log)
-        
-        account = model.Account(**kw)
-        flash(u"La cuenta ha sido grabada")
         raise redirect('/account/{0}'.format(account.id))
     
     @identity.require(identity.not_anonymous())

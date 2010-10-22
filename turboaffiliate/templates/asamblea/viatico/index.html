@@ -7,41 +7,40 @@
   <title>TurboAffiliate &bull; Asambleas</title>
 </head>
 <body>
-  <form action="${tg.url('/asamblea/agregar')}">
+  <form action="${tg.url('agregar')}">
     <fieldset>
-      <legend>Registrar Asamblea</legend>
-      <ol>
-        <li>
-          <label for="nombre">Nombre:</label>
-          <input name="nombre" />
-        </li>
-        <li>
-          <label for="numero">N&uacute;mero:</label>
-          <input name="numero" />
-        </li>
-        <li>
-          <label for="departamento">N&uacute;mero:</label>
-          <select name="numero">
-            <option py:for="d in departamentos" value="${d.id}">
-          </select>
-        </li>
-        <li><input type="submit" value="Registrar" /></li>
-      </ol>
-    </fieldset>
-  </form>
-  <form action="${tg.url('/asamblea/asamblea')}">
-    <fieldset>
-      <legend>Inscribir Afiliados a una Asamblea</legend>
+      <legend>Registrar Viaticos a un Departamento</legend>
       <ol>
         <li>
           <label>Asamblea:</label>
           <select name="asamblea">
-            <option value="${a.id}" py:for="a in asambleas">
-              ${a.numero} - ${a.nombre}
+            <option value="${a.id}" py:for="a in asamblea">
+              ${a.id} - ${a.nombre}
             </option>
           </select>
         </li>
-        <li><input type="submit" value="Mostrar Formulario" /></li>
+        <li>
+          <label>Departamento:</label>
+          <select name="departamento">
+            <option value="${d.id}" py:for="d in departamentos">${d.nombre}</option>
+          </select>
+        </li>
+        <li><input type="submit" value="Agregar" /></li>
+      </ol>
+    </fieldset>
+  </form>
+  <form action="${tg.url('asamblea')}">
+    <fieldset>
+      <legend>Mostrar los Vi&aacute;ticos para una asamblea</legend>
+      <ol>
+        <li>
+          <label>Asamblea:</label>
+          <select name="asamblea">
+            <option value="${a.id}" py:for="a in asamblea">
+              ${a.id} - ${a.nombre}
+            </option>
+          </select>
+        </li>
       </ol>
     </fieldset>
   </form>
