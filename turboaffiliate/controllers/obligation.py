@@ -68,7 +68,7 @@ class Obligation(controllers.Controller):
         
         obligation = model.Obligation(account=account, **kw)
         flash(u'La obligación se ha añadido')
-        raise redirect('/obligation/%s'.format(obligation.id))
+        raise redirect('/obligation/{0}'.format(obligation.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.obligation.obligations")

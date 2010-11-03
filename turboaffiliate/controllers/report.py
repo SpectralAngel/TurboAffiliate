@@ -234,6 +234,7 @@ class Report(controllers.Controller):
     def deducedPayment(self, account, month, year, payment):
         
         deduced = model.Deduced.selectBy(account=account, year=year, month=month)
+        deduced = [d for d in deduced if d.affiliate.payment == payment]
         total = sum(d.amount for d in deduced if d.affiliate.payment == payment)
         return dict(deduced=deduced, account=account, month=months[month], year=year, total=total, payment=payment)
     
@@ -251,7 +252,7 @@ class Report(controllers.Controller):
                 
                 affiliates.append(table.affiliate)
         
-        return dict(affiliates=affiliates, show="Cotizan por %s y pagaron un mes en %s" % (payment, year), count=len(affiliates))
+        return dict(affiliates=affiliates, show="Cotizan por {0} y pagaron un mes en {1}".format(payment, year), count=len(affiliates))
     
     @expose(template="turboaffiliate.templates.affiliate.show")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
@@ -280,5 +281,6 @@ class Report(controllers.Controller):
         cuotas = model.CuotaTable.selectBy(year=year)
         
         affiliates = [c.affiliate for c in cuotas if c.affiliate.active]
-        show = "que Cotizaron en %s de %s" % (month, year)
+        show = "que Cotizaron en {0} de {1}".format(month, year)
         return dict(affiliates=affiliates,show=show,count=len(affiliates))
+

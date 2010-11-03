@@ -21,7 +21,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 from turbogears import controllers, expose
-from turbogears import identity, redirect, url
+from turbogears import identity, redirect
 # from turbogears.toolbox.catwalk import CatWalk
 from cherrypy import request, response
 # from turboaffiliate import model
@@ -60,7 +60,7 @@ class Root(controllers.RootController):
         if not identity.current.anonymous \
             and identity.was_login_attempted() \
             and not identity.get_identity_errors():
-            raise redirect(url(forward_url))
+            raise redirect(forward_url)
         
         forward_url=None
         previous_url= request.path
@@ -73,7 +73,7 @@ class Root(controllers.RootController):
                   "this resource.")
         else:
             msg=_("Please log in.")
-            forward_url= request.headers.get("Referer", url("/"))
+            forward_url= request.headers.get("Referer", "/")
         
         response.status=403
         return dict(message=msg, previous_url=previous_url, logging_in=True,
@@ -83,4 +83,5 @@ class Root(controllers.RootController):
     @expose()
     def logout(self):
         identity.current.logout()
-        raise redirect(url("/"))
+        raise redirect("/")
+

@@ -25,6 +25,7 @@ from turbogears import expose, validate, validators
 from turboaffiliate import model
 from datetime import date
 from decimal import Decimal
+from sqlobject.sqlbuilder import AND
 
 class Pay(controllers.Controller):
 	
@@ -49,15 +50,15 @@ class Pay(controllers.Controller):
 		
 		log = dict()
 		log['user'] = identity.current.user
-		log['action'] = "Eliminar pago del prestamo %s" % loan.id
+		log['action'] = "Eliminar pago del prestamo {0}".format(loan.id)
 		model.Logger(**log)
 		
-		raise redirect('/payed/%s' % loan.id)
+		raise redirect('/payed/{0}'.format(loan.id))
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
 	@validate(validators=dict(amount=validators.Number(),
-							day=validators.DateTimeConverter(format='%Y-%m-%d'),
+							day=validators.DateTimeConverter(format='%d/%m/%Y'),
 							payedLoan=validators.Int()
 							))
 	def new(self, payedLoan, **kw):
@@ -69,11 +70,11 @@ class Pay(controllers.Controller):
 		
 		log = dict()
 		log['user'] = identity.current.user
-		log['action'] = "Agregar pago al prestamo %s" % payedLoan.id
+		log['action'] = "Agregar pago al prestamo {0}".format(payedLoan.id)
 		model.Logger(**log)
 		
 		flash(u'El pago se ha efecutado')
-		raise redirect('/payed/%s' % payedLoan.id)
+		raise redirect('/payed/{0}'.format(payedLoan.id))
 
 class PayedLoan(controllers.Controller):
 	
@@ -89,8 +90,8 @@ class PayedLoan(controllers.Controller):
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.loan.payed.list")
 	@validate(validators=dict(payment=validators.String(),
-							  start=validators.DateTimeConverter(format='%Y-%m-%d'),
-							  end=validators.DateTimeConverter(format='%Y-%m-%d')))
+							  start=validators.DateTimeConverter(format='%d/%m/%Y'),
+							  end=validators.DateTimeConverter(format='%d/%m/%Y')))
 	def payment(self, start, end, payment):
 		
 		loans = model.PayedLoan.select(AND(model.PayedLoan.q.last>=start,
@@ -99,24 +100,22 @@ class PayedLoan(controllers.Controller):
 		loans = [l for l in loans if l.affiliate.payment==payment]
 		
 		return dict(loans=loans, count=len(loans),
-					payment="de %s Periodo del %s al %s" % (payment,
+					payment="de {0} Periodo del {1} al {2}".format(payment,
 							start.strftime('%d de %B de %Y'),
 							end.strftime('%d de %B de %Y')),
 					capital=sum(l.capital for l in loans))
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template="turboaffiliate.templates.loan.payed.list")
-	@validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
-							  end=validators.DateTimeConverter(format='%Y-%m-%d')))
+	@validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
+							  end=validators.DateTimeConverter(format='%d/%m/%Y')))
 	def period(self, start, end):
-		
-		query = "payed_loan.last >= '%s' and payed_loan.last <= '%s'" % (start, end)
 		
 		loans = model.PayedLoan.select(AND(model.PayedLoan.q.last>=start,
                                       model.PayedLoan.q.last<=end))
 		
 		return dict(loans=loans, count=loans.count(),
-					payment="Periodo del %s al %s" % (start.strftime('%d de %B de %Y'),
+					payment="Periodo del {0} al {1}".format(start.strftime('%d de %B de %Y'),
 														end.strftime('%d de %B de %Y')),
 					capital=sum(l.capital for l in loans))
 	
@@ -148,7 +147,7 @@ class PayedLoan(controllers.Controller):
 		
 		loan = model.PayedLoan.get(loan)
 		loan.payment = Decimal(payment)
-		raise redirect('/payed/%s' % loan.id)
+		raise redirect('/payed/{0}'.format(loan.id))
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
@@ -157,7 +156,7 @@ class PayedLoan(controllers.Controller):
 		
 		loan = model.PayedLoan.get(loan)
 		loan.debt = debt
-		raise redirect('/payed/%s' % loan.id)
+		raise redirect('/payed/{0}'.format(loan.id))
 	
 	@identity.require(identity.not_anonymous())
 	@expose()
@@ -166,7 +165,7 @@ class PayedLoan(controllers.Controller):
 		
 		loan = model.PayedLoan.get(loan)
 		loan = loan.to_loan(identity.current.user)
-		raise redirect('/loan/%s' % loan.id)
+		raise redirect('/loan/{0}'.format(loan.id))
 	
 	@identity.require(identity.All(identity.not_anonymous(), identity.has_permission("delete")))
 	@expose()
@@ -176,4 +175,4 @@ class PayedLoan(controllers.Controller):
 		loan = model.PayedLoan.get(loan)
 		affiliate = loan.affiliate
 		loan.remove()
-		raise redirect('/affiliate/%s' % affiliate.id)
+		raise redirect('/affiliate/{0}'.format(affiliate.id))

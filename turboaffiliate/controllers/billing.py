@@ -24,6 +24,7 @@ from turbogears import controllers, identity
 from turbogears import expose, validate, validators
 from turboaffiliate import model
 from datetime import date
+from sqlobject.sqlbuilder import AND
 
 class Billing(controllers.Controller):
 	

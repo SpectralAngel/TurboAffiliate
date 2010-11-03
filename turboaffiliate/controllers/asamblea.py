@@ -152,15 +152,9 @@ class Asamblea(controllers.Controller):
             inscripcion.cuenta = cuenta
         
         except:
-            kw = dict()
-            kw['afiliado'] = model.Affiliate.get(afiliado)
-            kw['banco'] = model.Banco.get(banco)
-            kw['departamento'] = model.Departamento.get(departamento)
-            kw['cuenta'] = cuenta
-            kw['asamblea'] = model.Asamblea.get(asamblea)
-            kw['viatico'] = model.Viatico.selectBy(asamblea=kw['asamblea'],
-                            departamento=kw['departamento']).limit(1).getOne()
-            model.Inscripcion(**kw)
+            
+            flash('El afiliado {0} no se encuentra inscrito'.format(afiliado))
+            raise redirect('/asamblea/')
         
         flash('Corregida la inscripcion del afiliado {0}'.format(afiliado.id))
         

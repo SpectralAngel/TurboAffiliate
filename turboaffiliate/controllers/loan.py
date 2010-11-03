@@ -25,7 +25,7 @@ from turbogears import expose, validate, validators
 from turboaffiliate import model, wording
 from datetime import date
 from decimal import Decimal
-from sqlobject.sqlbuilder import AND, OR
+from sqlobject.sqlbuilder import AND
 
 class Deduction(controllers.Controller):
     
@@ -42,7 +42,7 @@ class Deduction(controllers.Controller):
         
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Deduccion de %s al prestamo %s" % (kw['amount'], kw['loan'].id)
+        log['action'] = "Deduccion de {0} al prestamo {1}".format(kw['amount'], kw['loan'].id)
         model.Logger(**log)
         
         model.Deduction(**kw)
@@ -59,7 +59,7 @@ class Deduction(controllers.Controller):
         
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Eliminada deduccion prestamo %s" % loan.id
+        log['action'] = "Eliminada deduccion prestamo {0}".format(loan.id)
         model.Logger(**log)
         
         raise redirect('/loan/{0}'.format(loan.id))
@@ -97,7 +97,7 @@ class Pay(controllers.Controller):
         
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Pago de %s al prestamo %s" % (amount, loan.id)
+        log['action'] = "Pago de {0} al prestamo {1}".format(amount, loan.id)
         model.Logger(**log)
         
         if loan.pagar(amount, receipt, day, free):
@@ -111,9 +111,7 @@ class Pay(controllers.Controller):
                               end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def resume(self, start, end):
         
-        query = "pay.day >= '%s' and pay.day <= '%s'" % (start, end)
-        
-        pays = model.Pay.select(query)
+        pays = model.Pay.select(AND(model.Pay.q.day>=start,model.Pay.day<=end))
         count = pays.count()
         capital = sum(pay.capital for pay in pays)
         interest = sum(pay.interest for pay in pays)
@@ -362,11 +360,9 @@ class Loan(controllers.Controller):
     def cartera(self, first, last):
         
         loans = list()
-        adeudados = [loan for loan in model.Loan.select(AND(model.Loan.q.startDate>=first,
-                                                            model.Loan.q.startDate<=last))]
+        adeudados = model.Loan.select(AND(model.Loan.q.startDate>=first, model.Loan.q.startDate<=last))
         
-        pagados = [loan for loan in model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=first,
-                                                               model.PayedLoan.q.startDate<=last))]
+        pagados = model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=first,model.PayedLoan.q.startDate<=last))
         
         for n in range(first.day, last.day + 1):
             loans.extend(loan for loan in adeudados if loan.startDate.day == n)
@@ -393,7 +389,7 @@ class Loan(controllers.Controller):
         
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Cambio de cuota de prestamo %s a %s" % (loan.id, payment)
+        log['action'] = "Cambio de cuota de prestamo {0} a {1}".format(loan.id, payment)
         model.Logger(**log)
         
         raise redirect('/loan/{0}'.format(loan.id))
@@ -502,7 +498,7 @@ class Loan(controllers.Controller):
         loan = model.Loan.get(loan)
         loan.offset += 1
         
-        raise redirect('/loan/%s' % loan.id)
+        raise redirect('/loan/{0}'.format(loan.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -512,7 +508,7 @@ class Loan(controllers.Controller):
         loan = model.Loan.get(loan)
         loan.offset -= 1
         
-        raise redirect('/loan/%s' % loan.id)
+        raise redirect('/loan/{0}'.format(loan.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.bypay')
@@ -528,17 +524,15 @@ class Loan(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.resume')
-    @validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
-                              end=validators.DateTimeConverter(format='%Y-%m-%d')))
+    @validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def resume(self, start, end):
         
-        pays = model.Pay.select(AND(model.Pay.q.day>=start,model.Pay.q.day<=end))
-        capital = sum(pay.capital for pay in pays)
-        interest = sum(pay.interest for pay in pays)
-        
-        pays = model.OldPay.select(AND(model.OldPay.q.day>=start,model.OldPay.q.day<=end))
-        capital += sum(pay.capital for pay in pays)
-        interest += sum(pay.interest for pay in pays)
+        pagos = list()
+        pagos.extend(model.Pay.select(AND(model.Pay.q.day>=start,model.Pay.q.day<=end)))
+        pagos.extend(model.OldPay.select(AND(model.OldPay.q.day>=start,model.OldPay.q.day<=end)))
+        capital = sum(pay.capital for pay in pagos)
+        interest = sum(pay.interest for pay in pagos)
         
         return dict(capital=capital, interest=interest, start=start, end=end)
     
