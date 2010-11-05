@@ -25,154 +25,153 @@ from turbogears import expose, validate, validators
 from turboaffiliate import model
 from datetime import date
 from decimal import Decimal
-from sqlobject.sqlbuilder import AND
 
 class Pay(controllers.Controller):
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.loan.payed.pay")
-	@validate(validators=dict(code=validators.Int()))
-	def add(self, code):
-		
-		return dict(loan=model.PayedLoan.get(code))
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(code=validators.Int()))
-	def remove(self, code):
-		
-		pay = model.OldPay.get(code)
-		loan = pay.payedLoan
-		capital = pay.capital
-		pay.destroySelf()
-		loan = loan.to_loan(identity.current.user)
-		loan.debt += capital
-		
-		log = dict()
-		log['user'] = identity.current.user
-		log['action'] = "Eliminar pago del prestamo {0}".format(loan.id)
-		model.Logger(**log)
-		
-		raise redirect('/payed/{0}'.format(loan.id))
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(amount=validators.Number(),
-							day=validators.DateTimeConverter(format='%d/%m/%Y'),
-							payedLoan=validators.Int()
-							))
-	def new(self, payedLoan, **kw):
-		
-		payedLoan = model.PayedLoan.get(payedLoan)
-		
-		model.OldPay(payedLoan=payedLoan, **kw)
-		#loan.pay2(amount, day, receipt)
-		
-		log = dict()
-		log['user'] = identity.current.user
-		log['action'] = "Agregar pago al prestamo {0}".format(payedLoan.id)
-		model.Logger(**log)
-		
-		flash(u'El pago se ha efecutado')
-		raise redirect('/payed/{0}'.format(payedLoan.id))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.loan.payed.pay")
+    @validate(validators=dict(code=validators.Int()))
+    def add(self, code):
+        
+        return dict(loan=model.PayedLoan.get(code))
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(code=validators.Int()))
+    def remove(self, code):
+        
+        pay = model.OldPay.get(code)
+        loan = pay.payedLoan
+        capital = pay.capital
+        pay.destroySelf()
+        loan = loan.to_loan(identity.current.user)
+        loan.debt += capital
+        
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Eliminar pago del prestamo {0}".format(loan.id)
+        model.Logger(**log)
+        
+        raise redirect('/payed/{0}'.format(loan.id))
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(amount=validators.Number(),
+                            day=validators.DateTimeConverter(format='%d/%m/%Y'),
+                            payedLoan=validators.Int()
+                            ))
+    def new(self, payedLoan, **kw):
+        
+        payedLoan = model.PayedLoan.get(payedLoan)
+        
+        model.OldPay(payedLoan=payedLoan, **kw)
+        #loan.pay2(amount, day, receipt)
+        
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Agregar pago al prestamo {0}".format(payedLoan.id)
+        model.Logger(**log)
+        
+        flash(u'El pago se ha efecutado')
+        raise redirect('/payed/{0}'.format(payedLoan.id))
 
 class PayedLoan(controllers.Controller):
-	
-	pay = Pay()
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.loan.payed.payed")
-	@validate(validators=dict(loan=validators.Int()))
-	def default(self, loan):
-		
-		return dict(loan=model.PayedLoan.get(loan), day=date.today())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.loan.payed.list")
-	@validate(validators=dict(payment=validators.String(),
-							  start=validators.DateTimeConverter(format='%d/%m/%Y'),
-							  end=validators.DateTimeConverter(format='%d/%m/%Y')))
-	def payment(self, start, end, payment):
-		
-		loans = model.PayedLoan.select(AND(model.PayedLoan.q.last>=start,
+    
+    pay = Pay()
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.loan.payed.payed")
+    @validate(validators=dict(loan=validators.Int()))
+    def default(self, loan):
+        
+        return dict(loan=model.PayedLoan.get(loan), day=date.today())
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.loan.payed.list")
+    @validate(validators=dict(payment=validators.String(),
+                              start=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              end=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def payment(self, start, end, payment):
+        
+        loans = model.PayedLoan.select(AND(model.PayedLoan.q.last>=start,
                                       model.PayedLoan.q.last<=end))
-		
-		loans = [l for l in loans if l.affiliate.payment==payment]
-		
-		return dict(loans=loans, count=len(loans),
-					payment="de {0} Periodo del {1} al {2}".format(payment,
-							start.strftime('%d de %B de %Y'),
-							end.strftime('%d de %B de %Y')),
-					capital=sum(l.capital for l in loans))
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.loan.payed.list")
-	@validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
-							  end=validators.DateTimeConverter(format='%d/%m/%Y')))
-	def period(self, start, end):
-		
-		loans = model.PayedLoan.select(AND(model.PayedLoan.q.last>=start,
+        
+        loans = [l for l in loans if l.affiliate.payment==payment]
+        
+        return dict(loans=loans, count=len(loans),
+                    payment="de %s Periodo del {0} al {1}".format(payment,
+                            start.strftime('%d de %B de %Y'),
+                            end.strftime('%d de %B de %Y')),
+                    capital=sum(l.capital for l in loans))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.loan.payed.list")
+    @validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              end=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def period(self, start, end):
+        
+        loans = model.PayedLoan.select(AND(model.PayedLoan.q.last>=start,
                                       model.PayedLoan.q.last<=end))
-		
-		return dict(loans=loans, count=loans.count(),
-					payment="Periodo del {0} al {1}".format(start.strftime('%d de %B de %Y'),
-														end.strftime('%d de %B de %Y')),
-					capital=sum(l.capital for l in loans))
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.loan.payed.pagare')
-	@validate(validators=dict(loan=validators.Int()))
-	def pagare(self, loan):
-		
-		return dict(loan=model.PayedLoan.get(loan))
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.loan.payed.receipt')
-	@validate(validators=dict(loan=validators.Int()))
-	def recibo(self, loan):
-		
-		return dict(loan=model.PayedLoan.get(loan))
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.loan.payed.view')
-	@validate(validators=dict(loan=validators.Int()))
-	def view(self, loan):
-		
-		return dict(loan=model.PayedLoan.get(loan))
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(loan=validators.Int(),payment=validators.String()))
-	def modify(self, loan, payment):
-		
-		loan = model.PayedLoan.get(loan)
-		loan.payment = Decimal(payment)
-		raise redirect('/payed/{0}'.format(loan.id))
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(loan=validators.Int(),debt=validators.Number()))
-	def debt(self, loan, debt):
-		
-		loan = model.PayedLoan.get(loan)
-		loan.debt = debt
-		raise redirect('/payed/{0}'.format(loan.id))
-	
-	@identity.require(identity.not_anonymous())
-	@expose()
-	@validate(validators=dict(loan=validators.Int()))
-	def toLoan(self, loan):
-		
-		loan = model.PayedLoan.get(loan)
-		loan = loan.to_loan(identity.current.user)
-		raise redirect('/loan/{0}'.format(loan.id))
-	
-	@identity.require(identity.All(identity.not_anonymous(), identity.has_permission("delete")))
-	@expose()
-	@validate(validators=dict(loan=validators.Int()))
-	def remove(self, loan):
-		
-		loan = model.PayedLoan.get(loan)
-		affiliate = loan.affiliate
-		loan.remove()
-		raise redirect('/affiliate/{0}'.format(affiliate.id))
+        
+        return dict(loans=loans, count=loans.count(),
+                    payment="Periodo del {0} al {1}".format(start.strftime('%d de %B de %Y'),
+                                                        end.strftime('%d de %B de %Y')),
+                    capital=sum(l.capital for l in loans))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.loan.payed.pagare')
+    @validate(validators=dict(loan=validators.Int()))
+    def pagare(self, loan):
+        
+        return dict(loan=model.PayedLoan.get(loan))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.loan.payed.receipt')
+    @validate(validators=dict(loan=validators.Int()))
+    def recibo(self, loan):
+        
+        return dict(loan=model.PayedLoan.get(loan))
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.loan.payed.view')
+    @validate(validators=dict(loan=validators.Int()))
+    def view(self, loan):
+        
+        return dict(loan=model.PayedLoan.get(loan))
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(loan=validators.Int(),payment=validators.String()))
+    def modify(self, loan, payment):
+        
+        loan = model.PayedLoan.get(loan)
+        loan.payment = Decimal(payment)
+        raise redirect('/payed/{0}'.format(loan.id))
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(loan=validators.Int(),debt=validators.Number()))
+    def debt(self, loan, debt):
+        
+        loan = model.PayedLoan.get(loan)
+        loan.debt = debt
+        raise redirect('/payed/{0}'.format(loan.id))
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(loan=validators.Int()))
+    def toLoan(self, loan):
+        
+        loan = model.PayedLoan.get(loan)
+        loan = loan.to_loan(identity.current.user)
+        raise redirect('/loan/{0}'.format(loan.id))
+    
+    @identity.require(identity.All(identity.not_anonymous(), identity.has_permission("delete")))
+    @expose()
+    @validate(validators=dict(loan=validators.Int()))
+    def remove(self, loan):
+        
+        loan = model.PayedLoan.get(loan)
+        affiliate = loan.affiliate
+        loan.remove()
+        raise redirect('/affiliate/{0}'.format(affiliate.id))

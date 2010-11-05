@@ -7,7 +7,7 @@
   <title>TurboAffiliate &bull; Asambleas</title>
 </head>
 <body>
-  <form action="${tg.url('/asamblea/agregar')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/agregar')}">
     <fieldset>
       <legend>Registrar Asamblea</legend>
       <ol>
@@ -20,16 +20,18 @@
           <input name="numero" />
         </li>
         <li>
-          <label for="departamento">N&uacute;mero:</label>
-          <select name="numero">
+          <label for="departamento">Departamento:</label>
+          <select name="departamento">
             <option py:for="d in departamentos" value="${d.id}">
+              ${d.nombre}
+            </option>
           </select>
         </li>
         <li><input type="submit" value="Registrar" /></li>
       </ol>
     </fieldset>
   </form>
-  <form action="${tg.url('/asamblea/asamblea')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/inscripcion')}">
     <fieldset>
       <legend>Inscribir Afiliados a una Asamblea</legend>
       <ol>

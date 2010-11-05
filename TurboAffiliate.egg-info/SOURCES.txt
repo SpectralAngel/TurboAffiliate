@@ -23,6 +23,7 @@ turboaffiliate/config/log.cfg
 turboaffiliate/controllers/__init__.py
 turboaffiliate/controllers/account.py
 turboaffiliate/controllers/affiliate.py
+turboaffiliate/controllers/asamblea.py
 turboaffiliate/controllers/billing.py
 turboaffiliate/controllers/cuota.py
 turboaffiliate/controllers/deduced.py
@@ -129,6 +130,12 @@ turboaffiliate/templates/affiliate/deduced/deduced.html
 turboaffiliate/templates/affiliate/deduced/mostrar.html
 turboaffiliate/templates/affiliate/extra/__init__.py
 turboaffiliate/templates/affiliate/extra/index.html
+turboaffiliate/templates/asamblea/__init__.py
+turboaffiliate/templates/asamblea/index.html
+turboaffiliate/templates/asamblea/banco/__init__.py
+turboaffiliate/templates/asamblea/banco/index.html
+turboaffiliate/templates/asamblea/viatico/__init__.py
+turboaffiliate/templates/asamblea/viatico/index.html
 turboaffiliate/templates/elecciones/__init__.py
 turboaffiliate/templates/elecciones/acta.html
 turboaffiliate/templates/elecciones/departamento.kid

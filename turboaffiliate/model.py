@@ -1185,7 +1185,6 @@ class Asamblea(SQLObject):
     numero = IntCol()
     nombre = UnicodeCol(length=100)
     departamento = ForeignKey('Departamento')
-    municipio = ForeignKey('Municipio')
 
 class Banco(SQLObject):
     

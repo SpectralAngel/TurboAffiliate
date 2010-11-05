@@ -24,6 +24,8 @@ from turbogears import controllers, flash, redirect, identity
 from turbogears import expose, validate, validators
 from turboaffiliate import model
 from decimal import Decimal
+from sqlobject.sqlbuilder import AND
+
 
 class Reintegro(controllers.Controller):
     
@@ -54,7 +56,7 @@ class Reintegro(controllers.Controller):
         
         flash("Se agrego el reintegro al afiliado")
         
-        raise redirect('/reintegro/%s' % reintegro.affiliate.id)
+        raise redirect('/reintegro/{0}'.format(reintegro.affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.reintegro.afiliado')
@@ -80,7 +82,7 @@ class Reintegro(controllers.Controller):
         
         reintegro.destroySelf()
         
-        raise redirect('/reintegro/%s' % afiliado.id)
+        raise redirect('/reintegro/{0}'.format(afiliado.id))
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -98,7 +100,7 @@ class Reintegro(controllers.Controller):
         
         flash("Se ha pagado el Reintegro")
         
-        raise redirect('/reintegro/%s' % reintegro.affiliate.id)
+        raise redirect('/reintegro/{0}'.format(reintegro.affiliate.id))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.reintegro.pagados')
@@ -108,9 +110,9 @@ class Reintegro(controllers.Controller):
         
         """Muestra los reintegros pagados durante un periodo"""
         
-        query = "reintegro.cancelacion >= '%s' and reintegro.cancelacion <= '%s' and pagado = true" % (inicio, fin)
-        
-        return dict(reintegros=model.Reintegro.select(query))
+        return dict(reintegros=model.Reintegro.select(AND(model.Reintegro.q.cancelacion>=inicio,
+                                                          model.Reintegro.q.cancelacion>=fin,
+                                                          model.Reintegro.q.pagado==True)))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.reintegro.emision')
@@ -120,9 +122,8 @@ class Reintegro(controllers.Controller):
         
         """Muestra los reintegros emitidos en un periodo"""
         
-        query = "reintegro.emision >= '%s' and reintegro.emision <= '%s'" % (inicio, fin)
-        
-        return dict(reintegros=model.Reintegro.select(query))
+        return dict(reintegros=model.Reintegro.select(AND(model.Reintegro.q.emision>=inicio,
+                                                          model.Reintegro.q.emision<=fin)))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.reintegro.cobros')

@@ -86,13 +86,13 @@ class Cuota(controllers.Controller):
         table = model.CuotaTable.get(id)
         for n in range(1, 13):
             try:
-                setattr(table, "month%s" % n, kw['month%s' % n])
+                setattr(table, "month{0}".format(n), kw["month{0}".format(n)])
             except KeyError:
-                setattr(table, "month%s" % n, False)
+                setattr(table, "month{0}".format(n), False)
         
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = u"Cambio en aportaciones anio %s afiliado %s" % (table.year, table.affiliate.id)
+        log['action'] = u"Cambio en aportaciones anio {0} afiliado {1}".format(table.year, table.affiliate.id)
         model.Logger(**log)
         
         raise redirect('/affiliate/cuota/{0}'.format(table.affiliate.id))

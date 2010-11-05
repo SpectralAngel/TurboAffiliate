@@ -27,7 +27,7 @@ from turboaffiliate import model
 class Banco(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.affiliate.asamblea.banco.index')
+    @expose(template='turboaffiliate.templates.asamblea.banco.index')
     def index(self):
         
         return dict(bancos=model.Banco.select())
@@ -43,14 +43,14 @@ class Banco(controllers.Controller):
 class Viatico(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.affiliate.asamblea.viatico.index')
+    @expose(template='turboaffiliate.templates.asamblea.viatico.index')
     def index(self):
         
         return dict(departamentos=model.Departamento.select(),
                     asambleas=model.Asamblea.select())
     
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.affiliate.asamblea.viatico.asamblea')
+    @expose(template='turboaffiliate.templates.asamblea.viatico.asamblea')
     @validate(validators=dict(asamblea=validators.Int()))
     def asamblea(self, asamblea):
         
@@ -86,20 +86,22 @@ class Asamblea(controllers.Controller):
     viatico = Viatico()
     
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.affiliate.asamblea.index')
+    @expose(template='turboaffiliate.templates.asamblea.index')
     def index(self):
         
-        return dict(asambleas=model.Asamblea.select())
+        return dict(asambleas=model.Asamblea.select(), departamentos=model.Departamento.select())
     
     @identity.require(identity.not_anonymous())
-    @expose()
+    @expose('turboaffiliate.templates.asamblea.inscripcion')
     @validate(validators=dict(asamblea=validators.Int()))
-    def asamblea(self, asamblea):
+    def inscripcion(self, asamblea):
         
-        raise redirect('/asamblea'.format(asamblea))
+        return dict(asamblea=model.Asamblea.get(asamblea),
+                    bancos=model.Banco.select(),
+                    departamentos=model.Departamento.select())
     
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.affiliate.asamblea.asamblea')
+    @expose(template='turboaffiliate.templates.asamblea.asamblea')
     @validate(validators=dict(asamblea=validators.Int()))
     def default(self, asamblea):
         
@@ -127,6 +129,40 @@ class Asamblea(controllers.Controller):
                             departamento=kw['departamento']).limit(1).getOne()
         
         model.Inscripcion(**kw)
+        
+        raise redirect('/asamblea/{0}'.format(asamblea.id))
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(identidad=validators.UnicodeString(),
+                              banco=validators.Int(),
+                              departamento=validators.Int(),
+                              cuenta=validators.Int(),
+                              asamblea=validators.Int()))
+    def identidad(self, identidad, banco, departamento, cuenta, asamblea):
+        
+        kw = dict()
+        kw['afiliado'] = model.Affiliate.selectBy(cardID=identidad).limit(1).getOne()
+        kw['banco'] = model.Banco.get(banco)
+        kw['departamento'] = model.Departamento.get(departamento)
+        kw['cuenta'] = cuenta
+        kw['asamblea'] = model.Asamblea.get(asamblea)
+        
+        kw['viatico'] = model.Viatico.selectBy(asamblea=kw['asamblea'],
+                            departamento=kw['departamento']).limit(1).getOne()
+        
+        model.Inscripcion(**kw)
+        
+        raise redirect('/asamblea/{0}'.format(asamblea.id))
+    
+    @expose()
+    @validate(validators=dict(departamento=validators.Int(), nombre=validators.UnicodeString(),
+                              numero=validators.Int()))
+    def agregar(self, departamento, **kw):
+        
+        kw['departamento'] = model.Departamento.get(departamento)
+        
+        asamblea = model.Asamblea(**kw)
         
         raise redirect('/asamblea/{0}'.format(asamblea.id))
     

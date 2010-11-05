@@ -289,9 +289,16 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(joined=validators.Int(),age=validators.Int()))
     def age(self, joined, age):
         
+        """Muestra los afiliados por edad hasta un determinado año de afiliacion
+        
+        :param joined:  El año máximo de afiliación
+        :param age:     La edad de los afiliados a buscar
+        """
+        
         day = date.today().year - age
-        affiliates = model.Affiliate.select(model.Affiliate.birthday>=day)
-        affiliates = [affiliate for affiliate in affiliates if affiliate.joined.year <= joined]
+        afiliacion = date(joined + 1, 1, 1)
+        affiliates = model.Affiliate.select(AND(model.Affiliate.q.birthday>=day,
+                                                model.Affiliate.q.joined<=afiliacion))
         
         return dict(affiliates=affiliates)
     
@@ -302,7 +309,8 @@ class Affiliate(controllers.Controller):
                               end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def byDate(self, start, end):
         
-        affiliates = model.Affiliate.select(AND(model.Affiliate.q.joined>=start,model.Affiliate.q.joined<=end))
+        affiliates = model.Affiliate.select(AND(model.Affiliate.q.joined>=start,
+                                                model.Affiliate.q.joined<=end))
         return dict(affiliates=affiliates, start=start, end=end, show="Fecha de Afiliaci&oacute;n", count=affiliates.count())
     
     @error_handler(error)
@@ -466,7 +474,6 @@ class Affiliate(controllers.Controller):
     @expose('json')
     @validate(validators=dict(afiliado=validators.Int(),
                               amount=validators.UnicodeString(),
-                              loan=validators.Int(),
                               cuenta=validators.Int(),
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))
     def devolucionPlanilla(self, afiliado, cuenta, day, amount):

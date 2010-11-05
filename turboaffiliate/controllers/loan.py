@@ -111,6 +111,7 @@ class Pay(controllers.Controller):
                               end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def resume(self, start, end):
         
+        pays = model.Pay.select(AND(model.Pay.q.day>=start,model.Pay.q.day<=end))
         pays = model.Pay.select(AND(model.Pay.q.day>=start,model.Pay.day<=end))
         count = pays.count()
         capital = sum(pay.capital for pay in pays)
@@ -527,6 +528,9 @@ class Loan(controllers.Controller):
     @validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
                               end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def resume(self, start, end):
+        
+        """Crea un reporte de capital e intereses de todos los préstamos,
+        incluidos los pagados"""
         
         pagos = list()
         pagos.extend(model.Pay.select(AND(model.Pay.q.day>=start,model.Pay.q.day<=end)))
