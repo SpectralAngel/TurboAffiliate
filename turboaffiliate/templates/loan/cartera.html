@@ -17,6 +17,7 @@
         <th>Carnet</th>
         <th>Afiliado</th>
         <th>Capital</th>
+        <th>Liquidado</th>
         <th>Saldo</th>
         <th>Fecha Otorgado</th>
       </tr>
@@ -27,6 +28,7 @@
         <td><a href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}">${loan.affiliate.id}</a></td>
         <td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
         <td>${locale.currency(loan.capital, True, True)}</td>
+        <td>${locale.currency(loan.net(), True, True)}</td>
         <td>${locale.currency(loan.debt, True, True)}</td>
         <td>${loan.startDate.strftime('%d/%m/%Y')}</td>
       </tr>
@@ -35,7 +37,8 @@
       <tr>
         <th colspan="2">Pr&eacute;stamos: ${count}</th>
         <th colspan="2">Monto Otorgado: ${locale.currency(amount, True, True)}</th>
-        <th colspan="2">Saldo: ${locale.currency(deuda, True, True)}</th>
+        <th colspan="2">Liquidado: ${locale.currency(net, True, True)}</th>
+        <th>Saldo: ${locale.currency(deuda, True, True)}</th>
       </tr>
     </tfoot>
   </table>

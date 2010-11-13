@@ -371,7 +371,8 @@ class Loan(controllers.Controller):
         
         amount = sum(l.capital for l in loans)
         deuda = sum(l.debt for l in loans)
-        return dict(amount=amount, deuda=deuda, loans=loans, first=first, last=last, count=len(loans))
+        net = sum(l.net() for l in loans)
+        return dict(amount=amount, deuda=deuda, net=net, loans=loans, first=first, last=last, count=len(loans))
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.view')
@@ -421,22 +422,29 @@ class Loan(controllers.Controller):
         
         loans = model.Loan.select(AND(model.Loan.q.startDate>=start,
                                       model.Loan.q.startDate<=end))
+        payed = model.Loan.select(AND(model.PayedLoan.q.startDate>=start,
+                                      model.Loan.q.startDate<=end))
         
         li = list()
+        li.extend(l for l in loans)
+        li.extend(p for p in payed)
+        prestamos = dict()
         
-        for n in range(start.month, end.month + 1):
-            
-            month = dict()
-            month['month'] = n
-            month['amount'] = sum(l.capital for l in loans if l.startDate.month == n)
-            month['net'] = sum(l.net() for l in loans if l.startDate.month == n)
-            month['number'] = len(list(l for l in loans if l.startDate.month == n))
-            li.append(month)
+        for l in li:
+            if not (l.startDate.year in prestamos):
+                prestamos[l.startDate.year] = dict()
         
-        total = sum(m['amount'] for m in li)
-        net = sum(m['net'] for m in li)
+        if l.startDate.month in prestamos[l.startDate.year]:
+            prestamos[l.startDate.year][l.startDate.month]['capital'] += l.capital
+            prestamos[l.startDate.year][l.startDate.month]['cantidad'] += 1
+            prestamos[l.startDate.year][l.startDate.month]['neto'] += l.net()
+        else:
+            prestamos[l.startDate.year][l.startDate.month] = dict()
+            prestamos[l.startDate.year][l.startDate.month]['capital'] += l.capital
+            prestamos[l.startDate.year][l.startDate.month]['cantidad'] += 1
+            prestamos[l.startDate.year][l.startDate.month]['neto'] += l.net()
         
-        return dict(months=li, total=total, start=start, end=end, net=net)
+        return dict(prestamos=loans, start=start, end=end)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.list')
