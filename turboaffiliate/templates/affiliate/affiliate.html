@@ -199,6 +199,24 @@
               </tr>
             </tbody>
         </table>
+        <table class="ui-widget-content ui-corner-all striped" py:if="len(affiliate.inscripciones) != 0">
+          <caption>Asistencia a Asambleas</caption>
+          <thead>
+            <tr>
+              <th>Asamblea</th>
+              <th>Departamento</th>
+              <th>Enviado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr py:for="inscripcion in affiliate.inscripciones">
+              <td>${inscripcion.asamblea.nombre}</td>
+              <td>${inscripcion.departamento.nombre}</td>
+              <td py:if="inscripcion.enviado">S&iacute;</td>
+              <td py:if="not inscripcion.enviado">No</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div id="personal" class="ui-widget-content ui-corner-all flotante-izquierdo">
         <h3 class="ui-widget-header ui-corner-all no-margin ui-helper-clearfix">Informaci&oacute;n Personal</h3>
