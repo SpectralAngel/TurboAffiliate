@@ -20,7 +20,7 @@
       </div>
       <h3 class="centrado">Capital Prestado: ${locale.currency(loan.capital, True, True)}</h3>
       <h4 class="flotante-izquierdo"> Prestatario:
-          <a class="print" href="${tg.url('/affiliate/%s' % loan.affiliate.id)}">${loan.affiliate.id}</a>
+          <a class="print" href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}">${loan.affiliate.id}</a>
           ${loan.affiliate.firstName} ${loan.affiliate.lastName}
       </h4>
       <h4 class="flotante-derecho">Fecha de Otorgamiento: ${loan.startDate.strftime('%d de %B de %Y')}</h4>
@@ -38,7 +38,7 @@
             <td>${d.account.name}</td>
             <td>${locale.currency(d.amount, True, True)}</td>
             <td class="noprint" py:if="'delete' in tg.identity.permissions">
-              <a class="" href="${tg.url('/loan/deduction/remove/%s' % d.id)}">Borrar</a>
+              <a class="" href="${tg.url('/loan/deduction/remove/{0}'.format(d.id))}">Borrar</a>
             </td>
           </tr>
           <tr>
@@ -110,7 +110,7 @@
             <td>${locale.currency(pay.capital, True, True)}</td>
             <td>${locale.currency(pay.amount, True, True)}</td>
             <td>${pay.receipt}</td>
-            <td class="noprint"><a href="${tg.url('/loan/pay/remove/%s' % pay.id)}">X</a></td>
+            <td class="noprint"><a href="${tg.url('/loan/pay/remove/{0}'.format(pay.id))}">X</a></td>
           </tr>
         </tbody>
         <tfoot class="noprint">
@@ -132,11 +132,11 @@
     <button class="button-size" onclick="javascript:$('#refinanciar').dialog('open');">Refinanciar</button>
     <button class="button-size" onclick="javascript:$('#cambiarTiempo').dialog('open');">Cambiar Peri&oacute;do de Pago</button>
     <button class="button-size" onclick="javascript:print();">Imprimir</button>
-    <a class="button button-size" href="${tg.url('/loan/pagare/%s' % loan.id)}">Ver Pagar&eacute;</a>
-    <a class="button button-size" href="${tg.url('/loan/receipt/%s' % loan.id)}">Ver Liquidaci&oacute;n</a>
-    <a class="button button-size" href="${tg.url('/loan/remove/%s' % loan.id)}">Enviar a Pagados</a>
-    <a class="button button-size" href="${tg.url('/loan/increase/%s' % loan.id)}">Corregir Mes +1</a>
-    <a class="button button-size" href="${tg.url('/loan/decrease/%s' % loan.id)}">Corregir Mes -1</a>
+    <a class="button button-size" href="${tg.url('/loan/pagare/{0}'.format(loan.id))}">Ver Pagar&eacute;</a>
+    <a class="button button-size" href="${tg.url('/loan/receipt/{0}'.format(loan.id))}">Ver Liquidaci&oacute;n</a>
+    <a class="button button-size" href="${tg.url('/loan/remove/{0}'.format(loan.id))}">Enviar a Pagados</a>
+    <a class="button button-size" href="${tg.url('/loan/increase/{0}'.format(loan.id))}">Corregir Mes +1</a>
+    <a class="button button-size" href="${tg.url('/loan/decrease/{0}'.format(loan.id))}">Corregir Mes -1</a>
     <button class="button-size" onclick="javascript:$('#cambiarSaldo').dialog('open');">Cambiar Saldo</button>
     <button class="button-size" onclick="javascript:$('#cambiarMonto').dialog('open');">Cambiar Monto</button>
     <button class="button-size" onclick="javascript:$('#cambiarCuota').dialog('open');">Cambiar Cuota</button>

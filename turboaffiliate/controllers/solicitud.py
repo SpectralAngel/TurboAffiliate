@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
-# affiliate.py
+# solicitud.py
 # This file is part of TurboAffiliate
 #
 # Copyright (c) 2010 Carlos Flores <cafg10@gmail.com>
@@ -20,8 +20,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, flash, redirect, identity
-from turbogears import expose, validate, validators
+from turbogears import (controllers, flash, redirect, identity, expose,
+                        validate, validators)
 from turboaffiliate import model
 from decimal import Decimal
 

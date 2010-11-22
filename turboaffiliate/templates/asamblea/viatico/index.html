@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python import locale ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="../master.html" />
+<xi:include href="../../master.html" />
 <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
   <title>TurboAffiliate &bull; Asambleas</title>
@@ -14,7 +14,7 @@
         <li>
           <label>Asamblea:</label>
           <select name="asamblea">
-            <option value="${a.id}" py:for="a in asamblea">
+            <option value="${a.id}" py:for="a in asambleas">
               ${a.id} - ${a.nombre}
             </option>
           </select>
@@ -24,6 +24,10 @@
           <select name="departamento">
             <option value="${d.id}" py:for="d in departamentos">${d.nombre}</option>
           </select>
+        </li>
+        <li>
+          <label for="monto">Monto</label>
+          <input name="monto" />
         </li>
         <li><input type="submit" value="Agregar" /></li>
       </ol>
@@ -36,11 +40,12 @@
         <li>
           <label>Asamblea:</label>
           <select name="asamblea">
-            <option value="${a.id}" py:for="a in asamblea">
+            <option value="${a.id}" py:for="a in asambleas">
               ${a.id} - ${a.nombre}
             </option>
           </select>
         </li>
+        <li><input type="submit" value="Mostrar" /></li>
       </ol>
     </fieldset>
   </form>

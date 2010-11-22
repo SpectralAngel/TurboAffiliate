@@ -112,7 +112,6 @@ class Pay(controllers.Controller):
     def resume(self, start, end):
         
         pays = model.Pay.select(AND(model.Pay.q.day>=start,model.Pay.q.day<=end))
-        pays = model.Pay.select(AND(model.Pay.q.day>=start,model.Pay.day<=end))
         count = pays.count()
         capital = sum(pay.capital for pay in pays)
         interest = sum(pay.interest for pay in pays)
@@ -154,7 +153,7 @@ class Pay(controllers.Controller):
         log['action'] = u"Pago por Planilla de {0} al prestamo {1}".format(amount, loan.id)
         model.Logger(**log)
         
-        loan.pagar(amount, 'Planilla', day, free)
+        loan.pagar(amount, u'Planilla', day, free)
         
         return dict(pago=loan.affiliate.get_monthly())
 

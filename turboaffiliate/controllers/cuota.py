@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
-# affiliate.py
+# cuota.py
 # This file is part of TurboAffiliate
 #
 # Copyright (c) 2008 Carlos Flores <cafg10@gmail.com>
@@ -20,8 +20,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, expose, identity, redirect
-from turbogears import validate, validators
+from turbogears import (controllers, expose, identity, redirect, validate,
+                        validators)
 from turboaffiliate import model
 from datetime import date
 
@@ -127,7 +127,7 @@ class Cuota(controllers.Controller):
         
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Pago por Planilla de cuota de aportaciones afiliado {0}".format(affiliate.id)
+        log['action'] = u"Pago por Planilla de cuota de aportaciones afiliado {0}".format(affiliate.id)
         model.Logger(**log)
         
         return dict(pago=affiliate.get_monthly())

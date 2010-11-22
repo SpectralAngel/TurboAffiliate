@@ -72,7 +72,7 @@ class Obligation(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.obligation.obligations")
-    @validate(validators=dict(company=validators.Int(), year=validators.Int()))
+    @validate(validators=dict(year=validators.Int()))
     def view(self, year):
         
         obligations = model.Obligation.selectBy(year=year)

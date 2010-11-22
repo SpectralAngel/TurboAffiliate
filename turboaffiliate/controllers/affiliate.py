@@ -20,8 +20,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, flash, redirect, identity
-from turbogears import expose, validate, validators, error_handler
+from turbogears import (controllers, flash, redirect, identity, expose,
+                        validate, validators, error_handler)
 from turboaffiliate import model
 from turboaffiliate.controllers import cuota, extra, billing, deduced, observacion
 from datetime import date
@@ -114,9 +114,11 @@ class Affiliate(controllers.Controller):
     ))
     def save(self, **kw):
         
+        """Permite guardar los datos del afiliado"""
+        
         if kw['cardID'] == '':
             flash(u'No se escribio un número de identidad')
-            flash(u'Al afiliado no se le podra cobrar si cotiza por escalafon')
+            raise redirect('/affiliate')
         try:            
             affiliate = model.Affiliate.get(int(kw['affiliate']))
             
@@ -468,7 +470,8 @@ class Affiliate(controllers.Controller):
                               afiliado=validators.Int()))
     def solvencia(self, afiliado, mes, anio):
         
-        return dict(afiliado=model.Affiliate.get(afiliado),mes=mes,anio=anio, dia=date.today())
+        return dict(afiliado=model.Affiliate.get(afiliado),mes=mes,anio=anio,
+                    dia=date.today())
     
     @identity.require(identity.not_anonymous())
     @expose('json')

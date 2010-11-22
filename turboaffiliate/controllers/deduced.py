@@ -68,7 +68,7 @@ class Deduced(controllers.Controller):
 		kw['account'] = model.Account.get(account)
 		model.Deduced(**kw)
 		
-		flash("Agregado Detalle de Deducción")
+		flash(u"Agregado Detalle de Deducción")
 		
 		raise redirect("/affiliate/deduced/{0}".format(affiliate))
 	

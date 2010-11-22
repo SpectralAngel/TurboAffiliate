@@ -240,6 +240,10 @@ class Affiliate(SQLObject):
     """Fecha de Fallecimiento"""
     desactivacion = DateCol(default=date.today)
     """Fecha de Desactivación"""
+    cuenta = BigIntCol(default=None)
+    """Número de cuenta bancaria"""
+    banco = IntCol(default=None)
+    """Código del Banco"""
     sobrevivencias = MultipleJoin("Sobrevivencia", joinColumn="afiliado_id")
     devoluciones = MultipleJoin("Devolucion", joinColumn="afiliado_id")
     funebres = MultipleJoin("Funebre", joinColumn="afiliado_id")
@@ -1212,6 +1216,5 @@ class Inscripcion(SQLObject):
     asamblea = ForeignKey('Asamblea')
     departamento = ForeignKey('Departamento')
     viatico = ForeignKey('Viatico')
-    cuenta = BigIntCol()
     enviado = BoolCol(default=False)
     envio = DateCol(default=date.today)

@@ -7,6 +7,48 @@
   <title>TurboAffiliate &bull; Inscripciones para Asamblea ${asamblea.numero}: ${asamblea.nombre}</title>
 </head>
 <body>
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/inscripcionRapida')}">
+    <fieldset>
+      <input name="asamblea" type="hidden" value="${asamblea.id}" />
+      <legend>Inscribir por Afiliaci&oacute;n</legend>
+      <ol>
+        <li>
+          <label for="afiliado">Carnet:</label>
+          <input name="afiliado" />
+        </li>
+        <li>
+          <label for="departamento">Departamento:</label>
+          <select name="departamento">
+            <option py:for="d in departamentos" value="${d.id}">
+              ${d.nombre}
+            </option>
+          </select>
+        </li>
+        <li><input type="submit" value="Inscribir" /></li>
+      </ol>
+    </fieldset>
+  </form>
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/inscripcionRapidaI')}">
+    <fieldset>
+      <input name="asamblea" type="hidden" value="${asamblea.id}" />
+      <legend>Inscribir por Afiliaci&oacute;n</legend>
+      <ol>
+        <li>
+          <label for="identidad">Carnet:</label>
+          <input name="identidad" />
+        </li>
+        <li>
+          <label for="departamento">Departamento:</label>
+          <select name="departamento">
+            <option py:for="d in departamentos" value="${d.id}">
+              ${d.nombre}
+            </option>
+          </select>
+        </li>
+        <li><input type="submit" value="Inscribir" /></li>
+      </ol>
+    </fieldset>
+  </form>
   <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/inscribir')}">
     <fieldset>
       <input name="asamblea" type="hidden" value="${asamblea.id}" />
@@ -40,14 +82,14 @@
       </ol>
     </fieldset>
   </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/inscribir')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/identidad')}">
     <fieldset>
       <input name="asamblea" type="hidden" value="${asamblea.id}" />
       <legend>Inscribir por Identidad</legend>
       <ol>
         <li>
-          <label for="afiliado">Carnet:</label>
-          <input name="afiliado" />
+          <label for="identidad">Carnet:</label>
+          <input name="identidad" />
         </li>
         <li>
           <label for="cuenta">Cuenta:</label>
