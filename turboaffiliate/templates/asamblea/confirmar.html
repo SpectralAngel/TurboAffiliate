@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html" />
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Confirmar Inscripci&oacute;n de Afiliado ${afiliado.id}</title>
+</head>
+<body>
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/inscribir')}">
+    <fieldset>
+      <input name="asamblea" type="hidden" value="${asamblea.id}" />
+      <input name="afiliado" type="hidden" value="${afiliado.id}" />
+      <legend>Confirmar e Inscribir</legend>
+      <ol>
+        <li>${afiliado.id} - ${afiliado.firstName} ${afiliado.lastName}</li>
+        <li>Identidad: ${afiliado.cardID}</li>
+        <li>Banco: ${afiliado.banco} - <span py:for="b in bancos" py:if="b.id == afiliado.banco">b.nombre</span></li>
+        <li>Cuenta: ${afiliado.cuenta}</li>
+        <li>Departamento: ${afiliado.departamento.nombre}</li>
+        <li><input type="submit" value="Inscribir" /></li>
+      </ol>
+    </fieldset>
+  </form>
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/corregir')}">
+    <fieldset>
+      <input name="asamblea" type="hidden" value="${asamblea.id}" />
+      <input name="afiliado" type="hidden" value="${afiliado.id}" />
+      <legend>Corregir Datos</legend>
+      <ol>
+        <li>${afiliado.id} - ${afiliado.firstName} ${afiliado.lastName}</li>
+        <li>Identidad: ${afiliado.cardID}</li>
+        <li>
+          <label for="banco">Banco:</label>
+          <select name="banco">
+            <option py:for="b in bancos" py:if="b.id == afiliado.banco" selected="selected" value="${b.id}">${b.nombre}</option>
+            <option py:for="b in bancos" value="${b.id}">${b.nombre}</option>
+          </select>
+        </li>
+        <li>
+          <label for="cuenta">Cuenta:</label>
+          <input name="cuenta" />
+        </li>
+        <li>
+          <label for="departamento">Departamento</label>
+          <select name="departamento">
+            <option py:for="d in departamentos" py:if="d == afiliado.departamento" selected="selected" value="${d.id}">${d.nombre}</option>
+            <option py:for="d in departamentos" value="${d.id}">${d.nombre}</option>
+          </select>
+        </li>
+        <li><input type="submit" value="Inscribir" /></li>
+      </ol>
+    </fieldset>
+  </form>
+</body>
+</html>

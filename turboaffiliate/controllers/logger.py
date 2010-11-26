@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
-# controllers.py
+# logger.py
 # This file is part of TurboAffiliate
 #
 # Copyright © 2009 Carlos Flores <cafg10@gmail.com>

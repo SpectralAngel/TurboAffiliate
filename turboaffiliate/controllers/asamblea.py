@@ -21,7 +21,6 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 from decimal import Decimal
-from sqlobject import SQLObjectNotFound
 from turboaffiliate import model
 from turbogears import (controllers, identity, expose, validate, validators,
                         redirect, flash)
@@ -123,53 +122,78 @@ class Asamblea(controllers.Controller):
                     asamblea=model.Asamblea.get(asamblea))
     
     @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.asamblea.confirmar')
+    @validate(validators=dict(asamblea=validators.Int(),
+                              afiliado=validators.Int()))
+    def confirmar(self, afiliado, asamblea):
+        
+        afiliado = model.Affiliate.get(afiliado)
+        banco = None
+        
+        if afiliado.banco != None:
+            banco = model.Banco.get(afiliado.banco)
+        
+        return dict(afiliado=afiliado,banco=banco, asamblea=model.Asamblea.get(asamblea),
+                    bancos=model.Banco.select(), departamentos=model.Departamento.select())
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.asamblea.confirmar')
+    @validate(validators=dict(asamblea=validators.Int(),
+                              identidad=validators.UnicodeString()))
+    def confirmarIdentidad(self, identidad, asamblea):
+        
+        afiliado = model.Affiliate.selectBy(cardID=identidad).limit(1).getOne()
+        banco = None
+        
+        if afiliado.banco != None:
+            banco = model.Banco.get(afiliado.banco)
+        
+        return dict(afiliado=afiliado,banco=banco,asamblea=model.Asamblea.get(asamblea),
+                    bancos=model.Banco.select(),departamentos=model.Departamento.select())
+    
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(asamblea=validators.Int(),
+                              afiliado=validators.Int()))
+    def inscribir(self, afiliado, asamblea):
+        
+        kw = dict()
+        afiliado = model.Affiliate.get(afiliado)
+        asamblea = model.Asamblea.get(asamblea)
+        kw['affiliate'] = afiliado
+        kw['asamblea'] = asamblea
+        kw['viatico'] = model.Viatico.selectBy(asamblea=asamblea,
+                        departamento=afiliado.departamento).limit(1).getOne()
+        
+        model.Inscripcion(**kw)
+        flash(inscripcionRealizada(afiliado))
+        
+        raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
+    
+    @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(afiliado=validators.Int(),
                               banco=validators.Int(),
                               departamento=validators.Int(),
                               cuenta=validators.Int(),
                               asamblea=validators.Int()))
-    def inscribir(self, afiliado, banco, departamento, cuenta, asamblea):
+    def corregir(self, afiliado, asamblea, departamento, banco, cuenta):
         
         kw = dict()
-        kw['afiliado'] = model.Affiliate.get(afiliado)
-        kw['afiliado'].banco = model.Banco.get(banco).id
-        kw['afiliado'].cuenta = cuenta
-        
-        kw['departamento'] = model.Departamento.get(departamento)
-        kw['asamblea'] = model.Asamblea.get(asamblea)
-        
-        kw['viatico'] = model.Viatico.selectBy(asamblea=kw['asamblea'],
-                            departamento=kw['departamento']).limit(1).getOne()
-        
-        model.Inscripcion(**kw)
-        
-        flash(inscripcionRealizada(kw['afiliado']))
-        
-        raise redirect('/asamblea/inscripcion/{0}'.format(kw['asamblea'].id))
-    
-    @identity.require(identity.not_anonymous())
-    @expose()
-    @validate(validators=dict(identidad=validators.UnicodeString(),
-                              banco=validators.Int(),
-                              departamento=validators.Int(),
-                              cuenta=validators.Int(),
-                              asamblea=validators.Int()))
-    def identidad(self, identidad, banco, departamento, cuenta, asamblea):
-        
-        kw = dict()
-        kw['afiliado'] = model.Affiliate.selectBy(cardID=identidad).limit(1).getOne()
-        kw['afiliado'].banco = model.Banco.get(banco).id
-        kw['afiliado'].cuenta = cuenta
-        kw['departamento'] = model.Departamento.get(departamento)
-        kw['asamblea'] = model.Asamblea.get(asamblea)
-        
-        kw['viatico'] = model.Viatico.selectBy(asamblea=kw['asamblea'],
-                            departamento=kw['departamento']).limit(1).getOne()
+        afiliado = model.Affiliate.get(afiliado)
+        asamblea = model.Asamblea.get(asamblea)
+        departamento = model.Departamento.get(departamento)
+        afiliado.departamento = departamento
+        banco = model.Banco.get(banco)
+        afiliado.banco = banco.id
+        afiliado.cuenta = cuenta
+        kw['affiliate'] = afiliado
+        kw['asamblea'] = asamblea
+        kw['viatico'] = model.Viatico.selectBy(asamblea=asamblea,
+                        departamento=departamento).limit(1).getOne()
         
         model.Inscripcion(**kw)
-        
-        flash(inscripcionRealizada(kw['afiliado']))
+        flash(inscripcionRealizada(afiliado))
         
         raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
     
@@ -178,81 +202,19 @@ class Asamblea(controllers.Controller):
     @validate(validators=dict(afiliado=validators.Int(),
                               departamento=validators.Int(),
                               asamblea=validators.Int()))
-    def inscripcionRapida(self, afiliado, departamento, asamblea):
+    def corregirDepto(self, afiliado, asamblea, departamento):
         
         kw = dict()
-        kw['afiliado'] = model.Affiliate.get(afiliado)
-        
-        kw['departamento'] = model.Departamento.get(departamento)
-        kw['asamblea'] = model.Asamblea.get(asamblea)
-        
-        kw['viatico'] = model.Viatico.selectBy(asamblea=kw['asamblea'],
-                            departamento=kw['departamento']).limit(1).getOne()
-        
-        model.Inscripcion(**kw)
-        
-        flash(inscripcionRealizada(kw['afiliado']))
-        
-        raise redirect('/asamblea/inscripcion/{0}'.format(kw['asamblea'].id))
-    
-    @identity.require(identity.not_anonymous())
-    @expose()
-    @validate(validators=dict(identidad=validators.UnicodeString(),
-                              departamento=validators.Int(),
-                              asamblea=validators.Int()))
-    def inscripcionRapidaI(self, identidad, departamento, asamblea):
-        
-        kw = dict()
-        kw['afiliado'] = model.Affiliate.selectBy(cardID=identidad).limit(1).getOne()
-        
-        kw['departamento'] = model.Departamento.get(departamento)
-        kw['asamblea'] = model.Asamblea.get(asamblea)
-        
-        kw['viatico'] = model.Viatico.selectBy(asamblea=kw['asamblea'],
-                            departamento=kw['departamento']).limit(1).getOne()
+        afiliado = model.Affiliate.get(afiliado)
+        asamblea = model.Asamblea.get(asamblea)
+        departamento = model.Departamento.get(departamento)
+        afiliado.departamento = departamento
+        kw['affiliate'] = afiliado
+        kw['asamblea'] = asamblea
+        kw['viatico'] = model.Viatico.selectBy(asamblea=asamblea,
+                        departamento=departamento).limit(1).getOne()
         
         model.Inscripcion(**kw)
+        flash(inscripcionRealizada(afiliado))
         
-        flash(inscripcionRealizada(kw['afiliado']))
-        
-        raise redirect('/asamblea/inscripcion/{0}'.format(kw['asamblea'].id))
-    
-    @expose()
-    @validate(validators=dict(departamento=validators.Int(),
-                              nombre=validators.UnicodeString(),
-                              numero=validators.Int()))
-    def agregar(self, departamento, **kw):
-        
-        kw['departamento'] = model.Departamento.get(departamento)
-        
-        asamblea = model.Asamblea(**kw)
-        
-        raise redirect('/asamblea/{0}'.format(asamblea.id))
-    
-    @identity.require(identity.not_anonymous())
-    @expose()
-    @validate(validators=dict(afiliado=validators.Int(), banco=validators.Int(),
-                              departamento=validators.Int(), cuenta=validators.Int()))
-    def corregir(self, afiliado, banco, asamblea, cuenta, departamento):
-        
-        try:
-            afiliado = model.Affiliate.get(afiliado)
-            afiliado.banco = model.Banco.get(banco).id
-            afiliado.cuenta = cuenta
-            departamento = model.Departamento.get(departamento)
-            asamblea = model.Asamblea.get(asamblea)
-            inscripcion = model.Inscripcion.selectBy(afiliado=afiliado,
-                                            asamblea=asamblea).limit(1).getOne()
-            inscripcion.departamento = departamento
-            inscripcion.viatico = model.Viatico.selectBy(asamblea=asamblea,
-                            departamento=departamento).limit(1).getOne()
-            inscripcion.enviado = False
-        
-        except SQLObjectNotFound:
-            
-            flash('El afiliado {0} no se encuentra inscrito'.format(afiliado))
-            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea))
-        
-        flash('Corregida la inscripcion del afiliado {0}'.format(afiliado.id))
-        
-        raise redirect('/asamblea/inscripcion/{0}'.format(asamblea))
+        raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
-# status.py
+# billing.py
 # This file is part of TurboAffiliate
 #
 # Copyright (c) 2009,2010 Carlos Flores <cafg10@gmail.com>

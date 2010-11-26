@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
-# affiliate.py
+# reintegro.py
 # This file is part of TurboAffiliate
 #
 # Copyright (c) 2010 Carlos Flores <cafg10@gmail.com>
@@ -111,7 +111,7 @@ class Reintegro(controllers.Controller):
         """Muestra los reintegros pagados durante un periodo"""
         
         return dict(reintegros=model.Reintegro.select(AND(model.Reintegro.q.cancelacion>=inicio,
-                                                          model.Reintegro.q.cancelacion>=fin,
+                                                          model.Reintegro.q.cancelacion<=fin,
                                                           model.Reintegro.q.pagado==True)))
     
     @identity.require(identity.not_anonymous())

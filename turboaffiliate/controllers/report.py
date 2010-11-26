@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
-# flyer.py
+# report.py
 # This file is part of TurboAffiliate
 #
 # Copyright (c) 2007 - 2010 Carlos Flores <cafg10@gmail.com>

@@ -201,7 +201,7 @@ class Affiliate(SQLObject):
     address = UnicodeCol(default=None)
     phone = UnicodeCol(default=None)
     
-    #departamento = ForeignKey('departamento')
+    departamento = ForeignKey('Departamento', default=Departamento.get(19))
     state = UnicodeCol(length=50, default=None)
     school = UnicodeCol(length=255, default=None)
     school2 = UnicodeCol(length=255, default=None)
@@ -1214,7 +1214,6 @@ class Inscripcion(SQLObject):
     afiliado = ForeignKey('Affiliate')
     """:class:`Afiliado` a quien se entrega"""
     asamblea = ForeignKey('Asamblea')
-    departamento = ForeignKey('Departamento')
     viatico = ForeignKey('Viatico')
     enviado = BoolCol(default=False)
     envio = DateCol(default=date.today)
