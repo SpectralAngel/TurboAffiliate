@@ -306,7 +306,7 @@ class Affiliate(SQLObject):
         except SQLObjectNotFound:
             
             # Esto evita crear un año de aportaciones incorrecto
-            if year > self.joined.year:
+            if year < self.joined.year:
                 return None
             
             kw = dict()

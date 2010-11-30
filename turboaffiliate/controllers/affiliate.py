@@ -27,6 +27,7 @@ from turboaffiliate.controllers import cuota, extra, billing, deduced, observaci
 from datetime import date
 from sqlobject.sqlbuilder import OR, AND
 from decimal import Decimal
+import csv
 
 class Affiliate(controllers.Controller):
     
@@ -499,3 +500,32 @@ class Affiliate(controllers.Controller):
         model.Logger(**log)
         
         return dict(pago=affiliate.get_monthly())
+    
+    @expose()
+    def cuentas(self):
+        
+        afo = model.Affiliate.selectBy(payment='Escalafon')
+    
+        afiliados = dict()
+        
+        for a in afo:
+            if a.cardID == None:
+                continue
+            afiliados[a.cardID.replace('-','')] = a
+        
+        cuentas = csv.reader(open('cuentas.csv'))
+        
+        for linea in cuentas:
+            
+            if linea[0] in afiliados:
+                afiliado = afiliados[linea[0]]
+                banco = int(linea[3])
+                cuenta = int(linea[4].strip('ABCDEFGHIJKMNLOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz- '))
+                
+                afiliado.banco = banco
+                afiliado.cuenta = cuenta
+                print afiliado.banco, afiliado.cuenta
+        
+        flash('terminado')
+        
+        raise redirect('/affiliate')
