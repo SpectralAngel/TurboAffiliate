@@ -69,16 +69,16 @@ class Viatico(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(asamblea=validators.Int(),monto=validators.UnicodeString(),
-                              departamento=validators.Int()))
-    def agregar(self, asamblea, departamento, **kw):
+                              municipio=validators.Int()))
+    def agregar(self, asamblea, municipio, **kw):
         
         kw['monto'] = Decimal(kw['monto'])
         
         kw['asamblea'] = model.Asamblea.get(asamblea)
-        kw['departamento'] = model.Departamento.get(departamento)
+        kw['municipio'] = model.Municipio.get(municipio)
         viatico = model.Viatico(**kw)
         
-        flash(u'Se agrego el viatico al Departamento de {0}'.format(viatico.departamento.nombre))
+        flash(u'Se agrego el viatico al Municipio de {0}'.format(viatico.municipio.nombre))
         
         raise redirect('/asamblea/viatico')
     
@@ -160,10 +160,10 @@ class Asamblea(controllers.Controller):
         kw = dict()
         afiliado = model.Affiliate.get(afiliado)
         asamblea = model.Asamblea.get(asamblea)
-        kw['affiliate'] = afiliado
+        kw['afiliado'] = afiliado
         kw['asamblea'] = asamblea
         kw['viatico'] = model.Viatico.selectBy(asamblea=asamblea,
-                        departamento=afiliado.departamento).limit(1).getOne()
+                        municipio=afiliado.municipio).limit(1).getOne()
         
         model.Inscripcion(**kw)
         flash(inscripcionRealizada(afiliado))
@@ -176,21 +176,24 @@ class Asamblea(controllers.Controller):
                               banco=validators.Int(),
                               departamento=validators.Int(),
                               cuenta=validators.Int(),
-                              asamblea=validators.Int()))
-    def corregir(self, afiliado, asamblea, departamento, banco, cuenta):
+                              asamblea=validators.Int(),
+                              municipio=validators.Int()))
+    def corregir(self, afiliado, asamblea, departamento, banco, cuenta, municipio):
         
         kw = dict()
         afiliado = model.Affiliate.get(afiliado)
         asamblea = model.Asamblea.get(asamblea)
         departamento = model.Departamento.get(departamento)
         afiliado.departamento = departamento
+        afiliado.municipio = model.Municipio.get(municipio)
         banco = model.Banco.get(banco)
         afiliado.banco = banco.id
         afiliado.cuenta = cuenta
-        kw['affiliate'] = afiliado
+        kw['afiliado'] = afiliado
         kw['asamblea'] = asamblea
         kw['viatico'] = model.Viatico.selectBy(asamblea=asamblea,
-                        departamento=departamento).limit(1).getOne()
+                                               municipio=afiliado.municipio
+                                               ).limit(1).getOne()
         
         model.Inscripcion(**kw)
         flash(inscripcionRealizada(afiliado))
@@ -201,20 +204,70 @@ class Asamblea(controllers.Controller):
     @expose()
     @validate(validators=dict(afiliado=validators.Int(),
                               departamento=validators.Int(),
-                              asamblea=validators.Int()))
-    def corregirDepto(self, afiliado, asamblea, departamento):
+                              asamblea=validators.Int(),
+                              municipio=validators.Int()))
+    def corregirDepto(self, afiliado, asamblea, departamento, municipio):
         
         kw = dict()
         afiliado = model.Affiliate.get(afiliado)
         asamblea = model.Asamblea.get(asamblea)
         departamento = model.Departamento.get(departamento)
         afiliado.departamento = departamento
-        kw['affiliate'] = afiliado
+        municipio = model.Municipio.get(municipio)
+        kw['afiliado'] = afiliado
         kw['asamblea'] = asamblea
         kw['viatico'] = model.Viatico.selectBy(asamblea=asamblea,
-                        departamento=departamento).limit(1).getOne()
+                                               departamento=departamento,
+                                               municipio=municipio
+                                               ).limit(1).getOne()
         
         model.Inscripcion(**kw)
         flash(inscripcionRealizada(afiliado))
         
         raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
+    
+    @expose()
+    def ingresar(self):
+        
+        ninguno = model.Municipio.get(299)
+        ndepto = model.Departamento.get(19)
+        
+        afiliados = model.Affiliate.select(model.Affiliate.q.municipio==ninguno)
+        
+        for afiliado in afiliados:
+            if afiliado.departamento != ndepto:
+                
+                if afiliado.departamento == None:
+                    afiliado.departamento = ndepto
+                    continue
+                
+                afiliado.municipio = afiliado.departamento.municipios[1]
+        
+        afiliados = model.Affiliate.select()
+        
+        for afiliado in afiliados:
+            
+            if afiliado.town == None:
+                if afiliado.municipio == None:
+                    afiliado.municipio = ninguno
+                continue
+            
+            if afiliado.departamento == None:
+                afiliado.departamento = ndepto
+            
+            municipios = dict()
+            for m in afiliado.departamento.municipios:
+                municipios[m.nombre.lower()] = m
+            
+            if afiliado.town.lower() in municipios:
+                afiliado.municipio = municipios[afiliado.town.lower()]
+            else:
+                for m in municipios:
+                    if m.find(afiliado.town.lower()) != -1:
+                        afiliado.municipio = municipios[m]
+            
+        flash('Registrados los municipos de los afiliados')
+        
+        raise redirect('/asamblea')
+        
+        raise redirect('/asamblea')

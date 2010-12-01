@@ -110,12 +110,15 @@ class Affiliate(controllers.Controller):
             school=validators.UnicodeString(),
             school2=validators.UnicodeString(),
             inprema=validators.UnicodeString(),
-            town=validators.UnicodeString(),
-            state=validators.UnicodeString(),
+            municipio=validators.Int(),
+            departamento=validators.Int()
     ))
-    def save(self, **kw):
+    def save(self, municipio, departamento, **kw):
         
         """Permite guardar los datos del afiliado"""
+        
+        municipio = model.Municipio.get(municipio)
+        departamento = model.Departamento.get(departamento)
         
         if kw['cardID'] == '':
             flash(u'No se escribio un número de identidad')
@@ -131,15 +134,18 @@ class Affiliate(controllers.Controller):
             
             del kw['affiliate']
             
-            for key in kw.keys():
+            for key in kw:
                 setattr(affiliate, key, kw[key])
-            
+            affiliate.departamento = departamento
+            affiliate.municipio = municipio
             flash(u'¡El afiliado ha sido actualizado!')
         
         except KeyError:
             
             affiliate = model.Affiliate(**kw)
             affiliate.complete(date.today().year)
+            affiliate.departamento = departamento
+            affiliate.municipio = municipio
             
             log = dict()
             log['user'] = identity.current.user

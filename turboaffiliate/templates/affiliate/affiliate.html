@@ -231,8 +231,8 @@
           <li><strong>Tel&eacute;fono: </strong>${affiliate.phone}</li>
           <li><strong>Instituto: </strong>${affiliate.school}</li>
           <li><strong>Instituto: </strong>${affiliate.school2}</li>
-          <li><strong>Municipio: </strong>${affiliate.town}</li>
-          <li><strong>Departamento: </strong>${affiliate.state}</li>
+          <li><strong>Municipio: </strong>${affiliate.municipio.nombre}</li>
+          <li><strong>Departamento: </strong>${affiliate.departamento.nombre}</li>
         </ul>
       </div>
       <div id="egresos" class="flotante-izquierdo ui-corner-all">
@@ -408,12 +408,16 @@
               <input name="school" value="${affiliate.school}" />
             </li>
             <li>
-              <label for="town">Municipio:</label>
-              <input name="town" value="${affiliate.town}" />
+              <label for="departamento">Departamento:</label>
+              <select class="departamento" name="departamento" id="editarDepartamento" onchange="Geo.municipioE('${tg.url('/geo')}', $('#editarDepartamento' + ' option:selected').val(), '#editarMunicipios')">
+                <option selected="selected" value="${affiliate.departamento.id}">${affiliate.departamento.nombre}</option>
+              </select>
             </li>
             <li>
-              <label for="state">Departamento:</label>
-              <input name="state" value="${affiliate.state}" />
+              <label for="municipio">Municipio:</label>
+              <select name="municipio" class="municipio" id="editarMunicipios">
+                <option selected="selected" value="${affiliate.municipio.id}">${affiliate.municipio.nombre}</option>
+              </select>
             </li>
           </ul>
         </div>

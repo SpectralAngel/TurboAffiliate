@@ -155,7 +155,7 @@ class Departamento(SQLObject):
     nombre = UnicodeCol(length=50,default=None)
     
     municipios = MultipleJoin('Municipio')
-    #afiliados = MultipleJoin('Affiliate')
+    afiliados = MultipleJoin('Affiliate')
 
 class Municipio(SQLObject):
     
@@ -202,6 +202,7 @@ class Affiliate(SQLObject):
     phone = UnicodeCol(default=None)
     
     departamento = ForeignKey('Departamento', default=Departamento.get(19))
+    municipio = ForeignKey('Municipio', default=Municipio.get(299))
     state = UnicodeCol(length=50, default=None)
     school = UnicodeCol(length=255, default=None)
     school2 = UnicodeCol(length=255, default=None)
@@ -1203,7 +1204,7 @@ class Viatico(SQLObject):
     :class:`Asamblea`"""
     
     asamblea = ForeignKey('Asamblea')
-    departamento = ForeignKey('Departamento')
+    municipio = ForeignKey('Municipio')
     monto = CurrencyCol()
 
 class Inscripcion(SQLObject):

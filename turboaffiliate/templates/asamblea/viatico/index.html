@@ -5,6 +5,12 @@
 <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
   <title>TurboAffiliate &bull; Asambleas</title>
+  <script type="text/javascript">
+    $('document').ready(function()
+    {
+      $('#depto-inscripcion').change();
+    });
+  </script>
 </head>
 <body>
   <form class="ui-widget-content ui-corner-all" action="${tg.url('agregar')}">
@@ -21,8 +27,13 @@
         </li>
         <li>
           <label>Departamento:</label>
-          <select name="departamento">
+          <select id="depto-inscripcion" onchange="Geo.municipio('${tg.url('/geo')}', $('#depto-inscripcion' + ' option:selected').val(), '#ins-municipios')">
             <option value="${d.id}" py:for="d in departamentos">${d.nombre}</option>
+          </select>
+        </li>
+        <li>
+          <label for="municipio">Municipio:</label>
+          <select name="municipio" class="municipio" id="ins-municipios">
           </select>
         </li>
         <li>

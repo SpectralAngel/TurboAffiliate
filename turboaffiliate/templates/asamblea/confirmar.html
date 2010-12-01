@@ -18,6 +18,7 @@
         <li>Banco: ${afiliado.banco} - <span py:for="b in bancos" py:if="b.id == afiliado.banco">${b.nombre}</span></li>
         <li>Cuenta: ${afiliado.cuenta}</li>
         <li>Departamento: ${afiliado.departamento.nombre}</li>
+        <li>Municipio: ${afiliado.municipio.nombre}</li>
         <li><input type="submit" value="Inscribir" /></li>
       </ol>
     </fieldset>
@@ -39,13 +40,20 @@
         </li>
         <li>
           <label for="cuenta">Cuenta:</label>
-          <input name="cuenta" />
+          <input name="cuenta" value="${afiliado.cuenta}" />
         </li>
         <li>
-          <label for="departamento">Departamento</label>
-          <select name="departamento">
+          <label for="departamento">Departamento:</label>
+          <select name="departamento" id="depto-inscripcion" onchange="Geo.municipio('${tg.url('/geo')}', $('#depto-inscripcion' + ' option:selected').val(), '#ins-municipios')">
             <option py:for="d in departamentos" py:if="d == afiliado.departamento" selected="selected" value="${d.id}">${d.nombre}</option>
             <option py:for="d in departamentos" value="${d.id}">${d.nombre}</option>
+          </select>
+        </li>
+        <li>
+          <label for="municipio">Municipio:</label>
+          <select name="municipio" class="municipio" id="ins-municipios">
+            <option py:for="m in afiliado.departamento.municipios" py:if="m == afiliado.municipio" selected="selected" value="${m.id}">${m.nombre}</option>
+            <option py:for="m in afiliado.departamento.municipios" value="${m.id}">${m.nombre}</option>
           </select>
         </li>
         <li><input type="submit" value="Inscribir" /></li>
