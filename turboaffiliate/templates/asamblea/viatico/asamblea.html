@@ -13,12 +13,14 @@
     <thead>
       <tr>
         <th>Departamento</th>
+        <th>Municipio</th>
         <th>Monto</th>
       </tr>
     </thead>
     <tbody>
       <tr py:for="viatico in viaticos">
-        <td>${viatico.departamento.nombre}</td>
+        <td>${viatico.municipio.departamento.nombre}</td>
+        <td>${viatico.municipio.nombre}</td>
         <td>${locale.currency(viatico.monto, True, True)}</td>
       </tr>
     </tbody>

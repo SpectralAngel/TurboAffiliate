@@ -108,6 +108,8 @@ class User(SQLObject):
     
     loans = MultipleJoin("Loan", joinColumn="aproval_id")
     logs = MultipleJoin("Logger", joinColumn="user_id")
+    departamentos = RelatedJoin("Departamento")
+    cotizaciones = RelatedJoin("Cotizacion")
     
     def _get_permissions(self):
         perms = set()
@@ -129,6 +131,10 @@ class User(SQLObject):
     def set_password_raw(self, password):
         "Saves the password as-is to the database."
         self._SO_set_password(password)
+    
+    def cotizar(self):
+        
+        return (c.nombre for c in self.cotizaciones)
 
 class Permission(SQLObject):
     permission_name = UnicodeCol(length=16, alternateID=True, 
@@ -156,6 +162,7 @@ class Departamento(SQLObject):
     
     municipios = MultipleJoin('Municipio')
     afiliados = MultipleJoin('Affiliate')
+    usuarios = RelatedJoin("User")
 
 class Municipio(SQLObject):
     
@@ -163,6 +170,11 @@ class Municipio(SQLObject):
     nombre = UnicodeCol(length=50,default=None)
     
     #afiliados = MultipleJoin('Affiliate')
+
+class Cotizacion(SQLObject):
+    
+    nombre = UnicodeCol(length=50,default=None)
+    usuarios = RelatedJoin("User")
 
 class Affiliate(SQLObject):
 
@@ -250,6 +262,14 @@ class Affiliate(SQLObject):
     funebres = MultipleJoin("Funebre", joinColumn="afiliado_id")
     inscripciones = MultipleJoin("Inscripcion", joinColumn="afiliado_id")
     
+    def tiempo(self):
+        
+        if self.joined == None:
+            
+            return 1
+        
+        return (date.today() - self.joined).days / 365
+    
     def get_monthly(self):
         
         """Obtiene el pago mensual que debe efectuar el afiliado"""
@@ -277,7 +297,7 @@ class Affiliate(SQLObject):
         
         kw = dict()
         for n in range(1, 13):
-            kw["month%s" % n] = False
+            kw["month{0}".format(n)] = False
         return kw
     
     def complete(self, year):
@@ -370,7 +390,7 @@ class Affiliate(SQLObject):
         if table == None:
             return False
         
-        return getattr(table, "month%s" % month)
+        return getattr(table, "month{0}".format(month))
     
     def get_age(self):
         

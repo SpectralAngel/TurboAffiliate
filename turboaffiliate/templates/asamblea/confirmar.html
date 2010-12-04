@@ -19,7 +19,7 @@
         <li>Cuenta: ${afiliado.cuenta}</li>
         <li>Departamento: ${afiliado.departamento.nombre}</li>
         <li>Municipio: ${afiliado.municipio.nombre}</li>
-        <li><input type="submit" value="Inscribir" /></li>
+        <li><input py:if="not deshabilitado" type="submit" value="Inscribir" /></li>
       </ol>
     </fieldset>
   </form>
@@ -56,7 +56,7 @@
             <option py:for="m in afiliado.departamento.municipios" value="${m.id}">${m.nombre}</option>
           </select>
         </li>
-        <li><input type="submit" value="Inscribir" /></li>
+        <li><input py:if="not deshabilitado" type="submit" value="Inscribir" /></li>
       </ol>
     </fieldset>
   </form>

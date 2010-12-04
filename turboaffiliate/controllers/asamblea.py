@@ -103,6 +103,17 @@ class Asamblea(controllers.Controller):
         
         return dict(asambleas=model.Asamblea.select(), departamentos=model.Departamento.select())
     
+    @expose()
+    @validate(validators=dict(departamento=validators.Int(), nombre=validators.UnicodeString(),
+                              numero=validators.Int()))
+    def agregar(self, departamento, **kw):
+        
+        kw['departamento'] = model.Departamento.get(departamento)
+        
+        asamblea = model.Asamblea(**kw)
+        
+        raise redirect('/asamblea/{0}'.format(asamblea.id))
+    
     @identity.require(identity.not_anonymous())
     @expose('turboaffiliate.templates.asamblea.inscripcion')
     @validate(validators=dict(asamblea=validators.Int()))
@@ -129,12 +140,24 @@ class Asamblea(controllers.Controller):
         
         afiliado = model.Affiliate.get(afiliado)
         banco = None
+        deshabilitado = False
+        
+        if afiliado.tiempo() < 1:
+            deshabilitado = True
+            flash(u'El afiliado no tiene un año desde su afiliación')
+        
+        if afiliado.debt() > 750:
+            deshabilitado = True
+            flash(u'El afiliado no se encuentra solvente')
         
         if afiliado.banco != None:
             banco = model.Banco.get(afiliado.banco)
         
-        return dict(afiliado=afiliado,banco=banco, asamblea=model.Asamblea.get(asamblea),
-                    bancos=model.Banco.select(), departamentos=model.Departamento.select())
+        return dict(deshabilitado=deshabilitado,
+                    afiliado=afiliado,banco=banco,
+                    asamblea=model.Asamblea.get(asamblea),
+                    bancos=model.Banco.select(),
+                    departamentos=model.Departamento.select())
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.asamblea.confirmar')
@@ -144,12 +167,24 @@ class Asamblea(controllers.Controller):
         
         afiliado = model.Affiliate.selectBy(cardID=identidad).limit(1).getOne()
         banco = None
+        deshabilitado = False
+        
+        if afiliado.tiempo() < 1:
+            deshabilitado = True
+            flash(u'El afiliado no tiene un año desde su afiliación')
+        
+        if afiliado.debt() > 750:
+            deshabilitado = True
+            flash(u'El afiliado no se encuentra solvente')
         
         if afiliado.banco != None:
             banco = model.Banco.get(afiliado.banco)
         
-        return dict(afiliado=afiliado,banco=banco,asamblea=model.Asamblea.get(asamblea),
-                    bancos=model.Banco.select(),departamentos=model.Departamento.select())
+        return dict(deshabilitado=deshabilitado,
+                    afiliado=afiliado,banco=banco,
+                    asamblea=model.Asamblea.get(asamblea),
+                    bancos=model.Banco.select(),
+                    departamentos=model.Departamento.select())
     
     @identity.require(identity.not_anonymous())
     @expose()
@@ -160,6 +195,19 @@ class Asamblea(controllers.Controller):
         kw = dict()
         afiliado = model.Affiliate.get(afiliado)
         asamblea = model.Asamblea.get(asamblea)
+        
+        if afiliado.tiempo() < 1:
+            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
+        
+        if afiliado.debt() > 750:
+            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
+        
+        usuario = identity.current.user
+        if (not afiliado.departamento in usuario.departamentos and
+            not afiliado.payment in usuario.cotizar()):
+            flash("No puede inscribir este departamento")
+            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
+        
         kw['afiliado'] = afiliado
         kw['asamblea'] = asamblea
         kw['viatico'] = model.Viatico.selectBy(asamblea=asamblea,
@@ -183,9 +231,23 @@ class Asamblea(controllers.Controller):
         kw = dict()
         afiliado = model.Affiliate.get(afiliado)
         asamblea = model.Asamblea.get(asamblea)
+        
         departamento = model.Departamento.get(departamento)
         afiliado.departamento = departamento
         afiliado.municipio = model.Municipio.get(municipio)
+        
+        if afiliado.tiempo() < 1:
+            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
+        
+        if afiliado.debt() > 750:
+            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
+        
+        usuario = identity.current.user
+        if (not afiliado.departamento in usuario.departamentos and
+            not afiliado.payment in usuario.cotizar()):
+            flash("No puede inscribir este departamento")
+            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
+        
         banco = model.Banco.get(banco)
         afiliado.banco = banco.id
         afiliado.cuenta = cuenta
@@ -265,9 +327,7 @@ class Asamblea(controllers.Controller):
                 for m in municipios:
                     if m.find(afiliado.town.lower()) != -1:
                         afiliado.municipio = municipios[m]
-            
-        flash('Registrados los municipos de los afiliados')
         
-        raise redirect('/asamblea')
+        flash('Registrados los municipos de los afiliados')
         
         raise redirect('/asamblea')

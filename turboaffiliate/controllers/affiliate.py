@@ -200,12 +200,14 @@ class Affiliate(controllers.Controller):
     @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.report')
-    @validate(validators=dict(state=validators.UnicodeString()))
-    def department(self, state):
+    @validate(validators=dict(departamento=validators.Int()))
+    def departamento(self, departamento):
         
-        affiliates = model.Affiliate.selectBy(state=state)
+        departamento = model.Departamento.ge(departamento)
+        
+        affiliates = model.Affiliate.selectBy(departamento=departamento)
         count = affiliates.count()
-        return dict(affiliates=affiliates, state=state, count=count)
+        return dict(affiliates=affiliates,departamento=departamento,count=count)
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())

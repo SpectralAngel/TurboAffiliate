@@ -81,12 +81,12 @@ class Num2Word_ES(Num2Word_EU):
                 return next
             ctext = "un"
         elif cnum == 100:
-            ctext += "t" + self.gender_stem
+            ctext += "t{0}".format(self.gender_stem)
 
         if nnum < cnum:
             if cnum < 100:
-                return ("%s y %s"%(ctext, ntext), cnum + nnum)
-            return ("%s %s"%(ctext, ntext), cnum + nnum)
+                return ("{0} y {1}".format(ctext, ntext), cnum + nnum)
+            return ("{0} {1}".format(ctext, ntext), cnum + nnum)
         elif (not nnum % 1000000) and cnum > 1:
             ntext = ntext[:-3] + "ones"
 
