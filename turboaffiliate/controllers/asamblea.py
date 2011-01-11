@@ -24,6 +24,7 @@ from decimal import Decimal
 from turboaffiliate import model
 from turbogears import (controllers, identity, expose, validate, validators,
                         redirect, flash)
+import locale
 
 def inscripcionRealizada(afiliado):
     
@@ -142,13 +143,15 @@ class Asamblea(controllers.Controller):
         banco = None
         deshabilitado = False
         
-        if afiliado.tiempo() < 1:
+        if afiliado.tiempo() < 1 and identity.current.user.user_name != 'asura10':
             deshabilitado = True
-            flash(u'El afiliado no tiene un año desde su afiliación')
+            flash(u'El afiliado no tiene un año desde su afiliación: {0}'.format(afiliado.joined))
         
-        if afiliado.debt() > 750:
+        if afiliado.debt() > 1000 and identity.current.user.user_name != 'asura10':
             deshabilitado = True
-            flash(u'El afiliado no se encuentra solvente')
+            flash(u'El afiliado no se encuentra solvente. Deuda {0}'.format(
+                                locale.currency(afiliado.debt(), True, True)
+            ))
         
         if afiliado.banco != None:
             banco = model.Banco.get(afiliado.banco)
@@ -169,13 +172,15 @@ class Asamblea(controllers.Controller):
         banco = None
         deshabilitado = False
         
-        if afiliado.tiempo() < 1:
+        if afiliado.tiempo() < 1 and identity.current.user.user_name != 'asura10':
             deshabilitado = True
-            flash(u'El afiliado no tiene un año desde su afiliación')
+            flash(u'El afiliado no tiene un año desde su afiliación: {0}'.format(afiliado.joined))
         
-        if afiliado.debt() > 750:
+        if afiliado.debt() > 1000 and identity.current.user.user_name != 'asura10':
             deshabilitado = True
-            flash(u'El afiliado no se encuentra solvente')
+            flash(u'El afiliado no se encuentra solvente. Deuda {0}'.format(
+                                locale.currency(afiliado.debt(), True, True)
+            ))
         
         if afiliado.banco != None:
             banco = model.Banco.get(afiliado.banco)
@@ -192,21 +197,21 @@ class Asamblea(controllers.Controller):
                               afiliado=validators.Int()))
     def inscribir(self, afiliado, asamblea):
         
+        if identity.current.user.user_name != 'asura10':
+            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
+        
         kw = dict()
         afiliado = model.Affiliate.get(afiliado)
         asamblea = model.Asamblea.get(asamblea)
         
-        if afiliado.tiempo() < 1:
+        if afiliado.tiempo() < 1 and identity.current.user.user_name != 'asura10':
             raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
-        if afiliado.debt() > 750:
+        if afiliado.debt() > 1000 and identity.current.user.user_name != 'asura10':
             raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
         usuario = identity.current.user
-        if (not afiliado.departamento in usuario.departamentos and
-            not afiliado.payment in usuario.cotizar()):
-            flash("No puede inscribir este departamento")
-            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
+        
         
         kw['afiliado'] = afiliado
         kw['asamblea'] = asamblea
@@ -228,6 +233,9 @@ class Asamblea(controllers.Controller):
                               municipio=validators.Int()))
     def corregir(self, afiliado, asamblea, departamento, banco, cuenta, municipio):
         
+        if identity.current.user.user_name != 'asura10':
+            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
+        
         kw = dict()
         afiliado = model.Affiliate.get(afiliado)
         asamblea = model.Asamblea.get(asamblea)
@@ -236,17 +244,13 @@ class Asamblea(controllers.Controller):
         afiliado.departamento = departamento
         afiliado.municipio = model.Municipio.get(municipio)
         
-        if afiliado.tiempo() < 1:
+        if afiliado.tiempo() < 1 and identity.current.user.user_name != 'asura10':
             raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
-        if afiliado.debt() > 750:
+        if afiliado.debt() > 1000 and identity.current.user.user_name != 'asura10':
             raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
         usuario = identity.current.user
-        if (not afiliado.departamento in usuario.departamentos and
-            not afiliado.payment in usuario.cotizar()):
-            flash("No puede inscribir este departamento")
-            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
         banco = model.Banco.get(banco)
         afiliado.banco = banco.id
@@ -269,6 +273,9 @@ class Asamblea(controllers.Controller):
                               asamblea=validators.Int(),
                               municipio=validators.Int()))
     def corregirDepto(self, afiliado, asamblea, departamento, municipio):
+        
+        if identity.current.user.user_name != 'asura10':
+            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
         kw = dict()
         afiliado = model.Affiliate.get(afiliado)

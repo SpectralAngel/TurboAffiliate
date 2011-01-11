@@ -48,13 +48,13 @@
           <strong>Este afiliado no tiene tarjeta de identidad ingresada</strong>
         </div>
       </div>
-      <div class="ui-widget" py:if="affiliate.state == None or affiliate.state ==''">
+      <div class="ui-widget" py:if="affiliate.departamento.id == 19">
         <div class="ui-state-error ui-corner-all advertencia" style="padding: 0.5em;">
           <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
           <strong>Este afiliado no tiene Departamento</strong>
         </div>
       </div>
-      <div class="ui-widget" py:if="affiliate.town == None or affiliate.town ==''">
+      <div class="ui-widget" py:if="affiliate.municipio.id == 299">
         <div class="ui-state-error ui-corner-all advertencia" style="padding: 0.5em;">
           <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
           <strong>Este afiliado no tiene Ciudad</strong>
@@ -204,14 +204,14 @@
           <thead>
             <tr>
               <th>Asamblea</th>
-              <th>Departamento</th>
+              <th>Municipio</th>
               <th>Enviado</th>
             </tr>
           </thead>
           <tbody>
             <tr py:for="inscripcion in affiliate.inscripciones">
               <td>${inscripcion.asamblea.nombre}</td>
-              <td>${inscripcion.viatico.departamento.nombre}</td>
+              <td>${inscripcion.viatico.municipio.nombre}</td>
               <td py:if="inscripcion.enviado">S&iacute;</td>
               <td py:if="not inscripcion.enviado">No</td>
             </tr>
