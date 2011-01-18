@@ -1,10 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
 # asamblea.py
 # This file is part of TurboAffiliate
 #
-# Copyright (c) 2010 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2010, 2011 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -211,7 +210,6 @@ class Asamblea(controllers.Controller):
             raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
         usuario = identity.current.user
-        
         
         kw['afiliado'] = afiliado
         kw['asamblea'] = asamblea

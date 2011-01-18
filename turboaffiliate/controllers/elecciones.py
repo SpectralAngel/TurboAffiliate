@@ -4,7 +4,7 @@
 # elecciones.py
 # This file is part of TurboAffiliate
 #
-# Copyright (c) 2009,2010 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2009 - 2011 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -42,10 +42,10 @@ class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.institutoDepto')
-    @validate(validators=dict(state=validators.UnicodeString()))
-    def stateSchool(self, state):
-        
-        affiliates = model.Affiliate.selectBy(state=state)
+    @validate(validators=dict(departamento=validators.Int()))
+    def stateSchool(self, departamento):
+        departamento = model.Departamento.get(departamento)
+        affiliates = model.Affiliate.selectBy(departamento=departamento)
         
         schools = dict()
         for affiliate in affiliates:
@@ -57,14 +57,15 @@ class Elecciones(controllers.Controller):
                 schools[affiliate.school] = list()
                 schools[affiliate.school].append(affiliate)
         
-        return dict(state=state, schools=schools)
+        return dict(departamento=departamento, schools=schools)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.urnas')
-    @validate(validators=dict(departamento=validators.UnicodeString()))
+    @validate(validators=dict(departamento=validators.Int()))
     def urnasDepartamentales(self, departamento):
         
-        afiliados = model.Affiliate.selectBy(active=True,state=departamento)
+        departamento = model.Departamento.get(departamento)
+        afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
         
         urnas = dict()
         urnas['Sin Instituto'] = 0
@@ -92,10 +93,11 @@ class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.urnas')
-    @validate(validators=dict(departamento=validators.UnicodeString()))
+    @validate(validators=dict(departamento=validators.Int()))
     def urnasDepartamentalesCinco(self, departamento):
         
-        afiliados = model.Affiliate.selectBy(active=True,state=departamento)
+        departamento = model.Departamento.get(departamento)
+        afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
         
         urnas = dict()
         urnas['Sin Instituto'] = 0
@@ -130,10 +132,11 @@ class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.acta')
-    @validate(validators=dict(departamento=validators.UnicodeString()))
+    @validate(validators=dict(departamento=validators.Int()))
     def actas(self, departamento):
         
-        afiliados = model.Affiliate.selectBy(active=True,state=departamento)
+        departamento = model.Departamento.get(departamento)
+        afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
         
         urnas = dict()
         urnas['Sin Instituto'] = 0
@@ -168,10 +171,11 @@ class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.municipios')
-    @validate(validators=dict(departamento=validators.UnicodeString()))
+    @validate(validators=dict(departamento=validators.Int()))
     def urnasMunicipio(self, departamento):
         
-        afiliados = model.Affiliate.selectBy(active=True,state=departamento)
+        departamento = model.Departamento.get(departamento)
+        afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
         urnas = dict()
         
         for afiliado in afiliados:
@@ -189,22 +193,23 @@ class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.urnasMunicipios')
-    @validate(validators=dict(departamento=validators.UnicodeString()))
+    @validate(validators=dict(departamento=validators.Int()))
     def listaUrnasMunicipio(self, departamento):
         
-        afiliados = model.Affiliate.selectBy(active=True,state=departamento)
+        departamento = model.Departamento.get(departamento)
+        afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
         urnas = dict()
         
         for afiliado in afiliados:
             
-            if not afiliado.town in urnas:
+            if not afiliado.municipio in urnas:
                 urnas[afiliado.town] = dict()
             
-            if afiliado.school in urnas[afiliado.town]:
-                urnas[afiliado.town][afiliado.school].append(afiliado)
+            if afiliado.school in urnas[afiliado.municipio]:
+                urnas[afiliado.municipio][afiliado.school].append(afiliado)
             else:
-                urnas[afiliado.town][afiliado.school] = list()
-                urnas[afiliado.town][afiliado.school].append(afiliado)
+                urnas[afiliado.municipio][afiliado.school] = list()
+                urnas[afiliado.municipio][afiliado.school].append(afiliado)
         
         return dict(urnas=urnas, departamento=departamento, cantidad=afiliados.count())
     
@@ -256,10 +261,11 @@ class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.departamento')
-    @validate(validators=dict(departamento=validators.UnicodeString()))
+    @validate(validators=dict(departamento=validators.Int()))
     def departamento(self, departamento):
         
-        afiliados = model.Affiliate.selectBy(active=True,state=departamento)
+        departamento = model.Departamento.get(departamento)
+        afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
         
         return dict(afiliados=afiliados, departamento=departamento, cantidad=afiliados.count())
     

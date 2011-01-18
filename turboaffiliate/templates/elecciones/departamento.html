@@ -27,7 +27,7 @@
       </thead>
       <tbody>
         <tr py:for="afiliado in afiliados">
-          <td><a href="${tg.url('/affiliate/%s') % afiliado.id}">${afiliado.id}</a></td>
+          <td><a href="${tg.url('/affiliate/{0}').format(afiliado.id)}">${afiliado.id}</a></td>
           <td>${afiliado.lastName}</td>
           <td>${afiliado.firstName}</td>
           <td>${afiliado.cardID}</td>

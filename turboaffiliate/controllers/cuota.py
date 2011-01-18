@@ -42,6 +42,11 @@ class Cuota(controllers.Controller):
         
         affiliate = model.Affiliate.get(affiliate)
         
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = u"Posteo aportaciones de  {0} a {1} afiliado {2}".format(start, end, affiliate.id)
+        model.Logger(**log)
+        
         for n in range(start, end + 1):
             [affiliate.pay_cuota(n, month) for month in range(1, 13)]
         

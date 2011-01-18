@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf8 -*-
 #
 # model.py
@@ -204,8 +203,11 @@ class Affiliate(SQLObject):
     """
 
     firstName = UnicodeCol(length=100)
+    """Nombre del Afiliado"""
     lastName = UnicodeCol(length=100)
+    """Apellidos del Afiliado"""
     cardID = UnicodeCol(length=15, default=None)
+    """Identidad del afiliado"""
     gender = UnicodeCol(length=1, varchar=False)
     birthday = DateCol(default=date.today)
     birthPlace = UnicodeCol(length=100, default=None)
@@ -223,15 +225,15 @@ class Affiliate(SQLObject):
     joined = DateCol(default=date.today)
     """Fecha en que se unio a la organización"""
     active = BoolCol(default=True, notNone=True)
-    
-    # Razon por la que fue desactivado
+    """Indica si el afiliado se encuentra activo o no"""
     reason = UnicodeCol(default=None, length=50)
-    
+    """Razon por la que fue desactivado el afiliado"""
     escalafon = UnicodeCol(length=11, default=None)
     inprema = UnicodeCol(length=11, default=None)
     jubilated = DateCol(default=None)
     
     payment = UnicodeCol(default="Ventanilla", length=20)
+    """Método de cotizacion"""
     
     cuotaTables = MultipleJoin("CuotaTable", orderBy='year')
     """Historial de aportaciones"""
@@ -350,7 +352,7 @@ class Affiliate(SQLObject):
     
     def deuda_prestamo(self):
         
-        """Returns the amount debt by payment"""
+        """Muestra la deuda por préstamos"""
         
         return sum(loan.debt() for loan in self.loans)
     
@@ -404,7 +406,7 @@ class CuentaRetrasada(SQLObject):
 
 class CuotaTable(SQLObject):
     
-    """Contains the payed months as Boolen values"""
+    """Contains the payed months as Boolean values"""
     
     affiliate = ForeignKey("Affiliate")
     year = IntCol()

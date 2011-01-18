@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
 # payed.py
@@ -66,7 +65,6 @@ class Pay(controllers.Controller):
         payedLoan = model.PayedLoan.get(payedLoan)
         
         model.OldPay(payedLoan=payedLoan, **kw)
-        #loan.pay2(amount, day, receipt)
         
         log = dict()
         log['user'] = identity.current.user
