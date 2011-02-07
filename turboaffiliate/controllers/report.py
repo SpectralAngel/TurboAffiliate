@@ -125,35 +125,6 @@ class Report(controllers.Controller):
         return dict(account=account, extras=account.extras)
     
     @identity.require(identity.not_anonymous())
-    @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12),
-                              payment=validators.String()))
-    def OtherReport(self, payment, month, year):
-        
-        """Genera un reporte para otras deducciones"""
-        
-        otherDeduced = model.Deduced.selectBy(year=year,month=month)
-        otherDeduced = [o for o in otherDeduced if o.affiliate.payment == payment]
-        
-        kw = dict()
-        init = dict()
-        i = {"payment":payment, "month":month, "year":year}
-        init["otherReport"] = model.OtherReport(**i)
-        for other in otherDeduced:
-            
-            try:
-                # The account is already in the report, just add the amount
-                kw[other.account].add(other.amount)
-            except KeyError:
-                init['account'] = other.account
-                kw[other.account] = model.OtherAccount(**init)
-                kw[other.account].add(other.amount)
-            
-            other.destroySelf()
-        
-        flash('Reporte Generado')
-        raise redirect(url('/escalafon'))
-    
-    @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.other")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12),
                               payment=validators.String()))
@@ -174,24 +145,25 @@ class Report(controllers.Controller):
         
         for affiliate in affiliates:
             if affiliate.get_month(year, month):
-                if affiliate.school in filiales[affiliate.state]:
-                    filiales[affiliate.state][affiliate.school] += 1
-                    filiales[affiliate.state]['total'] += 1
+                if affiliate.school in filiales[affiliate.departamento]:
+                    filiales[affiliate.departamento][affiliate.school] += 1
+                    filiales[affiliate.departamento]['total'] += 1
                 else:
-                    filiales[affiliate.state][affiliate.school] = 1
-                    filiales[affiliate.state]['total'] += 1
+                    filiales[affiliate.departamento][affiliate.school] = 1
+                    filiales[affiliate.departamento]['total'] += 1
         
         return dict(filiales=filiales)
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.filialesdept")
-    @validate(validators=dict(state=validators.String(),year=validators.Int(),
+    @validate(validators=dict(departamento=validators.Int(),year=validators.Int(),
                               month=validators.Int(min=1,max=12)))
-    def filialesDept(self, state, month, year):
+    def filialesDept(self, departamento, month, year):
         
         """Muestra todas las Filiales de un Departamento con sus respectivos miembros"""
         
-        afiliados = model.Affiliate.selectBy(payment="Escalafon",state=state)
+        departamento = model.Departamento.get(id)
+        afiliados = model.Affiliate.selectBy(payment="Escalafon",departamento=departamento)
         filiales = dict()
         
         for afiliado in afiliados:
@@ -202,7 +174,7 @@ class Report(controllers.Controller):
                     filiales[afiliado.school] = list()
                     filiales[afiliado.school].append(afiliado)
         
-        return dict(filiales=filiales, state=state)
+        return dict(filiales=filiales, departamento=departamento)
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.planilla")

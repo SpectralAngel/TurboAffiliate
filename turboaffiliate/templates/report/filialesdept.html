@@ -8,7 +8,7 @@
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
 </head>
 <body>
-  <h1>Filiales Departamentales ${state}</h1>
+  <h1>Filiales Departamentales ${departamento.nombre}</h1>
   <strong>Total de Afiliados: ${sum(len(filiales[school]) for school in filiales)}</strong>
   <table class="striped full-size ui-widget-content ui-corner-all" py:for="school in filiales">
     <caption>${school}</caption>

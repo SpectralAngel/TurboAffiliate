@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
 # elecciones.py
@@ -44,6 +43,7 @@ class Elecciones(controllers.Controller):
     @expose(template='turboaffiliate.templates.elecciones.institutoDepto')
     @validate(validators=dict(departamento=validators.Int()))
     def stateSchool(self, departamento):
+        
         departamento = model.Departamento.get(departamento)
         affiliates = model.Affiliate.selectBy(departamento=departamento)
         
@@ -180,14 +180,14 @@ class Elecciones(controllers.Controller):
         
         for afiliado in afiliados:
             
-            if not afiliado.town in urnas:
-                urnas[afiliado.town] = dict()
+            if not afiliado.municipio in urnas:
+                urnas[afiliado.municipio] = dict()
             
-            if afiliado.school in urnas[afiliado.town]:
-                urnas[afiliado.town][afiliado.school].append(afiliado)
+            if afiliado.school in urnas[afiliado.municipio]:
+                urnas[afiliado.municipio][afiliado.school].append(afiliado)
             else:
-                urnas[afiliado.town][afiliado.school] = list()
-                urnas[afiliado.town][afiliado.school].append(afiliado)
+                urnas[afiliado.municipio][afiliado.school] = list()
+                urnas[afiliado.municipio][afiliado.school].append(afiliado)
         
         return dict(urnas=urnas, departamento=departamento, cantidad=afiliados.count())
     
@@ -203,7 +203,7 @@ class Elecciones(controllers.Controller):
         for afiliado in afiliados:
             
             if not afiliado.municipio in urnas:
-                urnas[afiliado.town] = dict()
+                urnas[afiliado.municipio] = dict()
             
             if afiliado.school in urnas[afiliado.municipio]:
                 urnas[afiliado.municipio][afiliado.school].append(afiliado)

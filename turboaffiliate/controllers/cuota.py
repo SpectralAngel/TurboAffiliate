@@ -1,10 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
 # cuota.py
 # This file is part of TurboAffiliate
 #
-# Copyright (c) 2008 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2009 - 2011 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -67,7 +66,10 @@ class Cuota(controllers.Controller):
     @validate(validators=dict(code=validators.Int()))
     def edit(self, code):
         
-        "Muestra el formulario de edicion de un año de aportaciones"
+        """Muestra el formulario de edicion de un año de aportaciones
+        
+        :param code: identificador de la Tabla de Aportaciones
+        """
         
         return dict(table=model.CuotaTable.get(code))
     
@@ -97,7 +99,7 @@ class Cuota(controllers.Controller):
         
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = u"Cambio en aportaciones anio {0} afiliado {1}".format(table.year, table.affiliate.id)
+        log['action'] = u"Cambio en aportaciones año {0} afiliado {1}".format(table.year, table.affiliate.id)
         model.Logger(**log)
         
         raise redirect('/affiliate/cuota/{0}'.format(table.affiliate.id))

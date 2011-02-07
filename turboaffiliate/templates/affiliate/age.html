@@ -18,7 +18,7 @@
     </thead>
     <tbody>
       <tr py:for="affiliate in affiliates">
-        <td><a href="${tg.url('/affiliate/%s' % affiliate.id)}">${affiliate.id}</a></td>
+        <td><a href="${tg.url('/affiliate/{0}'.format(affiliate.id))}">${affiliate.id}</a></td>
         <td>${affiliate.firstName} ${affiliate.lastName}</td>
         <td>${affiliate.joined}</td>
         <!-- <td py:content="affiliate.get_age()" /> -->

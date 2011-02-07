@@ -3,7 +3,7 @@
 # billing.py
 # This file is part of TurboAffiliate
 #
-# Copyright (c) 2009,2010 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2009 - 2011 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,10 +35,18 @@ class Billing(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.billing.status')
-	@validate(validators=dict(state=validators.String()))
-	def state(self, state):
+	@validate(validators=dict(departamento=validators.Int()))
+	def state(self, departamento):
 		
-		affiliates = model.Affiliate.selectBy(state=state)
+		"""Muestra los estados de cuenta de aportaciones de los afiliados de un
+		Departamento
+		
+		:param departamento: El identificador del :class:`Departamento` a mostrar
+		"""
+		
+		departamento = model.Departamento.get(departamento)
+		affiliates = model.Affiliate.selectBy(departamento=departamento)
+		
 		return dict(affiliates=affiliates, day=date.today())
 	
 	@identity.require(identity.not_anonymous())
@@ -74,10 +82,16 @@ class Billing(controllers.Controller):
 	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.billing.loans')
-	@validate(validators=dict(state=validators.String()))
-	def loanState(self, state):
+	@validate(validators=dict(departamento=validators.Int()))
+	def loanState(self, departamento):
 		
-		affiliates = model.Affiliate.selectBy(state=state)
+		"""Muestra los estados de cuenta préstamos de los afiliados de un
+		departamento
+		
+		:param departamento: El identificador del :class:`Departamento` a mostrar"""
+		
+		departamento = model.Departamento.get(departamento)
+		affiliates = model.Affiliate.selectBy(departamento=departamento)
 		loans = list()
 		for affiliate in affiliates:
 			loans.extend(affiliate.loans)

@@ -3,7 +3,7 @@
 # extra.py
 # This file is part of TurboAffiliate
 #
-# Copyright (c) 2008 - 2010 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2008 - 2011 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,8 +19,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, redirect, identity
-from turbogears import expose, validate, validators
+from turbogears import (controllers, redirect, identity,expose, validate,
+                        validators, flash)
 from turboaffiliate import model
 from decimal import Decimal
 
@@ -56,6 +56,7 @@ class Extra(controllers.Controller):
         kw['account'] = model.Account.get(account)
         for n in range(first, last +1):
             kw['affiliate'] = model.Affiliate.get(n)
+            kw['amount'] = Decimal(kw['amount'])
             model.Extra(**kw)
         raise redirect('/affiliate')
     
@@ -75,12 +76,10 @@ class Extra(controllers.Controller):
     @validate(validators=dict(account=validators.Int(), months=validators.Int(),
                               payment=validators.String(),
                               amount=validators.String()))
-    def payment(self, payment, account, amount, months):
+    def payment(self, payment, account, amount, **kw):
         
-        kw = dict()
         kw['account'] = model.Account.get(account)
-        kw['amount'] = Decimal(amount)
-        kw['months'] = months
+        kw['amount'] = Decimal(kw['amount'])
         
         afiliados = model.Affiliate.selectBy(payment=payment)
         
@@ -89,7 +88,9 @@ class Extra(controllers.Controller):
             kw['affiliate'] = afiliado
             model.Extra(**kw)
         
-        raise redirect('/affiliate')
+        flash(u'Se agrego la deducción a los afiliados')
+        
+        raise redirect('/affiliate/extra')
     
     @identity.require(identity.not_anonymous())
     @expose('json')

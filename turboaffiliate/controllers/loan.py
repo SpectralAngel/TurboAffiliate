@@ -22,9 +22,16 @@
 from turbogears import controllers, flash, redirect, identity
 from turbogears import expose, validate, validators
 from turboaffiliate import model, wording
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
 from sqlobject.sqlbuilder import AND
+
+def daterange(start_date, end_date):
+    
+    """Crea un rango de fechas para efectuar cálculos"""
+    
+    for n in range((end_date - start_date).days):
+        yield start_date + timedelta(n)
 
 class Deduction(controllers.Controller):
     
@@ -365,9 +372,9 @@ class Loan(controllers.Controller):
         pagados = model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=first,
                                              model.PayedLoan.q.startDate<=last))
         
-        for n in range(first.day, last.day + 1):
-            loans.extend(loan for loan in adeudados if loan.startDate.day == n)
-            loans.extend(loan for loan in pagados if loan.startDate.day == n)
+        for n in daterange(first, last + timedelta(1)):
+            loans.extend(loan for loan in adeudados if loan.startDate == n)
+            loans.extend(loan for loan in pagados if loan.startDate == n)
         
         amount = sum(l.capital for l in loans)
         deuda = sum(l.debt for l in loans)

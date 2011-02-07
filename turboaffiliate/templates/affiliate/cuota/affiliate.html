@@ -12,7 +12,7 @@
     <h3>COPEMH</h3>
     <h4>Estado de Cuenta Aportaciones</h4>
     <div><strong>Al ${day.strftime('%d de %B de %Y')}</strong></div>
-    <h4>${affiliate.id} ${affiliate.firstName} ${affiliate.lastName}</h4>
+    <h4><a href="${tg.url('/affiliate/{0}'.format(affiliate.id))}" >${affiliate.id}</a> ${affiliate.firstName} ${affiliate.lastName}</h4>
     <div class="ui-widget" py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated is None">
       <div class="ui-state-error ui-corner-all advertencia" style="padding: 0.5em;">
         <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
@@ -73,7 +73,7 @@
       </tr>
     </tfoot>
   </table>
-  <table class="striped ui-widget-content" py:if="affiliate.active">
+  <table class="striped ui-widget-content ui-corner-all" py:if="affiliate.active">
     <caption>Cobros a Efectuar</caption>
     <thead>
       <th>Concepto</th>
@@ -120,6 +120,7 @@
       </tr>
     </tfoot>
   </table>
+  <div class="center">Impreso por: ${tg.identity.user.display_name}</div>
   <form action="${tg.url('/affiliate/cuota/addYear')}" method="post" class="ui-widget-content ui-corner-all noprint">
     <fieldset>
       <legend>A&ntilde;adir A&ntilde;o</legend>

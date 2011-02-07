@@ -1,5 +1,5 @@
 
-var Geo = {
+var JSON = {
   departamento : function(url)
   {
     $.get(url+'/departamentos?tg_format=json', function(data)

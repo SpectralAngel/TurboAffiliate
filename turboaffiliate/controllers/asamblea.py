@@ -209,7 +209,10 @@ class Asamblea(controllers.Controller):
         if afiliado.debt() > 1000 and identity.current.user.user_name != 'asura10':
             raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
-        usuario = identity.current.user
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Inscrito afiliado {0} en asamblea {1}".format(afiliado.id, asamblea.id)
+        model.Logger(**log)
         
         kw['afiliado'] = afiliado
         kw['asamblea'] = asamblea
@@ -248,7 +251,10 @@ class Asamblea(controllers.Controller):
         if afiliado.debt() > 1000 and identity.current.user.user_name != 'asura10':
             raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
-        usuario = identity.current.user
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Inscrito afiliado {0} en asamblea {1}".format(afiliado.id, asamblea.id)
+        model.Logger(**log)
         
         banco = model.Banco.get(banco)
         afiliado.banco = banco.id

@@ -1,10 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
 # affiliate.py
 # This file is part of TurboAffiliate
 #
-# Copyright (c) 2007 - 2010 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2007 - 2011 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,6 +27,7 @@ from datetime import date
 from sqlobject.sqlbuilder import OR, AND
 from decimal import Decimal
 import csv
+from sqlobject import SQLObjectNotFound
 
 class Affiliate(controllers.Controller):
     
@@ -62,7 +62,10 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(affiliate=validators.Int()))
     def default(self, affiliate):
         
-        """Permite mostrar un afiliado mediante su numero de afiliación"""
+        """Permite mostrar un afiliado mediante su numero de afiliación
+        
+        :param affiliate: Número de afiliación
+        """
         
         return dict(affiliate=model.Affiliate.get(affiliate),accounts=model.Account.select())
     
@@ -72,7 +75,16 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(cardID=validators.String()))
     def card(self, cardID):
         
-        affiliate = model.Affiliate.selectBy(cardID=cardID).limit(1).getOne()
+        """Permite mostrar un afiliado mediante su numero de Identidad
+        
+        :param cardID: Número de Identidad
+        """
+        try:
+            affiliate = model.Affiliate.selectBy(cardID=cardID).limit(1).getOne()
+        
+        except SQLObjectNotFound:
+            flash(u'No se encontró la identidad {0}'.format(cardID))
+            raise redirect('/affiliate')
         
         raise redirect('/affiliate/{0}'.format(affiliate.id))
     
@@ -115,7 +127,12 @@ class Affiliate(controllers.Controller):
     ))
     def save(self, municipio, departamento, **kw):
         
-        """Permite guardar los datos del afiliado"""
+        """Permite guardar los datos del afiliado
+        
+        :param municipio: Código del municipio del afiliado
+        :param departamento: Código del departamento del afiliado
+        :param kw: Diccionario conteniendo el resto de la información del afiliado
+        """
         
         municipio = model.Municipio.get(municipio)
         departamento = model.Departamento.get(departamento)
@@ -123,7 +140,8 @@ class Affiliate(controllers.Controller):
         if kw['cardID'] == '':
             flash(u'No se escribio un número de identidad')
             raise redirect('/affiliate')
-        try:            
+        try:
+            # Se esta actualizando un afiliado
             affiliate = model.Affiliate.get(int(kw['affiliate']))
             
             # Logs del sistema
@@ -142,6 +160,7 @@ class Affiliate(controllers.Controller):
         
         except KeyError:
             
+            # Se esta creando un nuevo afiliado
             affiliate = model.Affiliate(**kw)
             affiliate.complete(date.today().year)
             affiliate.departamento = departamento
@@ -181,7 +200,13 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(name=validators.UnicodeString()))
     def search(self, name):
         
+        """Permite efectuar una busqueda por nombre o apellido
+        
+        :param name: El nombre o apellido a buscar 
+        """
+        
         if name == '':
+            flash(u'Ingrese un nombre')
             raise redirect('/affiliate')
         affiliates = model.Affiliate.select(OR(model.Affiliate.q.firstName.contains(name),
                                                model.Affiliate.q.lastName.contains(name)))
@@ -215,7 +240,12 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(affiliate=validators.UnicodeString()))
     def byRange(self, cardID):
         
-        affiliates = model.Affiliate.select("affiliate.card_id like '%{0}%'".format(cardID))
+        """Permite buscar afiliados utilizando números de identidad parciales
+        
+        :param cardID: Número de identidad
+        """
+        
+        affiliates = model.Affiliate.select(model.Affiliate.q.cardID.contains(cardID))
         return dict(affiliates=affiliates, cardID=cardID, count=affiliates.count())
     
     @error_handler(error)
@@ -258,7 +288,11 @@ class Affiliate(controllers.Controller):
     def fallecimiento(self, affiliate, muerte):
         
         """Desactiva el Afiliado indicando la fecha de muerte y estableciendo la
-        fecha de proceso con el día en que se ingresa el incidente"""
+        fecha de proceso con el día en que se ingresa el incidente
+        
+        :param affiliate: El número de afiliación
+        :param muerte: Fecha de fallecimiento del Afiliado
+        """
         
         affiliate = model.Affiliate.get(affiliate)
         affiliate.active = False
@@ -291,7 +325,7 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(how=validators.UnicodeString()))
     def payment(self, how):
         
-        affiliates = model.Affiliate.selectBy(model.Affiliate.q.payment==how, orderBy="lastName")
+        affiliates = model.Affiliate.select(model.Affiliate.q.payment==how, orderBy="lastName")
         return dict(affiliates=affiliates, count=affiliates.count(), how=how)
     
     @error_handler(error)
@@ -336,11 +370,17 @@ class Affiliate(controllers.Controller):
     @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.show')
-    @validate(validators=dict(school=validators.UnicodeString(),state=validators.UnicodeString()))
-    def bySchool(self, school, state):
+    @validate(validators=dict(school=validators.UnicodeString(),departamento=validators.Int()))
+    def bySchool(self, school, departamento):
         
-        affiliates = model.Affiliate.select(OR(model.Affiliate.school==school,model.Affiliate.school2==school))
-        affiliates = [a for a in affiliates if a.state == state]
+        """Filtra los afiliados mediante departamento e Instituto
+        
+        :param school: Nombre del Instituto a buscar
+        :param departamento: Código del departamento a buscar
+        """
+        
+        departamento = model.Departamento.get(departamento)
+        affiliates = model.Affiliate.select(AND(model.Affiliate.school==school, model.Affiliate.q.departamento))
         return dict(affiliates=affiliates, show=u"Instituto", count=len(affiliates))
     
     @error_handler(error)
@@ -391,7 +431,7 @@ class Affiliate(controllers.Controller):
         
         affiliates = model.Affiliate.select()
         affiliates = [affiliate for affiliate in affiliates if affiliate.multisolvent(year)]
-        show = "Solventes al %s" % year
+        show = "Solventes al {0}".format(year)
         return dict(affiliates=affiliates, show=show, count=len(affiliates))
     
     @error_handler(error)
@@ -417,7 +457,7 @@ class Affiliate(controllers.Controller):
     def none(self):
         
         affiliates = model.Affiliate.selectBy(joined=None)
-        show = "Sin Año de Afiliación"
+        show = u"Sin Año de Afiliación"
         return dict(affiliates=affiliates, show=show, count=affiliates.count())
     
     @error_handler(error)
@@ -426,7 +466,7 @@ class Affiliate(controllers.Controller):
     def noCard(self):
         
         affiliates = model.Affiliate.selectBy(cardID=None)
-        show = "Sin Número de identidad"
+        show = u"Sin Número de identidad"
         return dict(affiliates=affiliates, show=show, count=affiliates.count())
     
     @error_handler(error)
@@ -457,10 +497,11 @@ class Affiliate(controllers.Controller):
     @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.stateSchool')
-    @validate(validators=dict(state=validators.UnicodeString()))
-    def stateSchool(self, state):
+    @validate(validators=dict(departamento=validators.Int()))
+    def stateSchool(self, departamento):
         
-        affiliates = model.Affiliate.selectBy(state=state)
+        departamento = model.Departamento.get(departamento)
+        affiliates = model.Affiliate.selectBy(departamento=departamento)
         
         schools = dict()
         for affiliate in affiliates:
@@ -470,7 +511,7 @@ class Affiliate(controllers.Controller):
                 schools[affiliate.school] = list()
                 schools[affiliate.school].append(affiliate)
         
-        return dict(state=state, schools=schools)
+        return dict(departamento=departamento, schools=schools)
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
@@ -490,6 +531,14 @@ class Affiliate(controllers.Controller):
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))
     def devolucionPlanilla(self, afiliado, cuenta, day, amount):
         
+        """Permite registrar una devolución de una planilla ingresada manualmente
+        
+        :param afiliado: Número de afiliación
+        :param cuenta: Código de la cuenta de devoluciones
+        :param day: Día en el que se efectuó la deducción
+        :param amount: Monto en que consiste la devolución
+        """
+        
         affiliate = model.Affiliate.get(afiliado)
         cuenta = model.Account.get(cuenta)
         affiliate.pay_cuota(day.year, day.month)
@@ -504,12 +553,12 @@ class Affiliate(controllers.Controller):
         
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Excedente Deducido por planilla afiliado {0}".format(affiliate.id)
+        log['action'] = u"Excedente Deducido por planilla afiliado {0}".format(affiliate.id)
         model.Logger(**log)
         
         return dict(pago=affiliate.get_monthly())
     
-    @expose()
+    #@expose()
     def cuentas(self):
         
         afo = model.Affiliate.selectBy(payment='Escalafon')

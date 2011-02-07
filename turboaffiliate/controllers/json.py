@@ -3,7 +3,7 @@
 # geo.py
 # This file is part of TurboAffiliate
 #
-# Copyright (c) 2010 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2010, 2011 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 from turbogears import controllers, expose, validate, validators
 from turboaffiliate import model
 
-class Geo(controllers.Controller):
+class JSON(controllers.Controller):
     
     @expose('json')
     def departamentos(self):
@@ -40,4 +40,11 @@ class Geo(controllers.Controller):
         departamento = model.Departamento.get(departamento)
         
         return dict(municipios=model.Municipio.selectBy(departamento=departamento))
+    
+    @expose('json')
+    def cuentas(self):
+        
+        """Muestra una lista de las cuentas del sistema"""
+        
+        return dict(cuentas=model.Account.select())
     
