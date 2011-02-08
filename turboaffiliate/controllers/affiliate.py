@@ -228,7 +228,12 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(departamento=validators.Int()))
     def departamento(self, departamento):
         
-        departamento = model.Departamento.ge(departamento)
+        """Muestra los afiliados de un departamento seleccionado
+        
+        :param departamento: Identificador del departamento seleccionado
+        """
+        
+        departamento = model.Departamento.get(departamento)
         
         affiliates = model.Affiliate.selectBy(departamento=departamento)
         count = affiliates.count()
@@ -262,6 +267,8 @@ class Affiliate(controllers.Controller):
     @expose(template='turboaffiliate.templates.affiliate.affiliate')
     def last(self):
         
+        """Muestra el último afiliado que se ingreso al sistema"""
+        
         return dict(affiliate=model.Affiliate.select(orderBy="-id").limit(1).getOne())
     
     @error_handler(error)
@@ -269,6 +276,11 @@ class Affiliate(controllers.Controller):
     @expose()
     @validate(validators=dict(affiliate=validators.Int(), reason=validators.UnicodeString()))
     def deactivate(self, affiliate, reason):
+        
+        """Desactiva el afiliado justificando la razon
+        
+        :param affiliate: Número de afiliación a desactivar
+        :param reason: Justificación de la desactivación"""
         
         affiliate = model.Affiliate.get(affiliate)
         affiliate.active = False

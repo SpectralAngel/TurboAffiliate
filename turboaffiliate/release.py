@@ -7,7 +7,7 @@ version = "0.90m1"
 # long_description = "More description about your plan"
 author = "Carlos Flores"
 email = "cafg10@gmail.com"
-copyright = "Copyright Carlos Flores 2007 - 2010"
+copyright = "Copyright Carlos Flores 2007 - 2011"
 
 # if it's open source, you might want to specify these
 # url = "http://yourcool.site/"

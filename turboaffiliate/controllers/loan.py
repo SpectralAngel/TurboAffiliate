@@ -25,6 +25,8 @@ from turboaffiliate import model, wording
 from datetime import date, timedelta
 from decimal import Decimal
 from sqlobject.sqlbuilder import AND
+from sqlobject.main import SQLObjectNotFound
+from cherrypy import request
 
 def daterange(start_date, end_date):
     
@@ -180,7 +182,14 @@ class Loan(controllers.Controller):
     @validate(validators=dict(code=validators.Int()))
     def default(self, code):
         
-        return dict(loan=model.Loan.get(code), day=date.today(),
+        loan = None
+        try:
+            loan=model.Loan.get(code)
+        except SQLObjectNotFound:
+            flash(u'No se encuentra el préstamo con Solicitud {0}'.format(code))
+            raise redirect(request.path)
+        
+        return dict(loan=loan, day=date.today(),
                     accounts=model.Account.selectBy(loan=True))
     
     @identity.require(identity.not_anonymous())
@@ -231,13 +240,6 @@ class Loan(controllers.Controller):
         
         return dict(loans=l, count=len(l), payment=u'',
                 debt=sum(loan.debt for loan in l), capital=sum(loan.capital for loan in l))
-    
-    @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.loan.edit')
-    @validate(validators=dict(loan=validators.Int()))
-    def edit(self, loan):
-        
-        return dict(loan=model.Loan.get(loan))
     
     @identity.require(identity.not_anonymous())
     @expose()

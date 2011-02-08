@@ -41,5 +41,19 @@ var JSON = {
         $(municipios).append(option);
       });
     });
+  },
+  
+  cotizacion : function(url)
+  {
+    $.get(url + '/cotizacion?tg_format=json',function(data)
+    {
+      $.each(data.cotizaciones, function(i, cotizacion)
+      {
+        var option = $('<option />');
+        option.val(cotizacion.id);
+        option.text(cotizacion.nombre)
+        $('.cotizacion').append(cotizacion);
+      });
+    });
   }
 }
