@@ -49,7 +49,7 @@ class Reintegro(controllers.Controller):
         
         kw['affiliate'] = model.Affiliate.get(affiliate)
         kw['cuenta'] = model.Account.get(cuenta)
-        kw['monto'] = Decimal(kw['monto'])
+        kw['monto'] = Decimal(kw['monto'].replace(',', ''))
         
         reintegro = model.Reintegro(**kw)
         

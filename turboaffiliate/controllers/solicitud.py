@@ -35,7 +35,7 @@ class Solicitud(controllers.Controller):
     def agregar(self, affiliate, **kw):
         
         kw['affiliate'] = model.Affiliate.get(affiliate)
-        kw['monto'] = Decimal(kw['monto'])
+        kw['monto'] = Decimal(kw['monto'].replace(',', ''))
         model.Solicitud(**kw)
         
         flash('Agregada la solicitud')

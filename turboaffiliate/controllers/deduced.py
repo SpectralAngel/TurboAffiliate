@@ -63,7 +63,7 @@ class Deduced(controllers.Controller):
 	def save(self, affiliate, account, **kw):
 	
 		kw['affiliate'] = model.Affiliate.get(affiliate)
-		kw['amount'] = Decimal(kw['amount'])
+		kw['amount'] = Decimal(kw['amount'].replace(',', ''))
 		kw['account'] = model.Account.get(account)
 		model.Deduced(**kw)
 		

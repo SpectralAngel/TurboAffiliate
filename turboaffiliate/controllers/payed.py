@@ -132,31 +132,6 @@ class PayedLoan(controllers.Controller):
         return dict(loan=model.PayedLoan.get(loan))
     
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.loan.payed.view')
-    @validate(validators=dict(loan=validators.Int()))
-    def view(self, loan):
-        
-        return dict(loan=model.PayedLoan.get(loan))
-    
-    @identity.require(identity.not_anonymous())
-    @expose()
-    @validate(validators=dict(loan=validators.Int(),payment=validators.String()))
-    def modify(self, loan, payment):
-        
-        loan = model.PayedLoan.get(loan)
-        loan.payment = Decimal(payment)
-        raise redirect('/payed/{0}'.format(loan.id))
-    
-    @identity.require(identity.not_anonymous())
-    @expose()
-    @validate(validators=dict(loan=validators.Int(),debt=validators.Number()))
-    def debt(self, loan, debt):
-        
-        loan = model.PayedLoan.get(loan)
-        loan.debt = debt
-        raise redirect('/payed/{0}'.format(loan.id))
-    
-    @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(loan=validators.Int()))
     def toLoan(self, loan):

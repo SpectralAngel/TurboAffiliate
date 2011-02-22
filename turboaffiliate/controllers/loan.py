@@ -46,7 +46,7 @@ class Deduction(controllers.Controller):
         
         kw['loan'] = model.Loan.get(kw['loan'])
         kw['account'] = model.Account.get(kw['account'])
-        kw['amount'] = Decimal(kw['amount'])
+        kw['amount'] = Decimal(kw['amount'].replace(',', ''))
         
         log = dict()
         log['user'] = identity.current.user
@@ -68,7 +68,7 @@ class Deduction(controllers.Controller):
         
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Eliminada deduccion prestamo {0}".format(loan.id)
+        log['action'] = u"Eliminada deducción préstamo {0}".format(loan.id)
         model.Logger(**log)
         
         raise redirect('/loan/{0}'.format(loan.id))
@@ -92,7 +92,7 @@ class Pay(controllers.Controller):
                           day=validators.DateTimeConverter(format='%d/%m/%Y')))
     def agregar(self, amount, day, loan, receipt, **kw):
         
-        amount = Decimal(amount)
+        amount = Decimal(amount.replace(',', ''))
         loan = model.Loan.get(loan)
         id = loan.id
         
@@ -136,7 +136,7 @@ class Pay(controllers.Controller):
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))
     def agregarPlanilla(self, loan, day, cuenta, amount, **kw):
         
-        amount = Decimal(amount)
+        amount = Decimal(amount.replace(',', ''))
         loan = model.Loan.get(loan)
         cuenta = model.Account.get(cuenta)
         id = loan.id
@@ -255,7 +255,7 @@ class Loan(controllers.Controller):
         model.Logger(**log)
         
         loan = model.Loan.get(loan)
-        loan.capital = capital
+        loan.capital = capital.replace(',', '')
         loan.months = months
         loan.payment = Decimal(payment).quantize(Decimal("0.01"))
         return self.default(loan.id)
@@ -272,7 +272,8 @@ class Loan(controllers.Controller):
     def new(self, affiliate, **kw):
         
         affiliate = model.Affiliate.get(affiliate)
-        kw['payment'] = Decimal(kw['payment']).quantize(Decimal("0.01"))
+        kw['capital'] = kw['capital'].replace(',', '')
+        kw['payment'] = Decimal(kw['payment'].replace(',', '')).quantize(Decimal("0.01"))
         kw['debt'] = kw['capital']
         kw['letters'] = wording.parse(kw['capital']).capitalize()
         
@@ -300,7 +301,7 @@ class Loan(controllers.Controller):
                               descripcion=validators.UnicodeString()))
     def refinanciar(self, loan, pago, solicitud, cuenta, descripcion):
         
-        pago = Decimal(pago)
+        pago = Decimal(pago.replace(',', ''))
         solicitud = model.Solicitud.get(solicitud)
         cuenta = model.Account.get(cuenta)
         loan = model.Loan.get(loan)
@@ -397,7 +398,7 @@ class Loan(controllers.Controller):
     def modify(self, loan, payment):
         
         loan = model.Loan.get(loan)
-        loan.payment = Decimal(payment)
+        loan.payment = Decimal(payment.replace(',', ''))
         
         log = dict()
         log['user'] = identity.current.user
@@ -414,7 +415,7 @@ class Loan(controllers.Controller):
     def debt(self, loan, debt):
         
         loan = model.Loan.get(loan)
-        loan.debt = Decimal(debt)
+        loan.debt = Decimal(debt.replace(',', ''))
         raise redirect('/loan/{0}'.format(loan.id))
     
     @identity.require(identity.not_anonymous())
@@ -423,7 +424,7 @@ class Loan(controllers.Controller):
     def capital(self, loan, amount):
         
         loan = model.Loan.get(loan)
-        loan.amount = Decimal(amount)
+        loan.amount = Decimal(amount.replace(',', ''))
         raise redirect('/loan/{0}'.format(loan.id))
     
     @identity.require(identity.not_anonymous())

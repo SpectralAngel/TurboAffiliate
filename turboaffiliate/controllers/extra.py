@@ -42,7 +42,7 @@ class Extra(controllers.Controller):
         
         kw['affiliate'] = model.Affiliate.get(affiliate)
         kw['account'] = model.Account.get(account)
-        kw['amount'] = Decimal(kw['amount'])
+        kw['amount'] = Decimal(kw['amount'].replace(',', ''))
         model.Extra(**kw)
         raise redirect('/affiliate/{0}'.format(kw['affiliate'].id))
     
@@ -56,7 +56,7 @@ class Extra(controllers.Controller):
         kw['account'] = model.Account.get(account)
         for n in range(first, last +1):
             kw['affiliate'] = model.Affiliate.get(n)
-            kw['amount'] = Decimal(kw['amount'])
+            kw['amount'] = Decimal(kw['amount'].replace(',', ''))
             model.Extra(**kw)
         raise redirect('/affiliate')
     
