@@ -405,7 +405,7 @@
             </li>
             <li>
               <label for="departamento">Departamento:</label>
-              <select class="departamento" name="departamento" id="editarDepartamento" onchange="Geo.municipioE('${tg.url('/geo')}', $('#editarDepartamento' + ' option:selected').val(), '#editarMunicipios')">
+              <select class="departamento" name="departamento" id="editarDepartamento" onchange="JSON.municipioE('${tg.url('/json')}', $('#editarDepartamento' + ' option:selected').val(), '#editarMunicipios')">
                 <option selected="selected" value="${affiliate.departamento.id}">${affiliate.departamento.nombre}</option>
               </select>
             </li>

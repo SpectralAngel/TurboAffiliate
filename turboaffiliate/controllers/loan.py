@@ -264,7 +264,7 @@ class Loan(controllers.Controller):
     @expose()
     @validate(validators=dict(affiliate=validators.Int(),
                               months=validators.Int(),
-                              capital=validators.Number(),
+                              capital=validators.UnicodeString(),
                               payment=validators.UnicodeString(),
                               interest=validators.Int(),
                               startDate=validators.DateTimeConverter(format='%d/%m/%Y'),
@@ -272,7 +272,7 @@ class Loan(controllers.Controller):
     def new(self, affiliate, **kw):
         
         affiliate = model.Affiliate.get(affiliate)
-        kw['capital'] = kw['capital'].replace(',', '')
+        kw['capital'] = Decimal(kw['capital'].replace(',', '')).quantize(Decimal("0.01"))
         kw['payment'] = Decimal(kw['payment'].replace(',', '')).quantize(Decimal("0.01"))
         kw['debt'] = kw['capital']
         kw['letters'] = wording.parse(kw['capital']).capitalize()

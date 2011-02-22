@@ -1,135 +1,128 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<?python import locale ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="../master.html" />
-  <head>
-    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-    <title>TurboAffiliate &bull; Elecciones</title>
-  </head>
-  <body>
-    <h1>Afiliados</h1>
-    <ul>
-      <li><a href="${tg.url('all')}">Ver Todos los Afiliados</a></li>
-      <li><a href="${tg.url('totalUrnas')}">Total de Urnas</a></li>
-    </ul>
-    <form class="ui-widget-content ui-corner-all" action="${tg.url('stateSchool')}">
-      <fieldset>
-        <legend>Padr&oacute;n Electoral Departamental</legend>
-        <ul>
-          <li>
-            <label for="departamento">Departamento:</label>
-            <select name="departamento" class="departamento" />
-          </li>
-          <li>
-            <input type="submit" value="Ver" />
-          </li>
-        </ul>
-      </fieldset>
-    </form>
-    <form class="ui-widget-content ui-corner-all" action="${tg.url('departamento')}">
-      <fieldset>
-        <legend>Padr&oacute;n Electoral Departamental sin Instituto</legend>
-        <ul>
-          <li>
-            <label for="departamento">Departamento:</label>
-            <select name="departamento" class="departamento" />
-          </li>
-          <li>
-            <input type="submit" value="Ver" />
-          </li>
-        </ul>
-      </fieldset>
-    </form>
-    <form class="ui-widget-content ui-corner-all" action="${tg.url('urnasDepartamentales')}">
-      <fieldset>
-        <legend>Listado de Instituto para Urnas por Departamento</legend>
-        <ul>
-          <li>
-            <label for="departamento">Departamento:</label>
-            <select name="departamento" class="departamento" />
-          </li>
-          <li>
-            <input type="submit" value="Ver" />
-          </li>
-        </ul>
-      </fieldset>
-    </form>
-    <form class="ui-widget-content ui-corner-all" action="${tg.url('urnasDepartamentalesCinco')}">
-      <fieldset>
-        <legend>Listado de Instituto con cinco Afiliados o m&aacute;s</legend>
-        <ul>
-          <li>
-            <label for="departamento">Departamento:</label>
-            <select name="departamento" class="departamento" />
-          </li>
-          <li>
-            <input type="submit" value="Ver" />
-          </li>
-        </ul>
-      </fieldset>
-    </form>
-    <form class="ui-widget-content ui-corner-all" action="${tg.url('urnasMunicipio')}">
-      <fieldset>
-        <legend>Listado de Centros Por Municipio</legend>
-        <ul>
-          <li>
-            <label for="departamento">Departamento:</label>
-            <select name="departamento" class="departamento" />
-          </li>
-          <li>
-            <input type="submit" value="Ver" />
-          </li>
-        </ul>
-      </fieldset>
-    </form>
-    <form class="ui-widget-content ui-corner-all" action="${tg.url('listaUrnasMunicipio')}">
-      <fieldset>
-        <legend>Listado de Urnas Por Municipio</legend>
-        <ul>
-          <li>
-            <label for="departamento">Departamento:</label>
-            <select name="departamento" class="departamento" />
-          </li>
-          <li>
-            <input type="submit" value="Ver" />
-          </li>
-        </ul>
-      </fieldset>
-    </form>
-    <form class="ui-widget-content ui-corner-all" action="${tg.url('actas')}">
-      <fieldset>
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Elecciones</title>
+</head>
+<body>
+  <h1>Afiliados</h1>
+  <div id="contenedor">
+    <div id="contenido">
+      <form class="ui-widget-content ui-corner-all" action="${tg.url('stateSchool')}">
+        <fieldset>
+          <legend>Padr&oacute;n Electoral Departamental</legend>
+          <ul>
+            <li>
+              <label for="departamento">Departamento:</label>
+              <select name="departamento" class="departamento" />
+            </li>
+              <li><input type="submit" value="Ver" /></li>
+          </ul>
+        </fieldset>
+      </form>
+      <form class="ui-widget-content ui-corner-all" action="${tg.url('departamento')}">
+        <fieldset>
+          <legend>Padr&oacute;n Electoral Departamental sin Instituto</legend>
+          <ul>
+            <li>
+              <label for="departamento">Departamento:</label>
+              <select name="departamento" class="departamento" />
+            </li>
+            <li><input type="submit" value="Ver" /></li>
+          </ul>
+        </fieldset>
+      </form>
+      <form class="ui-widget-content ui-corner-all" action="${tg.url('urnasDepartamentales')}">
+        <fieldset>
+          <legend>Listado de Instituto para Urnas por Departamento</legend>
+          <ul>
+            <li>
+              <label for="departamento">Departamento:</label>
+              <select name="departamento" class="departamento" />
+            </li>
+            <li><input type="submit" value="Ver" /></li>
+          </ul>
+        </fieldset>
+      </form>
+      <form class="ui-widget-content ui-corner-all" action="${tg.url('urnasDepartamentalesCinco')}">
+        <fieldset>
+          <legend>Listado de Instituto con cinco Afiliados o m&aacute;s</legend>
+          <ul>
+            <li>
+              <label for="departamento">Departamento:</label>
+              <select name="departamento" class="departamento" />
+            </li>
+            <li><input type="submit" value="Ver" /></li>
+          </ul>
+        </fieldset>
+      </form>
+      <form class="ui-widget-content ui-corner-all" action="${tg.url('urnasMunicipio')}">
+        <fieldset>
+          <legend>Listado de Centros Por Municipio</legend>
+          <ul>
+            <li>
+              <label for="departamento">Departamento:</label>
+              <select name="departamento" class="departamento" />
+            </li>
+            <li><input type="submit" value="Ver" /></li>
+          </ul>
+        </fieldset>
+      </form>
+      <form class="ui-widget-content ui-corner-all" action="${tg.url('listaUrnasMunicipio')}">
+        <fieldset>
+          <legend>Listado de Urnas Por Municipio</legend>
+          <ul>
+            <li>
+              <label for="departamento">Departamento:</label>
+              <select name="departamento" class="departamento" />
+            </li>
+            <li>
+              <input type="submit" value="Ver" />
+            </li>
+          </ul>
+        </fieldset>
+      </form>
+      <form class="ui-widget-content ui-corner-all" action="${tg.url('actas')}">
+        <fieldset>
         <legend>Actas de Resultado Departamental</legend>
-        <ul>
-          <li>
-            <label for="departamento">Departamento:</label>
-            <select name="departamento" class="departamento" />
-          </li>
-          <li>
-            <input type="submit" value="Ver" />
-          </li>
-        </ul>
-      </fieldset>
-    </form>
-    <form class="ui-widget-content ui-corner-all" action="${tg.url('cotizacion')}">
-      <fieldset>
-        <legend>Padr&oacute;n Electoral por Cotizaci&oacute;n</legend>
-        <ul>
-          <li>
-            <label for="cotizacion">Cotiza por:</label>
-            <select name="cotizacion">
-              <option>Escalafon</option>
-              <option>INPREMA</option>
-              <option>UPN</option>
-              <option>Ventanilla</option>
-              <option>Ministerio</option>
-              <option>Retirado</option>
-            </select>
-          </li>
-          <li>
-            <input type="submit" value="Buscar" />
-          </li>
-        </ul>
-      </fieldset>
-    </form>
-  </body>
+          <ul>
+            <li>
+              <label for="departamento">Departamento:</label>
+              <select name="departamento" class="departamento" />
+            </li>
+            <li>
+              <input type="submit" value="Ver" />
+            </li>
+          </ul>
+        </fieldset>
+      </form>
+      <form class="ui-widget-content ui-corner-all" action="${tg.url('cotizacion')}">
+        <fieldset>
+          <legend>Padr&oacute;n Electoral por Cotizaci&oacute;n</legend>
+          <ul>
+            <li>
+              <label for="cotizacion">Cotiza por:</label>
+              <select name="cotizacion">
+                <option>Escalafon</option>
+                <option>INPREMA</option>
+                <option>UPN</option>
+                <option>Ventanilla</option>
+                <option>Ministerio</option>
+                <option>Retirado</option>
+              </select>
+            </li>
+            <li>
+              <input type="submit" value="Buscar" />
+            </li>
+          </ul>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+  <div id="lateral" class="noprint">
+    <a class="button button-size" href="${tg.url('all')}">Ver Todos los Afiliados</a>
+    <a class="button button-size" href="${tg.url('totalUrnas')}">Total de Urnas</a>
+  </div>
+</body>
 </html>
