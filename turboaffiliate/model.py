@@ -219,7 +219,6 @@ class Affiliate(SQLObject):
     municipio = ForeignKey('Municipio', default=Municipio.get(299))
     state = UnicodeCol(length=50, default=None)
     school = UnicodeCol(length=255, default=None)
-    school2 = UnicodeCol(length=255, default=None)
     town = UnicodeCol(length=50, default=None)
     
     joined = DateCol(default=date.today)
@@ -277,8 +276,19 @@ class Affiliate(SQLObject):
         """Obtiene el pago mensual que debe efectuar el afiliado"""
         
         extras = sum(e.amount for e in self.extras)
-        loans = sum(l.get_payment() for l in self.loans)
-        reintegros = sum(r.monto for r in self.reintegros if not r.pagado)
+        loans = Decimal(0)
+        #loans = sum(l.get_payment() for l in self.loans)
+        #reintegros = sum(r.monto for r in self.reintegros if not r.pagado)
+        reintegros = Decimal(0)
+        for r in self.reintegros:
+            reintegros += r.monto
+            break
+        
+        # Cobrar solo el primer prestamo
+        for loan in self.loans:
+            
+            loans = loan.get_payment()
+            break
         
         return extras + loans + reintegros + self.get_cuota()
     

@@ -167,7 +167,7 @@
         <li>
           <label for="departamento">Departamento:</label>
           <select name="departamento" class="departamento" id="agregarDepartamento"
-          onchange="Geo.municipio('${tg.url('/geo')}', $('#agregarDepartamento' + ' option:selected').val(), '#agregarMunicipios')" />
+          onchange="JSON.municipio('${tg.url('/json')}', $('#agregarDepartamento' + ' option:selected').val(), '#agregarMunicipios')" />
         </li>
         <li>
           <label for="municipio">Municipio:</label>

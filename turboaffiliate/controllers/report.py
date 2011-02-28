@@ -47,7 +47,7 @@ class Report(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.index")
     def index(self):
-        return dict(accounts=model.Account.select())
+        return dict(accounts=model.Account.select(), departamentos=model.Departamento.select())
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.post")
@@ -162,7 +162,7 @@ class Report(controllers.Controller):
         
         """Muestra todas las Filiales de un Departamento con sus respectivos miembros"""
         
-        departamento = model.Departamento.get(id)
+        departamento = model.Departamento.get(departamento)
         afiliados = model.Affiliate.selectBy(payment="Escalafon",departamento=departamento)
         filiales = dict()
         
