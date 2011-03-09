@@ -1,7 +1,7 @@
+@CHARSET "UTF-8";
 body
 {
-	font: "Verdana";
-	font-size: large;
+	font: large "Verdana";
 	text-align: justify;
 }
 h1

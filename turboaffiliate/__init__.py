@@ -1,7 +1,9 @@
-#!/usr/bin/python
-# -*- coding: utf8 -*-
+#-*- coding:utf-8 -*-
 #
-# Copyright © 2007 Carlos Flores <cafg10@gmail.com>
+# __init__.py
+# This file is part of TurboAffiliate
+#
+# Copyright (c) 2007 - 2011 Carlos Flores <cafg10@gmail.com>
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or

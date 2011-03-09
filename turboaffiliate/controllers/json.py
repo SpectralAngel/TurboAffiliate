@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 #
-# geo.py
+# json.py
 # This file is part of TurboAffiliate
 #
 # Copyright (c) 2010, 2011 Carlos Flores <cafg10@gmail.com>
@@ -47,4 +47,11 @@ class JSON(controllers.Controller):
         """Muestra una lista de las cuentas del sistema"""
         
         return dict(cuentas=model.Account.select())
+    
+    @expose('json')
+    def cotizacion(self):
+        
+        """Muestra una lista de los métodos de cotización"""
+        
+        return dict(cotizaciones=model.Cotizacion.select())
     

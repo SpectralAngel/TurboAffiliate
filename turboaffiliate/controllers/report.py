@@ -3,7 +3,7 @@
 # report.py
 # This file is part of TurboAffiliate
 #
-# Copyright (c) 2007 - 2010 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2007 - 2011 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,8 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, expose, flash, identity, redirect, url
-from turbogears import validate, validators
+from turbogears import controllers, expose, identity, validate, validators
 from turboaffiliate import model
 from decimal import Decimal
 
@@ -30,14 +29,6 @@ months = {
             7:'Julio', 8:'Agosto', 9:'Septiembre',
             10:'Octubre', 11:'Noviembre', 12:'Diciembre'
          }
-
-filiales = {"Atlantida":{'total':0},"Choluteca":{'total':0},"Colon":{'total':0},
-            "Comayagua":{'total':0},"Copan":{'total':0}, "Cortes":{'total':0},
-            "El Paraiso":{'total':0}, "Francisco Morazan":{'total':0},
-            "Gracias a Dios":{'total':0}, "Intibuca":{'total':0},
-            "Islas de la Bahia":{'total':0},"La Paz":{'total':0},
-            "Lempira":{'total':0},"Olancho":{'total':0},"Ocotepeque":{'total':0},
-            "Santa Barbara":{'total':0},"Valle":{'total':0},"Yoro":{'total':0}}
 
 class Report(controllers.Controller):
     
@@ -142,9 +133,13 @@ class Report(controllers.Controller):
     def filiales(self, year, month):
         
         affiliates = model.Affiliate.selectBy(payment="Escalafon")
+        filiales = dict()
         
         for affiliate in affiliates:
             if affiliate.get_month(year, month):
+                if not affiliate.departamento in filiales:
+                    filiales[affiliate.departamento] = dict()
+                
                 if affiliate.school in filiales[affiliate.departamento]:
                     filiales[affiliate.departamento][affiliate.school] += 1
                     filiales[affiliate.departamento]['total'] += 1
@@ -182,7 +177,7 @@ class Report(controllers.Controller):
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))
     def planilla(self, cotizacion, day):
         
-        return dict(cotizacion=cotizacion, day=day, afiliados=model.Affiliate.selectBy(payment="Cotizacion",active=True))
+        return dict(cotizacion=cotizacion, day=day, afiliados=model.Affiliate.selectBy(payment=cotizacion,active=True))
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.deduced")
@@ -254,4 +249,3 @@ class Report(controllers.Controller):
         affiliates = [c.affiliate for c in cuotas if c.affiliate.active]
         show = "que Cotizaron en {0} de {1}".format(month, year)
         return dict(affiliates=affiliates,show=show,count=len(affiliates))
-

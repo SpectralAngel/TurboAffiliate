@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf8 -*-
 #
 # logger.py
@@ -42,4 +41,3 @@ class Logger(controllers.Controller):
 		logs = model.Logger.select(AND(model.Logger.q.day>=start,model.Logger.q.day<=end))
 		
 		return dict(logs=logs,start=start,end=end)
-

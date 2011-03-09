@@ -1,5 +1,4 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<?python import locale ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="../master.html" />
 <head>
@@ -125,7 +124,7 @@
                 <th>Monto</th>
                 <th>Deuda</th>
                 <th>Cuota</th>
-                <th>Ultimo Pago</th>
+                <th>Otorgado</th>
               </tr>
             </thead>
             <tbody>
@@ -134,7 +133,7 @@
                 <td>${locale.currency(loan.capital, True, True)}</td>
                 <td>${locale.currency(loan.debt, True, True)}</td>
                 <td>${locale.currency(loan.payment, True, True)}</td>
-                <td>${loan.last.strftime('%d de %B de %Y')}</td>
+                <td>${loan.startDate.strftime('%d de %B de %Y')}</td>
               </tr>
             </tbody>
         </table>
@@ -156,8 +155,8 @@
               <td>${solicitud.periodo}</td>
               <td>${solicitud.ingreso.strftime('%d de %B de %Y')}</td>
               <td>${solicitud.entrega.strftime('%d de %B de %Y')}</td>
-              <td><a href="${tg.url('/solicitud/convertir/%s' % solicitud.id)}">Liquidar</a></td>
-              <td><a href="${tg.url('/solicitud/eliminar/%s' % solicitud.id)}">Eliminar</a></td>
+              <td><a href="${tg.url('/solicitud/convertir/{0}'.format(solicitud.id))}">Liquidar</a></td>
+              <td><a href="${tg.url('/solicitud/eliminar/{0}'.format(solicitud.id))}">Eliminar</a></td>
             </tr>
           </tbody>
       </table>
@@ -168,15 +167,15 @@
               <th>Solicitud</th>
               <th>Monto</th>
               <th>Cuota</th>
-              <th>Ultimo Pago</th>
+              <th>Otorgado</th>
             </tr>
           </thead>
           <tbody>
             <tr py:for="loan in affiliate.payedLoans">
-              <td><a href="${tg.url('/payed/%s' % loan.id)}">${loan.id}</a></td>
+              <td><a href="${tg.url('/payed/{0}'.format(loan.id))}">${loan.id}</a></td>
               <td>${locale.currency(loan.capital, True, True)}</td>
               <td>${locale.currency(loan.payment, True, True)}</td>
-              <td>${loan.last.strftime('%d de %B de %Y')}</td>
+              <td>${loan.startDate.strftime('%d de %B de %Y')}</td>
             </tr>
           </tbody>
         </table>
@@ -509,11 +508,11 @@
   <div id="lateral" class="noprint">
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('#Prestamo').dialog('open');">Agregar Pr&eacute;stamo</button>
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.editar').dialog('open');">Editar</button>
-    <button py:if="'admin' in tg.identity.groups" class="ui-button button-size ui-state-default ui-corner-all" href="${tg.url('/affiliate/remove/%s' % affiliate.id)}">Borrar</button>
+    <button py:if="'admin' in tg.identity.groups" class="ui-button button-size ui-state-default ui-corner-all" href="${tg.url('/affiliate/remove/{0}'.format(affiliate.id))}">Borrar</button>
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.extra').dialog('open');">Agregar Deducci&oacute;n</button>
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.jubilar').dialog('open');">Jubilar</button>
     <button class="ui-button button-size ui-state-default ui-corner-all" py:if="affiliate.active" onclick="javascript:$('.desactivar').dialog('open');">Desactivar</button>
-    <a class="ui-button button-size ui-state-default ui-corner-all" py:if="not affiliate.active" href="${tg.url('/affiliate/activate/%s' % affiliate.id)}">Activar</a>
+    <a class="ui-button button-size ui-state-default ui-corner-all" py:if="not affiliate.active" href="${tg.url('/affiliate/activate/{0}'.format(affiliate.id))}">Activar</a>
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.agregarSolicitud').dialog('open');">Agregar Solicitud</button>
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.verDeducciones').dialog('open');">Mostrar Deducciones</button>
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('#deduccionAnual').dialog('open');">Mostrar Deducciones Anuales</button>

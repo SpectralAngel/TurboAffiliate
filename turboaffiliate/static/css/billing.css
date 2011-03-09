@@ -1,5 +1,5 @@
 /*  Ensures a page will be printed for the current block */
-
+@CHARSET "UTF-8";
 .page
 {
 	page-break-after: always;

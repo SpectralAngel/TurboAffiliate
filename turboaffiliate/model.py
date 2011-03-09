@@ -3,7 +3,7 @@
 # model.py
 # This file is part of TurboAffiliate
 #
-# Copyright (c) 2007 - 2010 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2007 - 2011 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -107,6 +107,7 @@ class User(SQLObject):
     
     loans = MultipleJoin("Loan", joinColumn="aproval_id")
     logs = MultipleJoin("Logger", joinColumn="user_id")
+    casa = ForeignKey("Casa")
     departamentos = RelatedJoin("Departamento")
     cotizaciones = RelatedJoin("Cotizacion")
     
@@ -155,6 +156,13 @@ class Logger(SQLObject):
 # Clases Especificas del Negocio
 ################################################################################
 
+months = {
+    1:'Enero', 2:'Febrero', 3:'Marzo', 
+    4:'Abril', 5:'Mayo', 6:'Junio', 
+    7:'Julio', 8:'Agosto', 9:'Septiembre', 
+    10:'Octubre', 11:'Noviembre', 12:'Diciembre'
+}
+
 class Departamento(SQLObject):
     
     nombre = UnicodeCol(length=50,default=None)
@@ -169,6 +177,20 @@ class Municipio(SQLObject):
     nombre = UnicodeCol(length=50,default=None)
     
     #afiliados = MultipleJoin('Affiliate')
+
+class Casa(SQLObject):
+    
+    """Sucursal del COPEMH
+    
+    Representa un lugar físico donde se encuentra una sede del COPEMH.
+    """
+    
+    nombre = UnicodeCol(length=20, default=None)
+    direccion = UnicodeCol(length=255)
+    telefono = UnicodeCol(length=11)
+    activa = BoolCol(default=True)
+    prestamos = MultipleJoin("Loan")
+    usuarios = MultipleJoin("User")
 
 class Cotizacion(SQLObject):
     
@@ -284,7 +306,7 @@ class Affiliate(SQLObject):
             reintegros += r.monto
             break
         
-        # Cobrar solo el primer prestamo
+        # Cobrar solo el primer préstamo
         for loan in self.loans:
             
             loans = loan.get_payment()
@@ -435,7 +457,7 @@ class CuotaTable(SQLObject):
     month11 = BoolCol(default=False)
     month12 = BoolCol(default=False)
     
-    def periodo(self):
+    def periodo(self, retrasada=False):
         
         (start, end) = (1, 13)
         
@@ -443,7 +465,10 @@ class CuotaTable(SQLObject):
             start = self.affiliate.joined.month
         
         if self.year == date.today().year:
-            end = date.today().month + 1
+            if retrasada:
+                end = date.today().month
+            else:
+                end = date.today().month + 1
         
         if end == 0:
             end = 1
@@ -551,8 +576,8 @@ class CuotaTable(SQLObject):
         aportaciones.
         """
         
-        inicio, fin = self.periodo()
-        for n in range(inicio, fin - 1):
+        inicio, fin = self.periodo(retrasada=True)
+        for n in range(inicio, fin):
             if not getattr(self, 'month{0}'.format(n)):
                 return n
         
@@ -585,6 +610,7 @@ class Loan(SQLObject):
     afiliado de la organización"""
     
     affiliate = ForeignKey("Affiliate")
+    casa = ForeignKey("Casa")
     
     capital = CurrencyCol(default=0, notNone=True)
     letters = UnicodeCol(default=None, length=100)
@@ -710,6 +736,7 @@ class Loan(SQLObject):
         kw['last'] = self.last
         kw['startDate'] = self.startDate
         kw['payment'] = self.payment
+        kw['casa'] = self.casa
         payed = PayedLoan(**kw)
         
         for pay in self.pays:
@@ -726,12 +753,6 @@ class Loan(SQLObject):
         
         debt = copy.copy(self.debt)
         li = list()
-        months = {
-            1:'Enero', 2:'Febrero', 3:'Marzo', 
-            4:'Abril', 5:'Mayo', 6:'Junio', 
-            7:'Julio', 8:'Agosto', 9:'Septiembre', 
-            10:'Octubre', 11:'Noviembre', 12:'Diciembre'
-        }
         start = self.startDate.month + self.offset
         if self.startDate.day == 24 and self.startDate.month == 8:
             start += 1
@@ -846,9 +867,11 @@ class Extra(SQLObject):
     
     def act(self, decrementar=True, day=date.today()):
         
+        self.to_deduced(day=day)
+        if decrementar and self.months == 1:
+            self.destroySelf()
         if decrementar:
             self.months -= 1
-        self.to_deduced(day=day)
         if self.months == 0:
             self.destroySelf()
     
@@ -869,7 +892,7 @@ class Extra(SQLObject):
                 month = cuota.delayed()
                 year = cuota.year
                 cuota.pay_month(month)
-            kw['detail'] = "Cuota Retrasada %s de %s" % (month, year)
+            kw['detail'] = "Cuota Retrasada {0} de {1}".format(month, year)
         
         Deduced(**kw)
     
@@ -897,6 +920,7 @@ class Deduction(SQLObject):
 class PayedLoan(SQLObject):
     
     affiliate = ForeignKey("Affiliate")
+    casa = ForeignKey("Casa")
     capital = CurrencyCol(default=0, notNone=True)
     letters = StringCol()
     payment = CurrencyCol(default=0, notNone=True)
@@ -928,6 +952,7 @@ class PayedLoan(SQLObject):
         kw['letters'] = self.letters
         kw['number'] = len(self.pays)
         kw['id'] = self.id
+        kw['casa'] = self.casa
         loan = Loan(**kw)
         
         [pay.to_pay(loan) for pay in self.pays]
@@ -1134,7 +1159,7 @@ class Reintegro(SQLObject):
     """Codigo de la planilla enviado por el empleador"""
     motivo = UnicodeCol(length=100)
     """Razón por la cual se debe efectuar el cobro de nuevo"""
-    formaPago = ForeignKey("FormaPago", default=FormaPago.get(1))
+    formaPago = ForeignKey("FormaPago")
     """Modo en que se efectuó el cobro"""
     pagado = BoolCol(default=False)
     """Identifica si el reintegro ya ha sido pagado"""
@@ -1164,7 +1189,7 @@ class Reintegro(SQLObject):
         kw['month'] = dia.month
         kw['year'] = dia.year
         
-        kw['detail'] = "Reintegro %s por %s" % (self.emision.strftime('%d/%m/%Y'), self.motivo)
+        kw['detail'] = "Reintegro {0} por {0}".format(self.emision.strftime('%d/%m/%Y'), self.motivo)
         
         Deduced(**kw)
     
@@ -1222,6 +1247,7 @@ class Asamblea(SQLObject):
     numero = IntCol()
     nombre = UnicodeCol(length=100)
     departamento = ForeignKey('Departamento')
+    habilitado = BoolCol(default=False)
 
 class Banco(SQLObject):
     

@@ -8,18 +8,18 @@
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
 </head>
 <body>
-  <h1>Cartera de Pr&eacute;stamos</h1>
+  <h1>Cartera de Pr&eacute;stamos de ${casa.nombre}</h1>
   <table class="striped full-size ui-corner-all ui-widget-content">
     <caption>Del ${first.strftime('%d/%m/%Y')} al ${last.strftime('%d/%m/%Y')}</caption>
     <thead>
       <tr>
-        <th>N&ordm;</th>
+        <th>Prestamo</th>
         <th>Carnet</th>
         <th>Afiliado</th>
         <th>Capital</th>
         <th>Liquidado</th>
-        <!-- <th>Saldo</th> -->
-        <th>Otorgado</th>
+        <th>Saldo</th>
+        <th>Fecha Otorgado</th>
       </tr>
     </thead>
     <tbody>
@@ -29,7 +29,7 @@
         <td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
         <td>${locale.currency(loan.capital, True, True)}</td>
         <td>${locale.currency(loan.net(), True, True)}</td>
-        <!-- <td>${locale.currency(loan.debt, True, True)}</td> -->
+        <td>${locale.currency(loan.debt, True, True)}</td>
         <td>${loan.startDate.strftime('%d/%m/%Y')}</td>
       </tr>
     </tbody>
@@ -38,7 +38,7 @@
         <th colspan="2">Pr&eacute;stamos: ${count}</th>
         <th colspan="2">Monto Otorgado: ${locale.currency(amount, True, True)}</th>
         <th colspan="2">Liquidado: ${locale.currency(net, True, True)}</th>
-        <!-- <th>Saldo: ${locale.currency(deuda, True, True)}</th> -->
+        <th>Saldo: ${locale.currency(deuda, True, True)}</th>
       </tr>
     </tfoot>
   </table>

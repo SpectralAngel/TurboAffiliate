@@ -1,10 +1,9 @@
-#!/usr/bin/env python
 #-*- coding:utf-8 -*-
 #
 # __init__.py
 # This file is part of TurboAffiliate
 #
-# Copyright (C) 2009 - Carlos Flores
+# Copyright (C) 2009 - 2011 Carlos Flores
 #
 # TurboAffiliate is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,4 +19,3 @@
 # along with TurboAffiliate; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, 
 # Boston, MA  02110-1301  USA
-

@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf8 -*-
 """
 Module: num2word_ES.py
@@ -31,7 +30,6 @@ History:
 """
 from num2word_EU import Num2Word_EU
 
-#//TODO: correct orthographics
 #//TODO: error messages
 
 class Num2Word_ES(Num2Word_EU):
@@ -41,7 +39,7 @@ class Num2Word_ES(Num2Word_EU):
         max = 3 + 6*len(high)
         
         for word, n in zip(high, range(max, 3, -6)):
-            self.cards[10**(n-3)] = word + "illón"
+            self.cards[10**(n-3)] = word + u"illón"
     
     def setup(self):
         lows = ["cuatr", "tr", "b", "m"]
@@ -98,7 +96,7 @@ class Num2Word_ES(Num2Word_EU):
                 ctext = "sete"
             elif cnum == 9:
                 ctext = "nove"
-            ntext += "t" + self.gender_stem + "s"
+            ntext += "t{0}s".format(self.gender_stem)
         else:
             ntext = " " + ntext
 
@@ -114,7 +112,7 @@ class Num2Word_ES(Num2Word_EU):
     def to_ordinal_num(self, value):
         self.verify_ordinal(value)
         # Correct for fem?
-        return "%s\xB0"%value
+        return "{0}\xB0".format(value)
     
     def to_currency(self, val, longval=True, old=False):
         if old:

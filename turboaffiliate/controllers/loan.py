@@ -3,7 +3,7 @@
 # loan.py
 # This file is part of TurboAffiliate
 #
-# Copyright (c) 2007 - 2010 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2007 - 2011 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ def daterange(start_date, end_date):
     """Crea un rango de fechas para efectuar cálculos"""
     
     for n in range((end_date - start_date).days):
-        yield start_date + timedelta(n)
+        yield (start_date + timedelta(n)).date()
 
 class Deduction(controllers.Controller):
     
@@ -174,7 +174,8 @@ class Loan(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.index')
     def index(self):
-        return dict()
+        
+        return dict(casas=model.Casa.select())
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.loan')
@@ -281,15 +282,17 @@ class Loan(controllers.Controller):
             del kw['id']
             
         if kw['capital'] < 0:
+            flash(u"El capital no puede ser menor que 0")
             raise redirect('/loan/add/{0}'.format(affiliate.id))
         
         kw["aproval"] = identity.current.user
+        kw["casa"] = kw["aproval"].casa
         
         loan = model.Loan(affiliate=affiliate, **kw)
         
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Otorgar prestamo al afiliado {0}".format(affiliate.id)
+        log['action'] = u"Otorgar préstamo al afiliado {0}".format(affiliate.id)
         model.Logger(**log)
         
         raise redirect("/loan/{0}".format(loan.id))
@@ -362,18 +365,9 @@ class Loan(controllers.Controller):
         amount = sum(l.capital for l in loans)
         return dict(amount=amount, loans=loans,day=day)
     
-    @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.loan.cartera')
-    @validate(validators=dict(first=validators.DateTimeConverter(format='%d/%m/%Y'),
-                              last=validators.DateTimeConverter(format='%d/%m/%Y')))
-    def cartera(self, first, last):
+    def carteraInterna(self, first, last, adeudados, pagados):
         
         loans = list()
-        adeudados = model.Loan.select(AND(model.Loan.q.startDate>=first,
-                                          model.Loan.q.startDate<=last))
-        
-        pagados = model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=first,
-                                             model.PayedLoan.q.startDate<=last))
         
         for n in daterange(first, last + timedelta(1)):
             loans.extend(loan for loan in adeudados if loan.startDate == n)
@@ -382,15 +376,44 @@ class Loan(controllers.Controller):
         amount = sum(l.capital for l in loans)
         deuda = sum(l.debt for l in loans)
         net = sum(l.net() for l in loans)
+        
+        return loans, amount, deuda, net
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.loan.cartera')
+    @validate(validators=dict(first=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              last=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def cartera(self, first, last):
+        
+        adeudados = model.Loan.select(AND(model.Loan.q.startDate>=first, model.Loan.q.startDate<=last))
+        
+        pagados = model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=first, model.PayedLoan.q.startDate<=last))
+        
+        loans, amount, deuda, net = self.carteraInterna(first, last, adeudados, pagados)
+        
         return dict(amount=amount, deuda=deuda, net=net, loans=loans,
                     first=first, last=last, count=len(loans))
     
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.loan.view')
-    @validate(validators=dict(loan=validators.Int()))
-    def view(self, loan):
+    @expose(template='turboaffiliate.templates.loan.carteraCasa')
+    @validate(validators=dict(first=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              last=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              casa=validators.Int()))
+    def carteraCasa(self, first, last, casa):
         
-        return dict(loan=model.Loan.get(loan))
+        casa = model.Casa.get(casa)
+        adeudados = model.Loan.select(AND(model.Loan.q.startDate>=first,
+                                          model.Loan.q.startDate<=last,
+                                          model.Loan.q.casa==casa))
+        
+        pagados = model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=first,
+                                             model.PayedLoan.q.startDate<=last,
+                                             model.PayedLoan.q.casa==casa))
+        
+        loans, amount, deuda, net = self.carteraInterna(first, last, adeudados, pagados)
+        
+        return dict(amount=amount, deuda=deuda, net=net, loans=loans,
+                    first=first, last=last, count=len(loans), casa=casa)
     
     @identity.require(identity.not_anonymous())
     @expose()

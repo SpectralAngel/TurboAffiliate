@@ -142,11 +142,11 @@ class Asamblea(controllers.Controller):
         banco = None
         deshabilitado = False
         
-        if afiliado.tiempo() < 1 and identity.current.user.user_name != 'asura10':
+        if afiliado.tiempo() < 1 and not identity.has_permission('asamblea'):
             deshabilitado = True
             flash(u'El afiliado no tiene un año desde su afiliación: {0}'.format(afiliado.joined))
         
-        if afiliado.debt() > 1000 and identity.current.user.user_name != 'asura10':
+        if afiliado.debt() > 1000 and not identity.has_permission('asamblea'):
             deshabilitado = True
             flash(u'El afiliado no se encuentra solvente. Deuda {0}'.format(
                                 locale.currency(afiliado.debt(), True, True)
@@ -171,11 +171,11 @@ class Asamblea(controllers.Controller):
         banco = None
         deshabilitado = False
         
-        if afiliado.tiempo() < 1 and identity.current.user.user_name != 'asura10':
+        if afiliado.tiempo() < 1 and not identity.has_permission('asamblea'):
             deshabilitado = True
             flash(u'El afiliado no tiene un año desde su afiliación: {0}'.format(afiliado.joined))
         
-        if afiliado.debt() > 1000 and identity.current.user.user_name != 'asura10':
+        if afiliado.debt() > 1000 and not identity.has_permission('asamblea'):
             deshabilitado = True
             flash(u'El afiliado no se encuentra solvente. Deuda {0}'.format(
                                 locale.currency(afiliado.debt(), True, True)
@@ -196,17 +196,18 @@ class Asamblea(controllers.Controller):
                               afiliado=validators.Int()))
     def inscribir(self, afiliado, asamblea):
         
-        if identity.current.user.user_name != 'asura10':
+        asamblea = model.Asamblea.get(asamblea)
+        
+        if not asamblea.habilidato and not identity.has_permission('asamblea'):
             raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
         kw = dict()
         afiliado = model.Affiliate.get(afiliado)
-        asamblea = model.Asamblea.get(asamblea)
         
-        if afiliado.tiempo() < 1 and identity.current.user.user_name != 'asura10':
+        if afiliado.tiempo() < 1 and not identity.has_permission('asamblea'):
             raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
-        if afiliado.debt() > 1000 and identity.current.user.user_name != 'asura10':
+        if afiliado.debt() > 1000 and not identity.has_permission('asamblea'):
             raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
         log = dict()

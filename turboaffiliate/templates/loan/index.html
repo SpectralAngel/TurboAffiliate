@@ -10,7 +10,6 @@
   <div id="contenedor">
     <div id="contenido">
     <h1>Pr&eacute;stamos</h1>
-    
     <form class="ui-widget-content ui-corner-all" action="${tg.url('search')}">
       <fieldset>
         <legend>Buscar Pr&eacute;stamo</legend>
@@ -64,6 +63,30 @@
           <li>
             <label>Final:</label>
             <input name="last" class="datepicker" />
+          </li>
+          <li>
+            <input type="submit" value="Buscar" />
+          </li>
+        </ul>
+      </fieldset>
+    </form>
+    <form class="ui-widget-content ui-corner-all" action="${tg.url('carteraCasa')}">
+      <fieldset>
+        <legend>Mostrar Cartera Pr&eacute;stamos Por Casa</legend>
+        <ul>
+          <li>
+            <label>Inicio:</label>
+            <input name="first" class="datepicker" />
+          </li>
+          <li>
+            <label>Final:</label>
+            <input name="last" class="datepicker" />
+          </li>
+          <li>
+            <label for="casa">Casa:</label>
+            <select name="casa">
+              <option py:for="casa in casas" value="${casa.id}">${casa.nombre}</option>
+            </select>
           </li>
           <li>
             <input type="submit" value="Buscar" />
