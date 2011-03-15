@@ -21,9 +21,9 @@
       <h3 class="centrado">Capital Prestado: ${locale.currency(loan.capital, True, True)}</h3>
       <h4 class="flotante-izquierdo"> Prestatario:
           <a class="print" href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}">${loan.affiliate.id}</a>
-          ${loan.affiliate.firstName} ${loan.affiliate.lastName}
+          ${loan.affiliate.firstName} ${loan.affiliate.lastName}  
       </h4>
-      <h4 class="flotante-derecho">Fecha de Otorgamiento: ${loan.startDate.strftime('%d de %B de %Y')}</h4>
+      <h4 class="flotante-derecho">Otorgamiento: ${loan.startDate.strftime('%d de %B de %Y')} ${loan.casa.nombre}</h4>
       <table class="ui-widget-content ui-corner-all striped full-size">
         <caption>Deducciones</caption>
         <thead>

@@ -120,7 +120,6 @@ class Affiliate(controllers.Controller):
             gender=validators.UnicodeString(),
             payment=validators.UnicodeString(),
             school=validators.UnicodeString(),
-            school2=validators.UnicodeString(),
             inprema=validators.UnicodeString(),
             municipio=validators.Int(),
             departamento=validators.Int()

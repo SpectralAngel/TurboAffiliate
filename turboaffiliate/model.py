@@ -303,6 +303,8 @@ class Affiliate(SQLObject):
         #reintegros = sum(r.monto for r in self.reintegros if not r.pagado)
         reintegros = Decimal(0)
         for r in self.reintegros:
+            if r.pagado:
+                break
             reintegros += r.monto
             break
         
