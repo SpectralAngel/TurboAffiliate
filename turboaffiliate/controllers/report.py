@@ -118,14 +118,15 @@ class Report(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.other")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12),
-                              payment=validators.String()))
-    def showReport(self, year, month, payment):
+                              cotizacion=validators.String()))
+    def cotizacion(self, year, month, cotizacion):
         
         """Muestra los cobros efectuados correspondientes a un mes y año con
         respecto a un tipo de pago"""
         
-        report = model.OtherReport.selectBy(payment=payment,year=year,month=month).getOne()
-        return dict(month=month, year=year, report=report, payment=payment)
+        cotizacion = model.Cotizacion.get(cotizacion)
+        report = model.OtherReport.selectBy(cotizacion=cotizacion,year=year,month=month).getOne()
+        return dict(month=month, year=year, report=report, cotizacion=cotizacion)
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.filiales")

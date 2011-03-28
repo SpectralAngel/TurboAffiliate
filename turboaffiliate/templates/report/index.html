@@ -47,17 +47,13 @@
       </ul>
     </fieldset>
   </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('showReport')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('cotizacion')}">
     <fieldset>
-      <legend>Mostrar Otros Reportes</legend>
+      <legend>Ingresos por Cotizaci&oacute;n</legend>
       <ul>
         <li>
-          <label for="payment">Cotizaci&oacute;n:</label>
-          <select name="payment">
-            <option>INPREMA</option>
-            <option>UPN</option>
-            <option>Ministerio</option>
-          </select>
+          <label for="cotizacion">Cotizaci&oacute;n:</label>
+          <select name="cotizacion" class="cotizaciones"></select>
         </li>
         <li>
           <label for="year">A&ntilde;o:</label>

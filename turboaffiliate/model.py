@@ -175,8 +175,7 @@ class Municipio(SQLObject):
     
     departamento = ForeignKey('Departamento')
     nombre = UnicodeCol(length=50,default=None)
-    
-    #afiliados = MultipleJoin('Affiliate')
+    afiliados = MultipleJoin('Affiliate')
 
 class Casa(SQLObject):
     
@@ -254,7 +253,8 @@ class Affiliate(SQLObject):
     jubilated = DateCol(default=None)
     
     payment = UnicodeCol(default="Ventanilla", length=20)
-    """Método de cotizacion"""
+    cotizacion = ForeignKey('Cotizacion')
+    """Método de Cotización"""
     
     cuotaTables = MultipleJoin("CuotaTable", orderBy='year')
     """Historial de aportaciones"""
@@ -283,9 +283,13 @@ class Affiliate(SQLObject):
     sobrevivencias = MultipleJoin("Sobrevivencia", joinColumn="afiliado_id")
     devoluciones = MultipleJoin("Devolucion", joinColumn="afiliado_id")
     funebres = MultipleJoin("Funebre", joinColumn="afiliado_id")
+    seguros = MultipleJoin("Seguro", joinColumn="afiliado_id")
     inscripciones = MultipleJoin("Inscripcion", joinColumn="afiliado_id")
     
     def tiempo(self):
+        
+        """Permite mostrar el tiempo que tiene el afiliado de ser parte de la
+        organizacion"""
         
         if self.joined == None:
             
@@ -324,8 +328,8 @@ class Affiliate(SQLObject):
         obligations = Obligation.selectBy(month=hoy.month, year=hoy.year)
         
         obligation = Decimal(0)
-        obligation += sum(o.amount for o in obligations if self.payment != 'INPREMA')
-        obligation += sum(o.inprema for o in obligations if self.payment == 'INPREMA')
+        obligation += sum(o.amount for o in obligations if self.cotizacion.nombre != 'INPREMA')
+        obligation += sum(o.inprema for o in obligations if self.cotizacion.nombre == 'INPREMA')
         
         return obligation
     
@@ -344,10 +348,6 @@ class Affiliate(SQLObject):
         kw['affiliate'] = self
         kw['year'] = year
         CuotaTable(**kw)
-    
-    def payment_check(self, string):
-        
-        return self.payment == string
     
     def get_delayed(self):
         
@@ -504,7 +504,7 @@ class CuotaTable(SQLObject):
         total = Zero
         os = Obligation.selectBy(year=self.year,month=mes)
         
-        if self.affiliate.payment == "INPREMA" and not self.affiliate.jubilated is None:
+        if self.affiliate.cotizacion.nombre == "INPREMA" and not self.affiliate.jubilated is None:
         
             if self.affiliate.jubilated.year < self.year:
                 total = sum(o.inprema for o in os)
@@ -1069,8 +1069,8 @@ class OtherReport(SQLObject):
     
     year = IntCol()
     month = IntCol()
-    payment = UnicodeCol(length=15)
     otherAccounts = MultipleJoin("OtherAccount")
+    cotizacion = ForeignKey("Cotizacion")
 
     def total(self):
         return sum(r.amount for r in self.otherAccounts)
@@ -1241,6 +1241,32 @@ class Funebre(SQLObject):
     pariente = UnicodeCol(length=100)
     """Familiar que fallecio"""
     banco = UnicodeCol(length=50)
+
+class Indemnizacion(SQLObject):
+    
+    nombre = UnicodeCol(length=50)
+    seguros = MultipleJoin("Seguro")
+
+class Seguro(SQLObject):
+    
+    afiliado = MultipleJoin("Affiliate")
+    indemnizacion = ForeignKey("Indemnizacion")
+    fecha = DateCol(default=datetime.now)
+    fallecimiento = DateCol(default=datetime.now)
+    beneficiarios = MultipleJoin("Beneficiario")
+    
+    def monto(self):
+        
+        return sum(beneficiario.monto for beneficiario in self.beneficiarios)
+
+class Beneficiario(SQLObject):
+    
+    seguro = ForeignKey("Seguro")
+    nombre = UnicodeCol(length=50)
+    monto = CurrencyCol()
+    cheque = UnicodeCol(length=20)
+    banco = UnicodeCol(length=50)
+    fecha = DateCol(default=datetime.now)
 
 class Asamblea(SQLObject):
     

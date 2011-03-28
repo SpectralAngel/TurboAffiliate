@@ -52,7 +52,7 @@ var JSON = {
         var option = $('<option />');
         option.val(cotizacion.id);
         option.text(cotizacion.nombre)
-        $('.cotizacion').append(cotizacion);
+        $('.cotizaciones').append(option);
       });
     });
   }

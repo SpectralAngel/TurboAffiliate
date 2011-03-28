@@ -23,7 +23,7 @@
           <a class="print" href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}">${loan.affiliate.id}</a>
           ${loan.affiliate.firstName} ${loan.affiliate.lastName}  
       </h4>
-      <h4 class="flotante-derecho">Otorgamiento: ${loan.startDate.strftime('%d de %B de %Y')} ${loan.casa.nombre}</h4>
+      <h4 class="flotante-derecho">Otorgado: ${loan.startDate.strftime('%d de %B de %Y')} ${loan.casa.nombre}</h4>
       <table class="ui-widget-content ui-corner-all striped full-size">
         <caption>Deducciones</caption>
         <thead>
