@@ -285,6 +285,7 @@ class Affiliate(SQLObject):
     funebres = MultipleJoin("Funebre", joinColumn="afiliado_id")
     seguros = MultipleJoin("Seguro", joinColumn="afiliado_id")
     inscripciones = MultipleJoin("Inscripcion", joinColumn="afiliado_id")
+    depositos = MultipleJoin("Deposito", joinColumn="afiliado_id")
     
     def tiempo(self):
         
@@ -372,9 +373,13 @@ class Affiliate(SQLObject):
             cuota = CuotaTable(**kw)
         return cuota
     
+    def pagar_cuota(self, mes, anio):
+        
+        self.obtenerAportaciones(anio).pagar_mes(mes)
+    
     def pay_cuota(self, year, month):
         
-        self.obtenerAportaciones(year).pay_month(month)
+        self.obtenerAportaciones(year).pagar_mes(month)
     
     def remove_cuota(self, year, month):
         
@@ -591,6 +596,9 @@ class CuotaTable(SQLObject):
             return text + ' checked'
         else:
             return text + ' '
+    
+    def pagar_mes(self, mes):
+        setattr(self, 'month{0}'.format(mes), True)
     
     def pay_month(self, month):
         setattr(self, 'month{0}'.format(month), True)
@@ -1283,6 +1291,8 @@ class Banco(SQLObject):
     :class:`Viaticos`"""
     
     nombre = UnicodeCol(length=100)
+    depositable = BoolCol(default=False)
+    depositos = MultipleJoin("Deposto")
 
 class Viatico(SQLObject):
     
@@ -1299,8 +1309,19 @@ class Inscripcion(SQLObject):
     :class:`Affiliate`"""
     
     afiliado = ForeignKey('Affiliate')
-    """:class:`Afiliado` a quien se entrega"""
+    """:class:`Afiliado` que se inscribio"""
     asamblea = ForeignKey('Asamblea')
     viatico = ForeignKey('Viatico')
     enviado = BoolCol(default=False)
     envio = DateCol(default=date.today)
+
+class Deposito(SQLObject):
+    
+    """Pagos efectuados mediante un deposito bancario"""
+    
+    afiliado = ForeignKey("Affiliate")
+    """:class:`Afiliado` que realizó el :class:`Deposito`"""
+    banco = ForeignKey("Banco")
+    concepto = UnicodeCol(length=50)
+    fecha = DateCol(default=date.today)
+    monto = CurrencyCol()

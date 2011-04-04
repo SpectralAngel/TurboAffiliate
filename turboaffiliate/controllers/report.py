@@ -159,7 +159,8 @@ class Report(controllers.Controller):
         """Muestra todas las Filiales de un Departamento con sus respectivos miembros"""
         
         departamento = model.Departamento.get(departamento)
-        afiliados = model.Affiliate.selectBy(payment="Escalafon",departamento=departamento)
+        cotizacion = model.Cotizacion.get(1)
+        afiliados = model.Affiliate.selectBy(cotizacion=cotizacion,departamento=departamento)
         filiales = dict()
         
         for afiliado in afiliados:
@@ -174,11 +175,12 @@ class Report(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.planilla")
-    @validate(validators=dict(cotizacion=validators.UnicodeString(),
+    @validate(validators=dict(cotizacion=validators.Int(),
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))
     def planilla(self, cotizacion, day):
         
-        return dict(cotizacion=cotizacion, day=day, afiliados=model.Affiliate.selectBy(payment=cotizacion,active=True))
+        cotizacion = model.Cotizacion.get(cotizacion)
+        return dict(cotizacion=cotizacion, day=day, afiliados=model.Affiliate.selectBy(cotizacion=cotizacion,active=True))
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.deduced")

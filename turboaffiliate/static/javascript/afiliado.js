@@ -87,7 +87,6 @@ $(document).ready(function(e)
   $('.jubilar').dialog(
   {
     title : "Jubilar o Cambiar Fecha de Jubilación",
-    modal:true,
     autoOpen:false,
     width:480,
     minWidth:480,
@@ -99,7 +98,6 @@ $(document).ready(function(e)
   ;$('.muerte').dialog(
   {
     title : "Reportar Fallecimiento",
-    modal:true,
     autoOpen:false,
     width:480,
     minWidth:480,
@@ -115,4 +113,42 @@ $(document).ready(function(e)
     width:480,
     minWidth:480
   });
+  
+  $('.pagar').dialog(
+  {
+      title: "Agregar un Pago",
+      autoOpen: false,
+      width: 380,
+      minWidth: 380,
+      buttons: {
+          'Agregar': function(){
+              $(this).submit()
+          },
+          Cancelar: function(){
+              $(this).dialog('close');
+          }
+      }
+  });
+  $('#pagarAportaciones').dialog(
+  {
+      title: "Agregar Pago Aportaciones",
+      autoOpen: false,
+      width: 380,
+      minWidth: 380,
+      buttons: {
+          'Agregar': function(){
+              $(this).submit()
+          },
+          'Cancelar': function(){
+              $(this).dialog('close');
+          }
+      }
+  });
 });
+
+function pagarPrestamo(prestamo, monto)
+{
+  $('#loan').val(prestamo);
+  $('#amount').val(monto);
+  $('#pagoPrestamo').dialog('open');
+}

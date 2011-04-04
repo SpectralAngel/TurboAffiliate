@@ -26,7 +26,8 @@ from cherrypy import request, response
 # from turboaffiliate import model
 from turboaffiliate.controllers import (affiliate, loan, obligation, report,
                                         account, payed, logger, elecciones,
-                                        solicitud, reintegro, asamblea, json)
+                                        solicitud, reintegro, asamblea, json,
+                                        deposito)
 
 # import logging
 # log = logging.getLogger("turboaffiliate.controllers")
@@ -46,6 +47,7 @@ class Root(controllers.RootController):
     reintegro = reintegro.Reintegro()
     asamblea = asamblea.Asamblea()
     json = json.JSON()
+    deposito = deposito.Deposito()
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.welcome")

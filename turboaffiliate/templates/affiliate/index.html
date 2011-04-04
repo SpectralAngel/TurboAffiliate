@@ -1,5 +1,4 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<?python import locale ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="../master.html" />
 <head>
@@ -84,20 +83,13 @@
         </ul>
       </fieldset>
     </form>
-    <form class="ui-widget-content ui-corner-all" action="${tg.url('payment')}">
+    <form class="ui-widget-content ui-corner-all" action="${tg.url('cotizacion')}">
       <fieldset>
         <legend>Ver Afiliados por Cotizaci&oacute;n</legend>
         <ul>
           <li>
-            <label for="how">Cotiza por:</label>
-            <select name="how">
-              <option>Escalafon</option>
-              <option>INPREMA</option>
-              <option>UPN</option>
-              <option>Ventanilla</option>
-              <option>Ministerio</option>
-              <option>Retirado</option>
-            </select>
+            <label for="cotizacion">Cotiza por:</label>
+            <select name="cotizacion" class="cotizaciones"></select>
           </li>
           <li><input type="submit" value="Buscar" /></li>
         </ul>
@@ -192,12 +184,8 @@
         <legend>Pago Manual de Planillas</legend>
         <ul>
           <li>
-            <label for="payment">Cotiza por:</label>
-            <select name="payment">
-              <option>INPREMA</option>
-              <option>UPN</option>
-              <option>Ministerio</option>
-            </select>
+            <label for="cotizacion">Cotiza por:</label>
+            <select name="cotizacion" class="cotizaciones"></select>
           </li>
           <li>
             <label>D&iacute;a de Posteo:</label>

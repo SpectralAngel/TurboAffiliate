@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html" />
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Depositos</title>
+</head>
+<body>
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/deposito/nombre')}">
+    <fieldset>
+      <legend>Buscar Afiliado</legend>
+      <ol>
+        <li>
+          <label for="nombre">Nombre:</label>
+          <input name="nombre" />
+        </li>
+        <li><input type="submit" value="Registrar" /></li>
+      </ol>
+    </fieldset>
+  </form>
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/deposito/afiliacion')}">
+    <fieldset>
+      <legend>Buscar por Afiliaci&oacute;n</legend>
+      <ol>
+        <li>
+          <label for="afiliado">Carnet:</label>
+          <input name="afiliado" />
+        </li>
+        <li><input type="submit" value="Revisar Datos" /></li>
+      </ol>
+    </fieldset>
+  </form>
+</body>
+</html>

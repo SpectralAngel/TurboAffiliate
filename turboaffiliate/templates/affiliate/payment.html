@@ -1,5 +1,4 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<?python import locale ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="../master.html" />
 <head>
@@ -7,7 +6,7 @@
   <title>TurboAffiliate &bull; Afiliados por Cotizaci&oacute;n ${show}</title>
 </head>
 <body>
-  <h1>Afiliados que Cotizan por ${how}</h1>
+  <h1>Afiliados que Cotizan por ${cotizacion.nombre}</h1>
   <table class="striped full-size ui-corner-all ui-widget-content">
     <thead>
       <tr>
@@ -18,7 +17,7 @@
     </thead>
     <tbody>
       <tr py:for="affiliate in affiliates">
-        <td><a href="${tg.url('/affiliate/%s' % affiliate.id)}">${affiliate.id}</a></td>
+        <td><a href="${tg.url('/affiliate/{0}'.format(affiliate.id))}">${affiliate.id}</a></td>
         <td>${affiliate.firstName} ${affiliate.lastName}</td>
         <td>${affiliate.cardID}</td>
       </tr>

@@ -337,11 +337,12 @@ class Affiliate(controllers.Controller):
     @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.payment')
-    @validate(validators=dict(how=validators.UnicodeString()))
-    def payment(self, how):
+    @validate(validators=dict(cotizacion=validators.Int()))
+    def cotizacion(self, cotizacion):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.payment==how, orderBy="lastName")
-        return dict(affiliates=affiliates, count=affiliates.count(), how=how)
+        cotizacion = model.Cotizacion.get(cotizacion)
+        affiliates = model.Affiliate.select(model.Affiliate.q.cotizacion==cotizacion, orderBy="lastName")
+        return dict(affiliates=affiliates, count=affiliates.count(), cotizacion=cotizacion)
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
@@ -417,16 +418,17 @@ class Affiliate(controllers.Controller):
     @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.planilla')
-    @validate(validators=dict(payment=validators.UnicodeString(),
+    @validate(validators=dict(cotizacion=validators.Int(),
                               prestamos=validators.Int(),
                               aportaciones=validators.Int(),
                               excedente=validators.Int(),
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))
-    def planilla(self, payment, day, aportaciones, prestamos, excedente):
+    def planilla(self, cotizacion, day, aportaciones, prestamos, excedente):
         
-        affiliates = model.Affiliate.select(model.Affiliate.q.payment==payment, orderBy="lastName")
+        cotizacion = model.Cotizacion.get(cotizacion)
+        affiliates = model.Affiliate.select(model.Affiliate.q.cotizacion==cotizacion, orderBy="lastName")
         
-        return dict(afiliados=affiliates, cotizacion=payment, excedente=excedente,
+        return dict(afiliados=affiliates, cotizacion=cotizacion, excedente=excedente,
                     aportaciones=aportaciones, prestamos=prestamos,day=day)
     
     @error_handler(error)
@@ -496,6 +498,9 @@ class Affiliate(controllers.Controller):
         affiliate.jubilated = jubilated
         affiliate.escalafon = str(cobro)
         affiliate.payment = "INPREMA"
+        # TODO: Encontrar una manera de cambiar esto por algo generico en lugar de
+        # codificado en duro.
+        affiliate.cotizacion = model.Cotizacion.get(2)
         return self.default(affiliate.id)
     
     @error_handler(error)

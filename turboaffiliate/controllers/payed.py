@@ -23,7 +23,6 @@ from turbogears import controllers, flash, redirect, identity
 from turbogears import expose, validate, validators
 from turboaffiliate import model
 from datetime import date
-from decimal import Decimal
 from sqlobject.sqlbuilder import AND
 
 class Pay(controllers.Controller):

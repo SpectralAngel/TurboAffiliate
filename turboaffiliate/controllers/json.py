@@ -55,3 +55,9 @@ class JSON(controllers.Controller):
         
         return dict(cotizaciones=model.Cotizacion.select())
     
+    @expose('json')
+    def bancos(self):
+        
+        """Muestra una lista con todos los bancos disponibles"""
+        
+        return dict(bancos=model.Banco.selectBy(depositable=True))

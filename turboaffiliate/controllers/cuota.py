@@ -20,7 +20,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 from turbogears import (controllers, expose, identity, redirect, validate,
-                        validators)
+                        validators, flash)
 from turboaffiliate import model
 from datetime import date
 
@@ -116,12 +116,27 @@ class Cuota(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose('json')
+    @validate(validators=dict(afiliado=validators.Int(),anio=validators.Int(),
+                              mes=validators.Int()))
+    def pagar(self, afiliado, mes, anio):
+        
+        afiliado = model.Affiliate.get(afiliado)
+        # afiliado.pagar_cuota(mes, anio)
+        afiliado.pay_cuota(anio, mes)
+        
+        flash(u'Pagadas Aportaciones de {0} de {1}'.format(mes, anio))
+        
+        raise redirect('/affiliate/{0}'.format(afiliado.id))
+    
+    @identity.require(identity.not_anonymous())
+    @expose('json')
     @validate(validators=dict(afiliado=validators.Int(),cuenta=validators.Int(),
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))
     def pagoPlanilla(self, afiliado, cuenta, day):
         
         affiliate = model.Affiliate.get(afiliado)
         cuenta = model.Account.get(cuenta)
+        # affiliate.pagar_cuota(day.month, day.year)
         affiliate.pay_cuota(day.year, day.month)
         
         deduccion = dict()

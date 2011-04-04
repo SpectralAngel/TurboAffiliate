@@ -55,5 +55,18 @@ var JSON = {
         $('.cotizaciones').append(option);
       });
     });
+  },
+  bancos : function(url)
+  {
+    $.get(url + '/bancos?tg_format=json', function(data)
+    {
+      $.each(data.bancos, function(i, banco)
+      {
+        var option = $('<option />');
+        option.val(banco.id);
+        option.text(banco.nombre)
+        $('.bancos').append(option);
+      });
+    });
   }
 }

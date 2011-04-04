@@ -1,12 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<?python import locale ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="../master.html" />
 <head>
 	<title>TurboAffiliate &bull; Planilla de ${cotizacion}</title>
 </head>
 <body>
-  <h1>Planilla de ${cotizacion}</h1>
+  <h1>Planilla de ${cotizacion.nombre}</h1>
   <table class="full-size striped ui-corner-all ui-widget-content">
     <caption>Lista de Afiliados</caption>
     <thead>
@@ -46,7 +45,7 @@
               <li><input type="submit" value="pagar" /></li>
             </fieldset>
           </form>
-          <form class="ui-widget-content reducido ui-corner-all" py:for="extra in afiliado.extras" action="${tg.url('/affiliate/')}">
+          <form class="ui-widget-content reducido ui-corner-all" py:for="extra in afiliado.extras" action="${tg.url('/affiliate/extra/pagarPlanilla')}">
             <fieldset>
               <legend>${extra.account.name}</legend>
               <strong>Cantidad: ${locale.currency(extra.amount)}</strong>

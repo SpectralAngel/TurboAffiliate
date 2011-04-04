@@ -125,6 +125,7 @@
                 <th>Deuda</th>
                 <th>Cuota</th>
                 <th>Otorgado</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -134,6 +135,7 @@
                 <td>${locale.currency(loan.debt, True, True)}</td>
                 <td>${locale.currency(loan.payment, True, True)}</td>
                 <td>${loan.startDate.strftime('%d de %B de %Y')}</td>
+                <td><button class="button inline ui-button ui-state-default ui-corner-all" onclick="javascript:pagarPrestamo(${loan.id}, ${loan.get_payment()})">Pagar</button></td>
               </tr>
             </tbody>
         </table>
@@ -499,11 +501,63 @@
           </ul>
         </div>
       </form>
+      <form class="pagar" id="pagoPrestamo" action="${tg.url('/loan/pay/agregar')}" method="post">
+        <div>
+          <input type="hidden" name="loan" id="loan" />
+          <ul>
+            <li>
+              <label for="amount">Monto:</label>
+              <input name="amount" id="amount" />
+            </li>
+            <li>
+              <label for="day">Fecha:</label>
+              <input name="day" />
+            </li>
+            <li>
+              <label for="receipt">Recibo:</label>
+              <input name="receipt" />
+            </li>
+            <li>
+              <label for="free">Libre de Intereses:</label>
+              <input name="free" type="checkbox" />
+            </li>
+          </ul>
+        </div>
+      </form>
+      <form id="pagarAportaciones" action="${tg.url('/affiliate/cuota/pagar')}">
+        <div>
+          <input type="hidden" name="afiliado" value="${affiliate.id}" />
+          <ul>
+            <li>
+              <label for="mes">Mes:</label>
+              <select name="mes">
+                <option value="1">Enero</option>
+                <option value="2">Febrero</option>
+                <option value="3">Marzo</option>
+                <option value="4">Abril</option>
+                <option value="5">Mayo</option>
+                <option value="6">Junio</option>
+                <option value="7">Julio</option>
+                <option value="8">Agosto</option>
+                <option value="9">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+              </select>
+            </li>
+            <li>
+              <label for="anio">A&ntilde;o:</label>
+              <input name="anio" />
+            </li>
+          </ul>
+        </div>
+      </form>
     </div>
   </div>
   <div id="lateral" class="noprint">
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('#Prestamo').dialog('open');">Agregar Pr&eacute;stamo</button>
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.editar').dialog('open');">Editar</button>
+    <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('#pagarAportaciones').dialog('open');">Pagar Aportaciones</button>
     <button py:if="'admin' in tg.identity.groups" class="ui-button button-size ui-state-default ui-corner-all" href="${tg.url('/affiliate/remove/{0}'.format(affiliate.id))}">Borrar</button>
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.extra').dialog('open');">Agregar Deducci&oacute;n</button>
     <button class="ui-button button-size ui-state-default ui-corner-all" onclick="javascript:$('.jubilar').dialog('open');">Jubilar</button>
