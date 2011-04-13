@@ -15,7 +15,7 @@ $(document).ready(function(e)
         minWidth:380,
         buttons:{
                      'Agregar Reintegro' : function() { $(this).submit() },
-                     Cancelar :  function() { $(this).dialog('close'); }
+                     'Cancelar' :  function() { $(this).dialog('close'); }
                 }
     });
     $('.PagarReintegro').dialog(
@@ -27,7 +27,7 @@ $(document).ready(function(e)
         minWidth:380,
         buttons:{
                      'Pagar Reintegro' : function() { $(this).submit() },
-                     Cancelar :  function() { $(this).dialog('close'); }
+                     'Cancelar' :  function() { $(this).dialog('close'); }
                 }
     });
 });

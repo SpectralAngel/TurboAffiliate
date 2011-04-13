@@ -2,7 +2,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="../master.html" />
 <head>
-	<title>TurboAffiliate &bull; Planilla de ${cotizacion}</title>
+  <title>TurboAffiliate &bull; Planilla de ${cotizacion.nombre}</title>
+  <script src="${tg.url('/static/javascript/jquery.validate.js')}" type="text/javascript"></script>
+  <script type="text/javascript">
+    $(document).ready(function(e)
+    {
+      $.each($(".postear"), function(i, form)
+      {
+        $(form).validate(
+          {
+            debug : false,
+            submitHandler : function(form)
+            {
+              $.post($(form).attr('action'), $(form).serialize(), function(data)
+              {
+                alert("Se efectuó el pago de " + data.pago);
+              });
+            }
+          }
+        );
+      });
+    });
+  </script>
 </head>
 <body>
   <h1>Planilla de ${cotizacion.nombre}</h1>
@@ -21,7 +42,7 @@
         <td><a href="${tg.url('/affiliate/{0}'.format(afiliado.id))}">${afiliado.id}</a></td>
         <td>${afiliado.lastName} ${afiliado.firstName}</td>
         <td>
-          <form class="ui-widget-content reducido ui-corner-all" action="${tg.url('/affiliate/cuota/pagoPlanilla')}">
+          <form class="ui-widget-content reducido ui-corner-all postear" action="${tg.url('/affiliate/cuota/pagoPlanilla')}">
             <fieldset>
               <legend>Aportaciones ${locale.currency(afiliado.get_cuota(), True, True)}</legend>
               <input name="afiliado" value="${afiliado.id}" type="hidden" />
@@ -36,13 +57,9 @@
               <input name="loan" value="${loan.id}" type="hidden" />
               <input name="day" value="${day.strftime('%d/%m/%Y')}" type="hidden" />
               <input name="cuenta" value="${prestamos}" type="hidden" />
-              <li>
-                <label>Pago: </label>
-                <input name="amount" value="${loan.get_payment()}" />
-               </li>
-               <li>
-              </li>
-              <li><input type="submit" value="pagar" /></li>
+              <label>Pago: </label>
+              <input name="amount" value="${loan.get_payment()}" />
+              <input type="submit" value="pagar" />
             </fieldset>
           </form>
           <form class="ui-widget-content reducido ui-corner-all" py:for="extra in afiliado.extras" action="${tg.url('/affiliate/extra/pagarPlanilla')}">

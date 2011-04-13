@@ -25,7 +25,6 @@ $(document).ready(function(e)
   $('#AgregarAfiliado').dialog(
   {
     title : "Agregar un Afiliado",
-    modal:true,
     autoOpen:false,
     buttons :   {
             'Agregar Afiliado' : function() { $(this).submit() },
@@ -37,7 +36,6 @@ $(document).ready(function(e)
   {
     title : "Buscar Por Identidad",
     autoOpen:false,
-    modal:true,
     buttons :   {
             'Buscar' : function() { $(this).submit() },
             'Cancelar' :  function() { $(this).dialog('close'); }
@@ -48,7 +46,6 @@ $(document).ready(function(e)
   {
     title : "Buscar Por Carnet",
     autoOpen:false,
-    modal:true,
     buttons :   {
             'Buscar' : function() { $(this).submit() },
             'Cancelar' :  function() { $(this).dialog('close'); }
@@ -59,7 +56,6 @@ $(document).ready(function(e)
   {
     title : "Buscar Por Nombre",
     autoOpen:false,
-    modal:true,
     buttons :   {
             'Buscar' : function() { $(this).submit() },
             'Cancelar' :  function() { $(this).dialog('close'); }

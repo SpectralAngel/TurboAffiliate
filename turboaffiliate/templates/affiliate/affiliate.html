@@ -5,6 +5,9 @@
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
   <title>TurboAffiliate &bull; ${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</title>
   <script src="${tg.url('/static/javascript/afiliado.js')}" type="text/javascript"></script>
+  <script type="text/javascript">
+    JSON.jubilados("${tg.url('/json')}");
+  </script>
 </head>
 <body>
   <div id="contenedor">
@@ -134,7 +137,7 @@
                 <td>${locale.currency(loan.capital, True, True)}</td>
                 <td>${locale.currency(loan.debt, True, True)}</td>
                 <td>${locale.currency(loan.payment, True, True)}</td>
-                <td>${loan.startDate.strftime('%d de %B de %Y')}</td>
+                <td>${loan.startDate.strftime('%d/%b/%Y')}</td>
                 <td><button class="button inline ui-button ui-state-default ui-corner-all" onclick="javascript:pagarPrestamo(${loan.id}, ${loan.get_payment()})">Pagar</button></td>
               </tr>
             </tbody>
@@ -448,6 +451,10 @@
               <input py:if="affiliate.jubilated != None" name="jubilated" value="${affiliate.jubilated.strftime('%d/%m/%Y')}" class="datepicker" />
               <input py:if="affiliate.jubilated == None" name="jubilated" class="datepicker" />
               <input type="hidden" value="${affiliate.id}" name="affiliate" />
+            </li>
+            <li>
+              <label for="cotizacion">Cotizaci&oacute;n</label>
+              <select name="cotizacion" class="jubilados"></select>
             </li>
             <li>
               <label for="cobro">N&uacute;mero de Cobro:</label>

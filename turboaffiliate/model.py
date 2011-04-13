@@ -194,6 +194,7 @@ class Casa(SQLObject):
 class Cotizacion(SQLObject):
     
     nombre = UnicodeCol(length=50,default=None)
+    jubilados = BoolCol(default=True)
     usuarios = RelatedJoin("User")
 
 class Affiliate(SQLObject):
@@ -329,8 +330,8 @@ class Affiliate(SQLObject):
         obligations = Obligation.selectBy(month=hoy.month, year=hoy.year)
         
         obligation = Decimal(0)
-        obligation += sum(o.amount for o in obligations if self.cotizacion.nombre != 'INPREMA')
-        obligation += sum(o.inprema for o in obligations if self.cotizacion.nombre == 'INPREMA')
+        obligation += sum(o.amount for o in obligations if not self.cotizacion.jubilados)
+        obligation += sum(o.inprema for o in obligations if self.cotizacion.jubilados)
         
         return obligation
     
@@ -509,7 +510,7 @@ class CuotaTable(SQLObject):
         total = Zero
         os = Obligation.selectBy(year=self.year,month=mes)
         
-        if self.affiliate.cotizacion.nombre == "INPREMA" and not self.affiliate.jubilated is None:
+        if self.affiliate.cotizacion.jubilados and not self.affiliate.jubilated is None:
         
             if self.affiliate.jubilated.year < self.year:
                 total = sum(o.inprema for o in os)
@@ -660,37 +661,46 @@ class Loan(SQLObject):
         """Carga un nuevo pago para el préstamo
         
         Dependiendo de si se marca como libre de intereses o no, calculará el
-        interés compuesto a pagar
+        interés compuesto a pagar.
+        
+        En caso de ingresar un pago mayor que la deuda actual del préstamo,
+        ingresará el sobrante como intereses y marcará el préstamo como
+        pagado.
         """
         
         kw = dict()
-        kw['amount'] = Decimal(amount).quantize(dot01)
+        kw['amount'] = amount = Decimal(amount).quantize(dot01)
         kw['day'] = day
         kw['receipt'] = receipt
         kw['loan'] = self
         
-        # La cantidad a pagar es igual o mayor que la deuda del préstamo, por
+        # La cantidad a pagar es igual que la deuda del préstamo, por
         # lo tanto se considera la ultima cuota y no se cargaran intereses
-        if(self.debt <= amount):
-        #   
+        if(self.debt == amount):
+           
             self.last = kw['day']
             kw['capital'] = kw['amount']
+            kw['interest'] = 0
             # Register the payment in the database
             Pay(**kw)
             # Remove the loan and convert it to PayedLoan
             self.remove()
             return True
+        
         if libre:
             kw['interest'] = 0
         else:
             kw['interest'] = (self.debt * self.interest / 1200).quantize(dot01)
         
-        # Increase the loans debt by the interest
-        self.debt += kw['interest']
-        # Decrease debt by the payment amount
-        self.debt -= kw['amount']
+        # Registra cualquier cantidad mayor a los intereses
+        if(self.debt < amount):
+            
+            kw['interest'] = amount - self.debt
+        
         # Calculate how much money was used to pay the capital
         kw['capital'] = kw['amount'] - kw['interest']
+        # Decrease debt by the amount of the payed capital
+        self.debt -= kw['capital']
         # Change the last payment date
         #if day.date > self.last:
         self.last = day

@@ -163,6 +163,9 @@ class Affiliate(controllers.Controller):
         except KeyError:
             
             # Se esta creando un nuevo afiliado
+            kw['cotizacion'] = cotizacion
+            kw['departamento'] = departamento
+            kw['municipio'] = municipio
             affiliate = model.Affiliate(**kw)
             affiliate.complete(date.today().year)
             affiliate.departamento = departamento
@@ -491,17 +494,18 @@ class Affiliate(controllers.Controller):
     @expose()
     @validate(validators=dict(affiliate=validators.Int(),
                               jubilated=validators.DateTimeConverter(format='%d/%m/%Y'),
-                              cobro=validators.Int()))
-    def jubilar(self, affiliate, jubilated, cobro):
+                              cobro=validators.Int(), cotizacion=validators.Int()))
+    def jubilar(self, affiliate, jubilated, cobro, cotizacion):
+        
+        """Permite pasar al afiliado al modo de cobro para jubilados y
+        pensionados a los cuales se les deduce una cantidad menor"""
         
         affiliate = model.Affiliate.get(affiliate)
         affiliate.jubilated = jubilated
         affiliate.escalafon = str(cobro)
-        affiliate.payment = "INPREMA"
-        # TODO: Encontrar una manera de cambiar esto por algo generico en lugar de
-        # codificado en duro.
-        affiliate.cotizacion = model.Cotizacion.get(2)
-        return self.default(affiliate.id)
+        affiliate.cotizacion = model.Cotizacion.get(cotizacion)
+        affiliate.payment = affiliate.cotizacion.nombre
+        raise redirect('/affiliate/{0}'.format(affiliate.id))
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())

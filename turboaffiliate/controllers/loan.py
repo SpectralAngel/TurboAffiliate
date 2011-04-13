@@ -188,7 +188,7 @@ class Loan(controllers.Controller):
             loan=model.Loan.get(code)
         except SQLObjectNotFound:
             flash(u'No se encuentra el préstamo con Solicitud {0}'.format(code))
-            raise redirect(request.path)
+            raise redirect(request.headers.get("Referer", "/"))
         
         return dict(loan=loan, day=date.today(),
                     accounts=model.Account.selectBy(loan=True))

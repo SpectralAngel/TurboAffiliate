@@ -152,4 +152,4 @@ class Cuota(controllers.Controller):
         log['action'] = u"Pago por Planilla de cuota de aportaciones afiliado {0}".format(affiliate.id)
         model.Logger(**log)
         
-        return dict(pago=affiliate.get_monthly())
+        return dict(pago=affiliate.get_cuota(day))

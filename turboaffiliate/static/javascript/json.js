@@ -68,5 +68,18 @@ var JSON = {
         $('.bancos').append(option);
       });
     });
+  },
+  jubilados : function(url)
+  {
+    $.get(url + '/jubilados?tg_format=json', function(data)
+    {
+      $.each(data.cotizaciones, function(i, cotizacion)
+      {
+        var option = $('<option />');
+        option.val(cotizacion.id);
+        option.text(cotizacion.nombre)
+        $('.jubilados').append(option);
+      });
+    });
   }
 }
