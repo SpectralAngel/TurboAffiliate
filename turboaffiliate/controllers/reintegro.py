@@ -36,7 +36,8 @@ class Reintegro(controllers.Controller):
         return dict()
     
     @expose()
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @validate(validators=dict(affiliate=validators.Int(),cuenta=validators.Int(),
                               emision=validators.DateTimeConverter(format='%d/%m/%Y'),
                               motivo=validators.UnicodeString(),
@@ -68,7 +69,8 @@ class Reintegro(controllers.Controller):
                     cuenta=model.Account.get(678),
                     formas=model.FormaPago.select())
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(reintegro=validators.Int()))
     def eliminar(self, reintegro):
@@ -83,7 +85,8 @@ class Reintegro(controllers.Controller):
         
         raise redirect('/reintegro/{0}'.format(afiliado.id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(reintegro=validators.Int(),forma=validators.Int(),
                               fecha=validators.DateTimeConverter(format='%d/%m/%Y')))

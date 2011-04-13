@@ -31,7 +31,8 @@ class Extra(controllers.Controller):
     def index(self):
         return dict(accounts=model.Account.select())
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(affiliate=validators.Int(),
                               account=validators.Int(),
@@ -46,7 +47,8 @@ class Extra(controllers.Controller):
         model.Extra(**kw)
         raise redirect('/affiliate/{0}'.format(kw['affiliate'].id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(account=validators.Int(), months=validators.Int(),
                               first=validators.Int(), last=validators.Int(),
@@ -60,7 +62,8 @@ class Extra(controllers.Controller):
             model.Extra(**kw)
         raise redirect('/affiliate')
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(code=validators.Int()))
     def delete(self, code):
@@ -71,7 +74,8 @@ class Extra(controllers.Controller):
         
         raise redirect('/affiliate/{0}'.format(affiliate.id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(account=validators.Int(), months=validators.Int(),
                               payment=validators.String(),
@@ -92,7 +96,8 @@ class Extra(controllers.Controller):
         
         raise redirect('/affiliate/extra')
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose('json')
     @validate(validators=dict(extra=validators.Int(),
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))

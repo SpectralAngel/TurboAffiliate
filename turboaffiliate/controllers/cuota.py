@@ -33,7 +33,8 @@ class Cuota(controllers.Controller):
         
         return dict(affiliate=model.Affiliate.get(affiliate), day=date.today())
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(affiliate=validators.Int(),start=validators.Int(),
                               end=validators.Int()))
@@ -51,7 +52,8 @@ class Cuota(controllers.Controller):
         
         raise redirect('/affiliate/cuota/{0}'.format(affiliate.id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(id=validators.Int()))
     def remove(self, id):
@@ -61,7 +63,8 @@ class Cuota(controllers.Controller):
         table.destroySelf()
         raise redirect('/affiliate/cuota/{0}'.format(affiliate.id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose(template='turboaffiliate.templates.affiliate.cuota.edit')
     @validate(validators=dict(code=validators.Int()))
     def edit(self, code):
@@ -73,7 +76,8 @@ class Cuota(controllers.Controller):
         
         return dict(table=model.CuotaTable.get(code))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(id=validators.Int(),
                               month1=validators.Bool(),
@@ -104,7 +108,8 @@ class Cuota(controllers.Controller):
         
         raise redirect('/affiliate/cuota/{0}'.format(table.affiliate.id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(affiliate=validators.Int(),year=validators.Int()))
     def addYear(self, affiliate, year):
@@ -114,7 +119,8 @@ class Cuota(controllers.Controller):
         
         raise redirect('/affiliate/cuota/{0}'.format(affiliate.id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose('json')
     @validate(validators=dict(afiliado=validators.Int(),anio=validators.Int(),
                               mes=validators.Int()))
@@ -128,7 +134,8 @@ class Cuota(controllers.Controller):
         
         raise redirect('/affiliate/{0}'.format(afiliado.id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose('json')
     @validate(validators=dict(afiliado=validators.Int(),cuenta=validators.Int(),
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))

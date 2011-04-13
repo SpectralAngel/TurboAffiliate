@@ -83,7 +83,7 @@
               <td></td>
               <td></td>
               <td>${locale.currency(affiliate.get_cuota(), True, True)}</td>
-              <td class="noprint">&nbsp;</td>
+              <td class="noprint"><button class="noprint button inline" onclick="javascript:$('#pagarAportaciones').dialog('open');">Pagar</button></td>
             </tr>
             <tr py:for="loan in affiliate.loans">
               <td>Cuota de Pr&eacute;stamo</td>

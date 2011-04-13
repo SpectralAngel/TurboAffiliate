@@ -37,7 +37,10 @@ def daterange(start_date, end_date):
 
 class Deduction(controllers.Controller):
     
-    @identity.require(identity.not_anonymous())
+    require = identity.require(identity.not_anonymous())
+    
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(loan=validators.Int(),account=validators.Int(),
                               amount=validators.UnicodeString(),
@@ -57,7 +60,8 @@ class Deduction(controllers.Controller):
         model.Deduction(**kw)
         raise redirect('/loan/{0}'.format(kw['loan'].id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(deduction=validators.Int()))
     def remove(self, deduction):
@@ -75,7 +79,10 @@ class Deduction(controllers.Controller):
 
 class Pay(controllers.Controller):
     
-    @identity.require(identity.not_anonymous())
+    require = identity.require(identity.not_anonymous())
+    
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(code=validators.Int()))
     def remove(self, code):
@@ -85,7 +92,8 @@ class Pay(controllers.Controller):
         pay.revert()
         raise redirect('/loan/{0}'.format(loan.id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(amount=validators.String(),loan=validators.Int(),
                           receipt=validators.String(), free=validators.Bool(),
@@ -128,7 +136,8 @@ class Pay(controllers.Controller):
         return dict(start=start, end=end, pays=pays, count=count, capital=capital,
                     interest=interest)
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose('json')
     @validate(validators=dict(amount=validators.UnicodeString(),
                               loan=validators.Int(),free=validators.Bool(),
@@ -194,12 +203,6 @@ class Loan(controllers.Controller):
                     accounts=model.Account.selectBy(loan=True))
     
     @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.loan.pay")
-    def payment(self, code):
-    
-        return dict(loan=model.Loan.get(code))
-    
-    @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.loan.list")
     @validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
                               end=validators.DateTimeConverter(format='%d/%m/%Y'),
@@ -242,7 +245,8 @@ class Loan(controllers.Controller):
         return dict(loans=l, count=len(l), payment=u'',
                 debt=sum(loan.debt for loan in l), capital=sum(loan.capital for loan in l))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(loan=validators.Int(),
                               months=validators.Int(),
@@ -261,7 +265,8 @@ class Loan(controllers.Controller):
         loan.payment = Decimal(payment).quantize(Decimal("0.01"))
         return self.default(loan.id)
         
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(affiliate=validators.Int(),
                               months=validators.Int(),
@@ -297,7 +302,8 @@ class Loan(controllers.Controller):
         
         raise redirect("/loan/{0}".format(loan.id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(loan=validators.Int(),solicitud=validators.Int(),
                               cuenta=validators.Int(),pago=validators.UnicodeString(),
@@ -415,7 +421,8 @@ class Loan(controllers.Controller):
         return dict(amount=amount, deuda=deuda, net=net, loans=loans,
                     first=first, last=last, count=len(loans), casa=casa)
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(loan=validators.Int(),payment=validators.String()))
     def modify(self, loan, payment):
@@ -431,7 +438,8 @@ class Loan(controllers.Controller):
         
         raise redirect('/loan/{0}'.format(loan.id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(loan=validators.Int(),
                               debt=validators.UnicodeString()))
@@ -441,7 +449,8 @@ class Loan(controllers.Controller):
         loan.debt = Decimal(debt.replace(',', ''))
         raise redirect('/loan/{0}'.format(loan.id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(loan=validators.Int(),amount=validators.String()))
     def capital(self, loan, amount):
@@ -536,7 +545,8 @@ class Loan(controllers.Controller):
         return dict(loans=loans,count=count,debt=debt,capital=capital,
                     payment=u"")
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(loan=validators.Int()))
     def increase(self, loan):
@@ -546,7 +556,8 @@ class Loan(controllers.Controller):
         
         raise redirect('/loan/{0}'.format(loan.id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(loan=validators.Int()))
     def decrease(self, loan):

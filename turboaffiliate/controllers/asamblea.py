@@ -66,7 +66,8 @@ class Viatico(controllers.Controller):
         return dict(viaticos=model.Viatico.selectBy(asamblea=asamblea),
                     asamblea=asamblea)
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(asamblea=validators.Int(),monto=validators.UnicodeString(),
                               municipio=validators.Int()))
@@ -82,7 +83,8 @@ class Viatico(controllers.Controller):
         
         raise redirect('/asamblea/viatico')
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(asamblea=validators.Int()))
     def eliminar(self, viatico):
@@ -103,6 +105,8 @@ class Asamblea(controllers.Controller):
         
         return dict(asambleas=model.Asamblea.select(), departamentos=model.Departamento.select())
     
+    @identity.require(identity.All(identity.in_any_group('admin', 'junta'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(departamento=validators.Int(), nombre=validators.UnicodeString(),
                               numero=validators.Int()))
@@ -132,7 +136,8 @@ class Asamblea(controllers.Controller):
                     bancos=model.Banco.select(),
                     asamblea=model.Asamblea.get(asamblea))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose(template='turboaffiliate.templates.asamblea.confirmar')
     @validate(validators=dict(asamblea=validators.Int(),
                               afiliado=validators.Int()))
@@ -161,7 +166,8 @@ class Asamblea(controllers.Controller):
                     bancos=model.Banco.select(),
                     departamentos=model.Departamento.select())
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose(template='turboaffiliate.templates.asamblea.confirmar')
     @validate(validators=dict(asamblea=validators.Int(),
                               identidad=validators.UnicodeString()))
@@ -190,7 +196,8 @@ class Asamblea(controllers.Controller):
                     bancos=model.Banco.select(),
                     departamentos=model.Departamento.select())
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(asamblea=validators.Int(),
                               afiliado=validators.Int()))
@@ -198,7 +205,7 @@ class Asamblea(controllers.Controller):
         
         asamblea = model.Asamblea.get(asamblea)
         
-        if not asamblea.habilidato and not identity.has_permission('asamblea'):
+        if not asamblea.habilitado or not identity.has_permission('asamblea'):
             raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
         kw = dict()
@@ -225,7 +232,8 @@ class Asamblea(controllers.Controller):
         
         raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(afiliado=validators.Int(),
                               banco=validators.Int(),
@@ -235,7 +243,9 @@ class Asamblea(controllers.Controller):
                               municipio=validators.Int()))
     def corregir(self, afiliado, asamblea, departamento, banco, cuenta, municipio):
         
-        if identity.current.user.user_name != 'asura10':
+        asamblea = model.Asamblea.get(asamblea)
+        
+        if not asamblea.habilitado or not identity.has_permission('asamblea'):
             raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
         kw = dict()
@@ -246,10 +256,10 @@ class Asamblea(controllers.Controller):
         afiliado.departamento = departamento
         afiliado.municipio = model.Municipio.get(municipio)
         
-        if afiliado.tiempo() < 1 and identity.current.user.user_name != 'asura10':
+        if afiliado.debt() > 1000 and not identity.has_permission('asamblea'):
             raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
-        if afiliado.debt() > 1000 and identity.current.user.user_name != 'asura10':
+        if afiliado.debt() > 1000 and not identity.has_permission('asamblea'):
             raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
         log = dict()
@@ -271,7 +281,8 @@ class Asamblea(controllers.Controller):
         
         raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(afiliado=validators.Int(),
                               departamento=validators.Int(),
@@ -279,7 +290,7 @@ class Asamblea(controllers.Controller):
                               municipio=validators.Int()))
     def corregirDepto(self, afiliado, asamblea, departamento, municipio):
         
-        if identity.current.user.user_name != 'asura10':
+        if not asamblea.habilitado or not identity.has_permission('asamblea'):
             raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
         kw = dict()
@@ -300,6 +311,7 @@ class Asamblea(controllers.Controller):
         
         raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
     
+    @identity.require(identity.All(identity.in_group('admin'), identity.not_anonymous()))
     @expose()
     def ingresar(self):
         

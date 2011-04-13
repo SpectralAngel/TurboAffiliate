@@ -63,7 +63,8 @@ class Deposito(controllers.Controller):
         return dict(afiliados=afiliados, dia=date.today())
     
     @expose('json')
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @validate(validators=dict(afiliado=validators.Int(),
                               concepto=validators.UnicodeString(),
                               banco=validators.Int(),
@@ -83,7 +84,8 @@ class Deposito(controllers.Controller):
         return dict(mensaje=u"Se registró el depósito al afiliado {0}".format(deposito.afiliado.id))
     
     @expose('json')
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @validate(validators=dict(afiliado=validators.Int(),
                               concepto=validators.UnicodeString(),
                               banco=validators.Int(),
@@ -138,7 +140,8 @@ class Deposito(controllers.Controller):
                                               model.Deposito.q.banco==banco)))
     
     @expose()
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @validate(validators=dict(deposito=validators.Int()))
     def eliminar(self, deposito):
         

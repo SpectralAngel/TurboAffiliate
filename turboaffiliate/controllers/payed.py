@@ -75,7 +75,7 @@ class Pay(controllers.Controller):
 
 class PayedLoan(controllers.Controller):
     
-    pay = Pay()
+    # pay = Pay()
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.loan.payed.payed")
