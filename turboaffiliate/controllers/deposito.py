@@ -99,7 +99,7 @@ class Deposito(controllers.Controller):
         kw['monto'] = Decimal(kw['monto'].replace(',', '')) 
         afiliado = kw['afiliado'] = model.Affiliate.get(afiliado)
         kw['banco'] = model.Banco.get(banco)
-        banco = kw['cuenta'].banco 
+        banco = kw['banco']
         deposito = model.Deposito(**kw)
         monto = kw['monto']
         while monto > model.Zero:
