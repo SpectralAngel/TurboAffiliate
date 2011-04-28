@@ -42,7 +42,8 @@ class Deposito(controllers.Controller):
         
         return dict(deposito=model.Deposito.get(deposito))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'deposito'),
+                                   identity.not_anonymous()))
     @expose(template='turboaffiliate.templates.deposito.agregar')
     @validate(validators=dict(afiliado=validators.Int()))
     def afiliacion(self, afiliado):
@@ -53,7 +54,8 @@ class Deposito(controllers.Controller):
         return dict(afiliados=afiliados, dia=date.today())
     
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.deposito.agregar')
+    @identity.require(identity.All(identity.in_any_group('admin', 'deposito'),
+                                   identity.not_anonymous()))
     @validate(validators=dict(nombre=validators.UnicodeString()))
     def nombre(self, nombre):
         
@@ -63,7 +65,7 @@ class Deposito(controllers.Controller):
         return dict(afiliados=afiliados, dia=date.today())
     
     @expose('json')
-    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+    @identity.require(identity.All(identity.in_any_group('admin', 'deposito'),
                                    identity.not_anonymous()))
     @validate(validators=dict(afiliado=validators.Int(),
                               concepto=validators.UnicodeString(),
@@ -84,7 +86,7 @@ class Deposito(controllers.Controller):
         return dict(mensaje=u"Se registró el depósito al afiliado {0}".format(deposito.afiliado.id))
     
     @expose('json')
-    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+    @identity.require(identity.All(identity.in_any_group('admin', 'deposito'),
                                    identity.not_anonymous()))
     @validate(validators=dict(afiliado=validators.Int(),
                               concepto=validators.UnicodeString(),
