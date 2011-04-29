@@ -40,6 +40,7 @@
   </form>
   <form class="ui-widget-content reducido ui-corner-all agregarDeposito" action="${tg.url('/deposito/agregarAnonimo')}">
     <fieldset>
+      <legend>Registrar Dep&oacute;sito An&oacute;nimo</legend>
       <ul>
         <li>
           <label>Banco</label>
@@ -58,6 +59,46 @@
           <input name="referencia" />
         </li>
         <li><input type="submit" value="Registrar" /></li>
+      </ul>
+    </fieldset>
+  </form>
+  <form class="ui-widget-content reducido ui-corner-all" action="${tg.url('/deposito/reporteBanco')}">
+    <fieldset>
+      <legend>Mostrar Reporte Por Banco</legend>
+      <ul>
+        <li>
+          <label>Banco</label>
+          <select name="banco" class="bancos" id="bancoAportaciones"></select>
+        </li>
+        <li>
+          <label for="inicio">Inicio:</label>
+          <input name="inicio" class="datepicker" />
+        </li>
+        <li>
+          <label for="final">fin:</label>
+          <input name="final" class="datepicker" />
+        </li>
+        <li><input type="submit" value="Mostrar" /></li>
+      </ul>
+    </fieldset>
+  </form>
+  <form class="ui-widget-content reducido ui-corner-all" action="${tg.url('/deposito/reporteAnonimo')}">
+    <fieldset>
+      <legend>Mostrar Reporte Por Banco - An&oacute;nimo</legend>
+      <ul>
+        <li>
+          <label>Banco</label>
+          <select name="banco" class="bancos" id="bancoAportaciones"></select>
+        </li>
+        <li>
+          <label for="inicio">Inicio:</label>
+          <input name="inicio" class="datepicker" />
+        </li>
+        <li>
+          <label for="final">fin:</label>
+          <input name="final" class="datepicker" />
+        </li>
+        <li><input type="submit" value="Mostrar" /></li>
       </ul>
     </fieldset>
   </form>

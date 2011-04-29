@@ -187,6 +187,10 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(affiliate=validators.Int()))
     def remove(self, affiliate):
         
+        """Elimina un afiliado permanentemente
+        
+        """
+        
         affiliate = model.Affiliate.get(affiliate)
         
         for loan in affiliate.loans:
@@ -329,7 +333,9 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(affiliate=validators.Int()))
     def activate(self, affiliate):
         
-        affiliate = model.Affiliate.get(int(affiliate))
+        """Reactiva un afiliado para que pueda continuar participando"""
+        
+        affiliate = model.Affiliate.get(affiliate)
         affiliate.active = True
         log = dict()
         log['user'] = identity.current.user
@@ -373,6 +379,12 @@ class Affiliate(controllers.Controller):
                               end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def byDate(self, start, end):
         
+        """Muestra los afiliados que se unieron en un periodo
+        
+        :param start:  Fecha inicial
+        :param end:  Fecha Final 
+        """
+        
         affiliates = model.Affiliate.select(AND(model.Affiliate.q.joined>=start,
                                                 model.Affiliate.q.joined<=end))
         return dict(affiliates=affiliates, start=start, end=end, show="Fecha de Afiliaci&oacute;n", count=affiliates.count())
@@ -407,6 +419,8 @@ class Affiliate(controllers.Controller):
     @expose(template='turboaffiliate.templates.affiliate.show')
     def disabled(self):
         
+        """Muestra los afiliados deshabilitados"""
+        
         affiliates = model.Affiliate.selectBy(active=False)
         return dict(affiliates=affiliates, show="Inhabilitados", count=affiliates.count())
     
@@ -414,6 +428,8 @@ class Affiliate(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.show')
     def all(self):
+        
+        """Muestra todos los afiliados"""
         
         affiliates = model.Affiliate.select()
         return dict(affiliates=affiliates, show="Todos", count=affiliates.count())

@@ -57,7 +57,7 @@
         <td>
           <form py:for="prestamo in afiliado.loans" class="ui-widget-content reducido ui-corner-all agregarDeposito" action="${tg.url('/deposito/agregarPrestamo')}">
             <fieldset>
-              <input name="afiliado" value="${afiliado.id}" type="hidden" />
+              <input name="prestamo" value="${prestamo.id}" type="hidden" />
               <input name="concepto" value="Prestamo" type="hidden" />
               <ul>
                 <li>

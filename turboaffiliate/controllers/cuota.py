@@ -141,6 +141,9 @@ class Cuota(controllers.Controller):
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))
     def pagoPlanilla(self, afiliado, cuenta, day):
         
+        """Permite registrar un pago mediante planilla utilizando llamadas
+        en JSON"""
+        
         affiliate = model.Affiliate.get(afiliado)
         cuenta = model.Account.get(cuenta)
         # affiliate.pagar_cuota(day.month, day.year)

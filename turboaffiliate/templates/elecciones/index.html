@@ -103,14 +103,25 @@
           <ul>
             <li>
               <label for="cotizacion">Cotiza por:</label>
-              <select name="cotizacion">
-                <option>Escalafon</option>
-                <option>INPREMA</option>
-                <option>UPN</option>
-                <option>Ventanilla</option>
-                <option>Ministerio</option>
-                <option>Retirado</option>
-              </select>
+              <select name="cotizacion" class="cotizaciones" />
+            </li>
+            <li>
+              <input type="submit" value="Buscar" />
+            </li>
+          </ul>
+        </fieldset>
+      </form>
+      <form class="ui-widget-content ui-corner-all" action="${tg.url('cotizacionDepto')}">
+        <fieldset>
+          <legend>Padr&oacute;n Electoral por Cotizaci&oacute;n</legend>
+          <ul>
+            <li>
+              <label for="cotizacion">Cotiza por:</label>
+              <select name="cotizacion" class="cotizaciones" />
+            </li>
+            <li>
+              <label for="departamento">Departamento:</label>
+              <select name="departamento" class="departamento" />
             </li>
             <li>
               <input type="submit" value="Buscar" />

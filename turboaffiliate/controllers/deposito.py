@@ -36,13 +36,24 @@ class Deposito(controllers.Controller):
         return dict()
     
     @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.error')
+    def error(self, tg_errors=None):
+        
+        if tg_errors:
+            errors = [(param,inv.msg,inv.value) for param, inv in
+                      tg_errors.items()]
+            return dict(errors=errors)
+        
+        return dict(errors=u"Desconocido")
+    
+    @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.deposito.deposito')
     @validate(validators=dict(deposito=validators.Int()))
     def default(self, deposito):
         
         return dict(deposito=model.Deposito.get(deposito))
     
-    @identity.require(identity.All(identity.in_any_group('admin', 'deposito'),
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose(template='turboaffiliate.templates.deposito.agregar')
     @validate(validators=dict(afiliado=validators.Int()))
@@ -53,8 +64,8 @@ class Deposito(controllers.Controller):
         
         return dict(afiliados=afiliados, dia=date.today())
     
-    @identity.require(identity.not_anonymous())
-    @identity.require(identity.All(identity.in_any_group('admin', 'deposito'),
+    @expose(template='turboaffiliate.templates.deposito.agregar')
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @validate(validators=dict(nombre=validators.UnicodeString()))
     def nombre(self, nombre):
@@ -65,7 +76,7 @@ class Deposito(controllers.Controller):
         return dict(afiliados=afiliados, dia=date.today())
     
     @expose('json')
-    @identity.require(identity.All(identity.in_any_group('admin', 'deposito'),
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @validate(validators=dict(afiliado=validators.Int(),
                               concepto=validators.UnicodeString(),
@@ -86,41 +97,31 @@ class Deposito(controllers.Controller):
         return dict(mensaje=u"Se registró el depósito al afiliado {0}".format(deposito.afiliado.id))
     
     @expose('json')
-    @identity.require(identity.All(identity.in_any_group('admin', 'deposito'),
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
-    @validate(validators=dict(afiliado=validators.Int(),
+    @validate(validators=dict(prestamo=validators.Int(),
                               concepto=validators.UnicodeString(),
                               banco=validators.Int(),
                               monto=validators.UnicodeString(),
                               fecha=validators.DateTimeConverter(format='%d/%m/%Y'),
                               sistema=validators.DateTimeConverter(format='%d/%m/%Y')))
-    def agregarPrestamo(self, afiliado, banco, sistema, **kw):
+    def agregarPrestamo(self, banco, sistema, prestamo, **kw):
         
         """Permite registrar un depósito que corresponde a pago de préstamos"""
         
+        prestamo = model.Loan.get(prestamo)
         kw['monto'] = Decimal(kw['monto'].replace(',', '')) 
-        afiliado = kw['afiliado'] = model.Affiliate.get(afiliado)
+        kw['afiliado'] = prestamo.affiliate
         kw['banco'] = model.Banco.get(banco)
         banco = kw['banco']
         deposito = model.Deposito(**kw)
         monto = kw['monto']
-        while monto > model.Zero:
-            
-            for prestamo in afiliado.loans:
-                
-                pago = prestamo.get_payment()
-                if monto < pago:
-                    pago = monto
-                    monto = model.Zero
-                else:
-                    monto -= pago
-                
-                prestamo.pagar(pago, banco.nombre, sistema)
+        prestamo.pagar(monto, banco.nombre, sistema)
         
         return dict(mensaje=u"Se registró el depósito al afiliado {0}".format(deposito.afiliado.id))
     
     @expose('json')
-    @identity.require(identity.All(identity.in_any_group('admin', 'deposito'),
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @validate(validators=dict(referencia=validators.UnicodeString(),
                               concepto=validators.UnicodeString(),
@@ -143,21 +144,36 @@ class Deposito(controllers.Controller):
                               final=validators.DateTimeConverter(format='%d/%m/%Y')))
     def reporte(self, inicio, fin):
         
-        return dict(depositos=model.Deposito.select(AND(model.Loan.q.startDate>=inicio,
-                                              model.Loan.q.startDate<=fin)))
+        return dict(depositos=model.Deposito.select(AND(model.Loan.q.fecha>=inicio,
+                                              model.Loan.q.fecha<=fin)))
     
     @identity.require(identity.not_anonymous())
-    @expose(template='turboaffiliate.templates.deposito.reporteCuenta')
+    @expose(template='turboaffiliate.templates.deposito.reporteBanco')
     @validate(validators=dict(banco=validators.Int(),
                               inicio=validators.DateTimeConverter(format='%d/%m/%Y'),
                               final=validators.DateTimeConverter(format='%d/%m/%Y')))
-    def reporteCuenta(self, inicio, fin, banco):
+    def reporteBanco(self, inicio, final, banco):
         
         banco = model.Banco.get(banco)
         
-        return dict(depositos=model.Deposito.select(AND(model.Deposito.q.startDate>=inicio,
-                                              model.Deposito.q.startDate<=fin,
-                                              model.Deposito.q.banco==banco)))
+        return dict(depositos=model.Deposito.select(AND(model.Deposito.q.fecha>=inicio,
+                                              model.Deposito.q.fecha<=final,
+                                              model.Deposito.q.banco==banco)),
+                                              banco=banco,inicio=inicio, final=final)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.deposito.reporteAnonimo')
+    @validate(validators=dict(banco=validators.Int(),
+                              inicio=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              final=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def reporteAnonimo(self, inicio, final, banco):
+        
+        banco = model.Banco.get(banco)
+        
+        return dict(depositos=model.DepositoAnonimo.select(AND(model.DepositoAnonimo.q.fecha>=inicio,
+                                              model.DepositoAnonimo.q.fecha<=final,
+                                              model.DepositoAnonimo.q.banco==banco)),
+                                              banco=banco,inicio=inicio, final=final)
     
     @expose()
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
@@ -166,6 +182,17 @@ class Deposito(controllers.Controller):
     def eliminar(self, deposito):
         
         deposito = model.Deposito.get(deposito)
+        deposito.destroySelf()
+        
+        raise redirect('/deposito')
+    
+    @expose()
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @validate(validators=dict(deposito=validators.Int()))
+    def eliminarAnonimo(self, deposito):
+        
+        deposito = model.DepositoAnonimo.get(deposito)
         deposito.destroySelf()
         
         raise redirect('/deposito')

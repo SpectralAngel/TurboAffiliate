@@ -252,10 +252,23 @@ class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.listado')
-    @validate(validators=dict(cotizacion=validators.UnicodeString()))
+    @validate(validators=dict(cotizacion=validators.Int()))
     def cotizacion(self, cotizacion):
         
-        afiliados = model.Affiliate.selectBy(active=True,payment=cotizacion)
+        cotizacion = model.Cotizacion.get(cotizacion)
+        afiliados = model.Affiliate.selectBy(active=True,cotizacion=cotizacion)
+        
+        return dict(affiliates=afiliados, count=afiliados.count())
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.elecciones.listado')
+    @validate(validators=dict(cotizacion=validators.Int(), departamento=validators.Int()))
+    def cotizacionDepto(self, cotizacion, departamento):
+        
+        cotizacion = model.Cotizacion.get(cotizacion)
+        departamento = model.Departamento.get(departamento)
+        afiliados = model.Affiliate.selectBy(active=True,cotizacion=cotizacion,
+                                             departamento=departamento)
         
         return dict(affiliates=afiliados, count=afiliados.count())
     
