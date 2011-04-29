@@ -26,8 +26,9 @@ $(document).ready(function(e)
         debug : false,
         submitHandler : function(deposito)
         {
-          $.post($(deposito).attr('action'), $(deposito).serialize());
-          alert("Agregado el deposito");
+          $.post($(deposito).attr('action'), $(deposito).serialize())
+          .success(function() { alert("Agregado el deposito"); })
+          .error(function() { alert("Ocurrió un Error"); });
         }
       }
     );

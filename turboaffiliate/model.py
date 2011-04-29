@@ -1302,7 +1302,8 @@ class Banco(SQLObject):
     
     nombre = UnicodeCol(length=100)
     depositable = BoolCol(default=False)
-    depositos = MultipleJoin("Deposto")
+    depositos = MultipleJoin("Deposito")
+    depositosAnonimos = MultipleJoin("DepositoAnonimo")
 
 class Viatico(SQLObject):
     
@@ -1331,6 +1332,17 @@ class Deposito(SQLObject):
     
     afiliado = ForeignKey("Affiliate")
     """:class:`Afiliado` que realizó el :class:`Deposito`"""
+    banco = ForeignKey("Banco")
+    concepto = UnicodeCol(length=50)
+    fecha = DateCol(default=date.today)
+    monto = CurrencyCol()
+
+class DepositoAnonimo(SQLObject):
+    
+    """Depositos efectuados en el :class:`Banco` que no pueden ser rastreados
+    a su depositante"""
+    
+    referencia = UnicodeCol(length=100)
     banco = ForeignKey("Banco")
     concepto = UnicodeCol(length=50)
     fecha = DateCol(default=date.today)

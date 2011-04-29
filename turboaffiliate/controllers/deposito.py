@@ -119,6 +119,24 @@ class Deposito(controllers.Controller):
         
         return dict(mensaje=u"Se registró el depósito al afiliado {0}".format(deposito.afiliado.id))
     
+    @expose('json')
+    @identity.require(identity.All(identity.in_any_group('admin', 'deposito'),
+                                   identity.not_anonymous()))
+    @validate(validators=dict(referencia=validators.UnicodeString(),
+                              concepto=validators.UnicodeString(),
+                              banco=validators.Int(),
+                              monto=validators.UnicodeString(),
+                              fecha=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def agregarAnonimo(self, banco, **kw):
+        
+        """Permite registrar un deposito al que no se le puede encontrar afiliado"""
+        
+        kw['monto'] = Decimal(kw['monto'].replace(',', ''))
+        kw['banco'] = model.Banco.get(banco)
+        deposito = model.DepositoAnonimo(**kw)
+        
+        return dict(mensaje=u"Se registró el deposito con referencia {0}".format(deposito.referencia))
+    
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.deposito.reporte')
     @validate(validators=dict(inicio=validators.DateTimeConverter(format='%d/%m/%Y'),

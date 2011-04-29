@@ -23,10 +23,10 @@
     </thead>
     <tbody>
       <tr py:for="loan in loans">
-        <td><a class="print" href="${tg.url('/loan/%s' % loan.id)}">${loan.id}</a></td>
-        <td><a class="print" href="${tg.url('/affiliate/%s' % loan.affiliate.id)}" py:content="loan.affiliate.id" /></td>
+        <td><a class="print" href="${tg.url('/loan/{0}'.format(loan.id))}">${loan.id}</a></td>
+        <td><a class="print" href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}" py:content="loan.affiliate.id" /></td>
         <td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
-        <td>${loan.affiliate.payment}</td>
+        <td>${loan.affiliate.cotizacion.nombre}</td>
         <td>${locale.currency(loan.capital, True, True)}</td>
         <td>${locale.currency(loan.totaldebt(), True, True)}</td>
         <td>${loan.startDate}</td>
