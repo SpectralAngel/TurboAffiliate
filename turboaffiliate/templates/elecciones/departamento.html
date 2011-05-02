@@ -15,7 +15,7 @@
   </head>
   <body>
     <h3>COPEMH</h3>
-    <h1>Padr&oacute;n Electoral ${departamento}</h1>
+    <h1>Padr&oacute;n Electoral ${departamento.nombre}</h1>
     <table width="100%">
       <thead>
         <tr>
@@ -27,7 +27,7 @@
       </thead>
       <tbody>
         <tr py:for="afiliado in afiliados">
-          <td><a href="${tg.url('/affiliate/{0}').format(afiliado.id)}">${afiliado.id}</a></td>
+          <td><a href="${tg.url('/affiliate/{0}'.format(afiliado.id)}">${afiliado.id}</a></td>
           <td>${afiliado.lastName}</td>
           <td>${afiliado.firstName}</td>
           <td>${afiliado.cardID}</td>

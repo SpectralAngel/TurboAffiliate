@@ -29,6 +29,9 @@ from datetime import date
 
 class Deposito(controllers.Controller):
     
+    """Permite registrar depósitos que los afiliados han efectuado en una
+    institución bancaria"""
+    
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.deposito.index')
     def index(self):
@@ -59,6 +62,12 @@ class Deposito(controllers.Controller):
     @validate(validators=dict(afiliado=validators.Int()))
     def afiliacion(self, afiliado):
         
+        """Muestra la interfaz de registro de depositos mediante el número de
+        afiliación
+        
+        :param afiliado: El número de afiliación a mostrar
+        """
+        
         afiliados = list()
         afiliados.append(model.Affiliate.get(afiliado))
         
@@ -69,6 +78,12 @@ class Deposito(controllers.Controller):
                                    identity.not_anonymous()))
     @validate(validators=dict(nombre=validators.UnicodeString()))
     def nombre(self, nombre):
+        
+        """Muestra la interfaz de registro de depositos mediante el nombre o los
+        apellidos del afiliado
+        
+        :param nombre: El nombre o apellidos del afiliado a buscar
+        """
         
         afiliados = model.Affiliate.select(OR(model.Affiliate.q.firstName.contains(nombre),
                                              model.Affiliate.q.lastName.contains(nombre)))
@@ -86,7 +101,13 @@ class Deposito(controllers.Controller):
                               sistema=validators.DateTimeConverter(format='%d/%m/%Y')))
     def agregarAportaciones(self, afiliado, banco, sistema, **kw):
         
-        """Permite registrar un deposito que corresponde a pago de aportaciones"""
+        """Permite registrar un deposito que corresponde a pago de aportaciones
+        
+        :param afiliado: El número de afiliación
+        :param banco:    El código del banco en que se efectuó el depósito
+        :param sistema:  La fecha en la que se esta registrando el pago
+        :param kw:       Diccionario que incluye el resto de los datos del depósito
+        """
         
         kw['monto'] = Decimal(kw['monto'].replace(',', '')) 
         kw['afiliado'] = model.Affiliate.get(afiliado)
@@ -107,7 +128,13 @@ class Deposito(controllers.Controller):
                               sistema=validators.DateTimeConverter(format='%d/%m/%Y')))
     def agregarPrestamo(self, banco, sistema, prestamo, **kw):
         
-        """Permite registrar un depósito que corresponde a pago de préstamos"""
+        """Permite registrar un depósito que corresponde a pago de préstamos
+        
+        :param prestamo: El número de préstamo que se va a pagar
+        :param banco:    El código del banco en que se efectuó el depósito
+        :param sistema:  La fecha en la que se esta registrando el pago
+        :param kw:       Diccionario que incluye el resto de los datos del depósito
+        """
         
         prestamo = model.Loan.get(prestamo)
         kw['monto'] = Decimal(kw['monto'].replace(',', '')) 
@@ -116,7 +143,7 @@ class Deposito(controllers.Controller):
         banco = kw['banco']
         deposito = model.Deposito(**kw)
         monto = kw['monto']
-        prestamo.pagar(monto, banco.nombre, sistema)
+        prestamo.pagar(amount=monto, receipt=banco.nombre, dia=sistema, remove=False)
         
         return dict(mensaje=u"Se registró el depósito al afiliado {0}".format(deposito.afiliado.id))
     

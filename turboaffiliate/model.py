@@ -220,7 +220,7 @@ class Affiliate(SQLObject):
         2. INPREMA: Número de cobro.
         3. UPN: Número de empleado.
     
-    Algunos datos son requeridos para obtener información estadistica acerca de
+    Algunos datos son requeridos para obtener información estadística acerca de
     la institución.
     """
 
@@ -656,7 +656,7 @@ class Loan(SQLObject):
     
         self.debt = self.capital
     
-    def pagar(self, amount, receipt, day=date.today(), libre=False):
+    def pagar(self, amount, receipt, day=date.today(), libre=False, remove=True):
         
         """Carga un nuevo pago para el préstamo
         
@@ -684,7 +684,8 @@ class Loan(SQLObject):
             # Register the payment in the database
             Pay(**kw)
             # Remove the loan and convert it to PayedLoan
-            self.remove()
+            if remove:
+                self.remove()
             return True
         
         if libre:
@@ -709,7 +710,7 @@ class Loan(SQLObject):
         # Increase the number of payments by one
         self.number += 1
         
-        if self.debt <= 0:
+        if self.debt <= 0 and remove:
             self.remove()
             return True
         
@@ -746,6 +747,8 @@ class Loan(SQLObject):
     
     def remove(self):
         
+        """Convierte un :class:`Loan` en un :class:`PayedLoan`"""
+        
         kw = dict()
         kw['id'] = self.id
         kw['affiliate'] = self.affiliate
@@ -771,6 +774,9 @@ class Loan(SQLObject):
     
     def future(self):
         
+        """Calcula la manera en que se pagará el préstamo basado en los
+        intereses y los pagos actuales"""
+        
         debt = copy.copy(self.debt)
         li = list()
         start = self.startDate.month + self.offset
@@ -780,6 +786,7 @@ class Loan(SQLObject):
         n = 1
         while debt > 0:
             kw = dict()
+            # calcular el número de pago
             kw['number'] = "{0}/{1}".format(n + self.number, self.months)
             kw['month'] = self.number + n + start
             kw['enum'] = self.number + n
@@ -790,7 +797,9 @@ class Loan(SQLObject):
                 kw['month'] = kw['month'] - 12
                 kw['year'] += 1
             
+            # colocar el mes y el año
             kw['month'] = "{0} {1}".format(months[kw['month']], kw['year'])
+            # calcular intereses
             kw['interest'] = Decimal(debt * self.interest / 1200).quantize(dot01)
             
             if debt <= self.payment:
@@ -810,6 +819,10 @@ class Loan(SQLObject):
         return li
     
     def compensar(self):
+        
+        """Recalcula la deuda final utilizando el calculo de pagos futuros
+        para evitar perdidas por pagos finales menores a la cuota de préstamo
+        pero que deberian mantenerse en el valor de la cuota de préstamo"""
         
         futuro = self.future()
         if futuro == list():
@@ -835,6 +848,13 @@ class Loan(SQLObject):
     def interesesPagados(self):
         
         return sum(p.interest for p in self.pays)
+    
+    def reconstruirSaldo(self):
+        
+        """Recalcula el valor de la deuda del préstamo en base a los pagos
+        efectuados"""
+        
+        self.debt = self.capital - self.capitalPagado()
 
 class Pay(SQLObject):
     
@@ -986,10 +1006,6 @@ class PayedLoan(SQLObject):
         """Obtains the amount that was given to the affiliate in the check"""
         
         return self.capital - sum(d.amount for d in self.deductions)
-    
-    def totaldebt(self):
-        
-        return 0
     
     def capitalPagado(self):
         
@@ -1302,6 +1318,7 @@ class Banco(SQLObject):
     
     nombre = UnicodeCol(length=100)
     depositable = BoolCol(default=False)
+    asambleista = BoolCol(default=False)
     depositos = MultipleJoin("Deposito")
     depositosAnonimos = MultipleJoin("DepositoAnonimo")
 

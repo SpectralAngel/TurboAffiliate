@@ -124,7 +124,7 @@ class Asamblea(controllers.Controller):
     def inscripcion(self, asamblea):
         
         return dict(asamblea=model.Asamblea.get(asamblea),
-                    bancos=model.Banco.select(),
+                    bancos=model.Banco.selectBy(asambleista=True),
                     departamentos=model.Departamento.select())
     
     @identity.require(identity.not_anonymous())
@@ -133,7 +133,7 @@ class Asamblea(controllers.Controller):
     def default(self, asamblea):
         
         return dict(departamentos=model.Departamento.select(),
-                    bancos=model.Banco.select(),
+                    bancos=model.Banco.selectBy(asambleista=True),
                     asamblea=model.Asamblea.get(asamblea))
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
@@ -163,7 +163,7 @@ class Asamblea(controllers.Controller):
         return dict(deshabilitado=deshabilitado,
                     afiliado=afiliado,banco=banco,
                     asamblea=model.Asamblea.get(asamblea),
-                    bancos=model.Banco.select(),
+                    bancos=model.Banco.selectBy(asambleista=True),
                     departamentos=model.Departamento.select())
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
@@ -193,7 +193,7 @@ class Asamblea(controllers.Controller):
         return dict(deshabilitado=deshabilitado,
                     afiliado=afiliado,banco=banco,
                     asamblea=model.Asamblea.get(asamblea),
-                    bancos=model.Banco.select(),
+                    bancos=model.Banco.selectBy(asambleista=True),
                     departamentos=model.Departamento.select())
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
@@ -318,7 +318,7 @@ class Asamblea(controllers.Controller):
         ninguno = model.Municipio.get(299)
         ndepto = model.Departamento.get(19)
         
-        afiliados = model.Affiliate.select(model.Affiliate.q.municipio==ninguno)
+        afiliados = model.Affiliate.selectBy(municipio=ninguno)
         
         for afiliado in afiliados:
             if afiliado.departamento != ndepto:
