@@ -4,32 +4,30 @@
 <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
   <title>TurboAffiliate &bull; ${departamento.nombre}</title>
-  <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/form.css')}" media="screen" />
-   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" />
-   <style>
-    table
-    {
-      width: 100%;
-      border-width: 1px;
-      border-style: solid;
-      border-collapse: collapse;
-    }
-    td
-    {
-      border-width: 1px 1px 1px 1px;
-      border-style: solid;
-      margin: 0;
-      padding: 4px;
-    }
-   </style>
-   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/billing.css')}" />
+    <style>
+        table
+        {
+            width: 100%;
+            border-width: 1px;
+            border-style: solid;
+            border-collapse: collapse;
+        }
+        td
+        {
+            border-width: 1px;
+            border-style: solid;
+            margin: 0;
+            padding: 4px;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/billing.css')}" />
 </head>
 <body>
   <a href="javascript:print()">Imprimir</a>
   <h1>Listado de Urnas ${departamento.nombre}</h1>
   <div py:for="municipio in sorted(urnas)">
     <h2>${municipio.nombre}</h2>
-    <table py:for="instituto in sorted(urnas[municipio])" style="width: 100%" class="page">
+    <table py:for="instituto in sorted(urnas[municipio])" class="page">
       <caption>${instituto} Municipio de ${municipio.nombre}</caption>
       <thead>
         <tr>

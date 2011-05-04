@@ -4,13 +4,10 @@
 <xi:include href="../master.html" />
   <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-    <title>TurboAffiliate &bull; Padr&oacute;n Electoral Departamento de ${state}</title>
-    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/form.css')}" media="screen" />
-     <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" />
-     <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/billing.css')}" />
+    <title>TurboAffiliate &bull; Padr&oacute;n Electoral Departamento de ${departamento.nombre}}</title>
   </head>
   <body>
-    <h1>Padr&oacute;n Electoral Departamento de ${state}</h1>
+    <h1>Padr&oacute;n Electoral Departamento de ${departamento.nombre}</h1>
     <table class="page" py:for="school in schools" style="width: 100%">
       <caption py:content="school" />
       <thead>

@@ -4,16 +4,14 @@
 <xi:include href="../master.html" />
   <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-    <title>TurboAffiliate &bull; ${departamento}</title>
-    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/form.css')}" media="screen" />
-     <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/print.css')}" media="print" />
-     <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/billing.css')}" />
+    <title>TurboAffiliate &bull; ${departamento.nombre}</title>
+    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/billing.css')}" />
   </head>
   <body>
-    <a href="javascript:print()">Imprimir</a>
-    <h1>Listado de Urnas <span py:content="departamento" /> </h1>
-    <table py:for="municipio in urnas" style="width: 100%">
-      <caption py:content="municipio" />
+    <h1>Listado de Urnas ${departamento.nombre}</h1>
+    <h2>Total de Urnas: ${cantidadUrnas}</h2>
+    <table py:for="municipio in urnas" style="width: 100%" class="page">
+      <caption>${municipio.nombre}</caption>
       <thead>
         <tr>
           <th>Instituto</th>
@@ -29,7 +27,7 @@
       <tfoot>
         <tr>
           <th>Total de Centros</th>
-          <th py:content="len(urnas[municipio])" />
+          <th>${len(urnas[municipio])}</th>
         </tr>
       </tfoot>
     </table>
