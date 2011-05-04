@@ -528,12 +528,17 @@
               <label for="free">Libre de Intereses:</label>
               <input name="free" type="checkbox" />
             </li>
+            <li>
+              <label for="deposito">Dep&oacute;sito Bancario:</label>
+              <input name="deposito" type="checkbox" />
+            </li>
           </ul>
         </div>
       </form>
-      <form id="pagarAportaciones" action="${tg.url('/affiliate/cuota/pagar')}">
+      <form id="pagarAportaciones" action="${tg.url('/affiliate/cuota/pagar')}" method="post">
         <div>
           <input type="hidden" name="afiliado" value="${affiliate.id}" />
+          <input type="hidden" name="redir" value="" />
           <ul>
             <li>
               <label for="mes">Mes:</label>

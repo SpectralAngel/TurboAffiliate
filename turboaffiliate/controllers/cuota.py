@@ -123,8 +123,8 @@ class Cuota(controllers.Controller):
                                    identity.not_anonymous()))
     @expose('json')
     @validate(validators=dict(afiliado=validators.Int(),anio=validators.Int(),
-                              mes=validators.Int()))
-    def pagar(self, afiliado, mes, anio):
+                              mes=validators.Int(), redir=validators.UnicodeString()))
+    def pagar(self, afiliado, mes, anio, redir):
         
         afiliado = model.Affiliate.get(afiliado)
         # afiliado.pagar_cuota(mes, anio)
@@ -132,7 +132,7 @@ class Cuota(controllers.Controller):
         
         flash(u'Pagadas Aportaciones de {0} de {1}'.format(mes, anio))
         
-        raise redirect('/affiliate/{0}'.format(afiliado.id))
+        raise redirect('/affiliate/{0}{1}'.format(redir, afiliado.id))
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))

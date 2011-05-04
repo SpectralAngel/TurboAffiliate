@@ -95,8 +95,9 @@ class Pay(controllers.Controller):
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose()
-    @validate(validators=dict(amount=validators.String(),loan=validators.Int(),
+    @validate(validators=dict(amount=validators.UnicodeString(),loan=validators.Int(),
                           receipt=validators.String(), free=validators.Bool(),
+                          deposito=validators.Bool(),
                           day=validators.DateTimeConverter(format='%d/%m/%Y')))
     def agregar(self, amount, day, loan, receipt, **kw):
         
@@ -104,10 +105,14 @@ class Pay(controllers.Controller):
         loan = model.Loan.get(loan)
         id = loan.id
         
-        free = False;
+        free = False
+        deposito = False
         
         if 'free' in kw:
             free = kw['free']
+        
+        if 'deposito' in kw:
+            deposito = kw['deposito']
         
         if day == None:
             day = date.today()
@@ -117,7 +122,7 @@ class Pay(controllers.Controller):
         log['action'] = "Pago de {0} al prestamo {1}".format(amount, loan.id)
         model.Logger(**log)
         
-        if loan.pagar(amount, receipt, day, free):
+        if loan.pagar(amount, receipt, day, free, deposito=deposito):
             raise redirect('/payed/{0}'.format(id))
         
         raise redirect('/loan/{0}'.format(loan.id))

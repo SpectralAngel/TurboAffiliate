@@ -60,8 +60,8 @@
         <td>${table.pago_mes(12)}</td>
         <td class="deuda">${table.pagado()}</td>
         <td class="deuda">${table.deuda()}</td>
-        <td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/edit/%s' % table.id)}">X</a></td>
-        <td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/remove/%s' % table.id)}">X</a></td>
+        <td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/edit/{0}'.format(table.id))}">X</a></td>
+        <td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/remove/{0}'.format(table.id))}">X</a></td>
       </tr>
     </tbody>
     <tfoot>
@@ -121,16 +121,34 @@
     </tfoot>
   </table>
   <div class="center">Impreso por: ${tg.identity.user.display_name}</div>
-  <form action="${tg.url('/affiliate/cuota/addYear')}" method="post" class="ui-widget-content ui-corner-all noprint">
+  <form id="pagarAportaciones" action="${tg.url('/affiliate/cuota/pagar')}" class="ui-widget-content ui-corner-all noprint">
     <fieldset>
-      <legend>A&ntilde;adir A&ntilde;o</legend>
-      <input type="hidden" value="${affiliate.id}" name="affiliate" />
+      <legend>Pagar Aportaciones</legend>
+      <input type="hidden" name="afiliado" value="${affiliate.id}" />
+      <input type="hidden" name="redir" value="cuota/" />
       <ul>
         <li>
-          <label for="year">A&ntilde;o</label>
-          <input name="year" />
+          <label for="mes">Mes:</label>
+          <select name="mes">
+            <option value="1">Enero</option>
+            <option value="2">Febrero</option>
+            <option value="3">Marzo</option>
+            <option value="4">Abril</option>
+            <option value="5">Mayo</option>
+            <option value="6">Junio</option>
+            <option value="7">Julio</option>
+            <option value="8">Agosto</option>
+            <option value="9">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+          </select>
         </li>
-        <li><input type="submit" value="A&ntilde;adir" /></li>
+        <li>
+          <label for="anio">A&ntilde;o:</label>
+          <input name="anio" />
+        </li>
+        <li><input type="submit" value="Pagar" /></li>
       </ul>
     </fieldset>
   </form>
@@ -146,6 +164,19 @@
         <li>
           <label for="end">A&ntilde;o Final</label>
           <input name="end" />
+        </li>
+        <li><input type="submit" value="A&ntilde;adir" /></li>
+      </ul>
+    </fieldset>
+  </form>
+  <form action="${tg.url('/affiliate/cuota/addYear')}" method="post" class="ui-widget-content ui-corner-all noprint">
+    <fieldset>
+      <legend>A&ntilde;adir A&ntilde;o</legend>
+      <input type="hidden" value="${affiliate.id}" name="affiliate" />
+      <ul>
+        <li>
+          <label for="year">A&ntilde;o</label>
+          <input name="year" />
         </li>
         <li><input type="submit" value="A&ntilde;adir" /></li>
       </ul>

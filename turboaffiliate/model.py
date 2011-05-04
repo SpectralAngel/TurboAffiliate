@@ -656,7 +656,7 @@ class Loan(SQLObject):
     
         self.debt = self.capital
     
-    def pagar(self, amount, receipt, day=date.today(), libre=False, remove=True):
+    def pagar(self, amount, receipt, day=date.today(), libre=False, remove=True, deposito=False):
         
         """Carga un nuevo pago para el préstamo
         
@@ -673,6 +673,7 @@ class Loan(SQLObject):
         kw['day'] = day
         kw['receipt'] = receipt
         kw['loan'] = self
+        kw['deposito'] = deposito
         
         # La cantidad a pagar es igual que la deuda del préstamo, por
         # lo tanto se considera la ultima cuota y no se cargaran intereses
@@ -863,6 +864,7 @@ class Pay(SQLObject):
     capital = CurrencyCol(default=0, notNone=True)
     interest = CurrencyCol(default=0, notNone=True)
     amount = CurrencyCol(default=0, notNone=True)
+    deposito = BoolCol(default=False)
     receipt = UnicodeCol(length=50)
     
     def remove(self, payedLoan):

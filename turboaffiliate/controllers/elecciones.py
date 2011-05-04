@@ -177,6 +177,7 @@ class Elecciones(controllers.Controller):
         departamento = model.Departamento.get(departamento)
         afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
         urnas = dict()
+        cantidadUrnas = 0
         
         for afiliado in afiliados:
             
@@ -188,8 +189,9 @@ class Elecciones(controllers.Controller):
             else:
                 urnas[afiliado.municipio][afiliado.school] = list()
                 urnas[afiliado.municipio][afiliado.school].append(afiliado)
+                cantidadUrnas += 1
         
-        return dict(urnas=urnas, departamento=departamento, cantidad=afiliados.count())
+        return dict(urnas=urnas, departamento=departamento, cantidad=afiliados.count(), cantidadUrnas=cantidadUrnas)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.urnasMunicipios')
