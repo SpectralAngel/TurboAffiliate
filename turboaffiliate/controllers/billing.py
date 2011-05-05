@@ -97,3 +97,21 @@ class Billing(controllers.Controller):
 			loans.extend(affiliate.loans)
 		
 		return dict(loans=loans, day=date.today())
+	
+	
+	@identity.require(identity.not_anonymous())
+	@expose(template='turboaffiliate.templates.affiliate.billing.loans')
+	@validate(validators=dict(school=validators.String()))
+	def loanSchool(self, school):
+		
+		"""Muestra los estados de cuenta préstamos de los afiliados de un
+		departamento
+		
+		:param school: El colegio a mostrar """
+		
+		affiliates = model.Affiliate.selectBy(school=school)
+		loans = list()
+		for affiliate in affiliates:
+			loans.extend(affiliate.loans)
+		
+		return dict(loans=loans, day=date.today())

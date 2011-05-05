@@ -412,7 +412,8 @@ class Affiliate(controllers.Controller):
         
         departamento = model.Departamento.get(departamento)
         affiliates = model.Affiliate.select(AND(model.Affiliate.school==school, model.Affiliate.q.departamento))
-        return dict(affiliates=affiliates, show=u"Instituto", count=len(affiliates))
+        
+        return dict(affiliates=affiliates, show=u"Instituto", count=affiliates.count())
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
