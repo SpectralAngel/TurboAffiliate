@@ -69,6 +69,19 @@ var JSON = {
       });
     });
   },
+  cuentas : function(url)
+  {
+    $.get(url + '/cuentas?tg_format=json', function(data)
+    {
+      $.each(data.cuentas, function(i, cuenta)
+      {
+        var option = $('<option />');
+        option.val(cuenta.id);
+        option.text(cuenta.id + ' ' + cuenta.name)
+        $('.cuentas').append(option);
+      });
+    });
+  },
   jubilados : function(url)
   {
     $.get(url + '/jubilados?tg_format=json', function(data)

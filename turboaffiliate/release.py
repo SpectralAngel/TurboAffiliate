@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # Release information about TurboAffiliate
 
-version = "0.90m1"
+version = "0.90"
 
-# description = "Your plan to rule the world"
+description = "An cooperative-like management system"
 # long_description = "More description about your plan"
 author = "Carlos Flores"
 email = "cafg10@gmail.com"

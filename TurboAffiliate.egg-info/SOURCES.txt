@@ -148,6 +148,8 @@ turboaffiliate/templates/asamblea/viatico/index.html
 turboaffiliate/templates/deposito/__init__.py
 turboaffiliate/templates/deposito/agregar.html
 turboaffiliate/templates/deposito/index.html
+turboaffiliate/templates/deposito/reporteAnonimo.html
+turboaffiliate/templates/deposito/reporteBanco.html
 turboaffiliate/templates/elecciones/__init__.py
 turboaffiliate/templates/elecciones/acta.html
 turboaffiliate/templates/elecciones/departamento.html

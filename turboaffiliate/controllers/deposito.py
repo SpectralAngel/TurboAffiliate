@@ -150,6 +150,32 @@ class Deposito(controllers.Controller):
     @expose('json')
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
+    @validate(validators=dict(afiliado=validators.Int(),
+                              banco=validators.Int(),
+                              monto=validators.UnicodeString(),
+                              fecha=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              cuenta=validators.Int()))
+    def agregarOtros(self, afiliado, banco, cuenta, **kw):
+        
+        """Permite registrar un deposito que corresponde a pago de aportaciones
+        
+        :param afiliado: El número de afiliación
+        :param banco:    El código del banco en que se efectuó el depósito
+        :param kw:       Diccionario que incluye el resto de los datos del depósito
+        """
+        
+        cuenta = model.Account.get(cuenta)
+        kw['monto'] = Decimal(kw['monto'].replace(',', ''))
+        kw['afiliado'] = model.Affiliate.get(afiliado)
+        kw['banco'] = model.Banco.get(banco)
+        kw['concepto'] = cuenta.name
+        deposito = model.Deposito(**kw)
+        
+        return dict(mensaje=u"Se registró el depósito al afiliado {0}".format(deposito.afiliado.id))
+    
+    @expose('json')
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @validate(validators=dict(referencia=validators.UnicodeString(),
                               concepto=validators.UnicodeString(),
                               banco=validators.Int(),
