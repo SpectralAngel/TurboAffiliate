@@ -143,7 +143,7 @@ class Deposito(controllers.Controller):
         banco = kw['banco']
         deposito = model.Deposito(**kw)
         monto = kw['monto']
-        prestamo.pagar(amount=monto, receipt=banco.nombre, dia=sistema, remove=False)
+        prestamo.pagar(amount=monto, receipt=banco.nombre, day=sistema, remove=False)
         
         return dict(mensaje=u"Se registró el depósito al afiliado {0}".format(deposito.afiliado.id))
     

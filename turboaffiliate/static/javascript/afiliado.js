@@ -40,7 +40,7 @@ $(document).ready(function(e)
   $('.agregarObservacion').dialog(
   {
     title : "Agregar Observación",
-    modal:true,
+    modal:false,
     autoOpen:false,
     width:380,
     minWidth:380,
@@ -52,7 +52,7 @@ $(document).ready(function(e)
   ;$('.desactivar').dialog(
   {
     title : "Desactivar Afiliado",
-    modal:true,
+    modal:false,
     autoOpen:false,
     width:380,
     minWidth:380,
@@ -64,7 +64,6 @@ $(document).ready(function(e)
   $('.editar').dialog(
   {
     title : "Editar Afiliado",
-    modal:true,
     autoOpen:false,
     width:380,
     minWidth:380,

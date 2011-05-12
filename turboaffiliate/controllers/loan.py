@@ -97,9 +97,9 @@ class Pay(controllers.Controller):
     @expose()
     @validate(validators=dict(amount=validators.UnicodeString(),loan=validators.Int(),
                           receipt=validators.String(), free=validators.Bool(),
-                          deposito=validators.Bool(),
+                          deposito=validators.Bool(), redir=validators.UnicodeString(),
                           day=validators.DateTimeConverter(format='%d/%m/%Y')))
-    def agregar(self, amount, day, loan, receipt, **kw):
+    def agregar(self, amount, day, loan, receipt, redir, **kw):
         
         amount = Decimal(amount.replace(',', ''))
         loan = model.Loan.get(loan)
@@ -125,7 +125,7 @@ class Pay(controllers.Controller):
         if loan.pagar(amount, receipt, day, free, deposito=deposito):
             raise redirect('/payed/{0}'.format(id))
         
-        raise redirect('/loan/{0}'.format(loan.id))
+        raise redirect(redir)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.pay.resume')
@@ -728,3 +728,16 @@ class Loan(controllers.Controller):
         return dict(loans=prestamos, start=start, end=start, monto=monto,
                     neto=neto, papeleo=papeleo, aportaciones=aportaciones,
                     intereses=intereses, retencion=retencion, reintegros=reintegros)
+    
+    @expose()
+    def reconstruirSaldo(self):
+        
+        loans = model.Loan.select()
+        
+        for loan in loans:
+            anterior = loan.debt
+            loan.reconstruirSaldo()
+            print loan.id, anterior, loan.debt, loan.capital, loan.capitalPagado()
+        
+        flash(u'Operacion Completada Exitósamente!')
+        raise redirect('/loan')

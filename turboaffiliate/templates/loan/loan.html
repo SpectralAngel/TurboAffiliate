@@ -144,6 +144,7 @@
   </div>
   <form class="pagar" action="${tg.url('/loan/pay/agregar')}" method="post">
     <div>
+      <input type="hidden" name="redir" value="${'/loan/{0}'.format(loan.id)}" />
       <ul>
         <li>
           <label for="amount">Monto:</label>

@@ -511,6 +511,7 @@
       <form class="pagar" id="pagoPrestamo" action="${tg.url('/loan/pay/agregar')}" method="post">
         <div>
           <input type="hidden" name="loan" id="loan" />
+          <input type="hidden" name="redir" value="${'/affiliate/{0}'.format(affiliate.id)}" />
           <ul>
             <li>
               <label for="amount">Monto:</label>
