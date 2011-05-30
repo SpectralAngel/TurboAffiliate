@@ -687,6 +687,8 @@ class Loan(SQLObject):
             # Remove the loan and convert it to PayedLoan
             if remove:
                 self.remove()
+            else:
+                self.debt -= kw['amount']
             return True
         
         if libre:

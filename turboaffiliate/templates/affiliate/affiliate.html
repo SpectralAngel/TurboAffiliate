@@ -217,6 +217,25 @@
             </tr>
           </tbody>
         </table>
+        <table class="ui-widget-content ui-corner-all striped" py:if="len(affiliate.depositos) != 0">
+          <caption>Dep&oacute;sitos Efectuados</caption>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Banco</th>
+              <th>Monto</th>
+              <th>Concepto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr py:for="deposito in affiliate.depositos">
+              <td>${deposito.fecha.strftime('%d/%m/%Y')}</td>
+              <td>${deposito.banco.nombre}</td>
+              <td>${locale.currency(deposito.monto, True, True)}</td>
+              <td>${deposito.concepto}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div id="personal" class="ui-widget-content ui-corner-all flotante-izquierdo">
         <h3 class="ui-widget-header ui-corner-all no-margin ui-helper-clearfix">Informaci&oacute;n Personal</h3>
