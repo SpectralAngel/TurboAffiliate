@@ -47,6 +47,8 @@ class Account(controllers.Controller):
     def add(self):
         return dict()
     
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(code=validators.Int(),name=validators.String()))
     def save(self, **kw):
@@ -60,13 +62,15 @@ class Account(controllers.Controller):
         model.Logger(**log)
         raise redirect('/account/{0}'.format(account.id))
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose(template="turboaffiliate.templates.account.retrasada")
     def retrasada(self):
         
         return dict(accounts=model.Account.select())
     
-    @identity.require(identity.not_anonymous())
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
     @expose()
     @validate(validators=dict(mes=validators.Int(), anio=validators.Int(),
                               account=validators.Int()))

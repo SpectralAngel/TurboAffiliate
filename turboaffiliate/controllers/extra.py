@@ -31,7 +31,7 @@ class Extra(controllers.Controller):
     def index(self):
         return dict(accounts=model.Account.select())
     
-    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+    @identity.require(identity.All(identity.in_any_group('admin'),
                                    identity.not_anonymous()))
     @expose()
     @validate(validators=dict(affiliate=validators.Int(),
@@ -62,7 +62,7 @@ class Extra(controllers.Controller):
             model.Extra(**kw)
         raise redirect('/affiliate')
     
-    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+    @identity.require(identity.All(identity.in_any_group('admin'),
                                    identity.not_anonymous()))
     @expose()
     @validate(validators=dict(code=validators.Int()))
@@ -74,18 +74,19 @@ class Extra(controllers.Controller):
         
         raise redirect('/affiliate/{0}'.format(affiliate.id))
     
-    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+    @identity.require(identity.All(identity.in_any_group('admin'),
                                    identity.not_anonymous()))
     @expose()
     @validate(validators=dict(account=validators.Int(), months=validators.Int(),
-                              payment=validators.String(),
+                              cotizacion=validators.String(),
                               amount=validators.String()))
-    def payment(self, payment, account, amount, **kw):
+    def payment(self, cotizacion, account, amount, **kw):
         
         kw['account'] = model.Account.get(account)
-        kw['amount'] = Decimal(kw['amount'])
+        kw['amount'] = Decimal(amount)
+        cotizacion = model.Cotizacion.get(cotizacion)
         
-        afiliados = model.Affiliate.selectBy(payment=payment)
+        afiliados = model.Affiliate.selectBy(cotizacion=cotizacion)
         
         for afiliado in afiliados:
             
@@ -96,7 +97,7 @@ class Extra(controllers.Controller):
         
         raise redirect('/affiliate/extra')
     
-    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+    @identity.require(identity.All(identity.in_any_group('admin'),
                                    identity.not_anonymous()))
     @expose('json')
     @validate(validators=dict(extra=validators.Int(),

@@ -153,6 +153,33 @@ class Report(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.filialesdept")
     @validate(validators=dict(departamento=validators.Int(),year=validators.Int(),
+                              start=validators.Int(min=1,max=12),
+                              end=validators.Int(min=1,max=12)))
+    def filialesResumen(self, departamento, year, start, end):
+        
+        """Muestra un reporte de Filiales de un :class:`Departamento` por mes
+        y año de manera resumida"""
+        
+        departamento = model.Departamento.get(departamento)
+        cotizacion = model.Cotizacion.get(1)
+        afiliados = model.Affiliate.selectBy(cotizacion=cotizacion,departamento=departamento)
+        filiales = dict()
+        for n in range(start, end + 1):
+            filiales[n] = dict()
+        
+        for afiliado in afiliados:
+            for month in range(start, end + 1):
+                if afiliado.get_month(year, month):
+                    if not afiliado.school in filiales[month]:
+                        filiales[month][afiliado.school] = 1
+                    else:
+                        filiales[month][afiliado.school] += 1
+        
+        return dict(filiales=filiales, year=year)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.report.filialesdept")
+    @validate(validators=dict(departamento=validators.Int(),year=validators.Int(),
                               month=validators.Int(min=1,max=12)))
     def filialesDept(self, departamento, month, year):
         
