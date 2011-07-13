@@ -1076,7 +1076,6 @@ class Obligation(SQLObject):
 class ReportAccount(SQLObject):
     
     name = name = UnicodeCol(length=100)
-    code = IntCol(default=0)
     quantity = IntCol()
     amount = CurrencyCol(default=0)
     postReport = ForeignKey("PostReport")

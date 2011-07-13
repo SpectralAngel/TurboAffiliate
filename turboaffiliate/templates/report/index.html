@@ -157,6 +157,34 @@
       </ul>
     </fieldset>
   </form>
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('filialesResumen')}">
+    <fieldset>
+      <legend>Mostrar Resumen de Filiales</legend>
+      <ul>
+        <li>
+          <label for="departamento">Departamento:</label>
+          <select name="departamento">
+            <option py:for="d in departamentos" value="${d.id}">${d.nombre}</option>
+          </select>
+        </li>
+        <li>
+          <label for="year">A&ntilde;o:</label>
+          <input name="year" />
+        </li>
+        <li>
+          <label for="start">Mes Inicio:</label>
+          <input name="start" />
+        </li>
+        <li>
+          <label for="end">Mes Final:</label>
+          <input name="end" />
+        </li>
+        <li>
+          <input type="submit" value="Mostrar Reporte" />
+        </li>
+      </ul>
+    </fieldset>
+  </form>
   <form class="ui-widget-content ui-corner-all" action="${tg.url('filialesDept')}">
     <fieldset>
       <legend>Mostrar Reporte de Filiales</legend>

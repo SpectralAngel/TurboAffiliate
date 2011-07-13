@@ -151,7 +151,7 @@ class Report(controllers.Controller):
         return dict(filiales=filiales)
     
     @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.report.filialesdept")
+    @expose(template="turboaffiliate.templates.report.filialres")
     @validate(validators=dict(departamento=validators.Int(),year=validators.Int(),
                               start=validators.Int(min=1,max=12),
                               end=validators.Int(min=1,max=12)))
@@ -164,18 +164,24 @@ class Report(controllers.Controller):
         cotizacion = model.Cotizacion.get(1)
         afiliados = model.Affiliate.selectBy(cotizacion=cotizacion,departamento=departamento)
         filiales = dict()
-        for n in range(start, end + 1):
-            filiales[n] = dict()
         
         for afiliado in afiliados:
-            for month in range(start, end + 1):
-                if afiliado.get_month(year, month):
-                    if not afiliado.school in filiales[month]:
-                        filiales[month][afiliado.school] = 1
-                    else:
-                        filiales[month][afiliado.school] += 1
+            if not afiliado.school in filiales:
+                filiales[afiliado.school] = dict()
+                
+                for month in range(1, 13):
+                    filiales[afiliado.school][month] = 0
+                
+                for month in range(start, end + 1):
+                    if afiliado.get_month(year, month):
+                        filiales[afiliado.school][month] = 1
+                
+            else:
+                for month in range(start, end + 1):
+                    if afiliado.get_month(year, month):
+                        filiales[afiliado.school][month] += 1
         
-        return dict(filiales=filiales, year=year)
+        return dict(filiales=filiales, year=year, departamento=departamento, start=start, end=end)
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.filialesdept")

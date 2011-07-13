@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html" />
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Filiales</title>
+  <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
+</head>
+<body>
+  <h1>Filiales ${departamento.nombre} A&ntilde;o ${year} del mes ${start} al mes ${end}</h1>
+  <table class="striped full-size ui-widget-content ui-corner-all">
+    <thead>
+      <tr>
+        <th>Filial</th>
+        <th>Enero</th>
+        <th>Feb</th>
+        <th>Marzo</th>
+        <th>Abril</th>
+        <th>Mayo</th>
+        <th>Junio</th>
+        <th>Julio</th>
+        <th>Agos</th>
+        <th>Sept</th>
+        <th>Oct</th>
+        <th>Nov</th>
+        <th>Dic</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr py:for="school in sorted(filiales)">
+        <td>${school}</td>
+        <td>${filiales[school][1]}</td>
+        <td>${filiales[school][2]}</td>
+        <td>${filiales[school][3]}</td>
+        <td>${filiales[school][4]}</td>
+        <td>${filiales[school][5]}</td>
+        <td>${filiales[school][6]}</td>
+        <td>${filiales[school][7]}</td>
+        <td>${filiales[school][8]}</td>
+        <td>${filiales[school][9]}</td>
+        <td>${filiales[school][10]}</td>
+        <td>${filiales[school][11]}</td>
+        <td>${filiales[school][12]}</td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>

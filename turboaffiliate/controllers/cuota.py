@@ -24,7 +24,14 @@ from turbogears import (controllers, expose, identity, redirect, validate,
 from turboaffiliate import model
 from datetime import date
 
+
 class Cuota(controllers.Controller):
+    
+    def log(self, message, user):
+        log = dict()
+        log['user'] = user
+        log['action'] = message
+        model.Logger(**log)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.cuota.affiliate')
@@ -42,10 +49,8 @@ class Cuota(controllers.Controller):
         
         affiliate = model.Affiliate.get(affiliate)
         
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = u"Posteo aportaciones de  {0} a {1} afiliado {2}".format(start, end, affiliate.id)
-        model.Logger(**log)
+        self.log(u"Posteo aportaciones de  {0} a {1} afiliado {2}".format(start, end, affiliate.id),
+                 identity.current.user)
         
         for n in range(start, end + 1):
             [affiliate.pay_cuota(n, month) for month in range(1, 13)]
@@ -101,10 +106,8 @@ class Cuota(controllers.Controller):
             except KeyError:
                 setattr(table, "month{0}".format(n), False)
         
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = u"Cambio en aportaciones año {0} afiliado {1}".format(table.year, table.affiliate.id)
-        model.Logger(**log)
+        self.log(u"Cambio en aportaciones año {0} afiliado {1}".format(table.year, table.affiliate.id),
+                 identity.current.user)
         
         raise redirect('/affiliate/cuota/{0}'.format(table.affiliate.id))
     
@@ -137,6 +140,25 @@ class Cuota(controllers.Controller):
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose('json')
+    @validate(validators=dict(afiliado=validators.Int(),anio=validators.Int(),
+                              meses=validators.UnicodeString(),
+                              redir=validators.UnicodeString()))
+    def pagarVarias(self, afiliado, meses, anio, redir):
+        
+        """Permite pagar varios meses en una sola operación"""
+        
+        afiliado = model.Affiliate.get(afiliado)
+        # afiliado.pagar_cuota(mes, anio)
+        for mes in meses.split():
+            afiliado.pay_cuota(anio, int(mes))
+        
+        flash(u'Pagadas Aportaciones de {0} de {1}'.format(meses, anio))
+        
+        raise redirect('/affiliate/{0}{1}'.format(redir, afiliado.id))
+    
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose('json')
     @validate(validators=dict(afiliado=validators.Int(),cuenta=validators.Int(),
                               day=validators.DateTimeConverter(format='%d/%m/%Y')))
     def pagoPlanilla(self, afiliado, cuenta, day):
@@ -157,9 +179,7 @@ class Cuota(controllers.Controller):
         deduccion['amount'] = affiliate.get_cuota(day)
         model.Deduced(**deduccion)
         
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = u"Pago por Planilla de cuota de aportaciones afiliado {0}".format(affiliate.id)
-        model.Logger(**log)
+        self.log(u"Pago por Planilla de cuota de aportaciones afiliado {0}".format(affiliate.id),
+                 identity.current.user)
         
         return dict(pago=affiliate.get_cuota(day))
