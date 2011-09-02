@@ -98,6 +98,7 @@ class Pay(controllers.Controller):
     @validate(validators=dict(amount=validators.UnicodeString(),loan=validators.Int(),
                           receipt=validators.String(), free=validators.Bool(),
                           deposito=validators.Bool(), redir=validators.UnicodeString(),
+                          description=validators.UnicodeString(),
                           day=validators.DateTimeConverter(format='%d/%m/%Y')))
     def agregar(self, amount, day, loan, receipt, redir, **kw):
         

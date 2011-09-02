@@ -98,6 +98,7 @@
             <th>Valor</th>
             <th>Recibo</th>
             <th class="noprint">Borrar</th>
+            <th class="noprint">Descripcion</th>
           </tr>
         </thead>
         <tbody>
@@ -111,6 +112,7 @@
             <td>${locale.currency(pay.amount, True, True)}</td>
             <td>${pay.receipt}</td>
             <td class="noprint"><a href="${tg.url('/loan/pay/remove/{0}'.format(pay.id))}">X</a></td>
+            <td class="noprint">${pay.description}</td>
           </tr>
         </tbody>
         <tfoot class="noprint">
@@ -157,6 +159,10 @@
         <li>
           <label for="receipt">Recibo:</label>
           <input name="receipt" />
+        </li>
+        <li>
+          <label for="description">Descripci&oacute;</label>
+          <input name="description" />
         </li>
         <li>
           <label for="free">Libre de Intereses:</label>

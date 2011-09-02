@@ -52,6 +52,7 @@
             <th>Capital</th>
             <th>Valor</th>
             <th>Recibo</th>
+            <th class="noprint">Descripcion</th>
           </tr>
         </thead>
         <tbody>
@@ -64,6 +65,7 @@
             <td>${locale.currency(pay.capital, True, True)}</td>
             <td>${locale.currency(pay.amount, True, True)}</td>
             <td>${pay.receipt}</td>
+            <td class="noprint">${pay.description}</td>
           </tr>
         </tbody>
         <tfoot class="noprint">

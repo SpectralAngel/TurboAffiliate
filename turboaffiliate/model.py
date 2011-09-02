@@ -868,6 +868,7 @@ class Pay(SQLObject):
     amount = CurrencyCol(default=0, notNone=True)
     deposito = BoolCol(default=False)
     receipt = UnicodeCol(length=50)
+    description = UnicodeCol(length=100)
     
     def remove(self, payedLoan):
         
@@ -878,6 +879,7 @@ class Pay(SQLObject):
         kw['interest'] = self.interest
         kw['amount'] = self.amount
         kw['receipt'] = self.receipt
+        kw['description'] = self.description
         self.destroySelf()
         OldPay(**kw)
     
@@ -1031,6 +1033,7 @@ class OldPay(SQLObject):
     interest = CurrencyCol(default=0, notNone=True)
     amount = CurrencyCol(default=0, notNone=True)
     receipt = UnicodeCol(length=50)
+    description = UnicodeCol(length=100)
     
     def to_pay(self, loan):
         
@@ -1041,6 +1044,7 @@ class OldPay(SQLObject):
         kw['interest'] = self.interest
         kw['amount'] = self.amount
         kw['receipt'] = self.receipt
+        kw['description'] = self.description
         Pay(**kw)
         self.destroySelf()
 
