@@ -213,6 +213,15 @@ class Elecciones(controllers.Controller):
                 urnas[afiliado.municipio][afiliado.school] = list()
                 urnas[afiliado.municipio][afiliado.school].append(afiliado)
         
+        for municipio in urnas:
+            
+            especial = list()
+            for instituto, v in urnas[municipio].items():
+                if len(urnas[municipio][instituto]) < 5:
+                    especial.extend(urnas[municipio][instituto])
+                    del urnas[municipio][instituto]
+            urnas[municipio]['Urna Especial'] = especial
+        
         return dict(urnas=urnas, departamento=departamento, cantidad=afiliados.count())
     
     @identity.require(identity.not_anonymous())
@@ -295,3 +304,53 @@ class Elecciones(controllers.Controller):
         afiliados = model.Affiliate.selectBy(active=True,cardID=None)
         
         return dict(afiliados=afiliados)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.elecciones.departamentos')
+    def resumenUrnas(self):
+        
+        departamentos = dict()
+        for n in range(1, 19):
+            resultado = self.urnas_depto(n)
+            print resultado
+            
+            
+            departamentos[resultado['departamento']] = len(resultado['urnas'])
+         
+        return dict(departamentos=departamentos)
+    
+    def urnas_depto(self, departamento):
+        departamento = model.Departamento.get(departamento)
+        afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
+        
+        urnas = dict()
+        urnas['Sin Instituto'] = 0
+        for afiliado in afiliados:
+            
+            if afiliado.school in urnas:
+                urnas[afiliado.school] += 1
+            else:
+                urnas[afiliado.school] = 1
+        
+        for instituto in urnas:
+            
+            if instituto is None:
+                urnas['Sin Instituto'] += urnas[instituto]
+            
+            if instituto == '':
+                urnas['Sin Instituto'] += urnas[instituto]
+        
+        if None in urnas:
+            del urnas[None]
+        if '' in urnas:
+            del urnas['']
+       
+        urnas2 = dict()
+        for instituto in urnas:
+           
+            if urnas[instituto] >= 5:
+                
+                urnas2[instituto] = urnas[instituto]
+        
+        return dict(urnas=urnas2, cantidad=sum(urnas2[i] for i in urnas2), departamento=departamento)
+    

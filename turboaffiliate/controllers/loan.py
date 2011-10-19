@@ -123,7 +123,7 @@ class Pay(controllers.Controller):
         log['action'] = "Pago de {0} al prestamo {1}".format(amount, loan.id)
         model.Logger(**log)
         
-        if loan.pagar(amount, receipt, day, free, deposito=deposito):
+        if loan.pagar(amount, receipt, day, free, deposito=deposito, descripcion=kw['description']):
             raise redirect('/payed/{0}'.format(id))
         
         raise redirect(redir)
@@ -581,6 +581,7 @@ class Loan(controllers.Controller):
         pays = model.Pay.selectBy(day=day)
         
         capital = sum(pay.capital for pay in pays)
+
         interest = sum(pay.interest for pay in pays)
         
         return dict(pays=pays, capital=capital, interest=interest)

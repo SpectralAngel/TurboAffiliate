@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html" />
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+    <title>TurboAffiliate &bull; Resumen de Urnas Por Departamento</title>
+    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/billing.css')}" />
+  </head>
+  <body>
+    <h1>Resumen de Urnas Por Departamento</h1>
+    <table style="width: 100%" class="page">
+      <thead>
+        <tr>
+          <th>Departamento</th>
+          <th>Cantidad de Urnas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr py:for="departamento in departamentos">
+          <td>${departamento.nombre}</td>
+          <td>${departamentos[departamento]}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th>Total de Centros</th>
+          <th>${sum(departamentos[d] for d in departamentos)}</th>
+        </tr>
+      </tfoot>
+    </table>
+  </body>
+</html>
+

@@ -164,6 +164,7 @@ class Report(controllers.Controller):
         cotizacion = model.Cotizacion.get(1)
         afiliados = model.Affiliate.selectBy(cotizacion=cotizacion,departamento=departamento)
         filiales = dict()
+        cantidad = 0
         
         for afiliado in afiliados:
             if not afiliado.school in filiales:
@@ -175,13 +176,15 @@ class Report(controllers.Controller):
                 for month in range(start, end + 1):
                     if afiliado.get_month(year, month):
                         filiales[afiliado.school][month] = 1
+                        cantidad += 1
                 
             else:
                 for month in range(start, end + 1):
                     if afiliado.get_month(year, month):
                         filiales[afiliado.school][month] += 1
+                        cantidad += 1
         
-        return dict(filiales=filiales, year=year, departamento=departamento, start=start, end=end)
+        return dict(filiales=filiales, year=year, departamento=departamento, start=start, end=end, cantidad=cantidad)
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.filialesdept")
@@ -285,3 +288,4 @@ class Report(controllers.Controller):
         affiliates = [c.affiliate for c in cuotas if c.affiliate.active]
         show = "que Cotizaron en {0} de {1}".format(month, year)
         return dict(affiliates=affiliates,show=show,count=len(affiliates))
+

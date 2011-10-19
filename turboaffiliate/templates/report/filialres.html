@@ -8,6 +8,7 @@
 </head>
 <body>
   <h1>Filiales ${departamento.nombre} A&ntilde;o ${year} del mes ${start} al mes ${end}</h1>
+  <h2>Total de Pagos por Filial Departamental: ${cantidad}</h2>
   <table class="striped full-size ui-widget-content ui-corner-all">
     <thead>
       <tr>
@@ -24,6 +25,7 @@
         <th>Oct</th>
         <th>Nov</th>
         <th>Dic</th>
+        <th>Total</th>
       </tr>
     </thead>
     <tbody>
@@ -41,6 +43,7 @@
         <td>${filiales[school][10]}</td>
         <td>${filiales[school][11]}</td>
         <td>${filiales[school][12]}</td>
+        <td>${sum(filiales[school][m] for m in filiales[school])}</td>
       </tr>
     </tbody>
   </table>

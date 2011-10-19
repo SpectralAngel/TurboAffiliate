@@ -627,3 +627,4 @@ class Affiliate(controllers.Controller):
         flash('terminado')
         
         raise redirect('/affiliate')
+

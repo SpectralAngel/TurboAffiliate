@@ -23,14 +23,18 @@
           <th>Apellido</th>
           <th>Nombre</th>
           <th>Identidad</th>
+          <th>Municipio</th>
+          <th>Colegio</th>
         </tr>
       </thead>
       <tbody>
         <tr py:for="afiliado in afiliados">
-          <td><a href="${tg.url('/affiliate/{0}'.format(afiliado.id)}">${afiliado.id}</a></td>
+          <td><a href="${tg.url('/affiliate/{0}'.format(afiliado.id))}">${afiliado.id}</a></td>
           <td>${afiliado.lastName}</td>
           <td>${afiliado.firstName}</td>
           <td>${afiliado.cardID}</td>
+          <td>${afiliado.municipio.nombre}</td>
+          <td>${afiliado.school}</td>
         </tr>
       </tbody>
     </table>

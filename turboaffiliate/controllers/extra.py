@@ -109,3 +109,4 @@ class Extra(controllers.Controller):
         extra.act(day=day)
         
         return dict(pago=pago)
+
