@@ -225,6 +225,7 @@
               <th>Banco</th>
               <th>Monto</th>
               <th>Concepto</th>
+              <th class="noprint">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -233,6 +234,7 @@
               <td>${deposito.banco.nombre}</td>
               <td>${locale.currency(deposito.monto, True, True)}</td>
               <td>${deposito.concepto}</td>
+              <td><a href="${tg.url('/deposito/eliminar/{0}'.format(deposito.id))}">Eliminar</a></td>
             </tr>
           </tbody>
         </table>

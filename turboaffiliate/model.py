@@ -641,12 +641,16 @@ class Loan(SQLObject):
     aproval = ForeignKey("User")
     
     def percent(self):
-    
+        
+        """Calcula cuanto de la deuda se ha cubierto con los pagos"""
+        
         x = (Decimal(self.debt) * Decimal(100)).quantize(dot01)
         total = x / Decimal(self.capital).quantize(dot01)
         return total
     
     def get_payment(self):
+        
+        """Obtiene el cobro a efectuar del prestamo"""
     
         if self.debt < self.payment and self.number != self.months - 1:
             return self.debt

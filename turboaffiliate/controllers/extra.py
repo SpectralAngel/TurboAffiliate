@@ -62,7 +62,7 @@ class Extra(controllers.Controller):
             model.Extra(**kw)
         raise redirect('/affiliate')
     
-    @identity.require(identity.All(identity.in_any_group('admin'),
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose()
     @validate(validators=dict(code=validators.Int()))
