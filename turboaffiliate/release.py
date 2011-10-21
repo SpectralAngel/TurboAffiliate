@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Release information about TurboAffiliate
 
-version = "0.90"
+version = "0.92.0"
 
 description = "An cooperative-like management system"
 # long_description = "More description about your plan"

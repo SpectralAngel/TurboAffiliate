@@ -153,6 +153,7 @@ turboaffiliate/templates/deposito/reporteBanco.html
 turboaffiliate/templates/elecciones/__init__.py
 turboaffiliate/templates/elecciones/acta.html
 turboaffiliate/templates/elecciones/departamento.html
+turboaffiliate/templates/elecciones/departamentos.html
 turboaffiliate/templates/elecciones/index.html
 turboaffiliate/templates/elecciones/institutoDepto.html
 turboaffiliate/templates/elecciones/listado.html
@@ -201,6 +202,7 @@ turboaffiliate/templates/report/department.html
 turboaffiliate/templates/report/extra.html
 turboaffiliate/templates/report/filiales.html
 turboaffiliate/templates/report/filialesdept.html
+turboaffiliate/templates/report/filialres.html
 turboaffiliate/templates/report/index.html
 turboaffiliate/templates/report/other.html
 turboaffiliate/templates/report/payment.html

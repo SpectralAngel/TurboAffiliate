@@ -25,7 +25,7 @@ from sqlobject import (SQLObject, UnicodeCol, StringCol, DateCol, CurrencyCol,
                        DatabaseIndex, DateTimeCol, RelatedJoin,
                        SQLObjectNotFound, BigIntCol)
 from decimal import Decimal
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import wording
 import math, copy
 
@@ -324,14 +324,17 @@ class Affiliate(SQLObject):
     
     def get_cuota(self, hoy=date.today()):
         
-        """Obtiene la cuota de aportación que el afiliado debera pagar en el
-        mes actual"""
+        """Obtiene la cuota de aportación que el :class:`Affiliate` debera pagar
+        en el mes actual"""
         
         obligations = Obligation.selectBy(month=hoy.month, year=hoy.year)
         
         obligation = Decimal(0)
-        obligation += sum(o.amount for o in obligations if not self.cotizacion.jubilados)
-        obligation += sum(o.inprema for o in obligations if self.cotizacion.jubilados)
+        obligation += sum(o.amount for o in obligations
+                          if not self.cotizacion.jubilados)
+        
+        obligation += sum(o.inprema for o in obligations
+                          if self.cotizacion.jubilados)
         
         return obligation
     
@@ -510,14 +513,18 @@ class CuotaTable(SQLObject):
         total = Zero
         os = Obligation.selectBy(year=self.year,month=mes)
         
-        if self.affiliate.cotizacion.jubilados and not self.affiliate.jubilated is None:
+        if (self.affiliate.cotizacion.jubilados and
+            not self.affiliate.jubilated is None):
         
             if self.affiliate.jubilated.year < self.year:
                 total = sum(o.inprema for o in os)
             
             elif self.affiliate.jubilated.year == self.year:
-                total += sum(o.amount for o in os if mes < self.affiliate.jubilated.month)
-                total += sum(o.inprema for o in os if mes >= self.affiliate.jubilated.month)
+                total += sum(o.amount for o in os
+                             if mes < self.affiliate.jubilated.month)
+                
+                total += sum(o.inprema for o in os
+                             if mes >= self.affiliate.jubilated.month)
             
             elif self.affiliate.jubilated.year > self.year:
                 total = sum(o.amount for o in os)
@@ -618,7 +625,7 @@ class CuotaTable(SQLObject):
 class Loan(SQLObject):
 
     """Guarda los datos que pertenecen a un préstamo personal otorgado a un
-    afiliado de la organización"""
+    :class:`Affiliate` de la organización"""
     
     affiliate = ForeignKey("Affiliate")
     casa = ForeignKey("Casa")
@@ -648,19 +655,50 @@ class Loan(SQLObject):
         total = x / Decimal(self.capital).quantize(dot01)
         return total
     
+    def mora_mensual(self):
+        
+        """Calcula el monto que se acumula mensualmente por mora"""
+        
+        return self.debt * Decimal("0.02")
+    
+    def prediccion_pagos_actuales(self):
+        
+        """Calcula la cantidad de pagos que el :class:`Loan` deberia tener a
+        la fecha de hoy"""
+        
+        return (date.today() - self.startDate).days / 30
+    
+    def pagos_en_mora(self):
+        
+        """Calcula la cantidad de pagos que el :class:`Affiliate` no ha
+        efectuado desde que se le otorgo el :class:`Loan`"""
+        
+        pagos = self.prediccion_pagos_actuales()
+        return pagos - len(self.pays) + 1
+    
+    def obtener_mora(self):
+        
+        """Calcula el monto a pagar por mora en la siguiente cuota"""
+        
+        return self.mora_mensual() * self.pagos_en_mora()
+    
     def get_payment(self):
         
         """Obtiene el cobro a efectuar del prestamo"""
     
         if self.debt < self.payment and self.number != self.months - 1:
             return self.debt
+        
         return self.payment
     
     def start(self):
+        
+        """Inicia el saldo del préstamo al capital"""
     
         self.debt = self.capital
     
-    def pagar(self, amount, receipt, day=date.today(), libre=False, remove=True, deposito=False, descripcion=None):
+    def pagar(self, amount, receipt, day=date.today(), libre=False, remove=True,
+              deposito=False, descripcion=None):
         
         """Carga un nuevo pago para el préstamo
         
@@ -890,7 +928,8 @@ class Pay(SQLObject):
     
     def revert(self):
         
-        self.loan.debt = self.loan.capital - self.loan.capitalPagado() + self.capital
+        self.loan.debt = self.loan.capital - self.loan.capitalPagado() \
+                       + self.capital
         self.loan.number -= 1
         self.destroySelf()
 
@@ -918,6 +957,8 @@ class Extra(SQLObject):
     
     def act(self, decrementar=True, day=date.today()):
         
+        """Registra que la deducción se efectuó y disminuye la cantidad"""
+        
         self.to_deduced(day=day)
         if decrementar and self.months == 1:
             self.destroySelf()
@@ -927,6 +968,8 @@ class Extra(SQLObject):
             self.destroySelf()
     
     def to_deduced(self, day=date.today()):
+        
+        """Registra la deducción convirtiendola en :class:`Deduced`"""
         
         kw = dict()
         kw['amount'] = self.amount
@@ -1237,7 +1280,9 @@ class Reintegro(SQLObject):
         kw['month'] = dia.month
         kw['year'] = dia.year
         
-        kw['detail'] = "Reintegro {0} por {0}".format(self.emision.strftime('%d/%m/%Y'), self.motivo)
+        kw['detail'] = "Reintegro {0} por {0}".format(
+                                            self.emision.strftime('%d/%m/%Y'),
+                                            self.motivo)
         
         Deduced(**kw)
     
