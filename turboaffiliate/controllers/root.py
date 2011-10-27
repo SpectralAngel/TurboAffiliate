@@ -86,4 +86,3 @@ class Root(controllers.RootController):
     def logout(self):
         identity.current.logout()
         raise redirect("/")
-

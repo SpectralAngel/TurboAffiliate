@@ -25,7 +25,7 @@ from sqlobject import (SQLObject, UnicodeCol, StringCol, DateCol, CurrencyCol,
                        DatabaseIndex, DateTimeCol, RelatedJoin,
                        SQLObjectNotFound, BigIntCol)
 from decimal import Decimal
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 import wording
 import math, copy
 
@@ -642,6 +642,7 @@ class Loan(SQLObject):
     
     startDate = DateCol(notNone=True, default=date.today)
     aproved = BoolCol(default=False)
+    fecha_mora = DateCol(notNone=True, default=date.today)
     
     pays = MultipleJoin("Pay", orderBy="day")
     deductions = MultipleJoin("Deduction")
@@ -661,12 +662,27 @@ class Loan(SQLObject):
         
         return self.debt * Decimal("0.02")
     
+    def inicio_mora(self):
+        
+        """Calcula la fecha de inicio de cobro de intereses moratorios de
+        manera.
+        Utiliza la fecha de inicio de mora almacenada en el prestamo en caso
+        que esta sea mayor que la fecha en que se inició.
+        """
+        
+        if self.startDate < self.fecha_mora:
+            
+            return self.moraDate
+        
+        return self.startDate
+    
     def prediccion_pagos_actuales(self):
         
         """Calcula la cantidad de pagos que el :class:`Loan` deberia tener a
-        la fecha de hoy"""
+        la fecha de hoy
+        """
         
-        return (date.today() - self.startDate).days / 30
+        return (date.today() - self.inicio_mora()).days / 30
     
     def pagos_en_mora(self):
         
@@ -674,7 +690,9 @@ class Loan(SQLObject):
         efectuado desde que se le otorgo el :class:`Loan`"""
         
         pagos = self.prediccion_pagos_actuales()
-        return pagos - len(self.pays) + 1
+        # Utilizar el número de pagos almacenado, para evitar calcular intereses
+        # sobre cuotas pagadas y eliminadas accidentalmente.
+        return pagos - self.number + 1
     
     def obtener_mora(self):
         

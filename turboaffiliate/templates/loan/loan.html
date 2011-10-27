@@ -21,7 +21,7 @@
       <h3 class="centrado">Capital Prestado: ${locale.currency(loan.capital, True, True)}</h3>
       <h4 class="flotante-izquierdo"> Prestatario:
           <a class="print" href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}">${loan.affiliate.id}</a>
-          ${loan.affiliate.firstName} ${loan.affiliate.lastName}  
+          ${loan.affiliate.firstName} ${loan.affiliate.lastName}
       </h4>
       <h4 class="flotante-derecho">Otorgado: ${loan.startDate.strftime('%d de %B de %Y')} ${loan.casa.nombre}</h4>
       <table class="ui-widget-content ui-corner-all striped full-size">
@@ -127,6 +127,11 @@
         </tfoot>
       </table>
       <div class="center">Impreso por: ${tg.identity.user.display_name}</div>
+      <div class="noprint center">Cobro mensual por mora:
+        ${locale.currency(loan.mora_mensual(), True, True)}</div>
+      <div class="noprint center">Meses en Mora: ${loan.pagos_en_mora()}</div>
+      <div class="noprint center">Cargo por Mora para la proxima cuota:
+        ${locale.currency(loan.obtener_mora(), True, True)}</div>
     </div>
   </div>
   <div id="lateral" class="noprint">

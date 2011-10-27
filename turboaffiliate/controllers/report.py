@@ -38,11 +38,14 @@ class Report(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.index")
     def index(self):
-        return dict(accounts=model.Account.select(), departamentos=model.Departamento.select())
+        return dict(accounts=model.Account.select(),
+                    departamentos=model.Departamento.select())
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.post")
-    @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
+    @validate(validators=dict(year=validators.Int(), month=validators.Int(
+                                                                    min=1,
+                                                                    max=12)))
     def postReport(self, year, month):
         
         """Muestra el reporte de ingresos por los diferentes cargos en un mes
@@ -54,7 +57,9 @@ class Report(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.report")
-    @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12),
+    @validate(validators=dict(year=validators.Int(), month=validators.Int(
+                                                                        min=1,
+                                                                        max=12),
                               payment=validators.String()))
     def report(self, payment, year, month):
         
@@ -117,7 +122,9 @@ class Report(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.other")
-    @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12),
+    @validate(validators=dict(year=validators.Int(), month=validators.Int(
+                                                                        min=1,
+                                                                        max=12),
                               cotizacion=validators.String()))
     def cotizacion(self, year, month, cotizacion):
         
@@ -125,12 +132,16 @@ class Report(controllers.Controller):
         respecto a un tipo de pago"""
         
         cotizacion = model.Cotizacion.get(cotizacion)
-        report = model.OtherReport.selectBy(cotizacion=cotizacion,year=year,month=month).getOne()
-        return dict(month=month, year=year, report=report, cotizacion=cotizacion)
+        report = model.OtherReport.selectBy(cotizacion=cotizacion,
+                                            year=year,month=month).getOne()
+        return dict(month=month, year=year, report=report,
+                    cotizacion=cotizacion)
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.filiales")
-    @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
+    @validate(validators=dict(year=validators.Int(), month=validators.Int(
+                                                                    min=1,
+                                                                    max=12)))
     def filiales(self, year, month):
         
         affiliates = model.Affiliate.selectBy(payment="Escalafon")
@@ -152,7 +163,8 @@ class Report(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.filialres")
-    @validate(validators=dict(departamento=validators.Int(),year=validators.Int(),
+    @validate(validators=dict(departamento=validators.Int(),
+                              year=validators.Int(),
                               start=validators.Int(min=1,max=12),
                               end=validators.Int(min=1,max=12)))
     def filialesResumen(self, departamento, year, start, end):
@@ -162,7 +174,8 @@ class Report(controllers.Controller):
         
         departamento = model.Departamento.get(departamento)
         cotizacion = model.Cotizacion.get(1)
-        afiliados = model.Affiliate.selectBy(cotizacion=cotizacion,departamento=departamento)
+        afiliados = model.Affiliate.selectBy(cotizacion=cotizacion,
+                                             departamento=departamento)
         filiales = dict()
         cantidad = 0
         
@@ -184,11 +197,13 @@ class Report(controllers.Controller):
                         filiales[afiliado.school][month] += 1
                         cantidad += 1
         
-        return dict(filiales=filiales, year=year, departamento=departamento, start=start, end=end, cantidad=cantidad)
+        return dict(filiales=filiales, year=year, departamento=departamento,
+                    start=start, end=end, cantidad=cantidad)
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.filialesdept")
-    @validate(validators=dict(departamento=validators.Int(),year=validators.Int(),
+    @validate(validators=dict(departamento=validators.Int(),
+                              year=validators.Int(),
                               month=validators.Int(min=1,max=12)))
     def filialesDept(self, departamento, month, year):
         
@@ -196,7 +211,8 @@ class Report(controllers.Controller):
         
         departamento = model.Departamento.get(departamento)
         cotizacion = model.Cotizacion.get(1)
-        afiliados = model.Affiliate.selectBy(cotizacion=cotizacion,departamento=departamento)
+        afiliados = model.Affiliate.selectBy(cotizacion=cotizacion,
+                                             departamento=departamento)
         filiales = dict()
         
         for afiliado in afiliados:
@@ -216,7 +232,10 @@ class Report(controllers.Controller):
     def planilla(self, cotizacion, day):
         
         cotizacion = model.Cotizacion.get(cotizacion)
-        return dict(cotizacion=cotizacion, day=day, afiliados=model.Affiliate.selectBy(cotizacion=cotizacion,active=True))
+        
+        return dict(cotizacion=cotizacion, day=day,
+                    afiliados=model.Affiliate.selectBy(cotizacion=cotizacion,
+                                                       active=True))
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.deduced")
@@ -226,22 +245,28 @@ class Report(controllers.Controller):
         
         account = model.Account.get(account)
         
-        deduced = model.Deduced.selectBy(account=account, year=year, month=month)
+        deduced = model.Deduced.selectBy(account=account,
+                                         year=year, month=month)
         
         total = sum(d.amount for d in deduced)
         
-        return dict(deduced=deduced, account=account, month=months[month], year=year, total=total)
+        return dict(deduced=deduced, account=account, month=months[month],
+                    year=year, total=total)
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.payment")
     @validate(validators=dict(account=validators.Int(),year=validators.Int(),
-                              month=validators.Int(min=1,max=12),payment=validators.String()))
+                              month=validators.Int(min=1,max=12),
+                              payment=validators.String()))
     def deducedPayment(self, account, month, year, payment):
         
-        deduced = model.Deduced.selectBy(account=account, year=year, month=month)
+        deduced = model.Deduced.selectBy(account=account, year=year,
+                                         month=month)
         deduced = [d for d in deduced if d.affiliate.payment == payment]
         total = sum(d.amount for d in deduced if d.affiliate.payment == payment)
-        return dict(deduced=deduced, account=account, month=months[month], year=year, total=total, payment=payment)
+        
+        return dict(deduced=deduced, account=account, month=months[month],
+                    year=year, total=total, payment=payment)
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.affiliate.show")
@@ -257,10 +282,16 @@ class Report(controllers.Controller):
                 
                 affiliates.append(table.affiliate)
         
-        return dict(affiliates=affiliates, show="Cotizan por {0} y pagaron un mes en {1}".format(payment, year), count=len(affiliates))
+        return dict(affiliates=affiliates,
+                    show="Cotizan por {0} y pagaron un mes en {1}".format(
+                                                                    payment,
+                                                                    year),
+                    count=len(affiliates))
     
     @expose(template="turboaffiliate.templates.affiliate.show")
-    @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
+    @validate(validators=dict(year=validators.Int(), month=validators.Int(
+                                                                    min=1,
+                                                                    max=12)))
     def aportaron(self, year, month):
         
         cuotas = model.CuotaTable.selectBy(year=year,month=month)
@@ -270,7 +301,9 @@ class Report(controllers.Controller):
         return dict(affiliates=affiliates,show=show, count=len(affiliates))
     
     @expose(template="turboaffiliate.templates.affiliate.show")
-    @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
+    @validate(validators=dict(year=validators.Int(), month=validators.Int(
+                                                                    min=1,
+                                                                    max=12)))
     def noAportaron(self, year, month):
         
         cuotas = model.CuotaTable.selectBy(year=year,month=month)
@@ -280,7 +313,9 @@ class Report(controllers.Controller):
         return dict(affiliates=affiliates,show=show, count=len(affiliates))
     
     @expose(template="turboaffiliate.templates.affiliate.show")
-    @validate(validators=dict(year=validators.Int(), month=validators.Int(min=1,max=12)))
+    @validate(validators=dict(year=validators.Int(), month=validators.Int(
+                                                                    min=1,
+                                                                    max=12)))
     def conTabla(self, year, month):
         
         cuotas = model.CuotaTable.selectBy(year=year)
