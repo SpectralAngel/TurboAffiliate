@@ -154,7 +154,7 @@ class Cuota(controllers.Controller):
         
         flash(u'Pagadas Aportaciones de {0} de {1}'.format(meses, anio))
         
-        raise redirect('/affiliate/{0}{1}'.format(redir, afiliado.id))
+        raise redirect(redir)
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))

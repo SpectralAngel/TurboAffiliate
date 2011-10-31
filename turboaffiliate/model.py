@@ -30,6 +30,7 @@ import wording
 import math, copy
 
 from turbogears import identity
+import calendar
 
 dot01 = Decimal(".01")
 Zero = Decimal(0)
@@ -670,9 +671,13 @@ class Loan(SQLObject):
         que esta sea mayor que la fecha en que se inició.
         """
         
-        if self.startDate < self.fecha_mora:
+        ultimo = calendar.monthrange(self.fecha_mora.year,
+                                     self.fecha_mora.month)[1]
+        inicio = date(self.fecha_mora.year, self.fecha_mora.month, ultimo)
+        
+        if self.startDate < inicio:
             
-            return self.moraDate
+            return self.fecha_mora
         
         return self.startDate
     

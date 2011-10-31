@@ -17,7 +17,7 @@
         <div class="ui-state-error ui-corner-all advertencia" style="padding: 0.5em;">
           <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
           Afiliado desactivado por <strong>${affiliate.reason}</strong>
-          <span py:if="not affiliate.muerte == None"> Fecha de Fallecimiento: ${affiliate.muerte.strftime('%d de %B de %Y')}</span>
+          <span py:if="not affiliate.muerte == None and affiliate.reason == u'Fallecimiento'"> Fecha de Fallecimiento: ${affiliate.muerte.strftime('%d de %B de %Y')}</span>
           <span py:if="not affiliate.desactivacion == None"> Fecha de Desactivaci&oacute;n: ${affiliate.desactivacion.strftime('%d de %B de %Y')}</span>
         </div>
       </div>
@@ -568,11 +568,11 @@
       <form id="pagarAportaciones" action="${tg.url('/affiliate/cuota/pagarVarias')}" method="post">
         <div>
           <input type="hidden" name="afiliado" value="${affiliate.id}" />
-          <input type="hidden" name="redir" value="" />
+          <input type="hidden" name="redir" value="${'/affiliate/{0}'.format(affiliate.id)}" />
           <ul>
             <li>
-              <label for="mes">Mes:</label>
-              <input name="mes" />
+              <label for="meses">Mes:</label>
+              <input name="meses" />
             </li>
             <li>
               <label for="anio">A&ntilde;o:</label>
