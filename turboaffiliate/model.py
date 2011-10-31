@@ -44,7 +44,7 @@ class Visit(SQLObject):
     class sqlmeta:
         table = "visit"
     
-    visit_key = StringCol(length=40, alternateID=True, 
+    visit_key = StringCol(length=40, alternateID=True,
                           alternateMethodName="by_visit_key")
     created = DateTimeCol(default=datetime.now)
     expiry = DateTimeCol()
@@ -57,7 +57,7 @@ class Visit(SQLObject):
     lookup_visit = classmethod(lookup_visit)
 
 class VisitIdentity(SQLObject):
-    visit_key = StringCol(length=40, alternateID=True, 
+    visit_key = StringCol(length=40, alternateID=True,
                           alternateMethodName="by_visit_key")
     user_id = IntCol()
 
@@ -71,18 +71,18 @@ class Group(SQLObject):
     class sqlmeta:
         table = "tg_group"
     
-    group_name = UnicodeCol(length=16, alternateID=True, 
+    group_name = UnicodeCol(length=16, alternateID=True,
                             alternateMethodName="by_group_name")
     display_name = UnicodeCol(length=255)
     created = DateTimeCol(default=datetime.now)
     
     # collection of all users belonging to this group
-    users = RelatedJoin("User", intermediateTable="user_group", 
+    users = RelatedJoin("User", intermediateTable="user_group",
                         joinColumn="group_id", otherColumn="user_id")
     
     # collection of all permissions for this group
-    permissions = RelatedJoin("Permission", joinColumn="group_id", 
-                              intermediateTable="group_permission", 
+    permissions = RelatedJoin("Permission", joinColumn="group_id",
+                              intermediateTable="group_permission",
                               otherColumn="permission_id")
 
 class User(SQLObject):
@@ -94,16 +94,16 @@ class User(SQLObject):
     class sqlmeta:
         table = "tg_user"
     
-    user_name = UnicodeCol(length=16, alternateID=True, 
+    user_name = UnicodeCol(length=16, alternateID=True,
                            alternateMethodName="by_user_name")
-    email_address = UnicodeCol(length=255, alternateID=True, 
+    email_address = UnicodeCol(length=255, alternateID=True,
                                alternateMethodName="by_email_address")
     display_name = UnicodeCol(length=255)
     password = UnicodeCol(length=40)
     created = DateTimeCol(default=datetime.now)
 
     # groups this user belongs to
-    groups = RelatedJoin("Group", intermediateTable="user_group", 
+    groups = RelatedJoin("Group", intermediateTable="user_group",
                          joinColumn="user_id", otherColumn="group_id")
     
     loans = MultipleJoin("Loan", joinColumn="aproval_id")
@@ -138,13 +138,13 @@ class User(SQLObject):
         return (c.nombre for c in self.cotizaciones)
 
 class Permission(SQLObject):
-    permission_name = UnicodeCol(length=16, alternateID=True, 
+    permission_name = UnicodeCol(length=16, alternateID=True,
                                  alternateMethodName="by_permission_name")
     description = UnicodeCol(length=255)
     
-    groups = RelatedJoin("Group", 
-                        intermediateTable="group_permission", 
-                         joinColumn="permission_id", 
+    groups = RelatedJoin("Group",
+                        intermediateTable="group_permission",
+                         joinColumn="permission_id",
                          otherColumn="group_id")
 
 class Logger(SQLObject):
@@ -158,15 +158,15 @@ class Logger(SQLObject):
 ################################################################################
 
 months = {
-    1:'Enero', 2:'Febrero', 3:'Marzo', 
-    4:'Abril', 5:'Mayo', 6:'Junio', 
-    7:'Julio', 8:'Agosto', 9:'Septiembre', 
+    1:'Enero', 2:'Febrero', 3:'Marzo',
+    4:'Abril', 5:'Mayo', 6:'Junio',
+    7:'Julio', 8:'Agosto', 9:'Septiembre',
     10:'Octubre', 11:'Noviembre', 12:'Diciembre'
 }
 
 class Departamento(SQLObject):
     
-    nombre = UnicodeCol(length=50,default=None)
+    nombre = UnicodeCol(length=50, default=None)
     
     municipios = MultipleJoin('Municipio')
     afiliados = MultipleJoin('Affiliate')
@@ -175,7 +175,7 @@ class Departamento(SQLObject):
 class Municipio(SQLObject):
     
     departamento = ForeignKey('Departamento')
-    nombre = UnicodeCol(length=50,default=None)
+    nombre = UnicodeCol(length=50, default=None)
     afiliados = MultipleJoin('Affiliate')
 
 class Casa(SQLObject):
@@ -194,7 +194,7 @@ class Casa(SQLObject):
 
 class Cotizacion(SQLObject):
     
-    nombre = UnicodeCol(length=50,default=None)
+    nombre = UnicodeCol(length=50, default=None)
     jubilados = BoolCol(default=True)
     usuarios = RelatedJoin("User")
 
@@ -223,6 +223,7 @@ class Affiliate(SQLObject):
     
     Algunos datos son requeridos para obtener información estadística acerca de
     la institución.
+    @DynamicAttrs
     """
 
     firstName = UnicodeCol(length=100)
@@ -512,7 +513,7 @@ class CuotaTable(SQLObject):
     def cantidad(self, mes):
         
         total = Zero
-        os = Obligation.selectBy(year=self.year,month=mes)
+        os = Obligation.selectBy(year=self.year, month=mes)
         
         if (self.affiliate.cotizacion.jubilados and
             not self.affiliate.jubilated is None):
@@ -626,7 +627,10 @@ class CuotaTable(SQLObject):
 class Loan(SQLObject):
 
     """Guarda los datos que pertenecen a un préstamo personal otorgado a un
-    :class:`Affiliate` de la organización"""
+    :class:`Affiliate` de la organización
+    
+    @DynamicAttrs
+    """
     
     affiliate = ForeignKey("Affiliate")
     casa = ForeignKey("Casa")
@@ -927,6 +931,11 @@ class Loan(SQLObject):
 
 class Pay(SQLObject):
     
+    """Pagos que se han efectuado a un :class:`Loan`
+    
+    @DynamicAttrs
+    """
+    
     loan = ForeignKey("Loan")
     day = DateCol(default=date.today)
     capital = CurrencyCol(default=0, notNone=True)
@@ -1036,6 +1045,12 @@ class Deduction(SQLObject):
 
 class PayedLoan(SQLObject):
     
+    """Representa un :class:`Loan` al que ya se le han efectuado pagos
+    suficientes para cubrir su capital
+    
+    @DynamicAttrs
+    """
+    
     affiliate = ForeignKey("Affiliate")
     casa = ForeignKey("Casa")
     capital = CurrencyCol(default=0, notNone=True)
@@ -1097,6 +1112,11 @@ class PayedLoan(SQLObject):
         return sum(p.interest for p in self.pays)
 
 class OldPay(SQLObject):
+    
+    """Pagos que se han efectuado a un :class:`PayedLoan`
+    
+    @DynamicAttrs
+    """
     
     payedLoan = ForeignKey("PayedLoan")
     day = DateCol(default=date.today)
@@ -1425,7 +1445,10 @@ class Inscripcion(SQLObject):
 
 class Deposito(SQLObject):
     
-    """Pagos efectuados mediante un deposito bancario"""
+    """Pagos efectuados mediante un deposito bancario
+    
+    @DynamicAttrs
+    """
     
     afiliado = ForeignKey("Affiliate")
     """:class:`Afiliado` que realizó el :class:`Deposito`"""
@@ -1437,7 +1460,9 @@ class Deposito(SQLObject):
 class DepositoAnonimo(SQLObject):
     
     """Depositos efectuados en el :class:`Banco` que no pueden ser rastreados
-    a su depositante"""
+    a su depositante
+    
+    @DynamicAttrs"""
     
     referencia = UnicodeCol(length=100)
     banco = ForeignKey("Banco")

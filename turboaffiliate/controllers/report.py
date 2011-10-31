@@ -115,7 +115,11 @@ class Report(controllers.Controller):
     @validate(validators=dict(account=validators.Int()))
     def extra(self, account):
         
-        """Muestra los cobros a efectuar que corresponden a la cuenta especificada"""
+        """Muestra los cobros a efectuar que corresponden a la cuenta
+        especificada
+        
+        :param account:    Número de la cuenta a mostrar
+        """
         
         account = model.Account.get(account)
         return dict(account=account, extras=account.extras)
@@ -207,7 +211,8 @@ class Report(controllers.Controller):
                               month=validators.Int(min=1,max=12)))
     def filialesDept(self, departamento, month, year):
         
-        """Muestra todas las Filiales de un Departamento con sus respectivos miembros"""
+        """Muestra todas las Filiales de un Departamento con sus respectivos
+        miembros"""
         
         departamento = model.Departamento.get(departamento)
         cotizacion = model.Cotizacion.get(1)
@@ -228,7 +233,8 @@ class Report(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.planilla")
     @validate(validators=dict(cotizacion=validators.Int(),
-                              day=validators.DateTimeConverter(format='%d/%m/%Y')))
+                              day=validators.DateTimeConverter(
+                                                            format='%d/%m/%Y')))
     def planilla(self, cotizacion, day):
         
         cotizacion = model.Cotizacion.get(cotizacion)
@@ -270,7 +276,8 @@ class Report(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.affiliate.show")
-    @validate(validators=dict(year=validators.Int(), payment=validators.String()))
+    @validate(validators=dict(year=validators.Int(),
+                              payment=validators.String()))
     def empty(self, year, payment):
         
         tables = model.CuotaTable.selectBy(year=year)

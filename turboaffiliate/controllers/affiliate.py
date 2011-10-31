@@ -105,7 +105,10 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(cobro=validators.String()))
     def cobro(self, cobro):
         
-        """Muestra un afiliado mediante su número de cobro de UPN o INPREMA"""
+        """Muestra un afiliado mediante su número de cobro de UPN o INPREMA
+        
+        :param cobro:    Número de empleado o jubilación a buscar
+        """
         
         return dict(result=model.Affiliate.selectBy(escalafon=cobro))
     
@@ -194,7 +197,10 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(affiliate=validators.Int()))
     def remove(self, affiliate):
         
-        """Elimina un afiliado permanentemente"""
+        """Elimina un afiliado permanentemente
+        
+        :param affiliate:    Número de afiliación a eliminar
+        """
         
         affiliate = model.Affiliate.get(affiliate)
         
@@ -238,7 +244,9 @@ class Affiliate(controllers.Controller):
     @validate(validators=dict(cardID=validators.String()))
     def byCardID(self, cardID):
         
-        """Permite buscar afiliados mediante número de identidad"""
+        """Permite buscar afiliados mediante número de identidad
+        
+        :param cardID: Número de identidad"""
         
         return dict(affiliates=model.Affiliate.selectBy(cardID=cardID))
     
@@ -308,7 +316,9 @@ class Affiliate(controllers.Controller):
         """Desactiva el afiliado justificando la razon
         
         :param affiliate: Número de afiliación a desactivar
-        :param reason:    Justificación de la desactivación"""
+        :param reason:    Justificación de la desactivación
+        :param day:       Fecha en que se realiza la desactivación
+        """
         
         affiliate = model.Affiliate.get(affiliate)
         affiliate.active = False
