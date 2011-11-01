@@ -698,14 +698,56 @@ class Loan(SQLObject):
         """Calcula la cantidad de pagos que el :class:`Affiliate` no ha
         efectuado desde que se le otorgo el :class:`Loan`"""
         
-        pagos = self.prediccion_pagos_actuales()
+        #pagos = self.prediccion_pagos_actuales()
         # Utilizar el número de pagos almacenado, para evitar calcular intereses
         # sobre cuotas pagadas y eliminadas accidentalmente.
-        return pagos - self.number + 1
+        #total = pagos - self.number - 1
+        
+        #if total < 0:
+        #    return 0
+        
+        #return total
+        pagos = self.__pago_retrasado() / self.payment
+        if pagos < 0:
+            return 0
+        
+        return pagos
+    
+    def __pago_retrasado(self):
+        
+        """"Calcula el monto retrasado en base a los pagos en mora"""
+        
+        # Disminuir en un mes los pagos requeridos para dar un periodo de gracia
+        # debido a retrasos o errores en el sistema, incluyendo aquellos
+        # ocasionados por instituciones externas
+        monto_proyectado = self.payment * (self.prediccion_pagos_actuales() - 1)
+        return monto_proyectado - self.pagado()
+    
+    def pago_retrasado(self):
+        
+        """Muestra el monto debido en cantidades vencidas a la fecha"""
+        
+        pago = self.__pago_retrasado()
+        if pago < 0:
+            return 0
+        return pago
+    
+    def pago_adelantado(self):
+        
+        """Calcula la cantidad monetaria que se ha pagado de forma anticipada"""
+        
+        pago = -self.__pago_retrasado()
+        if pago < 0:
+            return 0
+        return pago
     
     def obtener_mora(self):
         
         """Calcula el monto a pagar por mora en la siguiente cuota"""
+        
+        if self.__pago_retrasado() < 0:
+            
+            return 0
         
         return self.mora_mensual() * self.pagos_en_mora()
     
@@ -735,6 +777,15 @@ class Loan(SQLObject):
         En caso de ingresar un pago mayor que la deuda actual del préstamo,
         ingresará el sobrante como intereses y marcará el préstamo como
         pagado.
+        
+        :param amount:      El monto pagado
+        :param receipt:     Código del comprobante de pago
+        :param day:         Fecha en que se realiza el pago
+        :param libre:       Indica si el pago contabilizará intereses
+        :param remove:      Indica si el pago permitirá que el :class:`Loan`
+                            sea enviado a :class:`LoanPayed`
+        :param deposito:    Indica si el pago fue un deposito efectuado en banco
+        :param descripcion: Una descripción sobre la naturaleza del pago
         """
         
         kw = dict()
@@ -815,6 +866,9 @@ class Loan(SQLObject):
         return self.capital - sum(d.amount for d in self.deductions)
     
     def total_deductions(self):
+        
+        """Muestra el total de las :class:`Deduction` efectuadas a este
+        :class:`Loan`"""
         
         return sum(d.amount for d in self.deductions)
     
@@ -908,13 +962,19 @@ class Loan(SQLObject):
     
     def totaldebt(self):
         
+        """Muestra el valor total de la deuda"""
+        
         return self.debt
     
     def capitalPagado(self):
         
+        """Muestra el valor del capital pagado del :class:`Loan`"""
+        
         return sum(p.capital for p in self.pays)
     
     def pagado(self):
+        
+        """Muestra el monto total pagado a este :class:`Loan`"""
         
         return sum(p.amount for p in self.pays)
     

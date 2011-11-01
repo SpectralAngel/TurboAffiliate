@@ -128,10 +128,13 @@
       </table>
       <div class="center">Impreso por: ${tg.identity.user.display_name}</div>
       <div id="mora" class="centrado">
-        <div class="noprint">Cobro mensual por mora:
+        <div>Cobro mensual por mora:
           ${locale.currency(loan.mora_mensual(), True, True)}</div>
-        <div class="noprint">Meses en Mora: ${loan.pagos_en_mora()}</div>
-        <div class="noprint">Cargo por Mora para la proxima cuota:
+        <div>Meses en Mora: ${loan.pagos_en_mora()}</div>
+        <div>Meses Adelantados: ${loan.pagos_adelantados()}</div>
+        <div>Monto adelantado: ${locale.currency(loan.pago_adelantado(), True, True)}</div>
+        <div>Monto en deuda por mora: ${locale.currency(loan.pago_retrasado(), True, True)}</div>
+        <div>Cargo por Mora para la proxima cuota:
           ${locale.currency(loan.obtener_mora(), True, True)}</div>  
       </div>
     </div>

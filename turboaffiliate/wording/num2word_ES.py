@@ -36,10 +36,10 @@ class Num2Word_ES(Num2Word_EU):
 
     #//CHECK: Is this sufficient??
     def set_high_numwords(self, high):
-        max = 3 + 6*len(high)
+        max = 3 + 6 * len(high)
         
         for word, n in zip(high, range(max, 3, -6)):
-            self.cards[10**(n-3)] = word + u"illón"
+            self.cards[10 ** (n - 3)] = word + u"illón"
     
     def setup(self):
         lows = ["cuatr", "tr", "b", "m"]
@@ -52,7 +52,7 @@ class Num2Word_ES(Num2Word_EU):
         self.exclude_title = ["y", "menos", "punto"]
         self.mid_numwords = [(1000, "mil"), (100, "cien"), (90, "noventa"),
                              (80, "ochenta"), (70, "setenta"), (60, "sesenta"),
-                             (50,"cincuenta"), (40,"cuarenta"), (30, 'treinta')]
+                             (50, "cincuenta"), (40, "cuarenta"), (30, 'treinta')]
         self.low_numwords = ["vientinueve", "vientiocho", "vientisiete",
                              "vientiseis", "vienticinco", "vienticuatro",
                              "vientitres", u"vientidos", "vientiuno",
@@ -131,7 +131,7 @@ def main():
     for val in [ 1, 11, 12, 21, 31, 33, 71, 80, 81, 91, 99, 100, 101, 102, 155,
              180, 300, 308, 832, 1000, 1001, 1061, 1100, 1500, 1701, 3000,
              8280, 8291, 150000, 500000, 1000000, 2000000, 2000001,
-             -21212121211221211111, -2.121212, -1.0000100]:
+             - 21212121211221211111, -2.121212, -1.0000100]:
         n2w.test(val)
 
     n2w.test(1325325436067876801768700107601001012212132143210473207540327057320957032975032975093275093275093270957329057320975093272950730)

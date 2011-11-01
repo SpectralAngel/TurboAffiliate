@@ -152,6 +152,22 @@
       </ul>
     </fieldset>
   </form>
+  <form id="pagarAportaciones" action="${tg.url('/affiliate/cuota/pagarVarias')}" method="post">
+    <div>
+      <input type="hidden" name="afiliado" value="${affiliate.id}" />
+      <input type="hidden" name="redir" value="${'/cuota/{0}'.format(affiliate.id)}" />
+      <ul>
+        <li>
+          <label for="meses">Mes:</label>
+          <input name="meses" />
+        </li>
+        <li>
+          <label for="anio">A&ntilde;o:</label>
+          <input name="anio" />
+        </li>
+      </ul>
+    </div>
+  </form>
   <form action="${tg.url('/affiliate/cuota/fill')}" method="post" class="ui-widget-content ui-corner-all noprint">
     <fieldset>
       <legend>Postear A&ntilde;os</legend>
