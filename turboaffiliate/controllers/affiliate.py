@@ -30,7 +30,7 @@ from decimal import Decimal
 import csv
 from sqlobject import SQLObjectNotFound
 
-def log(message, user):
+def log(user, message):
     
     """Guarda un mensaje en el registro del sistema"""
     
@@ -323,7 +323,6 @@ class Affiliate(controllers.Controller):
         affiliate = model.Affiliate.get(affiliate)
         affiliate.active = False
         affiliate.reason = reason
-        log = dict()
         affiliate.desactivacion = day
         
         log(identity.current.user,

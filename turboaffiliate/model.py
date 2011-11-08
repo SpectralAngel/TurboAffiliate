@@ -725,9 +725,17 @@ class Loan(SQLObject):
     
     def pago_retrasado(self):
         
-        """Muestra el monto debido en cantidades vencidas a la fecha"""
+        """Muestra el monto debido en cantidades vencidas a la fecha
         
-        pago = self.__pago_retrasado()
+        Difiere de :function:__pago_retrasado en que se limitá a calcular hasta
+        el monto nominal del :class:`Loan` con sus intereses normales.
+        """
+        
+        cantidad_pagos = self.prediccion_pagos_actuales() - 1
+        if cantidad_pagos > self.months:
+            cantidad_pagos = self.months
+        monto_proyectado = self.payment * cantidad_pagos
+        pago = monto_proyectado - self.pagado()
         if pago < 0:
             return 0
         return pago
