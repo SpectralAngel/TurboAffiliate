@@ -103,8 +103,12 @@ class Cuota(controllers.Controller):
         for n in range(1, 13):
             try:
                 setattr(table, "month{0}".format(n), kw["month{0}".format(n)])
+                self.log(u"Cambio en aportaciones año {0} mes {1} afiliado {2}".format(table.year, n,table.affiliate.id),
+                 identity.current.user)
             except KeyError:
                 setattr(table, "month{0}".format(n), False)
+                self.log(u"Cambio en aportaciones año {0} mes {1} afiliado {2}".format(table.year, n,table.affiliate.id),
+                 identity.current.user)
         
         self.log(u"Cambio en aportaciones año {0} afiliado {1}".format(table.year, table.affiliate.id),
                  identity.current.user)

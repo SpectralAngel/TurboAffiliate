@@ -35,6 +35,30 @@ def daterange(start_date, end_date):
     for n in range((end_date - start_date).days):
         yield (start_date + timedelta(n)).date()
 
+def separacion(loan):
+    
+    papeleo = 0
+    intereses = 0
+    retencion = 0
+    aportaciones = 0
+    reintegros = 0
+    neto = loan.net()
+    monto = loan.capital
+    for d in loan.deductions:
+        if d.account.id == 660:
+            papeleo = d.amount
+        elif d.account.id == 658:
+            intereses = d.amount
+        elif d.account.id == 659:
+            retencion = d.amount
+        elif d.account.id == 665:
+            aportaciones = d.amount
+        elif d.account.id == 678:
+            reintegros = d.amount
+     
+    afiliado = loan.affiliate
+    return model.AuxiliarPrestamo(loan.id, afiliado, monto, neto, papeleo, aportaciones, intereses, retencion, reintegros)
+
 class Deduction(controllers.Controller):
     
     require = identity.require(identity.not_anonymous())
@@ -628,69 +652,27 @@ class Loan(controllers.Controller):
         
         return dict(loans=[l for l in loans if l.affiliate.payment == payment])
     
-    def calcularDeducciones(self, loans):
-        
-        prestamos = list()
-        
-        for loan in loans:
-            papeleo = 0
-            intereses = 0
-            retencion = 0
-            aportaciones = 0
-            reintegros = 0
-            neto = loan.net()
-            monto = loan.capital
-            for d in loan.deductions:
-                if d.account.id == 660:
-                    papeleo = d.amount
-                elif d.account.id == 658:
-                    intereses = d.amount
-                elif d.account.id == 659:
-                    retencion = d.amount
-                elif d.account.id == 665:
-                    aportaciones = d.amount
-                elif d.account.id == 678:
-                    reintegros = d.amount
-            
-            afiliado = loan.affiliate
-            prestamo = model.AuxiliarPrestamo(loan.id, afiliado, monto, neto, papeleo, aportaciones, intereses, retencion, reintegros)
-            prestamos.append(prestamo)
-        
-        return prestamos
-    
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.deducciones')
     @validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
                               end=validators.DateTimeConverter(format='%d/%m/%Y')))
     def deducciones(self, start, end):
-        
+        casa = model.Casa.get(1)
         loans = model.Loan.select(AND(model.Loan.q.startDate>=start,
-                                           model.Loan.q.startDate<=end))
+                                           model.Loan.q.startDate<=end, model.Loan.q.casa==casa))
         payedLoans = model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=start,
-                                           model.PayedLoan.q.startDate<=end))
+                                           model.PayedLoan.q.startDate<=end, model.PayedLoan.q.casa==casa))
         
-        prestamos = list()
+        prestamos = map(separacion, loans)
+        prestamos.extend(map(separacion, payedLoans))
         
-        prestamos.extend(self.calcularDeducciones(loans))
-        prestamos.extend(self.calcularDeducciones(payedLoans))
-        
-        papeleo = 0
-        intereses = 0
-        retencion = 0
-        aportaciones = 0
-        reintegros =0 
-        neto = 0
-        monto = 0
-        
-        for p in prestamos:
-            
-            papeleo += p.papeleo
-            intereses += p.intereses
-            retencion += p.retencion
-            aportaciones += p.aportaciones
-            neto += p.neto
-            reintegros += p.reintegros
-            monto += p.monto
+        papeleo = sum(p.papeleo for p in prestamos)
+        intereses = sum(p.intereses for p in prestamos)
+        retencion = sum(p.retencion for p in prestamos)
+        aportaciones = sum(p.aportaciones for p in prestamos)
+        reintegros = sum(p.reintegros for p in prestamos)
+        neto = sum(p.neto for p in prestamos)
+        monto = sum(p.monto for p in prestamos)
         
         return dict(loans=prestamos, start=start, end=end, monto=monto,
                     neto=neto, papeleo=papeleo, aportaciones=aportaciones,
@@ -704,28 +686,16 @@ class Loan(controllers.Controller):
         loans = model.Loan.selectBy(startDate=start)
         payedLoans = model.PayedLoan.selectBy(startDate=start)
         
-        prestamos = list()
+        prestamos = map(separacion, loans)
+        prestamos.extend(map(separacion, payedLoans))
         
-        prestamos.extend(self.calcularDeducciones(loans))
-        prestamos.extend(self.calcularDeducciones(payedLoans))
-        
-        papeleo = 0
-        intereses = 0
-        retencion = 0
-        aportaciones = 0
-        reintegros =0 
-        neto = 0
-        monto = 0
-        
-        for p in prestamos:
-            
-            papeleo += p.papeleo
-            intereses += p.intereses
-            retencion += p.retencion
-            aportaciones += p.aportaciones
-            neto += p.neto
-            reintegros += p.reintegros
-            monto += p.monto
+        papeleo = sum(p.papeleo for p in prestamos)
+        intereses = sum(p.intereses for p in prestamos)
+        retencion = sum(p.retencion for p in prestamos)
+        aportaciones = sum(p.aportaciones for p in prestamos)
+        reintegros = sum(p.reintegros for p in prestamos)
+        neto = sum(p.neto for p in prestamos)
+        monto = sum(p.monto for p in prestamos)
         
         return dict(loans=prestamos, start=start, end=start, monto=monto,
                     neto=neto, papeleo=papeleo, aportaciones=aportaciones,
@@ -743,3 +713,4 @@ class Loan(controllers.Controller):
         
         flash(u'Operacion Completada Exitósamente!')
         raise redirect('/loan')
+

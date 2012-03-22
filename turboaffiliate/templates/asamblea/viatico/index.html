@@ -26,7 +26,7 @@
         </li>
         <li>
           <label>Departamento:</label>
-          <select id="depto-inscripcion" onchange="Geo.municipio('${tg.url('/geo')}', $('#depto-inscripcion' + ' option:selected').val(), '#ins-municipios')">
+          <select id="depto-inscripcion" onchange="JSON.municipio('${tg.url('/json')}', $('#depto-inscripcion' + ' option:selected').val(), '#ins-municipios')">
             <option value="${d.id}" py:for="d in departamentos">${d.nombre}</option>
           </select>
         </li>

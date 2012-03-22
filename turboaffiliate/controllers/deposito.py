@@ -29,6 +29,12 @@ from datetime import date
 
 class Deposito(controllers.Controller):
     
+    def log(self, message, user):
+        log = dict()
+        log['user'] = user
+        log['action'] = message
+        model.Logger(**log)
+    
     """Permite registrar depósitos que los afiliados han efectuado en una
     institución bancaria"""
     
@@ -115,8 +121,12 @@ class Deposito(controllers.Controller):
         kw['monto'] = Decimal(kw['monto'].replace(',', '')) 
         kw['afiliado'] = model.Affiliate.get(afiliado)
         kw['banco'] = model.Banco.get(banco)
+        kw['posteo'] = sistema
         deposito = model.Deposito(**kw)
         kw['afiliado'].pay_cuota(sistema.year, sistema.month)
+        
+        self.log(u"Registrado deposito con fecha {0} al afiliado {1}, posteo {2}".format(kw['fecha'], kw['afiliado'], sistema),
+                 identity.current.user)
         
         return dict(mensaje=u"Se registró el depósito al afiliado {0}".format(
                                                         deposito.afiliado.id))
@@ -274,3 +284,4 @@ class Deposito(controllers.Controller):
         deposito.destroySelf()
         
         raise redirect('/deposito')
+

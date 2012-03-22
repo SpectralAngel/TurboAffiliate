@@ -43,7 +43,7 @@
         </li>
         <li>
           <label for="departamento">Departamento:</label>
-          <select name="departamento" id="depto-inscripcion" onchange="Geo.municipio('${tg.url('/geo')}', $('#depto-inscripcion' + ' option:selected').val(), '#ins-municipios')">
+          <select name="departamento" id="depto-inscripcion" onchange="JSON.municipio('${tg.url('/json')}', $('#depto-inscripcion' + ' option:selected').val(), '#ins-municipios')">
             <option py:for="d in departamentos" py:if="d == afiliado.departamento" selected="selected" value="${d.id}">${d.nombre}</option>
             <option py:for="d in departamentos" value="${d.id}">${d.nombre}</option>
           </select>

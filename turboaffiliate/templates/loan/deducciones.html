@@ -8,11 +8,12 @@
 </head>
 <body>
   <h1>Reporte de Deducciones de Pr&eacute;stamos</h1>
+  <h2>Del ${start.strftime('%d de %B de %Y')} al ${end.strftime('%d de %B de %Y')}</h2>
   <table class="striped full-size ui-corner-all ui-widget-content">
-    <caption>Del ${start.strftime('%d de %B de %Y')} al ${end.strftime('%d de %B de %Y')}</caption>
     <thead>
       <tr>
         <th>Pr&eacute;stamo</th>
+        <th>Afiliaci&oacute;n</th>
         <th>Nombre</th>
         <th>Monto</th>
         <th>Intereses</th>
@@ -24,28 +25,26 @@
     </thead>
     <tbody>
       <tr py:for="loan in loans">
-        <td>${loan.id}</td>
-        <td>
-          <a href="${tg.url('/affiliate/{0}'.format(loan.afiliado.id))}">${loan.afiliado.id}</a>
-          ${loan.afiliado.firstName} ${loan.afiliado.lastName}
-        </td>
-        <td>${locale.currency(loan.monto, True, True)}</td>
-        <td>${locale.currency(loan.intereses, True, True)}</td>
-        <td>${locale.currency(loan.papeleo, True, True)}</td>
-        <td>${locale.currency(loan.aportaciones, True, True)}</td>
-        <td>${locale.currency(loan.retencion, True, True)}</td>
-        <td>${locale.currency(loan.neto, True, True)}</td>
+        <td><a href="${tg.url('/loan/{0}'.format(loan.id))}">${loan.id}</a></td>
+        <td><a href="${tg.url('/affiliate/{0}'.format(loan.afiliado.id))}">${loan.afiliado.id}</a></td>
+        <td>${loan.afiliado.firstName} ${loan.afiliado.lastName}</td>
+        <td>${locale.currency(loan.monto, False, True)}</td>
+        <td>${locale.currency(loan.intereses, False, True)}</td>
+        <td>${locale.currency(loan.papeleo, False, True)}</td>
+        <td>${locale.currency(loan.aportaciones, False, True)}</td>
+        <td>${locale.currency(loan.retencion, False, True)}</td>
+        <td>${locale.currency(loan.neto, False, True)}</td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
-        <th colspan="2">Total:</th>
-        <th>${locale.currency(monto, True, True)}</th>
-        <th>${locale.currency(intereses, True, True)}</th>
-        <th>${locale.currency(papeleo, True, True)}</th>
-        <th>${locale.currency(aportaciones, True, True)}</th>>
-        <th>${locale.currency(retencion, True, True)}</th>
-        <th>${locale.currency(neto, True, True)}</th>
+        <th colspan="3">Total:</th>
+        <th>${locale.currency(monto, False, True)}</th>
+        <th>${locale.currency(intereses, False, True)}</th>
+        <th>${locale.currency(papeleo, False, True)}</th>
+        <th>${locale.currency(aportaciones, False, True)}</th>>
+        <th>${locale.currency(retencion, False, True)}</th>
+        <th>${locale.currency(neto, False, True)}</th>
       </tr>
     </tfoot>
   </table>

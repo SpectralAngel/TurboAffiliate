@@ -420,11 +420,9 @@ class Affiliate(SQLObject):
     
     def remove(self):
         
-        for table in self.cuotaTables:
-            table.destroySelf()
+        map(CuotaTable.destroySelf, self.cuotaTables)
         
-        for loan in self.loans:
-            loan.remove()
+        map(Loan.remove, self.loans)
         
         self.destroySelf()
     
@@ -1523,6 +1521,7 @@ class Deposito(SQLObject):
     banco = ForeignKey("Banco")
     concepto = UnicodeCol(length=50)
     fecha = DateCol(default=date.today)
+    posteo = DateCol(default=date.today)
     monto = CurrencyCol()
 
 class DepositoAnonimo(SQLObject):

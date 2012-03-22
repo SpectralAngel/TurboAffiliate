@@ -22,6 +22,7 @@
 from turbogears import controllers, identity, expose, validate, validators
 from turboaffiliate import model
 from sqlobject.sqlbuilder import AND
+from collections import defaultdict
 
 class Elecciones(controllers.Controller):
     
@@ -99,22 +100,23 @@ class Elecciones(controllers.Controller):
         departamento = model.Departamento.get(departamento)
         afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
         
-        urnas = dict()
+        urnas = defaultdict(int)
         urnas['Sin Instituto'] = 0
-        for afiliado in afiliados:
-            
-            if afiliado.school in urnas:
-                urnas[afiliado.school] += 1
-            else:
-                urnas[afiliado.school] = 1
         
-        for instituto in urnas:
+        def recolectar(afiliado):
+            
+            urnas[afiliado.school] += 1
+        
+        def nulos(instituto):
             
             if instituto is None:
                 urnas['Sin Instituto'] += urnas[instituto]
             
             if instituto == '':
                 urnas['Sin Instituto'] += urnas[instituto]
+        
+        map(recolectar, afiliados)
+        map(nulos, urnas)
         
         if None in urnas:
             del urnas[None]
@@ -138,22 +140,24 @@ class Elecciones(controllers.Controller):
         departamento = model.Departamento.get(departamento)
         afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
         
-        urnas = dict()
-        urnas['Sin Instituto'] = 0
-        for afiliado in afiliados:
-            
-            if afiliado.school in urnas:
-                urnas[afiliado.school] += 1
-            else:
-                urnas[afiliado.school] = 1
         
-        for instituto in urnas:
+        urnas = defaultdict(int)
+        urnas['Sin Instituto'] = 0
+        
+        def recolectar(afiliado):
+            
+            urnas[afiliado.school] += 1
+        
+        def nulos(instituto):
             
             if instituto is None:
                 urnas['Sin Instituto'] += urnas[instituto]
             
             if instituto == '':
                 urnas['Sin Instituto'] += urnas[instituto]
+        
+        map(recolectar, afiliados)
+        map(nulos, urnas)
         
         if None in urnas:
             del urnas[None]
@@ -177,21 +181,28 @@ class Elecciones(controllers.Controller):
         departamento = model.Departamento.get(departamento)
         afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
         urnas = dict()
-        cantidadUrnas = 0
+        urnas[None] = dict()
         
-        for afiliado in afiliados:
+        def municipios(municipio):
             
-            if not afiliado.municipio in urnas:
-                urnas[afiliado.municipio] = dict()
+            urnas[municipio] = defaultdict(dict)
+        
+        map(municipios, departamento.municipios)
+        
+        def asignar(afiliado):
             
             if afiliado.school in urnas[afiliado.municipio]:
                 urnas[afiliado.municipio][afiliado.school].append(afiliado)
             else:
                 urnas[afiliado.municipio][afiliado.school] = list()
                 urnas[afiliado.municipio][afiliado.school].append(afiliado)
-                cantidadUrnas += 1
         
-        return dict(urnas=urnas, departamento=departamento, cantidad=afiliados.count(), cantidadUrnas=cantidadUrnas)
+        map(asignar, afiliados)
+        
+        cantidadUrnas = sum(len(urnas[m]) for m in urnas)
+        
+        return dict(urnas=urnas, departamento=departamento, cantidad=afiliados.count(),
+                    cantidadUrnas=cantidadUrnas)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.urnasMunicipios')

@@ -22,6 +22,8 @@
 from turbogears import controllers, expose, identity, validate, validators
 from turboaffiliate import model
 from decimal import Decimal
+import time
+from collections import defaultdict
 
 months = {
             1:'Enero', 2:'Febrero', 3:'Marzo',
@@ -101,7 +103,7 @@ class Report(controllers.Controller):
                 del kw[account]
         
         reintegros = model.Reintegro.selectBy(pagado=False)
-        reintegro = dict() 
+        reintegro = dict()
         reintegro['count'] = reintegros.count()
         reintegro['amount'] = sum(r.monto for r in reintegros) 
         total += reintegro['amount']
@@ -181,28 +183,22 @@ class Report(controllers.Controller):
         afiliados = model.Affiliate.selectBy(cotizacion=cotizacion,
                                              departamento=departamento)
         filiales = dict()
-        cantidad = 0
+        def iniciar_colegio(afiliado):
+            filiales[afiliado.school] = defaultdict(int)
         
-        for afiliado in afiliados:
-            if not afiliado.school in filiales:
-                filiales[afiliado.school] = dict()
-                
-                for month in range(1, 13):
-                    filiales[afiliado.school][month] = 0
-                
-                for month in range(start, end + 1):
-                    if afiliado.get_month(year, month):
-                        filiales[afiliado.school][month] = 1
-                        cantidad += 1
-                
-            else:
-                for month in range(start, end + 1):
-                    if afiliado.get_month(year, month):
-                        filiales[afiliado.school][month] += 1
-                        cantidad += 1
+        def distribuir(afiliado):
+            cantidad = 0
+            for month in range(start, end + 1):
+                if afiliado.get_month(year, month):
+                    filiales[afiliado.school][month] += 1
+                    cantidad += 1
+            return cantidad
         
+        map(iniciar_colegio, afiliados)
+        
+        cantidades = map(distribuir, afiliados)
         return dict(filiales=filiales, year=year, departamento=departamento,
-                    start=start, end=end, cantidad=cantidad)
+                    start=start, end=end, cantidad=sum(cantidades))
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.filialesdept")

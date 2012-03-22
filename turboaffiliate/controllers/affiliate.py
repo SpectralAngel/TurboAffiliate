@@ -82,6 +82,19 @@ class Affiliate(controllers.Controller):
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.affiliate')
+    @validate(validators=dict(affiliate=validators.Int()))
+    def afiliado(self, affiliate):
+        
+        """Permite mostrar un afiliado mediante su numero de afiliación
+        
+        :param affiliate: Número de afiliación
+        """
+        
+        return self.default(affiliate)
+    
+    @error_handler(error)
+    @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(cardID=validators.String()))
     def card(self, cardID):
@@ -664,3 +677,4 @@ class Affiliate(controllers.Controller):
         flash('terminado')
         
         raise redirect('/affiliate')
+

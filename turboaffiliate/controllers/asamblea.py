@@ -147,16 +147,6 @@ class Asamblea(controllers.Controller):
         banco = None
         deshabilitado = False
         
-        if afiliado.tiempo() < 1 and not identity.has_permission('asamblea'):
-            deshabilitado = True
-            flash(u'El afiliado no tiene un año desde su afiliación: {0}'.format(afiliado.joined))
-        
-        if afiliado.debt() > 1000 and not identity.has_permission('asamblea'):
-            deshabilitado = True
-            flash(u'El afiliado no se encuentra solvente. Deuda {0}'.format(
-                                locale.currency(afiliado.debt(), True, True)
-            ))
-        
         if afiliado.banco != None:
             banco = model.Banco.get(afiliado.banco)
         
@@ -177,16 +167,6 @@ class Asamblea(controllers.Controller):
         banco = None
         deshabilitado = False
         
-        if afiliado.tiempo() < 1 and not identity.has_permission('asamblea'):
-            deshabilitado = True
-            flash(u'El afiliado no tiene un año desde su afiliación: {0}'.format(afiliado.joined))
-        
-        if afiliado.debt() > 1000 and not identity.has_permission('asamblea'):
-            deshabilitado = True
-            flash(u'El afiliado no se encuentra solvente. Deuda {0}'.format(
-                                locale.currency(afiliado.debt(), True, True)
-            ))
-        
         if afiliado.banco != None:
             banco = model.Banco.get(afiliado.banco)
         
@@ -205,18 +185,8 @@ class Asamblea(controllers.Controller):
         
         asamblea = model.Asamblea.get(asamblea)
         
-        if not asamblea.habilitado or not identity.has_permission('asamblea'):
-            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
-        
         kw = dict()
         afiliado = model.Affiliate.get(afiliado)
-        
-        if afiliado.tiempo() < 1 and not identity.has_permission('asamblea'):
-            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
-        
-        if afiliado.debt() > 1000 and not identity.has_permission('asamblea'):
-            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
-        
         log = dict()
         log['user'] = identity.current.user
         log['action'] = "Inscrito afiliado {0} en asamblea {1}".format(afiliado.id, asamblea.id)
@@ -227,7 +197,8 @@ class Asamblea(controllers.Controller):
         kw['viatico'] = model.Viatico.selectBy(asamblea=asamblea,
                         municipio=afiliado.municipio).limit(1).getOne()
         
-        model.Inscripcion(**kw)
+        inscripcion = model.Inscripcion(**kw)
+        
         flash(inscripcionRealizada(afiliado))
         
         raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
@@ -243,11 +214,6 @@ class Asamblea(controllers.Controller):
                               municipio=validators.Int()))
     def corregir(self, afiliado, asamblea, departamento, banco, cuenta, municipio):
         
-        asamblea = model.Asamblea.get(asamblea)
-        
-        if not asamblea.habilitado or not identity.has_permission('asamblea'):
-            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
-        
         kw = dict()
         afiliado = model.Affiliate.get(afiliado)
         asamblea = model.Asamblea.get(asamblea)
@@ -255,13 +221,6 @@ class Asamblea(controllers.Controller):
         departamento = model.Departamento.get(departamento)
         afiliado.departamento = departamento
         afiliado.municipio = model.Municipio.get(municipio)
-        
-        if afiliado.debt() > 1000 and not identity.has_permission('asamblea'):
-            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
-        
-        if afiliado.debt() > 1000 and not identity.has_permission('asamblea'):
-            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
-        
         log = dict()
         log['user'] = identity.current.user
         log['action'] = "Inscrito afiliado {0} en asamblea {1}".format(afiliado.id, asamblea.id)
@@ -276,7 +235,8 @@ class Asamblea(controllers.Controller):
                                                municipio=afiliado.municipio
                                                ).limit(1).getOne()
         
-        model.Inscripcion(**kw)
+        inscripcion = model.Inscripcion(**kw)
+        print inscripcion
         flash(inscripcionRealizada(afiliado))
         
         raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
@@ -289,9 +249,6 @@ class Asamblea(controllers.Controller):
                               asamblea=validators.Int(),
                               municipio=validators.Int()))
     def corregirDepto(self, afiliado, asamblea, departamento, municipio):
-        
-        if not asamblea.habilitado or not identity.has_permission('asamblea'):
-            raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
         
         kw = dict()
         afiliado = model.Affiliate.get(afiliado)
@@ -306,7 +263,7 @@ class Asamblea(controllers.Controller):
                                                municipio=municipio
                                                ).limit(1).getOne()
         
-        model.Inscripcion(**kw)
+        inscripcion = model.Inscripcion(**kw)
         flash(inscripcionRealizada(afiliado))
         
         raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
@@ -355,3 +312,4 @@ class Asamblea(controllers.Controller):
         flash('Registrados los municipos de los afiliados')
         
         raise redirect('/asamblea')
+
