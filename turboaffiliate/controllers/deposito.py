@@ -160,7 +160,7 @@ class Deposito(controllers.Controller):
         deposito = model.Deposito(**kw)
         monto = kw['monto']
         prestamo.pagar(amount=monto, receipt=banco.nombre, day=sistema,
-                       remove=False)
+                       remove=False, descripcion=kw['descripcion'])
         
         return dict( mensaje=u"Se registró el depósito al afiliado {0}".format(
                                                         deposito.afiliado.id))

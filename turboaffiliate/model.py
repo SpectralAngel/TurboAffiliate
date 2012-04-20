@@ -865,6 +865,31 @@ class Loan(SQLObject):
         
         return prestamo
     
+    def calibrar(self):
+        
+        """Permite que los :class:`Pay` efectuados al :class:`Loan` esten
+        ordenados en cuanto al valor de su monto en capital e intereses"""
+        
+        pagos = map(Pay.calibrar, self.pays)
+        fechas = list()
+        result = False
+        self.debt = self.capital
+        for pago in pagos:
+            
+            result = self.pagar(amount=pago[1], receipt=pago[2], day=pago[0],
+                                descripcion=pago[3])
+            fechas.append(pago[0])
+            if result:
+                break
+        
+        if result:
+            pagos = filter((lambda p: not p[0] in fechas), pagos)
+            for pago in pagos:
+                
+                comment = "Sobrante de {0} del pago efectuado el {1}".format(pago[1],
+                                                    pago[0].strftime('%d de %B de %Y'))
+                Observacion(affiliate=self.affiliate, texto=comment, fecha=date.today())
+    
     def net(self):
         
         """Obtains the amount that was given to the affiliate in the check"""
@@ -1030,6 +1055,15 @@ class Pay(SQLObject):
                        + self.capital
         self.loan.number -= 1
         self.destroySelf()
+    
+    def calibrar(self):
+        
+        dia = self.day
+        monto = self.amount
+        recibo = self.receipt
+        descripcion = self.description
+        self.revert()
+        return dia, monto, recibo, descripcion
 
 class Account(SQLObject):
     
@@ -1523,6 +1557,7 @@ class Deposito(SQLObject):
     fecha = DateCol(default=date.today)
     posteo = DateCol(default=date.today)
     monto = CurrencyCol()
+    descripcion = UnicodeCol(length=100)
 
 class DepositoAnonimo(SQLObject):
     
@@ -1536,3 +1571,4 @@ class DepositoAnonimo(SQLObject):
     concepto = UnicodeCol(length=50)
     fecha = DateCol(default=date.today)
     monto = CurrencyCol()
+

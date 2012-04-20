@@ -68,7 +68,7 @@
         <td>${table.pago_mes(12)}</td>
         <td class="deuda">${table.pagado()}</td>
         <td class="deuda">${table.deuda()}</td>
-        <td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/edit/{0}'.format(table.id))}">X</a></td>
+        <td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/edit/{0}'.format(table.id))}" py:if="'admin' in tg.identity.groups">X</a></td>
         <td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/remove/{0}'.format(table.id))}">X</a></td>
       </tr>
     </tbody>
@@ -150,6 +150,10 @@
           <label for="sistema">Fecha Posteo</label>
           <input name="sistema" value="${day.strftime('%d/%m/%Y')}" class="datepicker" />
         </li>
+        <li>
+          <label for="descripcion">Descripcion</label>
+          <input name="descripcion" />
+        </li>
         <li><input type="submit" value="Registrar" /></li>
       </ul>
     </fieldset>
@@ -158,7 +162,7 @@
     <fieldset>
       <legend>Pagar Aportaciones</legend>
       <input type="hidden" name="afiliado" value="${affiliate.id}" />
-      <input type="hidden" name="redir" value="${'/cuota/{0}'.format(affiliate.id)}" />
+      <input type="hidden" name="redir" value="${'/affiliate/cuota/{0}'.format(affiliate.id)}" />
       <ul>
         <li>
           <label for="meses">Mes:</label>
@@ -168,6 +172,7 @@
           <label for="anio">A&ntilde;o:</label>
           <input name="anio" />
         </li>
+        <li><input type="submit" value="A&ntilde;adir" /></li>
       </ul>
     </fieldset>
   </form>

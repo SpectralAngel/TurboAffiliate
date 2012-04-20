@@ -361,6 +361,26 @@ class Loan(controllers.Controller):
         flash('El prestamo ha sido removido')
         raise redirect('/payed/{0}'.format(loan.id))
     
+    @expose()
+    def limpiar(self):
+        
+        loans = model.Loan.select(model.Loan.q.debt==0)
+        map(model.Loan.remove, loans)
+        flash('Se han trasladado los Préstamos sin saldo pendiente')
+        raise redirect('/loan')
+    
+    @expose()
+    @validate(validators=dict(loan=validators.Int()))
+    def calibrar(self, loan):
+        
+        """Permite efectuar la calibración de un :class:`Loan` en especifico
+        desde la interfaz de usuario"""
+        
+        loan = model.Loan.get(loan)
+        loan.calibrar()
+        flash(u'Se han corregido los intereses de los pagos al Préstamo')
+        raise redirect('/loan/{0}'.format(loan.id))
+    
     @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(loan=validators.Int(),months=validators.Int(),
