@@ -13,18 +13,18 @@ from os.path import dirname, exists, join
 
 import pkg_resources
 try:
-    pkg_resources.require("TurboGears>=1.1")
+    pkg_resources.require("TurboGears>=1.5")
 except pkg_resources.DistributionNotFound:
-    print """\
+    print("""\
 This is a TurboGears (http://www.turbogears.org) application. It seems that
 you either don't have TurboGears installed or it can not be found.
 
 Please check if your PYTHONPATH is set correctly. To install TurboGears, go to
 http://docs.turbogears.org/Install and follow the instructions there. If you
-are stuck, visit http://docs.turbogears.org/GettingHelp for support options."""
+are stuck, visit http://docs.turbogears.org/GettingHelp for support options.""")
     sys.exit(1)
 try:
-    pkg_resources.require("SQLObject>=0.13")
+    pkg_resources.require("SQLObject>=0.12.5")
 except pkg_resources.DistributionNotFound:
     from turbogears.util import missing_dependency_error
     print missing_dependency_error('SQLObject')
@@ -35,13 +35,10 @@ import turbogears
 
 from turboaffiliate.release import version
 
-
 cherrypy.lowercase_api = True
-
 
 class ConfigurationError(Exception):
     pass
-
 
 def _read_config(args):
     """Read deployment configuration file.
@@ -62,7 +59,7 @@ def _read_config(args):
     """
     setupdir = dirname(dirname(__file__))
     curdir = getcwd()
-
+    
     if args:
         configfile = args[0]
     elif exists(join(setupdir, "setup.py")):
@@ -97,7 +94,7 @@ def bootstrap():
 
     optparser = optparse.OptionParser(usage="%prog [options] [config-file]",
         description="Load bootstrap data into the database defined in "
-        "config-file.", version="TurboAffiliate %s" % version)
+        "config-file.", version="TurboAffiliate {0}".format(version))
     optparser.add_option('-C', '--clean', dest="clean", action="store_true",
         help="Purge all data in the database before loading the bootrap data.")
     optparser.add_option('-u', '--user', dest="user", metavar="USERNAME",
@@ -111,7 +108,7 @@ def bootstrap():
 
 def start():
     """Start the CherryPy application server."""
-
+    
     _read_config(sys.argv[1:])
     from turboaffiliate.controllers import root
-    turbogears.start_server(root.Root())
+    return turbogears.start_server(root.Root())

@@ -68,7 +68,7 @@
         <td>${table.pago_mes(12)}</td>
         <td class="deuda">${table.pagado()}</td>
         <td class="deuda">${table.deuda()}</td>
-        <td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/edit/{0}'.format(table.id))}" py:if="'admin' in tg.identity.groups">X</a></td>
+        <td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/edit/{0}'.format(table.id))}">X</a></td>
         <td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/remove/{0}'.format(table.id))}">X</a></td>
       </tr>
     </tbody>

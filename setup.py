@@ -28,7 +28,7 @@ setup(
     license=license,
 
     install_requires=[
-        "TurboGears >= 1.1",
+        "TurboGears >= 1.5",
         "WebTest",
         "SQLObject>=0.12.5"
     ],
