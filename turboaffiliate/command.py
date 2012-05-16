@@ -111,4 +111,5 @@ def start():
     
     _read_config(sys.argv[1:])
     from turboaffiliate.controllers import root
+    print(root.Root)
     return turbogears.start_server(root.Root())

@@ -20,7 +20,7 @@ import locale
 locale.setlocale(locale.LC_ALL, locale_name)
 
 turbogears.update_config(configfile="dev.cfg", modulename="turboaffiliate.config")
-turbogears.config.update({'global': {'server.webpath': '/afiliados'}})
+turbogears.config.update({'global': {'server.webpath': '/afiliados', 'engine.start': False}})
 
 from turboaffiliate import command
 

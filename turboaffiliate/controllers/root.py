@@ -19,8 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, expose
-from turbogears import identity, redirect
+from turbogears import controllers, expose, identity, redirect, url
 # from turbogears.toolbox.catwalk import CatWalk
 from cherrypy import request, response
 # from turboaffiliate import model
@@ -51,11 +50,9 @@ class Root(controllers.RootController):
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.welcome")
-    # @identity.require(identity.in_group("admin"))
     def index(self):
-        import time
-        # log.debug("Happy TurboGears Controller Responding For Duty")
-        return dict(now=time.ctime())
+        
+        return dict()
     
     @expose(template="turboaffiliate.templates.login")
     def login(self, forward_url=None, previous_url=None, *args, **kw):
@@ -65,7 +62,7 @@ class Root(controllers.RootController):
             raise redirect(forward_url)
         
         forward_url=None
-        previous_url= request.path_info
+        previous_url = url(request.path_info)
         
         if identity.was_login_attempted():
             msg=_("The credentials you supplied were not correct or "
@@ -85,4 +82,11 @@ class Root(controllers.RootController):
     @expose()
     def logout(self):
         identity.current.logout()
+        raise redirect("/")
+    
+    @expose()
+    def afiliados(self):
+        
+        """Workaround para 404 not Found al utilizar /afiliados como raiz"""
+        
         raise redirect("/")
