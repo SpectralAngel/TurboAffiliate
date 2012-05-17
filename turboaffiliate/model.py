@@ -49,12 +49,12 @@ class Visit(SQLObject):
     created = DateTimeCol(default=datetime.now)
     expiry = DateTimeCol()
     
+    @classmethod
     def lookup_visit(cls, visit_key):
         try:
-            return cls.by_visit_key(visit_key)
+            return Visit.get(visit_key)
         except SQLObjectNotFound:
             return None
-    lookup_visit = classmethod(lookup_visit)
 
 class VisitIdentity(SQLObject):
     visit_key = StringCol(length=40, alternateID=True,
@@ -121,13 +121,15 @@ class User(SQLObject):
     def has_permission(self, permission):
         
         perms = (p.permission_name for p in self._get_permissions())
-        if permission in perms: return True
-        else: return False
+        if permission in perms:
+            return True
+        else:
+            return False
     
     def _set_password(self, cleartext_password):
         "Runs cleartext_password through the hash algorithm before saving."
-        hash = identity.encrypt_password(cleartext_password)
-        self._SO_set_password(hash)
+        digest = identity.encrypt_password(cleartext_password)
+        self._SO_set_password(digest)
     
     def set_password_raw(self, password):
         "Saves the password as-is to the database."
@@ -310,10 +312,10 @@ class Affiliate(SQLObject):
         #loans = sum(l.get_payment() for l in self.loans)
         #reintegros = sum(r.monto for r in self.reintegros if not r.pagado)
         reintegros = Decimal(0)
-        for r in self.reintegros:
-            if r.pagado:
+        for reintegro in self.reintegros:
+            if reintegro.pagado:
                 break
-            reintegros += r.monto
+            reintegros += reintegro.monto
             break
         
         # Cobrar solo el primer préstamo
@@ -339,13 +341,6 @@ class Affiliate(SQLObject):
                           if self.cotizacion.jubilados)
         
         return obligation
-    
-    def populate(self, year):
-        
-        kw = dict()
-        for n in range(1, 13):
-            kw["month{0}".format(n)] = False
-        return kw
     
     def complete(self, year):
         
@@ -411,18 +406,19 @@ class Affiliate(SQLObject):
     
     def multisolvent(self, year):
         
-        for cuota in self.cuotaTables:
-            if cuota.year > year:
-                break
-            if not cuota.todos():
-                return False
+        resultados = (self.obtenerAportaciones(y) for y in
+                      range(self.joined.year, year + 1))
+        
+        if False in resultados:
+            return False
+        
         return True
     
     def remove(self):
         
-        map(CuotaTable.destroySelf, self.cuotaTables)
+        (table.destroySelf() for table in self.cuotaTables)
         
-        map(Loan.remove, self.loans)
+        (loan.remove() for loan in self.loans)
         
         self.destroySelf()
     
@@ -886,9 +882,11 @@ class Loan(SQLObject):
             pagos = filter((lambda p: not p[0] in fechas), pagos)
             for pago in pagos:
                 
-                comment = "Sobrante de {0} del pago efectuado el {1}".format(pago[1],
-                                                    pago[0].strftime('%d de %B de %Y'))
-                Observacion(affiliate=self.affiliate, texto=comment, fecha=date.today())
+                comment = "Sobrante de {0} del pago efectuado el {1}".format(
+                                    pago[1], pago[0].strftime('%d de %B de %Y'))
+                
+                Observacion(affiliate=self.affiliate, texto=comment,
+                            fecha=date.today())
     
     def net(self):
         
@@ -942,6 +940,7 @@ class Loan(SQLObject):
             start += 1
         year = self.startDate.year
         n = 1
+        int_month = self.interest / 1200
         while debt > 0:
             kw = dict()
             # calcular el número de pago
@@ -958,7 +957,7 @@ class Loan(SQLObject):
             # colocar el mes y el año
             kw['month'] = "{0} {1}".format(months[kw['month']], kw['year'])
             # calcular intereses
-            kw['interest'] = Decimal(debt * self.interest / 1200).quantize(dot01)
+            kw['interest'] = Decimal(debt * int_month).quantize(dot01)
             
             if debt <= self.payment:
                 kw['amount'] = 0
@@ -1418,7 +1417,7 @@ class Reintegro(SQLObject):
         
         kw = dict()
         kw['amount'] = self.monto
-        kw['affiliate'] = self.afiliado
+        kw['affiliate'] = self.affiliate
         kw['account'] = self.cuenta
         kw['month'] = dia.month
         kw['year'] = dia.year
