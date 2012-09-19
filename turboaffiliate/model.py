@@ -1068,7 +1068,7 @@ class Account(SQLObject):
     
     """Simple Account made for affiliate handling"""
     
-    name = StringCol()
+    name = UnicodeCol()
     loan = BoolCol(default=False)
     
     extras = MultipleJoin("Extra")

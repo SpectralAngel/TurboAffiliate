@@ -152,6 +152,48 @@ class Pay(controllers.Controller):
         
         raise redirect(redir)
     
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose()
+    @validate(validators=dict(amount=validators.UnicodeString(),loan=validators.Int(),
+                          receipt=validators.String(), free=validators.Bool(),
+                          deposito=validators.Bool(), redir=validators.UnicodeString(),
+                          description=validators.UnicodeString(),
+                          day=validators.DateTimeConverter(format='%d/%m/%Y'),
+                          numero=validators.Int()))
+    def agregarVarios(self, amount, day, loan, receipt, redir, numero, **kw):
+        
+        amount = Decimal(amount.replace(',', ''))
+        loan = model.Loan.get(loan)
+        id = loan.id
+        
+        free = False
+        deposito = False
+        
+        if 'free' in kw:
+            free = kw['free']
+        
+        if 'deposito' in kw:
+            deposito = kw['deposito']
+        
+        if day == None:
+            day = date.today()
+        
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "{0} Pagos de {1} al prestamo {2}".format(numero,
+                                                                  amount,
+                                                                  loan.id)
+        model.Logger(**log)
+        
+        for n in range(numero):
+            
+            if loan.pagar(amount, receipt, day, free, deposito=deposito,
+                          descripcion=kw['description']):
+                raise redirect('/payed/{0}'.format(id))
+        
+        raise redirect(redir)
+    
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.pay.resume')
     @validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
@@ -441,9 +483,11 @@ class Loan(controllers.Controller):
                               last=validators.DateTimeConverter(format='%d/%m/%Y')))
     def cartera(self, first, last):
         
-        adeudados = model.Loan.select(AND(model.Loan.q.startDate>=first, model.Loan.q.startDate<=last))
+        adeudados = model.Loan.select(AND(model.Loan.q.startDate>=first,
+                                          model.Loan.q.startDate<=last))
         
-        pagados = model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=first, model.PayedLoan.q.startDate<=last))
+        pagados = model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=first,
+                                             model.PayedLoan.q.startDate<=last))
         
         loans, amount, deuda, net = self.carteraInterna(first, last, adeudados, pagados)
         

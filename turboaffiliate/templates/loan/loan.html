@@ -140,6 +140,7 @@
   </div>
   <div id="lateral" class="noprint">
     <button class="button-size" onclick="javascript:$('.pagar').dialog('open');">Agregar un Pago</button>
+    <button class="button-size" onclick="javascript:$('.pagarVarios').dialog('open');">Agregar Varios Pagos</button>
     <button class="button-size" onclick="javascript:$('.deduccion').dialog('open');">Agregar una Deducci&oacute;n</button>
     <button class="button-size" onclick="javascript:$('#refinanciar').dialog('open');">Refinanciar</button>
     <button class="button-size" onclick="javascript:$('#cambiarTiempo').dialog('open');">Cambiar Peri&oacute;do de Pago</button>
@@ -186,6 +187,42 @@
       </ul>
     </div>
   </form>
+  <form class="pagarVarios" action="${tg.url('/loan/pay/agregarVarios')}" method="post">
+    <div>
+      <input type="hidden" name="redir" value="${'/loan/{0}'.format(loan.id)}" />
+      <ul>
+        <li>
+          <label for="amount">Monto:</label>
+          <input name="amount" />
+        </li>
+        <li>
+          <label for="day">Fecha:</label>
+          <input name="day" class="datepicker" /><input type="hidden" name="loan" value="${loan.id}" />
+        </li>
+        <li>
+          <label for="receipt">Recibo:</label>
+          <input name="receipt" />
+        </li>
+        <li>
+          <label for="description">Descripci&oacute;</label>
+          <input name="description" />
+        </li>
+        <li>
+          <label for="free">Libre de Intereses:</label>
+          <input name="free" type="checkbox" />
+        </li>
+        <li>
+          <label for="deposito">Dep&oacute;sito Bancario:</label>
+          <input name="deposito" type="checkbox" />
+        </li>
+        <li>
+          <label for="numero">N&uacute;mero de Pagos:</label>
+          <input name="numero" />
+        </li>
+        <li><input type="submit" value="Agregar" /></li>
+      </ul>
+    </div>
+  </form>
   <form class="deduccion" action="${tg.url('/loan/deduction/save')}" method="post">
     <div>
       <input type="hidden" name="loan" value="${loan.id}" />
@@ -202,7 +239,7 @@
         </li>
         <li>
           <label for="description">Descripci&oacute;n:</label>
-          <textarea name="description" />
+          <textarea name="description"></textarea>
         </li>
         <li><input type="submit" value="Agregar" /></li>
       </ul>
@@ -230,7 +267,7 @@
         </li>
         <li>
           <label for="descripcion">Descripci&oacute;n deducci&oacute;n:</label>
-          <textarea name="descripcion" />
+          <textarea name="descripcion"></textarea>
         </li>
       </ul>
     </div>

@@ -27,3 +27,4 @@ from turboaffiliate import command
 
 print(turbogears.config.get("server.webpath"))
 application = command.start()
+

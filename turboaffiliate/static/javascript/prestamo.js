@@ -11,6 +11,17 @@ $(document).ready( function(e)
       'Cancelar': function() { $(this).dialog('close'); }
     }
   });
+  $('.pagarVarios').dialog(
+  {
+    title: "Agregar varios Pagos",
+    autoOpen: false,
+    width: 380,
+    minWidth: 380,
+    buttons: {
+      'Agregar': function() { $(this).submit() },
+      'Cancelar': function() { $(this).dialog('close'); }
+    }
+  });
   $('.deduccion').dialog(
   {
     title: "Agregar una Deducción",
