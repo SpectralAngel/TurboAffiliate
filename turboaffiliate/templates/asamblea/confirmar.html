@@ -6,6 +6,11 @@
   <title>TurboAffiliate &bull; Confirmar Inscripci&oacute;n de Afiliado ${afiliado.id}</title>
 </head>
 <body>
+  <div class="ui-widget" py:if="not affiliate.active">
+    <div class="ui-state-error ui-corner-all advertencia" style="padding: 0.5em;">
+      <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;">${msg}</span>
+  </div>
+</div>
   <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/inscribir')}">
     <fieldset>
       <input name="asamblea" type="hidden" value="${asamblea.id}" />

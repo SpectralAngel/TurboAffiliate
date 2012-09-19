@@ -146,5 +146,11 @@ class PayedLoan(controllers.Controller):
         
         loan = model.PayedLoan.get(loan)
         affiliate = loan.affiliate
+        loan_id = loan.id
+        #loan.remove()
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Prestamo {0} eliminado".format(loan_id)
+        model.Logger(**log)
         loan.remove()
         raise redirect('/affiliate/{0}'.format(affiliate.id))

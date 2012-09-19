@@ -42,7 +42,7 @@ http://docs.turbogears.org/Install and follow the instructions there. If you
 are stuck, visit http://docs.turbogears.org/GettingHelp for support options.""")
     sys.exit(1)
 try:
-    pkg_resources.require("SQLObject>=0.12.5")
+    pkg_resources.require("SQLObject>=1.0.0")
 except pkg_resources.DistributionNotFound:
     from turbogears.util import missing_dependency_error
     print missing_dependency_error('SQLObject')

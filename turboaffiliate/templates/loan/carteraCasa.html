@@ -27,9 +27,9 @@
         <td><a href="${tg.url('/loan/{0}'.format(loan.id))}">${loan.id}</a></td>
         <td><a href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}">${loan.affiliate.id}</a></td>
         <td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
-        <td>${locale.currency(loan.capital, True, True)}</td>
-        <td>${locale.currency(loan.net(), True, True)}</td>
-        <td>${locale.currency(loan.debt, True, True)}</td>
+        <td>${locale.currency(loan.capital, False, True)}</td>
+        <td>${locale.currency(loan.net(), False, True)}</td>
+        <td>${locale.currency(loan.debt, False, True)}</td>
         <td>${loan.startDate.strftime('%d/%m/%Y')}</td>
       </tr>
     </tbody>

@@ -3,7 +3,7 @@
 # asamblea.py
 # This file is part of TurboAffiliate
 #
-# Copyright (c) 2010, 2011 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2010 - 2012 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ from decimal import Decimal
 from turboaffiliate import model
 from turbogears import (controllers, identity, expose, validate, validators,
                         redirect, flash)
-import locale
+from sqlobject.sqlbuilder import *
 
 def inscripcionRealizada(afiliado):
     
@@ -69,7 +69,8 @@ class Viatico(controllers.Controller):
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose()
-    @validate(validators=dict(asamblea=validators.Int(),monto=validators.UnicodeString(),
+    @validate(validators=dict(asamblea=validators.Int(),
+                              monto=validators.UnicodeString(),
                               municipio=validators.Int()))
     def agregar(self, asamblea, municipio, **kw):
         
@@ -79,7 +80,8 @@ class Viatico(controllers.Controller):
         kw['municipio'] = model.Municipio.get(municipio)
         viatico = model.Viatico(**kw)
         
-        flash(u'Se agrego el viatico al Municipio de {0}'.format(viatico.municipio.nombre))
+        flash(u'Se agrego el viatico al Municipio de {0}'.format(
+                                                    viatico.municipio.nombre))
         
         raise redirect('/asamblea/viatico')
     
@@ -103,12 +105,14 @@ class Asamblea(controllers.Controller):
     @expose(template='turboaffiliate.templates.asamblea.index')
     def index(self):
         
-        return dict(asambleas=model.Asamblea.select(), departamentos=model.Departamento.select())
+        return dict(asambleas=model.Asamblea.select(),
+                    departamentos=model.Departamento.select())
     
     @identity.require(identity.All(identity.in_any_group('admin', 'junta'),
                                    identity.not_anonymous()))
     @expose()
-    @validate(validators=dict(departamento=validators.Int(), nombre=validators.UnicodeString(),
+    @validate(validators=dict(departamento=validators.Int(),
+                              nombre=validators.UnicodeString(),
                               numero=validators.Int()))
     def agregar(self, departamento, **kw):
         
@@ -143,17 +147,30 @@ class Asamblea(controllers.Controller):
                               afiliado=validators.Int()))
     def confirmar(self, afiliado, asamblea):
         
+        """Confirmar los datos de inscripción mediante el número de afiliación
+        
+        Permite confirmar los datos del afiliado antes de inscribirlo a la
+        asamblea correspondiente, mostrando un mensaje acerca del estado de la
+        inscripcion del afiliado en la asamblea"""
+        
         afiliado = model.Affiliate.get(afiliado)
         banco = None
         deshabilitado = False
         
+        asamblea=model.Asamblea.get(asamblea)
+        viaticos = model.Viatico.select(asamblea=asamblea, afiliado)
+        msg = u"Inscribiendo en asamblea {0}".format(asamblea.nombre)
+        
+        if viaticos.count() > 0:
+            deshabilitado = True
+            msg = u"Ya esta inscrito en asamblea {0}".format(asamblea.nombre)
+        
         if afiliado.banco != None:
             banco = model.Banco.get(afiliado.banco)
         
-        return dict(deshabilitado=deshabilitado,
-                    afiliado=afiliado,banco=banco,
-                    asamblea=model.Asamblea.get(asamblea),
-                    bancos=model.Banco.selectBy(asambleista=True),
+        return dict(deshabilitado=deshabilitado, msg=msg,
+                    afiliado=afiliado,banco=banco, asamblea=asamblea,
+                    bancos=model.Banco.selectBy(asambleista=True), 
                     departamentos=model.Departamento.select())
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
@@ -163,17 +180,30 @@ class Asamblea(controllers.Controller):
                               identidad=validators.UnicodeString()))
     def confirmarIdentidad(self, identidad, asamblea):
         
+        """Confirmar los datos de inscripción mediante la identidad
+        
+        Permite confirmar los datos del afiliado antes de inscribirlo a la
+        asamblea correspondiente, mostrando un mensaje acerca del estado de la
+        inscripcion del afiliado en la asamblea"""
+        
         afiliado = model.Affiliate.selectBy(cardID=identidad).limit(1).getOne()
         banco = None
         deshabilitado = False
         
+        asamblea=model.Asamblea.get(asamblea)
+        viaticos = model.Viatico.select(asamblea=asamblea, afiliado)
+        msg = u"Inscribiendo en asamblea {0}".format(asamblea.nombre)
+        
+        if viaticos.count() > 0:
+            deshabilitado = True
+            msg = u"Ya esta inscrito en asamblea {0}".format(asamblea.nombre)
+        
         if afiliado.banco != None:
             banco = model.Banco.get(afiliado.banco)
         
-        return dict(deshabilitado=deshabilitado,
-                    afiliado=afiliado,banco=banco,
-                    asamblea=model.Asamblea.get(asamblea),
-                    bancos=model.Banco.selectBy(asambleista=True),
+        return dict(deshabilitado=deshabilitado, msg=msg,
+                    afiliado=afiliado,banco=banco, asamblea=asamblea,
+                    bancos=model.Banco.selectBy(asambleista=True), 
                     departamentos=model.Departamento.select())
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
@@ -189,7 +219,9 @@ class Asamblea(controllers.Controller):
         afiliado = model.Affiliate.get(afiliado)
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Inscrito afiliado {0} en asamblea {1}".format(afiliado.id, asamblea.id)
+        log['action'] = "Inscrito afiliado {0} en asamblea {1}".format(
+                                                                afiliado.id,
+                                                                asamblea.id)
         model.Logger(**log)
         
         kw['afiliado'] = afiliado
@@ -197,7 +229,7 @@ class Asamblea(controllers.Controller):
         kw['viatico'] = model.Viatico.selectBy(asamblea=asamblea,
                         municipio=afiliado.municipio).limit(1).getOne()
         
-        inscripcion = model.Inscripcion(**kw)
+        model.Inscripcion(**kw)
         
         flash(inscripcionRealizada(afiliado))
         
@@ -212,7 +244,8 @@ class Asamblea(controllers.Controller):
                               cuenta=validators.Int(),
                               asamblea=validators.Int(),
                               municipio=validators.Int()))
-    def corregir(self, afiliado, asamblea, departamento, banco, cuenta, municipio):
+    def corregir(self, afiliado, asamblea, departamento, banco, cuenta,
+                 municipio):
         
         kw = dict()
         afiliado = model.Affiliate.get(afiliado)
@@ -223,7 +256,9 @@ class Asamblea(controllers.Controller):
         afiliado.municipio = model.Municipio.get(municipio)
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = "Inscrito afiliado {0} en asamblea {1}".format(afiliado.id, asamblea.id)
+        log['action'] = "Inscrito afiliado {0} en asamblea {1}".format(
+                                                                afiliado.id,
+                                                                asamblea.id)
         model.Logger(**log)
         
         banco = model.Banco.get(banco)
@@ -263,12 +298,13 @@ class Asamblea(controllers.Controller):
                                                municipio=municipio
                                                ).limit(1).getOne()
         
-        inscripcion = model.Inscripcion(**kw)
+        model.Inscripcion(**kw)
         flash(inscripcionRealizada(afiliado))
         
         raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))
     
-    @identity.require(identity.All(identity.in_group('admin'), identity.not_anonymous()))
+    @identity.require(identity.All(identity.in_group('admin'),
+                                   identity.not_anonymous()))
     @expose()
     def ingresar(self):
         
@@ -312,4 +348,98 @@ class Asamblea(controllers.Controller):
         flash('Registrados los municipos de los afiliados')
         
         raise redirect('/asamblea')
-
+    
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose(template='turboaffiliate.templates.asamblea.departamento')
+    @validate(validators=dict(departamento=validators.Int(),
+                              asamblea=validators.Int()))
+    def departamento(self, departamento, asamblea):
+        
+        """Muestra un reporte de los montos de en pago"""
+        
+        clause1 = model.Inscripcion.q.viatico == model.Viatico.q.id
+        clause2 = model.Viatico.q.municipio == model.Municipio.q.id
+        clause3 = model.Municipio.q.departamento == model.Departamento.q.id
+        clause4 = model.Departamento.q.id == departamento
+        clause5 = model.Inscripcion.q.asamblea == asamblea
+        anded = AND(clause1, clause2, clause3, clause4, clause5)
+        select = Select([model.Municipio.q.nombre,
+                         func.COUNT(model.Inscripcion.q.id),
+                         func.SUM(model.Viatico.q.monto)],
+                        staticTables=['inscripcion', 'departamento',
+                                      'municipio', 'viatico'],
+                        where=anded,
+                        groupBy='municipio.id')
+        query = model.__connection__.sqlrepr(select)
+        municipios = model.__connection__.queryAll(query)
+        
+        return dict(municipios=municipios, asamblea=model.Asamblea.get(asamblea),
+                    departamento=model.Departamento.get(departamento))
+    
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose(template='turboaffiliate.templates.asamblea.ach')
+    @validate(validators=dict(banco=validators.Int(),
+                              asamblea=validators.Int()))
+    def ach(self, asamblea, banco):
+        
+        clause1 = model.Inscripcion.q.asamblea == asamblea
+        clause2 = model.Inscripcion.q.afiliado == model.Affiliate.q.id
+        clause3 = model.Inscripcion.q.viatico == model.Viatico.q.id
+        clause4 = model.Inscripcion.q.enviado == False
+        clause5 = model.Affiliate.q.banco == banco
+        
+        select = Select([model.Affiliate.q.banco,
+                         model.Affiliate.q.cuenta,
+                         model.Viatico.q.monto],
+                        where=AND(clause1, clause2, clause3, clause4, clause5),
+                        orderBy=model.Affiliate.q.banco)
+        query = model.__connection__.sqlrepr(select)
+        pagos = model.__connection__.queryAll(query)
+        
+        asamblea = model.Asamblea.get(asamblea)
+        banco = model.Banco.get(banco)
+        
+        return dict(pagos=pagos, asamblea=asamblea, banco=banco)
+    
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose(template='turboaffiliate.templates.asamblea.planilla')
+    @validate(validators=dict(banco=validators.Int(),
+                              asamblea=validators.Int()))
+    def planilla(self, asamblea, banco):
+        
+        clause1 = model.Inscripcion.q.asamblea == asamblea
+        clause2 = model.Inscripcion.q.afiliado == model.Affiliate.q.id
+        clause3 = model.Inscripcion.q.viatico == model.Viatico.q.id
+        clause4 = model.Inscripcion.q.enviado == False
+        clause5 = model.Affiliate.q.banco == banco
+        
+        select = Select([model.Affiliate.q.cuenta,
+                         model.Viatico.q.monto],
+                        where=AND(clause1, clause2, clause3, clause4, clause5),
+                        orderBy=model.Affiliate.q.banco)
+        query = model.__connection__.sqlrepr(select)
+        pagos = model.__connection__.queryAll(query)
+        
+        asamblea = model.Asamblea.get(asamblea)
+        banco = model.Banco.get(banco)
+        
+        return dict(pagos=pagos, asamblea=asamblea, banco=banco)
+    
+    @identity.require(identity.All(identity.in_any_group('admin'),
+                                   identity.not_anonymous()))
+    @expose()
+    @validate(validators=dict(asamblea=validators.Int()))
+    def enviar(self, asamblea):
+        
+        update = Update('inscripcion',
+                        values={'enviado':True},
+                        where='asamblea_id={0}'.format(asamblea))
+        query = model.__connection__.sqlrepr(update)
+        model.__connection__.query(query)
+        
+        flash(u'Marcadas como enviadas todas las Inscripciones')
+        
+        raise redirect('/asamblea')

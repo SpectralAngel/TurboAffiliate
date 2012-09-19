@@ -22,7 +22,6 @@
 from turbogears import controllers, expose, identity, validate, validators
 from turboaffiliate import model
 from decimal import Decimal
-import time
 from collections import defaultdict
 
 months = {
@@ -199,6 +198,32 @@ class Report(controllers.Controller):
         cantidades = map(distribuir, afiliados)
         return dict(filiales=filiales, year=year, departamento=departamento,
                     start=start, end=end, cantidad=sum(cantidades))
+    
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.report.listafilial")
+    @validate(validators=dict(departamento=validators.Int(),
+                              year=validators.Int(),
+                              month=validators.Int(min=1,max=12),
+                              instituto=validators.UnicodeString()))
+    def filialmensual(self, departamento, month, year, instituto):
+        
+        """Permite mostrar el listado de afiliados que cotizaron a una filial
+        en un determinado mes y año"""
+        
+        departamento = model.Departamento.get(departamento)
+        afiliados = model.Affiliate.selectBy(school=instituto,
+                                             departamento=departamento)
+        listado = list()
+        for afiliado in afiliados:
+            
+            colegiacion = model.CuotaTable.selectBy(affiliate=afiliado,
+                                                    year=year).getOne()
+            if getattr(colegiacion, "month{0}".format(month)):
+                listado.append(afiliado)
+        
+        return dict(afiliados=listado, month=month, year=year,
+                    instituto=instituto, departamento=departamento)
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.filialesdept")

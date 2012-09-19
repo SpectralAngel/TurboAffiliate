@@ -400,7 +400,11 @@ class Loan(controllers.Controller):
         
         loan = model.Loan.get(code)
         loan = loan.remove()
+        log = dict()
+        log['user'] = identity.current.user
+        log['action'] = "Enviado el prestamo {0} a pagados".format(loan.id)
         flash('El prestamo ha sido removido')
+        model.Logger(**log)
         raise redirect('/payed/{0}'.format(loan.id))
     
     @expose()
@@ -483,11 +487,9 @@ class Loan(controllers.Controller):
                               last=validators.DateTimeConverter(format='%d/%m/%Y')))
     def cartera(self, first, last):
         
-        adeudados = model.Loan.select(AND(model.Loan.q.startDate>=first,
-                                          model.Loan.q.startDate<=last))
+        adeudados = model.Loan.select(AND(model.Loan.q.startDate>=first, model.Loan.q.startDate<=last))
         
-        pagados = model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=first,
-                                             model.PayedLoan.q.startDate<=last))
+        pagados = model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=first, model.PayedLoan.q.startDate<=last))
         
         loans, amount, deuda, net = self.carteraInterna(first, last, adeudados, pagados)
         

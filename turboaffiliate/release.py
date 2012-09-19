@@ -13,3 +13,4 @@ copyright = "Copyright Carlos Flores 2007 - 2012"
 # url = "http://yourcool.site/"
 download_url = "http://launchpad.net/turboaffiliate/download"
 license = "GPL"
+

@@ -316,7 +316,6 @@ class Affiliate(SQLObject):
             if reintegro.pagado:
                 break
             reintegros += reintegro.monto
-            break
         
         # Cobrar solo el primer préstamo
         for loan in self.loans:
@@ -341,6 +340,13 @@ class Affiliate(SQLObject):
                           if self.cotizacion.jubilados)
         
         return obligation
+    
+    def populate(self, year):
+        
+        kw = dict()
+        for n in range(1, 13):
+            kw["month{0}".format(n)] = False
+        return kw
     
     def complete(self, year):
         
@@ -406,12 +412,11 @@ class Affiliate(SQLObject):
     
     def multisolvent(self, year):
         
-        resultados = (self.obtenerAportaciones(y) for y in
-                      range(self.joined.year, year + 1))
-        
-        if False in resultados:
-            return False
-        
+        for cuota in self.cuotaTables:
+            if cuota.year > year:
+                break
+            if not cuota.todos():
+                return False
         return True
     
     def remove(self):
@@ -757,8 +762,8 @@ class Loan(SQLObject):
         
         """Obtiene el cobro a efectuar del prestamo"""
     
-        if self.debt < self.payment and self.number != self.months - 1:
-            return self.debt
+        #if self.debt < self.payment and self.number != self.months - 1:
+        #    return self.debt
         
         return self.payment
     
@@ -1570,4 +1575,3 @@ class DepositoAnonimo(SQLObject):
     concepto = UnicodeCol(length=50)
     fecha = DateCol(default=date.today)
     monto = CurrencyCol()
-
