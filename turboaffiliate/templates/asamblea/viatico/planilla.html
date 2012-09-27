@@ -1,0 +1,12 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../../master.html" />
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Asambleas</title>
+</head>
+<body>
+  <h1>Transferencia Planilla a Banco ${banco.nombre} de Asamblea ${asamblea.id} ${asamblea.nombre}</h1>
+  <p py:for="pago in pagos">A, ${pago[0]}, ${pago[1]}</p>
+</body>
+</html>

@@ -52,7 +52,7 @@ class Visit(SQLObject):
     @classmethod
     def lookup_visit(cls, visit_key):
         try:
-            return Visit.get(visit_key)
+            return cls.by_visit_key(visit_key)
         except SQLObjectNotFound:
             return None
 

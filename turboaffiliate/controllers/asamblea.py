@@ -54,7 +54,8 @@ class Viatico(controllers.Controller):
     def index(self):
         
         return dict(departamentos=model.Departamento.select(),
-                    asambleas=model.Asamblea.select())
+                    asambleas=model.Asamblea.select(),
+                    bancos=model.Banco.select())
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.asamblea.viatico.asamblea')
@@ -106,7 +107,8 @@ class Asamblea(controllers.Controller):
     def index(self):
         
         return dict(asambleas=model.Asamblea.select(),
-                    departamentos=model.Departamento.select())
+                    departamentos=model.Departamento.select(),
+                    bancos=model.Banco.select())
     
     @identity.require(identity.All(identity.in_any_group('admin', 'junta'),
                                    identity.not_anonymous()))
@@ -157,8 +159,8 @@ class Asamblea(controllers.Controller):
         banco = None
         deshabilitado = False
         
-        asamblea=model.Asamblea.get(asamblea)
-        viaticos = model.Viatico.select(asamblea=asamblea, afiliado)
+        asamblea = model.Asamblea.get(asamblea)
+        viaticos = model.Viatico.selectBy(asamblea=asamblea, afiliado=afiliado)
         msg = u"Inscribiendo en asamblea {0}".format(asamblea.nombre)
         
         if viaticos.count() > 0:
@@ -190,8 +192,8 @@ class Asamblea(controllers.Controller):
         banco = None
         deshabilitado = False
         
-        asamblea=model.Asamblea.get(asamblea)
-        viaticos = model.Viatico.select(asamblea=asamblea, afiliado)
+        asamblea = model.Asamblea.get(asamblea)
+        viaticos = model.Viatico.selectBy(asamblea=asamblea, afiliado=afiliado)
         msg = u"Inscribiendo en asamblea {0}".format(asamblea.nombre)
         
         if viaticos.count() > 0:

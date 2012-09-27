@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../../master.html" />
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Asambleas</title>
+</head>
+<body>
+  <h1>Departamento ${departamento.nombre} Asamblea ${asamblea.id} ${asamblea.nombre}</h1>
+  <table class="ui-widget-content ui-corner-all striped full-size">
+    <caption>Asistencia</caption>
+    <thead>
+      <tr>
+        <th>Municipio</th>
+        <th>Asistentes</th>
+        <th>Monto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr py:for="municipio in municipio">
+        <td>${municipio[0]}</td>
+        <td>${municipio[1]}</td>
+        <td>${locale.currency(municipio[2], True, True)}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Total:</th>
+            <th>Total: ${sum(m[1] for m in municipios)}</th>
+            <th>${locale.currency(sum(m[2] for m in municipios), True, True)}</th>
+        </tr>
+    </tfoot>
+  </table>
+</body>
+</html>
