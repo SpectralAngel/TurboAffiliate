@@ -74,7 +74,7 @@ class Extra(controllers.Controller):
         
         raise redirect('/affiliate/{0}'.format(affiliate.id))
     
-    @identity.require(identity.All(identity.in_any_group('admin'),
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose()
     @validate(validators=dict(account=validators.Int(), months=validators.Int(),
@@ -109,4 +109,3 @@ class Extra(controllers.Controller):
         extra.act(day=day)
         
         return dict(pago=pago)
-

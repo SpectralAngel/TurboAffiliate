@@ -51,7 +51,7 @@
               <input type="submit" value="Pagar" />
             </fieldset>
           </form>
-          <form class="ui-widget-content reducido ui-corner-all" py:for="loan in afiliado.loans" action="${tg.url('/loan/pay/agregarPlanilla')}">
+          <form class="ui-widget-content reducido ui-corner-all postear" py:for="loan in afiliado.loans" action="${tg.url('/loan/pay/agregarPlanilla')}">
             <fieldset>
               <legend>Pr&eacute;stamo ${loan.id}</legend>
               <input name="loan" value="${loan.id}" type="hidden" />
@@ -62,7 +62,7 @@
               <input type="submit" value="pagar" />
             </fieldset>
           </form>
-          <form class="ui-widget-content reducido ui-corner-all" py:for="extra in afiliado.extras" action="${tg.url('/affiliate/extra/pagarPlanilla')}">
+          <form class="ui-widget-content reducido ui-corner-all postear" py:for="extra in afiliado.extras" action="${tg.url('/affiliate/extra/pagarPlanilla')}">
             <fieldset>
               <legend>${extra.account.name}</legend>
               <strong>Cantidad: ${locale.currency(extra.amount)}</strong>
