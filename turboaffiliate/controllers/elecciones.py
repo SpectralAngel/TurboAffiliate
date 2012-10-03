@@ -24,6 +24,33 @@ from turboaffiliate import model
 from sqlobject.sqlbuilder import AND
 from collections import defaultdict
 
+def municipios(urnas, municipio):
+    
+    urnas[municipio] = defaultdict(dict)
+
+def asignar(urnas, afiliado):
+    
+    if afiliado.school in urnas[afiliado.municipio]:
+        urnas[afiliado.municipio][afiliado.school].append(afiliado)
+    else:
+        urnas[afiliado.municipio][afiliado.school] = list()
+        urnas[afiliado.municipio][afiliado.school].append(afiliado)
+
+def filtrar_urnas(afiliados):
+    
+    urnas = defaultdict()
+    urnas['Sin Instituto'] = 0
+    for afiliado in afiliados:
+        urnas[afiliado.school] += 1
+    
+    if None in urnas:
+        urnas['Sin Instituto'] += urnas[None]
+        del urnas[None]
+    if '' in urnas:
+        urnas['Sin Instituto'] += urnas['']
+        del urnas['']
+    return urnas
+
 class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
@@ -35,9 +62,10 @@ class Elecciones(controllers.Controller):
     @expose(template='turboaffiliate.templates.elecciones.listado')
     def all(self):
         
-        affiliates = model.Affiliate.select(AND(model.Affiliate.q.firstName!=None,
-                                                model.Affiliate.q.lastName!=None,
-                                                model.Affiliate.q.active==True))
+        affiliates = model.Affiliate.select(AND(
+                                            model.Affiliate.q.firstName!=None,
+                                            model.Affiliate.q.lastName!=None,
+                                            model.Affiliate.q.active==True))
         return dict(affiliates=affiliates, count=affiliates.count())
     
     @identity.require(identity.not_anonymous())
@@ -46,13 +74,15 @@ class Elecciones(controllers.Controller):
     def stateSchool(self, departamento):
         
         departamento = model.Departamento.get(departamento)
-        affiliates = model.Affiliate.selectBy(departamento=departamento)
+        # cambiar por seleccion de cotizacion
+        cotizacion = model.Cotizacion.get(1)
+        afiliados = model.Affiliate.selectBy(departamento=departamento,
+                                             cotizacion=cotizacion,
+                                             active=True)
         
         schools = dict()
-        for affiliate in affiliates:
+        for affiliate in afiliados:
             if affiliate.school in schools:
-                if affiliate.active == False:
-                    continue
                 schools[affiliate.school].append(affiliate)
             else:
                 schools[affiliate.school] = list()
@@ -66,112 +96,38 @@ class Elecciones(controllers.Controller):
     def urnasDepartamentales(self, departamento):
         
         departamento = model.Departamento.get(departamento)
-        afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
+        # cambiar por seleccion de cotizacion
+        cotizacion = model.Cotizacion.get(1)
+        afiliados = model.Affiliate.selectBy(departamento=departamento,
+                                             cotizacion=cotizacion,
+                                             active=True)
         
-        urnas = dict()
-        urnas['Sin Instituto'] = 0
-        for afiliado in afiliados:
-            
-            if afiliado.school in urnas:
-                urnas[afiliado.school] += 1
-            else:
-                urnas[afiliado.school] = 1
+        urnas = filtrar_urnas(afiliados)
         
-        for instituto in urnas:
-            
-            if instituto is None:
-                urnas['Sin Instituto'] += urnas[instituto]
-            
-            if instituto == '':
-                urnas['Sin Instituto'] += urnas[instituto]
-        
-        if None in urnas:
-            del urnas[None]
-        if '' in urnas:
-            del urnas['']
-        
-        return dict(urnas=urnas, cantidad=afiliados.count(), departamento=departamento)
+        return dict(urnas=urnas, cantidad=afiliados.count(),
+                    departamento=departamento)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.urnas')
     @validate(validators=dict(departamento=validators.Int()))
     def urnasDepartamentalesCinco(self, departamento):
         
-        departamento = model.Departamento.get(departamento)
-        afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
-        
-        urnas = defaultdict(int)
-        urnas['Sin Instituto'] = 0
-        
-        def recolectar(afiliado):
-            
-            urnas[afiliado.school] += 1
-        
-        def nulos(instituto):
-            
-            if instituto is None:
-                urnas['Sin Instituto'] += urnas[instituto]
-            
-            if instituto == '':
-                urnas['Sin Instituto'] += urnas[instituto]
-        
-        map(recolectar, afiliados)
-        map(nulos, urnas)
-        
-        if None in urnas:
-            del urnas[None]
-        if '' in urnas:
-            del urnas['']
+        urnas = self.urnasDepartamentales(departamento)['urnas']
        
-        urnas2 = dict()
-        for instituto in urnas:
+        for instituto in urnas.keys():
            
-            if urnas[instituto] >= 5:
-                
-                urnas2[instituto] = urnas[instituto]
+            if urnas[instituto] < 5:
+                del urnas[instituto]
         
-        return dict(urnas=urnas2, cantidad=sum(urnas2[i] for i in urnas2), departamento=departamento)
+        return dict(urnas=urnas, cantidad=sum(urnas[i] for i in urnas),
+                    departamento=departamento)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.acta')
     @validate(validators=dict(departamento=validators.Int()))
     def actas(self, departamento):
         
-        departamento = model.Departamento.get(departamento)
-        afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
-        
-        
-        urnas = defaultdict(int)
-        urnas['Sin Instituto'] = 0
-        
-        def recolectar(afiliado):
-            
-            urnas[afiliado.school] += 1
-        
-        def nulos(instituto):
-            
-            if instituto is None:
-                urnas['Sin Instituto'] += urnas[instituto]
-            
-            if instituto == '':
-                urnas['Sin Instituto'] += urnas[instituto]
-        
-        map(recolectar, afiliados)
-        map(nulos, urnas)
-        
-        if None in urnas:
-            del urnas[None]
-        if '' in urnas:
-            del urnas['']
-       
-        urnas2 = dict()
-        for instituto in urnas:
-           
-            if urnas[instituto] >= 5:
-                
-                urnas2[instituto] = urnas[instituto]
-        
-        return dict(urnas=urnas2, cantidad=sum(urnas2[i] for i in urnas2), departamento=departamento)
+        return self.urnasDepartamentalesCinco(departamento)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.municipios')
@@ -179,29 +135,21 @@ class Elecciones(controllers.Controller):
     def urnasMunicipio(self, departamento):
         
         departamento = model.Departamento.get(departamento)
-        afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
+        cotizacion = model.Cotizacion.get(1)
+        afiliados = model.Affiliate.selectBy(departamento=departamento,
+                                             cotizacion=cotizacion,
+                                             active=True)
         urnas = dict()
         urnas[None] = dict()
         
-        def municipios(municipio):
-            
-            urnas[municipio] = defaultdict(dict)
+        map(lambda m: municipios(urnas, m), departamento.municipios)
         
-        map(municipios, departamento.municipios)
-        
-        def asignar(afiliado):
-            
-            if afiliado.school in urnas[afiliado.municipio]:
-                urnas[afiliado.municipio][afiliado.school].append(afiliado)
-            else:
-                urnas[afiliado.municipio][afiliado.school] = list()
-                urnas[afiliado.municipio][afiliado.school].append(afiliado)
-        
-        map(asignar, afiliados)
+        map(lambda a: asignar(urnas, a), afiliados)
         
         cantidadUrnas = sum(len(urnas[m]) for m in urnas)
         
-        return dict(urnas=urnas, departamento=departamento, cantidad=afiliados.count(),
+        return dict(urnas=urnas, departamento=departamento,
+                    cantidad=afiliados.count(),
                     cantidadUrnas=cantidadUrnas)
     
     @identity.require(identity.not_anonymous())
@@ -210,67 +158,45 @@ class Elecciones(controllers.Controller):
     def listaUrnasMunicipio(self, departamento):
         
         departamento = model.Departamento.get(departamento)
-        afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
+        cotizacion = model.Cotizacion.get(1)
+        afiliados = model.Affiliate.selectBy(departamento=departamento,
+                                             cotizacion=cotizacion,
+                                             active=True)
         urnas = dict()
         
-        for afiliado in afiliados:
-            
-            if not afiliado.municipio in urnas:
-                urnas[afiliado.municipio] = dict()
-            
-            if afiliado.school in urnas[afiliado.municipio]:
-                urnas[afiliado.municipio][afiliado.school].append(afiliado)
-            else:
-                urnas[afiliado.municipio][afiliado.school] = list()
-                urnas[afiliado.municipio][afiliado.school].append(afiliado)
+        map(lambda m: municipios(urnas, m), departamento.municipios)
+        
+        map(lambda a: asignar(urnas, a), afiliados)
         
         for municipio in urnas:
             
             especial = list()
-            for instituto, v in urnas[municipio].items():
+            for instituto in urnas[municipio].keys():
                 if len(urnas[municipio][instituto]) < 5:
                     especial.extend(urnas[municipio][instituto])
                     del urnas[municipio][instituto]
             urnas[municipio]['Urna Especial'] = especial
         
-        return dict(urnas=urnas, departamento=departamento, cantidad=afiliados.count())
+        return dict(urnas=urnas, departamento=departamento,
+                    cantidad=afiliados.count())
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.urnas')
     def totalUrnas(self):
         
-        afiliados = model.Affiliate.selectBy(active=True)
+        cotizacion = model.Cotizacion.get(1)
+        afiliados = model.Affiliate.selectBy(cotizacion=cotizacion,
+                                             active=True)
         
-        urnas = dict()
-        urnas['Sin Instituto'] = 0
-        for afiliado in afiliados:
-            
-            if afiliado.school in urnas:
-                urnas[afiliado.school] += 1
-            else:
-                urnas[afiliado.school] = 1
-        
-        for instituto in urnas:
-            
-            if instituto is None:
-                urnas['Sin Instituto'] += urnas[instituto]
-            
-            if instituto == '':
-                urnas['Sin Instituto'] += urnas[instituto]
-        
-        if None in urnas:
-            del urnas[None]
-        if '' in urnas:
-            del urnas['']
+        urnas = filtrar_urnas(afiliados)
        
-        urnas2 = dict()
-        for instituto in urnas:
+        for instituto in urnas.keys():
            
-            if urnas[instituto] >= 5:
-                
-                urnas2[instituto] = urnas[instituto]
+            if urnas[instituto] < 5:
+                del urnas[instituto]
         
-        return dict(urnas=urnas2, cantidad=sum(urnas2[i] for i in urnas2), departamento="Total de Urnas")
+        return dict(urnas=urnas, cantidad=sum(urnas[i] for i in urnas),
+                    departamento="Total de Urnas")
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.listado')
@@ -284,7 +210,8 @@ class Elecciones(controllers.Controller):
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.listado')
-    @validate(validators=dict(cotizacion=validators.Int(), departamento=validators.Int()))
+    @validate(validators=dict(cotizacion=validators.Int(),
+                              departamento=validators.Int()))
     def cotizacionDepto(self, cotizacion, departamento):
         
         cotizacion = model.Cotizacion.get(cotizacion)
@@ -302,7 +229,8 @@ class Elecciones(controllers.Controller):
         departamento = model.Departamento.get(departamento)
         afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
         
-        return dict(afiliados=afiliados, departamento=departamento, cantidad=afiliados.count())
+        return dict(afiliados=afiliados, departamento=departamento,
+                    cantidad=afiliados.count())
     
     def sinInstituto(self):
         
@@ -321,47 +249,9 @@ class Elecciones(controllers.Controller):
     def resumenUrnas(self):
         
         departamentos = dict()
+        
         for n in range(1, 19):
-            resultado = self.urnas_depto(n)
-            print resultado
-            
-            
+            resultado = self.urnasDepartamentalesCinco(n)
             departamentos[resultado['departamento']] = len(resultado['urnas'])
          
         return dict(departamentos=departamentos)
-    
-    def urnas_depto(self, departamento):
-        departamento = model.Departamento.get(departamento)
-        afiliados = model.Affiliate.selectBy(departamento=departamento,active=True)
-        
-        urnas = dict()
-        urnas['Sin Instituto'] = 0
-        for afiliado in afiliados:
-            
-            if afiliado.school in urnas:
-                urnas[afiliado.school] += 1
-            else:
-                urnas[afiliado.school] = 1
-        
-        for instituto in urnas:
-            
-            if instituto is None:
-                urnas['Sin Instituto'] += urnas[instituto]
-            
-            if instituto == '':
-                urnas['Sin Instituto'] += urnas[instituto]
-        
-        if None in urnas:
-            del urnas[None]
-        if '' in urnas:
-            del urnas['']
-       
-        urnas2 = dict()
-        for instituto in urnas:
-           
-            if urnas[instituto] >= 5:
-                
-                urnas2[instituto] = urnas[instituto]
-        
-        return dict(urnas=urnas2, cantidad=sum(urnas2[i] for i in urnas2), departamento=departamento)
-    

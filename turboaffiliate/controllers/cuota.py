@@ -48,6 +48,9 @@ class Cuota(controllers.Controller):
     def fill(self, affiliate, start, end):
         
         affiliate = model.Affiliate.get(affiliate)
+        if end > date.today().year:
+            
+            end = start
         
         self.log(u"Posteo aportaciones de  {0} a {1} afiliado {2}".format(start, end, affiliate.id),
                  identity.current.user)
@@ -103,11 +106,11 @@ class Cuota(controllers.Controller):
         for n in range(1, 13):
             try:
                 setattr(table, "month{0}".format(n), kw["month{0}".format(n)])
-                self.log(u"Cambio en aportaciones año {0} mes {1} afiliado {2}".format(table.year, n,table.affiliate.id),
+                self.log(u"Cambio en aportaciones año {0} mes {1} afiliado {2} 1".format(table.year, n,table.affiliate.id),
                  identity.current.user)
             except KeyError:
                 setattr(table, "month{0}".format(n), False)
-                self.log(u"Cambio en aportaciones año {0} mes {1} afiliado {2}".format(table.year, n,table.affiliate.id),
+                self.log(u"Cambio en aportaciones año {0} mes {1} afiliado {2} 0".format(table.year, n,table.affiliate.id),
                  identity.current.user)
         
         self.log(u"Cambio en aportaciones año {0} afiliado {1}".format(table.year, table.affiliate.id),
