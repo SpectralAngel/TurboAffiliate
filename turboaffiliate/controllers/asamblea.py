@@ -160,10 +160,10 @@ class Asamblea(controllers.Controller):
         deshabilitado = False
         
         asamblea = model.Asamblea.get(asamblea)
-        viaticos = model.Viatico.selectBy(asamblea=asamblea, afiliado=afiliado)
+        inscripciones = model.Inscripcion.selectBy(asamblea=asamblea, afiliado=afiliado)
         msg = u"Inscribiendo en asamblea {0}".format(asamblea.nombre)
         
-        if viaticos.count() > 0:
+        if inscripciones.count() > 0:
             deshabilitado = True
             msg = u"Ya esta inscrito en asamblea {0}".format(asamblea.nombre)
         
@@ -193,10 +193,10 @@ class Asamblea(controllers.Controller):
         deshabilitado = False
         
         asamblea = model.Asamblea.get(asamblea)
-        viaticos = model.Viatico.selectBy(asamblea=asamblea, afiliado=afiliado)
+        inscripciones = model.Inscripcion.selectBy(asamblea=asamblea, afiliado=afiliado)
         msg = u"Inscribiendo en asamblea {0}".format(asamblea.nombre)
         
-        if viaticos.count() > 0:
+        if inscripciones.count() > 0:
             deshabilitado = True
             msg = u"Ya esta inscrito en asamblea {0}".format(asamblea.nombre)
         

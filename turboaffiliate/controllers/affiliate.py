@@ -677,4 +677,19 @@ class Affiliate(controllers.Controller):
         flash('terminado')
         
         raise redirect('/affiliate')
-
+    
+    @error_handler(error)
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.solvencia')
+    @validate(validators=dict(mes=validators.UnicodeString(),
+                              cotizacion=validators.Int()))
+    def talonarios(self, mes, cotizacion):
+        
+        """Permite generar de manera automatizada talonarios de pago que serán
+        utilizados por los afiliados para llevar un registro de los pagos que
+        deben efectuar"""
+        
+        cotizacion = model.Cotizacion.get(cotizacion)
+        afiliados = model.Affiliate.selectBy(cotizacion=cotizacion, active=True)
+        
+        return dict(afiliados=afiliados)

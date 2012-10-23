@@ -469,6 +469,9 @@ class Loan(controllers.Controller):
     
     def carteraInterna(self, first, last, adeudados, pagados):
         
+        """Calcula los montos de Prestamo Pagados y Corrientes, ordenandolos
+        por fecha"""
+        
         loans = list()
         
         for n in daterange(first, last + timedelta(1)):
@@ -563,15 +566,9 @@ class Loan(controllers.Controller):
         
         loans = model.Loan.select(AND(model.Loan.q.startDate>=start,
                                       model.Loan.q.startDate<=end))
-        payed = model.Loan.select(AND(model.PayedLoan.q.startDate>=start,
-                                      model.Loan.q.startDate<=end))
-        
-        li = list()
-        li.extend(l for l in loans)
-        li.extend(p for p in payed)
         prestamos = dict()
         
-        for l in li:
+        for l in loans:
             if not (l.startDate.year in prestamos):
                 prestamos[l.startDate.year] = dict()
         

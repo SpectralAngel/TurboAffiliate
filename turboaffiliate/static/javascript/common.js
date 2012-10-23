@@ -67,6 +67,6 @@ $(document).ready(function(e)
   $(".deduced-674").addClass("ui-state-error").addClass("ui-corner-all");
   $('.button, button').button();
   // Workaround a bug found added in JQuery 1.5 + JQuery UI 1.8.x
-  $('#ui-datepicker-div').hide();
+  // $('#ui-datepicker-div').hide();
 });
 
