@@ -8,3 +8,4 @@ build
 dist
 TurboAffiliate.egg-info
 peak
+*.db
