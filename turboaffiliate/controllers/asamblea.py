@@ -147,18 +147,11 @@ class Asamblea(controllers.Controller):
     @expose(template='turboaffiliate.templates.asamblea.confirmar')
     @validate(validators=dict(asamblea=validators.Int(),
                               afiliado=validators.Int()))
-    def confirmar(self, afiliado, asamblea):
+
+    def confirmacion(self, asamblea, afiliado):
         
-        """Confirmar los datos de inscripción mediante el número de afiliación
-        
-        Permite confirmar los datos del afiliado antes de inscribirlo a la
-        asamblea correspondiente, mostrando un mensaje acerca del estado de la
-        inscripcion del afiliado en la asamblea"""
-        
-        afiliado = model.Affiliate.get(afiliado)
         banco = None
         deshabilitado = False
-        
         asamblea = model.Asamblea.get(asamblea)
         inscripciones = model.Inscripcion.selectBy(asamblea=asamblea, afiliado=afiliado)
         msg = u"Inscribiendo en asamblea {0}".format(asamblea.nombre)
@@ -170,8 +163,23 @@ class Asamblea(controllers.Controller):
         if afiliado.banco != None:
             banco = model.Banco.get(afiliado.banco)
         
+        print msg
+        
+        return deshabilitado, msg, afiliado, banco, asamblea
+
+    def confirmar(self, afiliado, asamblea):
+        
+        """Confirmar los datos de inscripción mediante el número de afiliación
+        
+        Permite confirmar los datos del afiliado antes de inscribirlo a la
+        asamblea correspondiente, mostrando un mensaje acerca del estado de la
+        inscripcion del afiliado en la asamblea"""
+        
+        afiliado = model.Affiliate.get(afiliado)
+        deshabilitado, msg, afiliado, banco, asamblea = self.confirmacion(asamblea, afiliado)
+        
         return dict(deshabilitado=deshabilitado, msg=msg,
-                    afiliado=afiliado,banco=banco, asamblea=asamblea,
+                    afiliado=afiliado, banco=banco, asamblea=asamblea,
                     bancos=model.Banco.selectBy(asambleista=True), 
                     departamentos=model.Departamento.select())
     
@@ -189,19 +197,7 @@ class Asamblea(controllers.Controller):
         inscripcion del afiliado en la asamblea"""
         
         afiliado = model.Affiliate.selectBy(cardID=identidad).limit(1).getOne()
-        banco = None
-        deshabilitado = False
-        
-        asamblea = model.Asamblea.get(asamblea)
-        inscripciones = model.Inscripcion.selectBy(asamblea=asamblea, afiliado=afiliado)
-        msg = u"Inscribiendo en asamblea {0}".format(asamblea.nombre)
-        
-        if inscripciones.count() > 0:
-            deshabilitado = True
-            msg = u"Ya esta inscrito en asamblea {0}".format(asamblea.nombre)
-        
-        if afiliado.banco != None:
-            banco = model.Banco.get(afiliado.banco)
+        deshabilitado, msg, afiliado, banco, asamblea = self.confirmacion(asamblea, afiliado)
         
         return dict(deshabilitado=deshabilitado, msg=msg,
                     afiliado=afiliado,banco=banco, asamblea=asamblea,
@@ -272,8 +268,7 @@ class Asamblea(controllers.Controller):
                                                municipio=afiliado.municipio
                                                ).limit(1).getOne()
         
-        inscripcion = model.Inscripcion(**kw)
-        print inscripcion
+        model.Inscripcion(**kw)
         flash(inscripcionRealizada(afiliado))
         
         raise redirect('/asamblea/inscripcion/{0}'.format(asamblea.id))

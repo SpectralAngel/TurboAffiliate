@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html" />
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+    <title>TurboAffiliate &bull; Talonarios</title>
+</head>
+<body>
+    <div class="page receipt" py:for="affiliate in affiliates">
+        <div class="izquierda">
+            <h2 class="afiliado">${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</h2>
+            <h3>ID: ${affiliate.cardID}</h3>
+            <table class="ui-widget-content ui-corner-all striped" py:if="affiliate.active">
+                <caption>
+                    Cobros a Efectuar
+                </caption>
+                <thead>
+                    <th>Concepto</th>
+                    <th>Retrasada</th>
+                    <th>Mes</th>
+                    <th>A&ntilde;o</th>
+                    <th>Cantidad</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Aportaci&oacute;n Ordinaria</td>
+                        <td>No</td>
+                        <td></td>
+                        <td></td>
+                        <td>${locale.currency(affiliate.get_cuota(), True, True)}</td>
+                    </tr>
+                    <tr py:for="loan in affiliate.loans">
+                        <td>Cuota de Pr&eacute;stamo</td>
+                        <td>No</td>
+                        <td></td>
+                        <td></td>
+                        <td>${locale.currency(loan.get_payment(), True, True)}</td>
+                        <td class="noprint">&nbsp;</td>
+                    </tr>
+                    <tr py:for="extra in affiliate.extras">
+                        <td>${extra.account.name}</td>
+                        <td py:if="extra.retrasada">S&iacute;</td>
+                        <td py:if="not extra.retrasada">No</td>
+                        <td>${extra.mes}</td>
+                        <td>${extra.anio}</td>
+                        <td>${locale.currency(extra.amount, True, True)}</td>
+                    </tr>
+                    <tr py:for="reintegro in affiliate.reintegros" py:if="not reintegro.pagado">
+                        <td>Reintegro</td>
+                        <td>No</td>
+                        <td>${reintegro.motivo}</td>
+                        <td>${reintegro.emision.strftime('%d/%m/%Y')}</td>
+                        <td>${locale.currency(reintegro.monto, True, True)}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">Total de Deducciones</td>
+                        <td>${locale.currency(affiliate.get_monthly(), True, True)}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="derecha">
+            <h2 class="afiliado">${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</h2>
+            <h3>ID: ${affiliate.cardID}</h3>
+            <table class="ui-widget-content ui-corner-all striped" py:if="affiliate.active">
+                <caption>
+                    Cobros a Efectuar
+                </caption>
+                <thead>
+                    <th>Concepto</th>
+                    <th>Retrasada</th>
+                    <th>Mes</th>
+                    <th>A&ntilde;o</th>
+                    <th>Cantidad</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Aportaci&oacute;n Ordinaria</td>
+                        <td>No</td>
+                        <td></td>
+                        <td></td>
+                        <td>${locale.currency(affiliate.get_cuota(), True, True)}</td>
+                    </tr>
+                    <tr py:for="loan in affiliate.loans">
+                        <td>Cuota de Pr&eacute;stamo</td>
+                        <td>No</td>
+                        <td></td>
+                        <td></td>
+                        <td>${locale.currency(loan.get_payment(), True, True)}</td>
+                        <td class="noprint">&nbsp;</td>
+                    </tr>
+                    <tr py:for="extra in affiliate.extras">
+                        <td>${extra.account.name}</td>
+                        <td py:if="extra.retrasada">S&iacute;</td>
+                        <td py:if="not extra.retrasada">No</td>
+                        <td>${extra.mes}</td>
+                        <td>${extra.anio}</td>
+                        <td>${locale.currency(extra.amount, True, True)}</td>
+                    </tr>
+                    <tr py:for="reintegro in affiliate.reintegros" py:if="not reintegro.pagado">
+                        <td>Reintegro</td>
+                        <td>No</td>
+                        <td>${reintegro.motivo}</td>
+                        <td>${reintegro.emision.strftime('%d/%m/%Y')}</td>
+                        <td>${locale.currency(reintegro.monto, True, True)}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">Total de Deducciones</td>
+                        <td>${locale.currency(affiliate.get_monthly(), True, True)}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
