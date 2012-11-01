@@ -142,12 +142,6 @@ class Asamblea(controllers.Controller):
                     bancos=model.Banco.selectBy(asambleista=True),
                     asamblea=model.Asamblea.get(asamblea))
     
-    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
-                                   identity.not_anonymous()))
-    @expose(template='turboaffiliate.templates.asamblea.confirmar')
-    @validate(validators=dict(asamblea=validators.Int(),
-                              afiliado=validators.Int()))
-
     def confirmacion(self, asamblea, afiliado):
         
         banco = None
@@ -167,6 +161,12 @@ class Asamblea(controllers.Controller):
         
         return deshabilitado, msg, afiliado, banco, asamblea
 
+    
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose(template='turboaffiliate.templates.asamblea.confirmar')
+    @validate(validators=dict(asamblea=validators.Int(),
+                              afiliado=validators.Int()))
     def confirmar(self, afiliado, asamblea):
         
         """Confirmar los datos de inscripción mediante el número de afiliación
