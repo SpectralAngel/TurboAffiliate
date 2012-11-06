@@ -7,7 +7,7 @@
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" media="screen" />
 </head>
 <body>
-  <h1>Reporte de Deducciones de Pr&eacute;stamos</h1>
+  <h1>Reporte de Deducciones de Pr&eacute;stamos ${casa.nombre}</h1>
   <h2>Del ${start.strftime('%d de %B de %Y')} al ${end.strftime('%d de %B de %Y')}</h2>
   <table class="striped full-size ui-corner-all ui-widget-content">
     <thead>
@@ -42,7 +42,7 @@
         <th>${locale.currency(monto, False, True)}</th>
         <th>${locale.currency(intereses, False, True)}</th>
         <th>${locale.currency(papeleo, False, True)}</th>
-        <th>${locale.currency(aportaciones, False, True)}</th>>
+        <th>${locale.currency(aportaciones, False, True)}</th>
         <th>${locale.currency(retencion, False, True)}</th>
         <th>${locale.currency(neto, False, True)}</th>
       </tr>
