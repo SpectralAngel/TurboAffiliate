@@ -718,9 +718,11 @@ class Loan(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.deducciones')
     @validate(validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
-                              end=validators.DateTimeConverter(format='%d/%m/%Y')))
-    def deducciones(self, start, end):
-        casa = model.Casa.get(1)
+                              end=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              casa=validators.Int()))
+    def deducciones(self, start, end, casa):
+        
+        casa = model.Casa.get(casa)
         loans = model.Loan.select(AND(model.Loan.q.startDate>=start,
                                            model.Loan.q.startDate<=end, model.Loan.q.casa==casa))
         payedLoans = model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=start,
@@ -737,7 +739,7 @@ class Loan(controllers.Controller):
         neto = sum(p.neto for p in prestamos)
         monto = sum(p.monto for p in prestamos)
         
-        return dict(loans=prestamos, start=start, end=end, monto=monto,
+        return dict(loans=prestamos, start=start, end=end, monto=monto, casa=casa,
                     neto=neto, papeleo=papeleo, aportaciones=aportaciones,
                     intereses=intereses, retencion=retencion, reintegros=reintegros)
     

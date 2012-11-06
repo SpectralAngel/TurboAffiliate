@@ -371,6 +371,12 @@
               <label>Final:</label>
             <input name="end" class="datepicker" />
           </li>
+          <li>
+            <label for="casa">Casa:</label>
+            <select name="casa">
+              <option py:for="casa in casas" value="${casa.id}">${casa.nombre}</option>
+            </select>
+          </li>
           <li><input type="submit" value="Ver" /></li>
         </ul>
       </fieldset>
