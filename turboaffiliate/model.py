@@ -281,7 +281,7 @@ class Affiliate(SQLObject):
     """Fecha de Fallecimiento"""
     desactivacion = DateCol(default=date.today)
     """Fecha de Desactivación"""
-    cuenta = BigIntCol(default=None)
+    cuenta = UnicodeCol(default=None)
     """Número de cuenta bancaria"""
     banco = IntCol(default=None)
     """Código del Banco"""
@@ -302,6 +302,14 @@ class Affiliate(SQLObject):
             return 1
         
         return (date.today() - self.joined).days / 365
+    
+    def get_banco(self):
+        
+        if self.banco == None:
+            
+            return None
+        
+        return Banco.get(self.banco)
     
     def get_monthly(self):
         
