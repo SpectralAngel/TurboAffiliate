@@ -157,8 +157,6 @@ class Asamblea(controllers.Controller):
         if afiliado.banco != None:
             banco = model.Banco.get(afiliado.banco)
         
-        print msg
-        
         return deshabilitado, msg, afiliado, banco, asamblea
 
     
@@ -425,18 +423,68 @@ class Asamblea(controllers.Controller):
         
         return dict(pagos=pagos, asamblea=asamblea, banco=banco)
     
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose()
+    @validate(validators=dict(asamblea=validators.Int(),
+                              enviado=validators.Bool(),
+                              municipio=validators.Int()))
+    def asistentes(self, asamblea, municipio, enviado):
+        
+        asamblea = model.Asamblea.get(asamblea)
+        municipio = model.Municipio.get(municipio)
+        
+        viaticos = model.Viatico.selectBy(asamblea=asamblea, municipio=municipio,
+                                          enviado=enviado)
+        
+        return dict(asamblea=asamblea, municipio=municipio, viaticos=viaticos)
+    
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose()
+    @validate(validators=dict(viatico=validators.Int()))
+    def enviar(self, viatico):
+        
+        viatico = model.Viatico.get(viatico)
+        viatico.enviado = True
+        
+        return dict(viatico=viatico)
+    
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose()
+    @validate(validators=dict(asamblea=validators.Int(),
+                              municipio=validators.Int()))
+    def enviarMunicipio(self, asamblea, municipio):
+        
+        asamblea = model.Asamblea.get(asamblea)
+        municipio = model.Municipio.get(municipio)
+        update = Update('inscripcion',
+                        values={'enviado':True},
+                        where='asamblea_id={0} and municipio_id={1}'.format(
+                                                    asamblea.id,
+                                                    municipio.id)
+                        )
+        query = model.__connection__.sqlrepr(update)
+        model.__connection__.query(query)
+        
+        flash(u'Marcadas como enviadas todas las Inscripciones de {0} en {1}'.format(asamblea.nombre, municipio.nombre))
+        
+        raise redirect('/asamblea/{0}'.format(asamblea.id))
+    
     @identity.require(identity.All(identity.in_any_group('admin'),
                                    identity.not_anonymous()))
     @expose()
     @validate(validators=dict(asamblea=validators.Int()))
-    def enviar(self, asamblea):
+    def enviarMasa(self, asamblea):
         
         update = Update('inscripcion',
                         values={'enviado':True},
                         where='asamblea_id={0}'.format(asamblea))
         query = model.__connection__.sqlrepr(update)
         model.__connection__.query(query)
+        asamblea = model.Asamblea.get(asamblea)
         
-        flash(u'Marcadas como enviadas todas las Inscripciones')
+        flash(u'Marcadas como enviadas todas las Inscripciones de {0}'.format(asamblea.nombre))
         
         raise redirect('/asamblea')

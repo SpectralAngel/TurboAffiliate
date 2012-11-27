@@ -51,7 +51,6 @@
             <strong class="enfasis">Jubilado desde ${affiliate.jubilated.strftime('%d de %B de %Y')}</strong>
           </li>
         </ul>
-        <div class="ui-helper-clearfix">&nbsp;</div>
         <div class="ui-widget" py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated == None">
           <div class="ui-state-error ui-corner-all advertencia" style="padding: 0.5em;">
             <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
@@ -241,6 +240,7 @@
               <tr>
                 <th>Asamblea</th>
                 <th>Municipio</th>
+                <th>Monto</th>
                 <th>Enviado</th>
               </tr>
             </thead>
@@ -248,6 +248,7 @@
               <tr py:for="inscripcion in affiliate.inscripciones">
                 <td>${inscripcion.asamblea.nombre}</td>
                 <td>${inscripcion.viatico.municipio.nombre}</td>
+                <td>${inscripcion.viatico.monto}</td>
                 <td py:if="inscripcion.enviado">S&iacute;</td>
                 <td py:if="not inscripcion.enviado">No</td>
               </tr>
@@ -257,29 +258,19 @@
         <div id="personal" class="ui-widget-content ui-corner-all flotante-izquierdo">
           <h3 class="ui-widget-header ui-corner-all no-margin ui-helper-clearfix">Informaci&oacute;n Personal</h3>
           <ul>
+            <li><strong>Lugar de Nacimiento: </strong> ${affiliate.birthPlace}</li>
+            <li><strong>Fecha de Nacimiento: </strong><span py:if="not affiliate.birthday is None">${affiliate.birthday.strftime('%d de %B de %Y')}</span></li>
             <li>
-              <strong>Lugar de Nacimiento: </strong> ${affiliate.birthPlace}
-            </li>
-            <li>
-              <strong>Fecha de Nacimiento: </strong><span py:if="not affiliate.birthday is None">${affiliate.birthday.strftime('%d de %B de %Y')}</span>
-            </li>
-            <li>
-              <strong>G&eacute;nero:</strong>
+              <strong>Sexo:</strong>
               <span py:if="affiliate.gender == 'M'">Masculino</span>
               <span py:if="affiliate.gender == 'F'">Femenino</span>
             </li>
-            <li>
-              <strong>Tel&eacute;fono: </strong>${affiliate.phone}
-            </li>
-            <li>
-              <strong>Instituto: </strong>${affiliate.school}
-            </li>
-            <li>
-              <strong>Municipio: </strong>${affiliate.municipio.nombre}
-            </li>
-            <li>
-              <strong>Departamento: </strong>${affiliate.departamento.nombre}
-            </li>
+            <li><strong>Tel&eacute;fono: </strong>${affiliate.phone}</li>
+            <li><strong>Instituto: </strong>${affiliate.school}</li>
+            <li><strong>Municipio: </strong>${affiliate.municipio.nombre}</li>
+            <li><strong>Departamento: </strong>${affiliate.departamento.nombre}</li>
+            <li><strong>Banco: </strong>${afiliado.banco}</li>
+            <li><strong>Cuenta: </strong>${afiliado.cuenta}</li>
           </ul>
         </div>
         <div id="egresos" class="flotante-izquierdo ui-corner-all">
