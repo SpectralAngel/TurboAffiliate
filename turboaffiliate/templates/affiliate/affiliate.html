@@ -242,6 +242,7 @@
                 <th>Municipio</th>
                 <th>Monto</th>
                 <th>Enviado</th>
+                <th class="noprint">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -251,6 +252,7 @@
                 <td>${inscripcion.viatico.monto}</td>
                 <td py:if="inscripcion.enviado">S&iacute;</td>
                 <td py:if="not inscripcion.enviado">No</td>
+                <td class="noprint"><a py:if="inscripcion.reenviable()" href="${tg.url('/asamblea/inscripcion/reenviar/?inscripcion={0}'.format(inscripcion.id))}">Reenviar</a></td>
               </tr>
             </tbody>
           </table>
@@ -484,6 +486,14 @@
                 <select name="municipio" class="municipio" id="editarMunicipios">
                   <option selected="selected" value="${affiliate.municipio.id}">${affiliate.municipio.nombre}</option>
                 </select>
+              </li>
+              <li>
+                  <label for="cuenta">Cuenta:</label>
+                  <input name="cuenta" value="${affiliate.cuenta}" />
+              </li>
+              <li>
+                  <label for="banco">Banco:</label>
+                  <input name="banco" value="${affiliate.banco}" />
               </li>
             </ul>
           </div>

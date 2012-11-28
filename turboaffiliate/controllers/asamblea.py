@@ -24,6 +24,7 @@ from turboaffiliate import model
 from turbogears import (controllers, identity, expose, validate, validators,
                         redirect, flash)
 from sqlobject.sqlbuilder import *
+from datetime import date
 
 def inscripcionRealizada(afiliado):
     
@@ -93,14 +94,49 @@ class Viatico(controllers.Controller):
     def eliminar(self, viatico):
         
         viatico = model.Viatico.get(viatico)
+        asamblea = viatico.asamblea
         viatico.destroySelf()
         
-        raise redirect('/asamblea/banco')
+        raise redirect('/asamblea/{0}'.format(asamblea.id))
+
+class Inscripcion(controllers.Controller):
+    
+    @identity.require(identity.not_anonymous())
+    @expose('turboaffiliate.templates.asamblea.inscripcion')
+    @validate(validators=dict(asamblea=validators.Int()))
+    def default(self, asamblea):
+        
+        return dict(asamblea=model.Asamblea.get(asamblea),
+                    bancos=model.Banco.selectBy(asambleista=True),
+                    departamentos=model.Departamento.select())
+    
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose()
+    @validate(validators=dict(inscripcion=validators.Int()))
+    def reenviar(self, inscripcion):
+        
+        inscripcion = model.Inscripcion.get(inscripcion)
+        inscripcion.enviado = False
+        
+        raise redirect('/affiliate/{0}'.format(inscripcion.afiliado.id))
+    
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose()
+    @validate(validators=dict(viatico=validators.Int()))
+    def enviar(self, inscripcion):
+        
+        inscripcion = model.Inscripcion.get(inscripcion)
+        inscripcion.enviado = True
+        
+        return dict(inscripcion=inscripcion)
 
 class Asamblea(controllers.Controller):
     
     banco = Banco()
     viatico = Viatico()
+    inscripcion = Inscripcion()
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.asamblea.index')
@@ -123,15 +159,6 @@ class Asamblea(controllers.Controller):
         asamblea = model.Asamblea(**kw)
         
         raise redirect('/asamblea/{0}'.format(asamblea.id))
-    
-    @identity.require(identity.not_anonymous())
-    @expose('turboaffiliate.templates.asamblea.inscripcion')
-    @validate(validators=dict(asamblea=validators.Int()))
-    def inscripcion(self, asamblea):
-        
-        return dict(asamblea=model.Asamblea.get(asamblea),
-                    bancos=model.Banco.selectBy(asambleista=True),
-                    departamentos=model.Departamento.select())
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.asamblea.asamblea')
@@ -383,6 +410,32 @@ class Asamblea(controllers.Controller):
         clause2 = model.Inscripcion.q.afiliado == model.Affiliate.q.id
         clause3 = model.Inscripcion.q.viatico == model.Viatico.q.id
         clause4 = model.Inscripcion.q.enviado == False
+        clause5 = model.Affiliate.q.banco != banco
+        
+        select = Select([model.Affiliate.q.banco,
+                         model.Affiliate.q.cuenta,
+                         model.Viatico.q.monto],
+                        where=AND(clause1, clause2, clause3, clause4, clause5),
+                        orderBy=model.Affiliate.q.banco)
+        query = model.__connection__.sqlrepr(select)
+        pagos = model.__connection__.queryAll(query)
+        
+        asamblea = model.Asamblea.get(asamblea)
+        banco = model.Banco.get(banco)
+        
+        return dict(pagos=pagos, asamblea=asamblea, banco=banco)
+    
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose(template='turboaffiliate.templates.asamblea.ach')
+    @validate(validators=dict(banco=validators.Int(),
+                              asamblea=validators.Int()))
+    def achBanco(self, asamblea):
+        
+        clause1 = model.Inscripcion.q.asamblea == asamblea
+        clause2 = model.Inscripcion.q.afiliado == model.Affiliate.q.id
+        clause3 = model.Inscripcion.q.viatico == model.Viatico.q.id
+        clause4 = model.Inscripcion.q.enviado == False
         clause5 = model.Affiliate.q.banco == banco
         
         select = Select([model.Affiliate.q.banco,
@@ -442,17 +495,6 @@ class Asamblea(controllers.Controller):
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose()
-    @validate(validators=dict(viatico=validators.Int()))
-    def enviar(self, viatico):
-        
-        viatico = model.Viatico.get(viatico)
-        viatico.enviado = True
-        
-        return dict(viatico=viatico)
-    
-    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
-                                   identity.not_anonymous()))
-    @expose()
     @validate(validators=dict(asamblea=validators.Int(),
                               municipio=validators.Int()))
     def enviarMunicipio(self, asamblea, municipio):
@@ -479,8 +521,8 @@ class Asamblea(controllers.Controller):
     def enviarMasa(self, asamblea):
         
         update = Update('inscripcion',
-                        values={'enviado':True},
-                        where='asamblea_id={0}'.format(asamblea))
+                        values={'enviado':True,'envio':date.today()},
+                        where='asamblea_id={0} and enviado=false'.format(asamblea))
         query = model.__connection__.sqlrepr(update)
         model.__connection__.query(query)
         asamblea = model.Asamblea.get(asamblea)

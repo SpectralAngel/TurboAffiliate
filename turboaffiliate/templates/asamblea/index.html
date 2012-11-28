@@ -37,7 +37,7 @@
         <li>
           <label>Asamblea:</label>
           <select name="asamblea">
-            <option value="${a.id}" py:for="a in asambleas">
+            <option value="${a.id}" py:for="a in asambleas" py:if="a.habilitado">
               ${a.numero} - ${a.nombre}
             </option>
           </select>
@@ -47,6 +47,30 @@
     </fieldset>
   </form>
   <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/ach')}">
+    <fieldset>
+      <legend>Transferencias ACH excluyendo a un banco</legend>
+      <ol>
+        <li>
+          <label>Asamblea:</label>
+          <select name="asamblea">
+            <option value="${a.id}" py:for="a in asambleas">
+              ${a.id} - ${a.nombre}
+            </option>
+          </select>
+        </li>
+        <li>
+          <label>Banco:</label>
+          <select name="banco">
+            <option value="${b.id}" py:for="b in bancos">
+              ${b.id} - ${b.nombre}
+            </option>
+          </select>
+        </li>
+        <li><input type="submit" value="Mostrar" /></li>
+      </ol>
+    </fieldset>
+  </form>
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/achBanco')}">
     <fieldset>
       <legend>Transferencias ACH a un banco</legend>
       <ol>
@@ -66,7 +90,7 @@
             </option>
           </select>
         </li>
-        <li><input type="submit" value="Submit" /></li>
+        <li><input type="submit" value="Mostrar" /></li>
       </ol>
     </fieldset>
   </form>
@@ -90,13 +114,28 @@
             </option>
           </select>
         </li>
-        <li><input type="submit" value="Submit" /></li>
+        <li><input type="submit" value="Mostrar" /></li>
+      </ol>
+    </fieldset>
+  </form>
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/enviarMasa')}">
+    <fieldset>
+      <legend>Marcar Inscripciones como enviadas</legend>
+      <ol>
+        <li>
+          <label>Asamblea:</label>
+          <select name="asamblea">
+            <option value="${a.id}" py:for="a in asambleas">
+              ${a.id} - ${a.nombre}
+            </option>
+          </select>
+        </li>
+        <li><input type="submit" value="Enviar" /></li>
       </ol>
     </fieldset>
   </form>
   <div id="lateral" class="noprint">
     <a class="button button-size" href="${tg.url('/asamblea/viatico')}">Control de Vi&aacute;ticos</a>
-    <a class="button button-size" href="${tg.url('/asamblea/enviar')}">Marcar Inscripciones como enviadas</a>
   </div>
 </body>
 </html>

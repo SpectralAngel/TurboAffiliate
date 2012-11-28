@@ -1554,6 +1554,10 @@ class Inscripcion(SQLObject):
     viatico = ForeignKey('Viatico')
     enviado = BoolCol(default=False)
     envio = DateCol(default=date.today)
+    
+    def reenviable(self):
+        
+        return self.asamblea.habilitado
 
 class Deposito(SQLObject):
     
