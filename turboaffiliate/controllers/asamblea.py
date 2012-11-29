@@ -127,10 +127,25 @@ class Inscripcion(controllers.Controller):
     @validate(validators=dict(viatico=validators.Int()))
     def enviar(self, inscripcion):
         
+        """Cambia el estado de una inscripción a enviada"""
+        
         inscripcion = model.Inscripcion.get(inscripcion)
         inscripcion.enviado = True
+        inscripcion.envio = date.today()
         
         return dict(inscripcion=inscripcion)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.asamblea.pendientes')
+    @validate(validators=dict(asamblea=validators.Int()))
+    def pendientes(self, asamblea):
+        
+        """Muestra las inscripciones que estan pendientes de pago"""
+        
+        asamblea = model.Asamblea.get(asamblea)
+        inscripciones = model.Inscripcion.selectBy(asamblea=asamblea, enviado=False)
+        
+        return dict(asamblea=asamblea, inscripciones=inscripciones)
 
 class Asamblea(controllers.Controller):
     
@@ -170,6 +185,9 @@ class Asamblea(controllers.Controller):
                     asamblea=model.Asamblea.get(asamblea))
     
     def confirmacion(self, asamblea, afiliado):
+        
+        """Muestra una interfaz para confirmar los datos del afiliado antes de
+        inscribir su participación en la asamblea"""
         
         banco = None
         deshabilitado = False

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude" py:strip="">
 <?python
   import locale
-  locale.setlocale(locale.LC_ALL, 'es_HN.utf8')
+  locale.setlocale(locale.LC_ALL, "es_HN.utf8")
 ?>
 <head py:match="head" py:attrs="select('@*')">
   <title py:replace="''">Sistema Gestor de Afiliaciones</title>
@@ -157,6 +157,10 @@
         <li>
           <label for="school">Instituto:</label>
           <input name="school" />
+        </li>
+        <li>
+            <label for="banco">Banco:</label>
+            <input name="banco" />
         </li>
         <li>
           <label for="departamento">Departamento:</label>

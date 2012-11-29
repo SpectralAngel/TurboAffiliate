@@ -1554,8 +1554,11 @@ class Inscripcion(SQLObject):
     viatico = ForeignKey('Viatico')
     enviado = BoolCol(default=False)
     envio = DateCol(default=date.today)
+    ingresado = DateTimeCol(default=datetime.now)
     
     def reenviable(self):
+        
+        """Indica si la inscripcion puede ser enviada de nuevo"""
         
         return self.asamblea.habilitado
 

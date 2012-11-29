@@ -150,7 +150,8 @@ class Affiliate(controllers.Controller):
             inprema=validators.UnicodeString(),
             municipio=validators.Int(),
             departamento=validators.Int(),
-            cotizacion=validators.Int()
+            cotizacion=validators.Int(),
+            banco=validators.Int()
     ))
     def save(self, municipio, departamento, cotizacion, **kw):
         

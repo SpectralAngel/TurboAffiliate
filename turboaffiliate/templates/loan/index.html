@@ -94,6 +94,28 @@
         </ul>
       </fieldset>
     </form>
+    <form class="ui-widget-content ui-corner-all" action="${tg.url('carteraDepartamento')}">
+      <fieldset>
+        <legend>Mostrar Cartera Pr&eacute;stamos</legend>
+        <ul>
+          <li>
+            <label>Inicio:</label>
+            <input name="first" class="datepicker" />
+          </li>
+          <li>
+            <label>Final:</label>
+            <input name="last" class="datepicker" />
+          </li>
+          <li>
+            <label for="departamento">Departamento:</label>
+            <select name="departamento" class="departamento"></select>
+          </li>
+          <li>
+            <input type="submit" value="Buscar" />
+          </li>
+        </ul>
+      </fieldset>
+    </form>
     <form class="ui-widget-content ui-corner-all" action="${tg.url('cotizacion')}">
       <fieldset>
         <legend>Pr&eacute;stamos Otorgados por Periodo y Cotizacion</legend>

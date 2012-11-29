@@ -59,6 +59,23 @@ def separacion(loan):
     afiliado = loan.affiliate
     return model.AuxiliarPrestamo(loan.id, afiliado, monto, neto, papeleo, aportaciones, intereses, retencion, reintegros)
 
+def deduccionesInterno(self, loans, payedLoans, start, end):
+    
+    prestamos = map(separacion, loans)
+    prestamos.extend(map(separacion, payedLoans))
+    
+    papeleo = sum(p.papeleo for p in prestamos)
+    intereses = sum(p.intereses for p in prestamos)
+    retencion = sum(p.retencion for p in prestamos)
+    aportaciones = sum(p.aportaciones for p in prestamos)
+    reintegros = sum(p.reintegros for p in prestamos)
+    neto = sum(p.neto for p in prestamos)
+    monto = sum(p.monto for p in prestamos)
+    
+    return dict(loans=prestamos, start=start, end=start, monto=monto,
+                    neto=neto, papeleo=papeleo, aportaciones=aportaciones,
+                    intereses=intereses, retencion=retencion, reintegros=reintegros)
+
 class Deduction(controllers.Controller):
     
     require = identity.require(identity.not_anonymous())
@@ -520,6 +537,29 @@ class Loan(controllers.Controller):
         return dict(amount=amount, deuda=deuda, net=net, loans=loans,
                     first=first, last=last, count=len(loans), casa=casa)
     
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.loan.carteraDepartamento')
+    @validate(validators=dict(first=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              last=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              departamento=validators.Int()))
+    def carteraDepartamento(self, first, last, departamento):
+        
+        departamento = model.Departamento.get(departamento)
+        
+        adeudados = model.Affiliate.selectBy(departamento=departamento).throughTo.loans.filter(AND(model.Loan.q.startDate>=first,
+                                          model.Loan.q.startDate<=last))
+        
+        pagados = model.Affiliate.selectBy(departamento=departamento).throughTo.payedLoans.filter(AND(model.PayedLoan.q.startDate>=first,
+                                          model.PayedLoan.q.startDate<=last))
+        
+        loans, amount, deuda, net = self.carteraInterna(first, last, adeudados, pagados)
+        #loans = list(l for l in loans if l.affiliate.departamento == departamento)
+        
+        return dict(amount=amount, deuda=deuda, net=net, loans=loans,
+                    departamento=departamento, first=first, last=last,
+                    count=len(loans))
+    
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose()
@@ -728,20 +768,7 @@ class Loan(controllers.Controller):
         payedLoans = model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=start,
                                            model.PayedLoan.q.startDate<=end, model.PayedLoan.q.casa==casa))
         
-        prestamos = map(separacion, loans)
-        prestamos.extend(map(separacion, payedLoans))
-        
-        papeleo = sum(p.papeleo for p in prestamos)
-        intereses = sum(p.intereses for p in prestamos)
-        retencion = sum(p.retencion for p in prestamos)
-        aportaciones = sum(p.aportaciones for p in prestamos)
-        reintegros = sum(p.reintegros for p in prestamos)
-        neto = sum(p.neto for p in prestamos)
-        monto = sum(p.monto for p in prestamos)
-        
-        return dict(loans=prestamos, start=start, end=end, monto=monto, casa=casa,
-                    neto=neto, papeleo=papeleo, aportaciones=aportaciones,
-                    intereses=intereses, retencion=retencion, reintegros=reintegros)
+        return deduccionesInterno(loans, payedLoans, start, end)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.deducciones')
@@ -751,20 +778,7 @@ class Loan(controllers.Controller):
         loans = model.Loan.selectBy(startDate=start)
         payedLoans = model.PayedLoan.selectBy(startDate=start)
         
-        prestamos = map(separacion, loans)
-        prestamos.extend(map(separacion, payedLoans))
-        
-        papeleo = sum(p.papeleo for p in prestamos)
-        intereses = sum(p.intereses for p in prestamos)
-        retencion = sum(p.retencion for p in prestamos)
-        aportaciones = sum(p.aportaciones for p in prestamos)
-        reintegros = sum(p.reintegros for p in prestamos)
-        neto = sum(p.neto for p in prestamos)
-        monto = sum(p.monto for p in prestamos)
-        
-        return dict(loans=prestamos, start=start, end=start, monto=monto,
-                    neto=neto, papeleo=papeleo, aportaciones=aportaciones,
-                    intereses=intereses, retencion=retencion, reintegros=reintegros)
+        return deduccionesInterno(loans, payedLoans, start, start)
     
     @expose()
     def reconstruirSaldo(self):
@@ -778,4 +792,3 @@ class Loan(controllers.Controller):
         
         flash(u'Operacion Completada Exitósamente!')
         raise redirect('/loan')
-
