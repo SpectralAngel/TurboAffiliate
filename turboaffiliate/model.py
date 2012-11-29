@@ -179,6 +179,7 @@ class Municipio(SQLObject):
     departamento = ForeignKey('Departamento')
     nombre = UnicodeCol(length=50, default=None)
     afiliados = MultipleJoin('Affiliate')
+    viaticos = MultipleJoin('Viatico')
 
 class Casa(SQLObject):
     
@@ -1522,6 +1523,7 @@ class Asamblea(SQLObject):
     nombre = UnicodeCol(length=100)
     departamento = ForeignKey('Departamento')
     habilitado = BoolCol(default=False)
+    fecha = DateCol(default=date.today)
 
 class Banco(SQLObject):
     
@@ -1542,6 +1544,10 @@ class Viatico(SQLObject):
     asamblea = ForeignKey('Asamblea')
     municipio = ForeignKey('Municipio')
     monto = CurrencyCol()
+    transporte = CurrencyCol()
+    previo = CurrencyCol()
+    posterior = CurrencyCol()
+    inscripciones = MultipleJoin('Inscripcion')
 
 class Inscripcion(SQLObject):
     
@@ -1561,6 +1567,20 @@ class Inscripcion(SQLObject):
         """Indica si la inscripcion puede ser enviada de nuevo"""
         
         return self.asamblea.habilitado
+    
+    def monto(self):
+        
+        """Obtiene el monto a pagar por concepto de viaticos"""
+        
+        if self.asamblea.fecha == None or self.ingresado == None:
+            
+            return self.viatico.monto
+        
+        if self.ingresado.date() < self.asamblea.fecha:
+            
+            return self.viatico.transporte + self.viatico.previo
+        
+        return self.viatico.transporte + self.viatico.posterior
 
 class Deposito(SQLObject):
     

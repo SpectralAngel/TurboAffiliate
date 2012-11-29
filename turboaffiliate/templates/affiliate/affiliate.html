@@ -249,7 +249,7 @@
               <tr py:for="inscripcion in affiliate.inscripciones">
                 <td>${inscripcion.asamblea.nombre}</td>
                 <td>${inscripcion.viatico.municipio.nombre}</td>
-                <td>${inscripcion.viatico.monto}</td>
+                <td>${inscripcion.monto()}</td>
                 <td py:if="inscripcion.enviado">S&iacute;</td>
                 <td py:if="not inscripcion.enviado">No</td>
                 <td class="noprint"><a py:if="inscripcion.reenviable()" href="${tg.url('/asamblea/inscripcion/reenviar/?inscripcion={0}'.format(inscripcion.id))}">Reenviar</a></td>

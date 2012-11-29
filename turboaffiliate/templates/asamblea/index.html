@@ -6,6 +6,7 @@
   <title>TurboAffiliate &bull; Asambleas</title>
 </head>
 <body>
+    <div>
   <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/agregar')}">
     <fieldset>
       <legend>Registrar Asamblea</legend>
@@ -134,6 +135,31 @@
       </ol>
     </fieldset>
   </form>
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('inscripcion/pendientesDepartamento')}">
+    <fieldset>
+      <legend>Mostrar Inscripciones Pendientes por Departamento</legend>
+      <ol>
+        <li>
+          <label>Asamblea:</label>
+          <select name="asamblea">
+            <option value="${a.id}" py:for="a in asambleas">
+              ${a.id} - ${a.nombre}
+            </option>
+          </select>
+        </li>
+        <li>
+          <label for="departamento">Departamento:</label>
+          <select name="departamento">
+            <option py:for="d in departamentos" value="${d.id}">
+              ${d.nombre}
+            </option>
+          </select>
+        </li>
+        <li><input type="submit" value="Mostrar" /></li>
+      </ol>
+    </fieldset>
+  </form>
+  </div>
   <div id="lateral" class="noprint">
     <a class="button button-size" href="${tg.url('/asamblea/viatico')}">Control de Vi&aacute;ticos</a>
   </div>

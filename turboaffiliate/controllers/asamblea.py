@@ -73,10 +73,16 @@ class Viatico(controllers.Controller):
     @expose()
     @validate(validators=dict(asamblea=validators.Int(),
                               monto=validators.UnicodeString(),
+                              transporte=validators.UnicodeString(),
+                              previo=validators.UnicodeString(),
+                              posterior=validators.UnicodeString(),
                               municipio=validators.Int()))
     def agregar(self, asamblea, municipio, **kw):
         
         kw['monto'] = Decimal(kw['monto'])
+        kw['transporte'] = Decimal(kw['transporte'])
+        kw['previo'] = Decimal(kw['previo'])
+        kw['posterior'] = Decimal(kw['posterior'])
         
         kw['asamblea'] = model.Asamblea.get(asamblea)
         kw['municipio'] = model.Municipio.get(municipio)
@@ -146,6 +152,44 @@ class Inscripcion(controllers.Controller):
         inscripciones = model.Inscripcion.selectBy(asamblea=asamblea, enviado=False)
         
         return dict(asamblea=asamblea, inscripciones=inscripciones)
+    
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.asamblea.pendientes')
+    @validate(validators=dict(asamblea=validators.Int(),
+                              departamento=validators.Int()))
+    def pendientesDepartamento(self, asamblea, departamento):
+        
+        """Muestra las inscripciones que estan pendientes de pago"""
+        
+        asamblea = model.Asamblea.get(asamblea)
+        departamento = model.Departamento.get(departamento)
+        viaticos = model.Municipio.selectBy(departamento=departamento).throughTo.viaticos
+        inscripciones = viaticos.throughTo.inscripciones.filter(AND(
+                                    model.Inscripcion.q.asamblea==asamblea,
+                                    model.Inscripcion.q.enviado==False))
+        return dict(asamblea=asamblea, inscripciones=inscripciones)
+    
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose()
+    @validate(validators=dict(asamblea=validators.Int(),
+                              municipio=validators.Int()))
+    def enviarDepartamento(self, asamblea, departamento):
+        
+        asamblea = model.Asamblea.get(asamblea)
+        departamento = model.Departamento.get(departamento)
+        viaticos = model.Municipio.selectBy(departamento=departamento).throughTo.viaticos
+        inscripciones = viaticos.throughTo.inscripciones.filter(AND(
+                                    model.Inscripcion.q.asamblea==asamblea,
+                                    model.Inscripcion.q.enviado==False))
+        
+        for inscripcion in inscripciones:
+            
+            inscripcion.enviado = True
+        
+        flash(u'Marcadas como enviadas todas las Inscripciones de {0} en {1}'.format(asamblea.nombre, departamento.nombre))
+        
+        raise redirect('/asamblea/{0}'.format(asamblea.id))
 
 class Asamblea(controllers.Controller):
     
@@ -509,28 +553,6 @@ class Asamblea(controllers.Controller):
                                           enviado=enviado)
         
         return dict(asamblea=asamblea, municipio=municipio, viaticos=viaticos)
-    
-    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
-                                   identity.not_anonymous()))
-    @expose()
-    @validate(validators=dict(asamblea=validators.Int(),
-                              municipio=validators.Int()))
-    def enviarMunicipio(self, asamblea, municipio):
-        
-        asamblea = model.Asamblea.get(asamblea)
-        municipio = model.Municipio.get(municipio)
-        update = Update('inscripcion',
-                        values={'enviado':True},
-                        where='asamblea_id={0} and municipio_id={1}'.format(
-                                                    asamblea.id,
-                                                    municipio.id)
-                        )
-        query = model.__connection__.sqlrepr(update)
-        model.__connection__.query(query)
-        
-        flash(u'Marcadas como enviadas todas las Inscripciones de {0} en {1}'.format(asamblea.nombre, municipio.nombre))
-        
-        raise redirect('/asamblea/{0}'.format(asamblea.id))
     
     @identity.require(identity.All(identity.in_any_group('admin'),
                                    identity.not_anonymous()))

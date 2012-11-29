@@ -14,6 +14,9 @@
         <th>Departamento</th>
         <th>Municipio</th>
         <th>Monto</th>
+        <th>Transporte</th>
+        <th>Previo</th>
+        <th>Posterior</th>
       </tr>
     </thead>
     <tbody>
@@ -21,6 +24,9 @@
         <td>${viatico.municipio.departamento.nombre}</td>
         <td>${viatico.municipio.nombre}</td>
         <td>${locale.currency(viatico.monto, True, True)}</td>
+        <td>${locale.currency(viatico.transporte, True, True)}</td>
+        <td>${locale.currency(viatico.previo, True, True)}</td>
+        <td>${locale.currency(viatico.posterior, True, True)}</td>
       </tr>
     </tbody>
   </table>
