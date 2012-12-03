@@ -14,7 +14,7 @@
 <body>
   <form class="ui-widget-content ui-corner-all" action="${tg.url('agregar')}">
     <fieldset>
-      <legend>Registrar Viaticos a un Departamento</legend>
+      <legend>Registrar Viaticos a un Municipio</legend>
       <ol>
         <li>
           <label>Asamblea:</label>
@@ -33,6 +33,43 @@
         <li>
           <label for="municipio">Municipio:</label>
           <select name="municipio" class="municipio" id="ins-municipios">
+          </select>
+        </li>
+        <li>
+          <label for="monto">Monto</label>
+          <input name="monto" />
+        </li>
+        <li>
+          <label for="transporte">Transporte</label>
+          <input name="transporte" />
+        </li>
+        <li>
+          <label for="previo">D&iacute;a Previo</label>
+          <input name="previo" />
+        </li>
+        <li>
+          <label for="posterior">Posterior</label>
+          <input name="posterior" />
+        </li>
+        <li><input type="submit" value="Agregar" /></li>
+      </ol>
+    </fieldset>
+  </form><form class="ui-widget-content ui-corner-all" action="${tg.url('agregarDepto')}">
+    <fieldset>
+      <legend>Registrar Viaticos a un Departamento</legend>
+      <ol>
+        <li>
+          <label>Asamblea:</label>
+          <select name="asamblea">
+            <option value="${a.id}" py:for="a in asambleas">
+              ${a.id} - ${a.nombre}
+            </option>
+          </select>
+        </li>
+        <li>
+          <label>Departamento:</label>
+          <select id="depto-inscripcion" name="departamento">
+            <option value="${d.id}" py:for="d in departamentos">${d.nombre}</option>
           </select>
         </li>
         <li>

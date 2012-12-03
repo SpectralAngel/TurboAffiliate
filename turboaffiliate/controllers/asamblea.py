@@ -96,6 +96,33 @@ class Viatico(controllers.Controller):
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose()
+    @validate(validators=dict(asamblea=validators.Int(),
+                              monto=validators.UnicodeString(),
+                              transporte=validators.UnicodeString(),
+                              previo=validators.UnicodeString(),
+                              posterior=validators.UnicodeString(),
+                              departamento=validators.Int()))
+    def agregarDepto(self, asamblea, departamento, **kw):
+        
+        kw['monto'] = Decimal(kw['monto'])
+        kw['transporte'] = Decimal(kw['transporte'])
+        kw['previo'] = Decimal(kw['previo'])
+        kw['posterior'] = Decimal(kw['posterior'])
+        
+        kw['asamblea'] = model.Asamblea.get(asamblea)
+        departamento = model.Departamento.get(departamento)
+        for municipio in departamento.municipios:
+            kw['municipio'] = municipio
+            model.Viatico(**kw)
+        
+        flash(u'Se agrego el viatico al Departamento de {0}'.format(
+                                                    departamento.nombre))
+        
+        raise redirect('/asamblea/viatico')
+    
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose()
     @validate(validators=dict(asamblea=validators.Int()))
     def eliminar(self, viatico):
         
