@@ -353,7 +353,7 @@ class Asamblea(controllers.Controller):
     @validate(validators=dict(afiliado=validators.Int(),
                               banco=validators.Int(),
                               departamento=validators.Int(),
-                              cuenta=validators.Int(),
+                              cuenta=validators.UnicodeString(),
                               asamblea=validators.Int(),
                               municipio=validators.Int()))
     def corregir(self, afiliado, asamblea, departamento, banco, cuenta,
