@@ -581,7 +581,8 @@ class Asamblea(controllers.Controller):
         
         return dict(asamblea=asamblea, municipio=municipio, viaticos=viaticos)
     
-    @expose()
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.asamblea.pendientes')
     @validate(validators=dict(asamblea=validators.Int(),
                               departamento=validators.Int()))
     def asistentesDepto(self, asamblea, departamento):
