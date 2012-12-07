@@ -1524,6 +1524,7 @@ class Asamblea(SQLObject):
     departamento = ForeignKey('Departamento')
     habilitado = BoolCol(default=False)
     fecha = DateCol(default=date.today)
+    inscripciones = MultipleJoin('Inscripcion')
 
 class Banco(SQLObject):
     
@@ -1576,7 +1577,7 @@ class Inscripcion(SQLObject):
             
             return self.viatico.monto
         
-        if self.ingresado < self.asamblea.fecha:
+        if self.ingresado.date() < self.asamblea.fecha:
             
             return self.viatico.transporte + self.viatico.previo
         

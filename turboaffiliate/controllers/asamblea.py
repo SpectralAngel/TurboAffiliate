@@ -581,6 +581,17 @@ class Asamblea(controllers.Controller):
         
         return dict(asamblea=asamblea, municipio=municipio, viaticos=viaticos)
     
+    @expose()
+    @validate(validators=dict(asamblea=validators.Int(),
+                              departamento=validators.Int()))
+    def asistentesDepto(self, asamblea, departamento):
+        
+        asamblea = model.Asamblea.get(asamblea)
+        departamento = model.Departamento.get(departamento)
+        viaticos = model.Municipio.selectBy(departamento=departamento).throughTo.viaticos
+        inscripciones = viaticos.throughTo.inscripciones.filter(model.Inscripcion.q.asamblea==asamblea)
+        return dict(asamblea=asamblea, inscripciones=inscripciones)
+    
     @identity.require(identity.All(identity.in_any_group('admin'),
                                    identity.not_anonymous()))
     @expose()
