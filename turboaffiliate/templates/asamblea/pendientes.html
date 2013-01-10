@@ -29,8 +29,8 @@ border: 1px solid black;
           </tr>
       </thead>
       <tbody>
-          <tr style="border: 1px solid;" py:for="inscripcion in inscripciones">
-              <td height="1.1em">${inscripcion.afiliado.id}</td>
+          <tr height="1.1em" py:for="inscripcion in inscripciones">
+              <td>${inscripcion.afiliado.id}</td>
               <td>${inscripcion.afiliado.firstName} ${inscripcion.afiliado.lastName}</td>
               <td>${inscripcion.viatico.municipio.nombre}</td>
               <td>${inscripcion.viatico.municipio.departamento.nombre}</td>
