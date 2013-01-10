@@ -14,6 +14,7 @@
   </style>
 </head>
 <body>
+<div class="page">
   <h1 style="text-align: center">Colegio de Profesores de Educaci&oacute;n Media de Honduras</h1>
   <h2 style="text-align: center">C&oacute;mite Administrativo Fondo
   AutoSeguro</h2>
@@ -64,6 +65,7 @@
       <span py:if="not loan.aproval is None">${loan.aproval.display_name}</span>
       Impreso por: ${tg.identity.user.display_name}
   </p>
+  </div>
   <div class="page">
     <p align="left">Tegucigalpa M. D. C., ${loan.startDate.strftime('%d de %B de %Y')}</p>
     <h1>Autorizaci&oacute;n</h1>
