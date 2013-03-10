@@ -9,15 +9,20 @@
 {
 border-collapse:collapse;
 }
-table,th, td
+table,th, td, tr
 {
 border: 1px solid black;
+border-bottom: 1px solid black;
+
 }
+tr { height:30px; }
+.numero { text-align: right; padding-right:10px; }
+h1 { text-align: center; }
   </style>
 </head>
 <body>
   <h1>Inscripciones Pendientes de Pago de Asamblea ${asamblea.nombre}</h1>
-  <table class="ui-corner-all full-size striped ui-widget-content">
+  <table class="ui-corner-all full-size ui-widget-content">
       <thead>
           <tr>
               <th>Afiliaci&oacute;n</th>
@@ -29,8 +34,8 @@ border: 1px solid black;
           </tr>
       </thead>
       <tbody>
-          <tr height="1.1em" py:for="inscripcion in inscripciones">
-              <td>${inscripcion.afiliado.id}</td>
+          <tr height="2em" py:for="inscripcion in inscripciones">
+              <td class="numero">${inscripcion.afiliado.id}</td>
               <td>${inscripcion.afiliado.firstName} ${inscripcion.afiliado.lastName}</td>
               <td>${inscripcion.viatico.municipio.nombre}</td>
               <td>${inscripcion.viatico.municipio.departamento.nombre}</td>

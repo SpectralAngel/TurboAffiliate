@@ -1577,7 +1577,7 @@ class Inscripcion(SQLObject):
             
             return self.viatico.monto
         
-        if self.ingresado.date() < self.asamblea.fecha:
+        if self.ingresado < self.asamblea.fecha:
             
             return self.viatico.transporte + self.viatico.previo
         

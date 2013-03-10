@@ -66,16 +66,18 @@
       Impreso por: ${tg.identity.user.display_name}
   </p>
   </div>
-  <div class="page">
-    <p align="left">Tegucigalpa M. D. C., ${loan.startDate.strftime('%d de %B de %Y')}</p>
-    <h1>Autorizaci&oacute;n</h1>
+  <div class="page" style="margin: 0 10%; padding-top: 30%">
+    <p align="right">Tegucigalpa M. D. C., ${loan.startDate.strftime('%d de %B de %Y')}</p>
+    <h1 style="text-align: center;">Autorizaci&oacute;n</h1>
     <p>Yo, ${loan.affiliate.firstName} ${loan.affiliate.lastName}, con
     n&uacute;mero de identidad ${loan.affiliate.cardID}, por este medio,
     autorizo al Colegio de Profesores de Educación Media de Honduras (COPEMH)
+    y a Banco ${loan.affiliate.get_banco().nombre}
     a efectuar la deducci&oacute;n de la cuota de pr&eacute;stamo directamente
     de mi cuenta de banco, cuya información detallo a continuaci&oacute;n:</p>
     <ul>
-        <li><strong>Banco:</strong> ${loan.affiliate.banco}</li>
+        <li><strong>Banco:</strong> ${loan.affiliate.get_banco().nombre}</li>
+	<li><strong>C&oacute;digo ACH</strong> ${loan.affiliate.banco}</li>
         <li><strong>Cuenta:</strong> ${loan.affiliate.cuenta}</li>
     </ul>
     <p>&nbsp;</p>
