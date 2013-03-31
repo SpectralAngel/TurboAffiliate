@@ -148,6 +148,7 @@ class Affiliate(controllers.Controller):
             payment=validators.UnicodeString(),
             school=validators.UnicodeString(),
             inprema=validators.UnicodeString(),
+            email=validators.UnicodeString(),
             municipio=validators.Int(),
             departamento=validators.Int(),
             cotizacion=validators.Int(),

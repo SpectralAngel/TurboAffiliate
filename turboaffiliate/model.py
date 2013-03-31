@@ -286,6 +286,7 @@ class Affiliate(SQLObject):
     """Número de cuenta bancaria"""
     banco = IntCol(default=None)
     """Código del Banco"""
+    email = UnicodeCol(default=None)
     sobrevivencias = MultipleJoin("Sobrevivencia", joinColumn="afiliado_id")
     devoluciones = MultipleJoin("Devolucion", joinColumn="afiliado_id")
     funebres = MultipleJoin("Funebre", joinColumn="afiliado_id")
