@@ -3,7 +3,7 @@
 # affiliate.py
 # This file is part of TurboAffiliate
 #
-# Copyright (c) 2007 - 2011 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2007 - 2013 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -695,3 +695,21 @@ class Affiliate(controllers.Controller):
         afiliados = model.Affiliate.selectBy(cotizacion=cotizacion, active=True)
         
         return dict(afiliados=afiliados)
+    
+    @error_handler(error)
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int()))
+    def autorizar(self, affiliate):
+        
+        """Reactiva un afiliado para que pueda continuar participando
+        
+        :param affiliate: El número de afiliación
+        """
+        
+        affiliate = model.Affiliate.get(affiliate)
+        affiliate.autorizacion = True
+        log(identity.current.user,
+            u"Se registro la autorización del afiliado {0}".format(affiliate.id))
+        
+        raise redirect('/affiliate/')

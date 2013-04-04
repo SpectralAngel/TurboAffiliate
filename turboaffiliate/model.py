@@ -3,7 +3,7 @@
 # model.py
 # This file is part of TurboAffiliate
 #
-# Copyright (c) 2007 - 2012 Carlos Flores <cafg10@gmail.com>
+# Copyright (c) 2007 - 2013 Carlos Flores <cafg10@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ from turbogears.database import PackageHub
 from sqlobject import (SQLObject, UnicodeCol, StringCol, DateCol, CurrencyCol,
                        MultipleJoin, ForeignKey, IntCol, DecimalCol, BoolCol,
                        DatabaseIndex, DateTimeCol, RelatedJoin,
-                       SQLObjectNotFound, BigIntCol)
+                       SQLObjectNotFound)
 from decimal import Decimal
 from datetime import date, datetime
 import wording
@@ -287,6 +287,7 @@ class Affiliate(SQLObject):
     banco = IntCol(default=None)
     """Código del Banco"""
     email = UnicodeCol(default=None)
+    autorizacion = BoolCol(default=False, notNone=True)
     sobrevivencias = MultipleJoin("Sobrevivencia", joinColumn="afiliado_id")
     devoluciones = MultipleJoin("Devolucion", joinColumn="afiliado_id")
     funebres = MultipleJoin("Funebre", joinColumn="afiliado_id")

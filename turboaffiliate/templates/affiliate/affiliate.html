@@ -590,36 +590,40 @@
             </ul>
           </div>
         </form>
-        <form class="pagar" id="pagoPrestamo" action="${tg.url('/loan/pay/agregar')}" method="post">
+        <form class="pagar" id="pagoPrestamo" action="${tg.url('/loan/pay/agregarVarios')}" method="post">>
           <div>
             <input type="hidden" name="loan" id="loan" />
             <input type="hidden" name="redir" value="${'/affiliate/{0}'.format(affiliate.id)}" />
             <ul>
-              <li>
-                <label for="amount">Monto:</label>
-                <input name="amount" id="amount" />
-              </li>
-              <li>
-                <label for="day">Fecha:</label>
-                <input name="day" />
-              </li>
-              <li>
-                <label for="receipt">Recibo:</label>
-                <input name="receipt" />
-              </li>
-              <li>
-                <label for="description">Descripci&oacute;</label>
-                <input name="description" />
-              </li>
-              <li>
-                <label for="free">Libre de Intereses:</label>
-                <input name="free" type="checkbox" />
-              </li>
-              <li>
-                <label for="deposito">Dep&oacute;sito Bancario:</label>
-                <input name="deposito" type="checkbox" />
-              </li>
-            </ul>
+	        <li>
+	          <label for="amount">Monto:</label>
+	          <input name="amount" />
+	        </li>
+	        <li>
+	          <label for="day">Fecha:</label>
+	          <input name="day" class="datepicker" />
+	        </li>
+	        <li>
+	          <label for="receipt">Recibo:</label>
+	          <input name="receipt" />
+	        </li>
+	        <li>
+	          <label for="description">Descripci&oacute;n</label>
+	          <input name="description" />
+	        </li>
+	        <li>
+	          <label for="free">Libre de Intereses:</label>
+	          <input name="free" type="checkbox" />
+	        </li>
+	        <li>
+	          <label for="deposito">Dep&oacute;sito Bancario:</label>
+	          <input name="deposito" type="checkbox" />
+	        </li>
+	        <li>
+	          <label for="numero">N&uacute;mero de Pagos:</label>
+	          <input name="numero" />
+	        </li>
+	      </ul>
           </div>
         </form>
         <form id="pagarAportaciones" action="${tg.url('/affiliate/cuota/pagarVarias')}" method="post">
