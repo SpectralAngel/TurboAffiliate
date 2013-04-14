@@ -294,6 +294,7 @@ class Affiliate(SQLObject):
     seguros = MultipleJoin("Seguro", joinColumn="afiliado_id")
     inscripciones = MultipleJoin("Inscripcion", joinColumn="afiliado_id")
     depositos = MultipleJoin("Deposito", joinColumn="afiliado_id")
+    deduccionesBancarias = MultipleJoin("DeduccionBancaria", joinColumn="afiliado_id")
     
     def tiempo(self):
         
@@ -1137,6 +1138,32 @@ class Extra(SQLObject):
         
         Deduced(**kw)
     
+    def deduccion_bancaria(self, dia=date.today()):
+        
+        self.cancelar(dia)
+        self.formaPago = FormaPago.get(1)
+        
+        kw = dict()
+        kw['amount'] = self.monto
+        kw['afiliado'] = self.affiliate
+        kw['banco'] = self.affiliate.get_banco()
+        kw['account'] = self.cuenta
+        kw['month'] = dia.month
+        kw['year'] = dia.year
+        kw['day'] = self.dia
+        
+        if self.retrasada:
+            
+            cuota = self.affiliate.get_delayed()
+            month, year = (None, None)
+            if not cuota is None:
+                month = cuota.delayed()
+                year = cuota.year
+                cuota.pay_month(month)
+            kw['detail'] = "Cuota Retrasada {0} de {1}".format(month, year)
+        
+        DeduccionBancaria(**kw)
+    
     def manual(self):
         
         self.act()
@@ -1444,6 +1471,26 @@ class Reintegro(SQLObject):
         
         Deduced(**kw)
     
+    def deduccion_bancaria(self, dia=date.today()):
+        
+        self.cancelar(dia)
+        self.formaPago = FormaPago.get(1)
+        
+        kw = dict()
+        kw['amount'] = self.monto
+        kw['afiliado'] = self.affiliate
+        kw['banco'] = self.affiliate.get_banco()
+        kw['account'] = self.cuenta
+        kw['month'] = dia.month
+        kw['year'] = dia.year
+        kw['day'] = self.dia
+        
+        kw['detail'] = "Reintegro {0} por {0}".format(
+                                            self.emision.strftime('%d/%m/%Y'),
+                                            self.motivo)
+        
+        DeduccionBancaria(**kw)
+    
     def revertir(self):
         
         """Revierte el pago del :class:`Reintegro`"""
@@ -1540,7 +1587,6 @@ class Banco(SQLObject):
     generator = UnicodeCol(length=100, default=None)
     cuenta = UnicodeCol(length=100, default=None)
     codigo = UnicodeCol(length=100, default=None)
-
     depositos = MultipleJoin("Deposito")
     depositosAnonimos = MultipleJoin("DepositoAnonimo")
 
@@ -1618,3 +1664,27 @@ class DepositoAnonimo(SQLObject):
     concepto = UnicodeCol(length=50)
     fecha = DateCol(default=date.today)
     monto = CurrencyCol()
+
+class DeduccionBancaria(SQLObject):
+    
+    afiliado = ForeignKey("Affiliate")
+    banco = ForeignKey("Banco")
+    account = ForeignKey("Account")
+    amount = CurrencyCol()
+    detail = UnicodeCol(default="")
+    day = DateCol(default=date.today)
+    month = IntCol(default=date.today().month)
+    year = IntCol(default=date.today().year)
+
+class ReporteBancario(SQLObject):
+    
+    banco = ForeignKey("Banco")
+    day = DateCol(default=date.today)
+    month = IntCol(default=date.today().month)
+    year = IntCol(default=date.today().year)
+
+class DetalleBancario(SQLObject):
+    
+    reporte = ForeignKey("ReporteBancario")
+    account = ForeignKey("Account")
+    amount = CurrencyCol()
