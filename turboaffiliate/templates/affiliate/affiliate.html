@@ -493,7 +493,10 @@
               </li>
               <li>
                   <label for="banco">Banco:</label>
-                  <input name="banco" value="${affiliate.banco}" />
+                  <select name="banco">
+                    <option py:for="b in bancos" py:if="b.id == affiliate.banco" selected="selected" value="${b.id}">${b.nombre}</option>
+                    <option py:for="b in bancos" value="${b.id}">${b.nombre}</option>
+                  </select>
               </li>
             </ul>
           </div>

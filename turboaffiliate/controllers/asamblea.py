@@ -274,7 +274,6 @@ class Asamblea(controllers.Controller):
             banco = model.Banco.get(afiliado.banco)
         
         return deshabilitado, msg, afiliado, banco, asamblea
-
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
@@ -519,7 +518,7 @@ class Asamblea(controllers.Controller):
     @expose(template='turboaffiliate.templates.asamblea.ach')
     @validate(validators=dict(banco=validators.Int(),
                               asamblea=validators.Int()))
-    def achBanco(self, asamblea):
+    def achBanco(self, asamblea, banco):
         
         clause1 = model.Inscripcion.q.asamblea == asamblea
         clause2 = model.Inscripcion.q.afiliado == model.Affiliate.q.id

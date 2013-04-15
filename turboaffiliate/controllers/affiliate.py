@@ -78,7 +78,8 @@ class Affiliate(controllers.Controller):
         """
         
         return dict(affiliate=model.Affiliate.get(affiliate),
-                    accounts=model.Account.select())
+                    accounts=model.Account.select(),
+                    bancos=model.Banco.select())
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())

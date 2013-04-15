@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../../master.html" />
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Detalle de Deducciones ${deduced.affiliate.id} - ${deduced.affiliate.firstName} ${deduced.affiliate.lastName}</title>
+</head>
+<body>
+  <form class="ui=widget-content ui-corner-all" action="${tg.url('/affiliate/deduced/convert')}">
+    <fieldset>
+      <legend>Cambiar cuenta de una deducci&oacute;n</legend>
+      <ul>
+        <li>
+          <label for="account">Cuenta:</label>
+          <select name="account">
+            <option py:for="account in accounts" value="${account.id}">${account.id} - ${account.name}</option>
+          </select>
+        </li>
+        <li><input type="submit" value="Cambiar Deducci&oacute;n" /></li>
+      </ul>
+      <input type="hidden" name="deduced" value="${deduced.id}" />
+    </fieldset>
+  </form>
+</body>
+</html>

@@ -46,6 +46,23 @@ class Deduced(controllers.Controller):
 		deducciones = model.Deduced.selectBy(affiliate=afiliado, month=mes, year=anio)
 		return dict(affiliate=afiliado, deducciones=deducciones)
 	
+	@expose()
+	@validate(validators=dict(deduced=validators.Int(), account=validators.Int()))
+	def convert(self, deduced, account):
+		
+		deduced = model.Deduced.get(deduced)
+		deduced.account = model.Account.get(account)
+		
+		raise redirect("/affiliate/deduced/{0}".format(deduced.affiliate.id))
+	
+	@expose(template='turboaffiliate.templates.affiliate.deduced.cambiar')
+	@validate(validators=dict(deduced=validators.Int()))
+	def cambiar(self, deduced):
+		
+		deduced = model.Deduced.get(deduced)
+		
+		return dict(deduced=deduced, accounts=model.Account.select())
+	
 	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.deduced.mostrar')
 	@validate(validators=dict(afiliado=validators.Int(), anio=validators.Int()))
