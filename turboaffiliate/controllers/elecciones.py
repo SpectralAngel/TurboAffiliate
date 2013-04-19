@@ -38,7 +38,7 @@ def asignar(urnas, afiliado):
 
 def filtrar_urnas(afiliados):
     
-    urnas = defaultdict()
+    urnas = defaultdict(int)
     urnas['Sin Instituto'] = 0
     for afiliado in afiliados:
         urnas[afiliado.school] += 1
@@ -90,19 +90,23 @@ class Elecciones(controllers.Controller):
         
         return dict(departamento=departamento, schools=schools)
     
+    def urnas_departamentales_interno(self, departamento):
+        departamento = model.Departamento.get(departamento)
+    # cambiar por seleccion de cotizacion
+        cotizacion = model.Cotizacion.get(1)
+        afiliados = model.Affiliate.selectBy(departamento=departamento, 
+            cotizacion=cotizacion, 
+            active=True)
+        urnas = filtrar_urnas(afiliados)
+        return urnas, afiliados, departamento
+    
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.urnas')
     @validate(validators=dict(departamento=validators.Int()))
+
     def urnasDepartamentales(self, departamento):
         
-        departamento = model.Departamento.get(departamento)
-        # cambiar por seleccion de cotizacion
-        cotizacion = model.Cotizacion.get(1)
-        afiliados = model.Affiliate.selectBy(departamento=departamento,
-                                             cotizacion=cotizacion,
-                                             active=True)
-        
-        urnas = filtrar_urnas(afiliados)
+        urnas, afiliados, departamento = self.urnas_departamentales_interno(departamento)
         
         return dict(urnas=urnas, cantidad=afiliados.count(),
                     departamento=departamento)
@@ -112,7 +116,7 @@ class Elecciones(controllers.Controller):
     @validate(validators=dict(departamento=validators.Int()))
     def urnasDepartamentalesCinco(self, departamento):
         
-        urnas = self.urnasDepartamentales(departamento)['urnas']
+        urnas, afiliados, departamento = self.urnas_departamentales_interno(departamento)
        
         for instituto in urnas.keys():
            
@@ -162,7 +166,7 @@ class Elecciones(controllers.Controller):
         afiliados = model.Affiliate.selectBy(departamento=departamento,
                                              cotizacion=cotizacion,
                                              active=True)
-        urnas = dict()
+        urnas = defaultdict(lambda : defaultdict(list))
         
         map(lambda m: municipios(urnas, m), departamento.municipios)
         
