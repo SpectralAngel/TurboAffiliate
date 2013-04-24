@@ -70,6 +70,30 @@
         </ul>
       </fieldset>
     </form>
+    <form class="ui-widget-content ui-corner-all" action="${tg.url('autorizarIdentidad')}">
+      <fieldset>
+        <legend>Ingresar Autorizaci&oacute;n de Afiliado</legend>
+        <ul>
+          <li>
+            <label>Identidad:</label>
+            <input name="cardID" />
+          </li>
+          <li><input type="submit" value="Buscar" /></li>
+        </ul>
+      </fieldset>
+    </form>
+    <form class="ui-widget-content ui-corner-all" action="${tg.url('cobro')}">
+      <fieldset>
+        <legend>Buscar Afiliado Por N&uacute;mero de Cobro</legend>
+        <ul>
+          <li>
+            <label>Cobro INPREMA:</label>
+            <input name="cobro" />
+          </li>
+          <li><input type="submit" value="Buscar" /></li>
+        </ul>
+      </fieldset>
+    </form>
     <form class="ui-widget-content ui-corner-all" action="${tg.url('byRange')}">
       <fieldset>
         <legend>Buscar Afiliados por ID Departamental</legend>

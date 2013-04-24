@@ -713,4 +713,31 @@ class Affiliate(controllers.Controller):
         log(identity.current.user,
             u"Se registro la autorización del afiliado {0}".format(affiliate.id))
         
+        flash(u'Se ha registrado la autorización del afiliado {0}'.format(affiliate.id))
+        
         raise redirect('/affiliate/')
+    
+    @error_handler(error)
+    @identity.require(identity.not_anonymous())
+    @expose()
+    @validate(validators=dict(cardID=validators.String()))
+    def autorizarIdentidad(self, cardID):
+        
+        """Reactiva un afiliado para que pueda continuar participando
+        
+        :param affiliate: El número de afiliación
+        """
+        
+        try:
+            affiliate = model.Affiliate.selectBy(cardID=cardID).limit(1).getOne()
+            affiliate.autorizacion = True
+            log(identity.current.user,
+                u"Se registro la autorización del afiliado {0}".format(affiliate.id))
+            
+            flash(u'Se ha registrado la autorización del afiliado {0}'.format(affiliate.id))
+        
+            raise redirect('/affiliate/')
+        
+        except SQLObjectNotFound:
+            flash(u'No se encontró la identidad {0}'.format(cardID))
+            raise redirect('/affiliate')
