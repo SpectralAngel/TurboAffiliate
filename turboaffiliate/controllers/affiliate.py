@@ -96,6 +96,19 @@ class Affiliate(controllers.Controller):
     
     @error_handler(error)
     @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.autorizacion')
+    @validate(validators=dict(affiliate=validators.Int()))
+    def autorizacion(self, affiliate):
+        
+        """Permite mostrar un afiliado mediante su numero de afiliación
+        
+        :param affiliate: Número de afiliación
+        """
+        
+        return dict(affiliate=model.Affiliate.get(affiliate), day=date.today())
+    
+    @error_handler(error)
+    @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(cardID=validators.String()))
     def card(self, cardID):
@@ -735,7 +748,7 @@ class Affiliate(controllers.Controller):
                 u"Se registro la autorización del afiliado {0}".format(affiliate.id))
             
             flash(u'Se ha registrado la autorización del afiliado {0}'.format(affiliate.id))
-        
+            
             raise redirect('/affiliate/')
         
         except SQLObjectNotFound:
