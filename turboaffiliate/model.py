@@ -1706,7 +1706,7 @@ class PagoBancarioBanhcafe(SQLObject):
     terminal = UnicodeCol(length=10)
     aplicado = BoolCol(default=False)
 
-class ReversionBancariaBanhcafe():
+class ReversionBancariaBanhcafe(SQLObject):
     
     fecha = DateTimeCol(default=datetime.now)
     referencia = IntCol()
