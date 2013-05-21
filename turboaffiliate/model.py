@@ -1688,3 +1688,29 @@ class DetalleBancario(SQLObject):
     reporte = ForeignKey("ReporteBancario")
     account = ForeignKey("Account")
     amount = CurrencyCol()
+
+class CobroBancarioBanhcafe(SQLObject):
+    
+    identidad = UnicodeCol(length=13)
+    cantidad = CurrencyCol()
+    consumido = BoolCol(default=False)
+
+class PagoBancarioBanhcafe(SQLObject):
+    
+    identidad = UnicodeCol(length=13)
+    cantidad = CurrencyCol()
+    fecha = DateTimeCol(default=datetime.now)
+    referencia = IntCol()
+    agencia = IntCol()
+    cajero = UnicodeCol(length=10)
+    terminal = UnicodeCol(length=10)
+    aplicado = BoolCol(default=False)
+
+class ReversionBancariaBanhcafe():
+    
+    fecha = DateTimeCol(default=datetime.now)
+    referencia = IntCol()
+    agencia = IntCol()
+    cajero = UnicodeCol(length=10)
+    terminal = UnicodeCol(length=10)
+    cajero = UnicodeCol(length=10)
