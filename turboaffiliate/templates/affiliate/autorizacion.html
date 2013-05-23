@@ -20,9 +20,11 @@
         <style type="text/css">
             #huella {
                 width: 100px;
-                height: 100px;
-                border: 1px solid;
                 float: right;
+            }
+            #huella-interior {
+                border: 1px solid;
+                height: 100px;
             }
         </style>
     </head>
@@ -57,7 +59,7 @@
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <h2 align="center">${affiliate.firstName} ${affiliate.lastName}</h2>
-            <div id="huella">&nbsp;</div>
+            <div id="huella"><div>&nbsp;</div><span style="text-align: center;">Huella Digital</span></div>
             <p>Identidad: ${affiliate.cardID}</p>
             <p>Correo Electr&oacute;nico: ${affiliate.email}</p>
             <p>Tel&eacute;no: ${affiliate.phone}</p>
