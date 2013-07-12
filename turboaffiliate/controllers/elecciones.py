@@ -143,8 +143,7 @@ class Elecciones(controllers.Controller):
         afiliados = model.Affiliate.selectBy(departamento=departamento,
                                              cotizacion=cotizacion,
                                              active=True)
-        urnas = dict()
-        urnas[None] = dict()
+        urnas = defaultdict(lambda : defaultdict(list))
         
         map(lambda m: municipios(urnas, m), departamento.municipios)
         
