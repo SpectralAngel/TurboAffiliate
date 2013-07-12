@@ -315,12 +315,11 @@ class Affiliate(SQLObject):
         
         return Banco.get(self.banco)
     
-    def get_monthly(self):
+    def get_monthly(self, day=date.today()):
         
         """Obtiene el pago mensual que debe efectuar el afiliado"""
         
         extras = sum(e.amount for e in self.extras)
-        loans = Decimal(0)
         #loans = sum(l.get_payment() for l in self.loans)
         #reintegros = sum(r.monto for r in self.reintegros if not r.pagado)
         reintegros = Decimal(0)
@@ -329,20 +328,14 @@ class Affiliate(SQLObject):
                 break
             reintegros += reintegro.monto
         
-        # Cobrar solo el primer préstamo
-        for loan in self.loans:
-            
-            loans = loan.get_payment()
-            break
-        
-        return extras + loans + reintegros + self.get_cuota()
+        return extras + self.get_prestamo() + reintegros + self.get_cuota(day)
     
-    def get_cuota(self, hoy=date.today()):
+    def get_cuota(self, day=date.today()):
         
         """Obtiene la cuota de aportación que el :class:`Affiliate` debera pagar
         en el mes actual"""
         
-        obligations = Obligation.selectBy(month=hoy.month, year=hoy.year)
+        obligations = Obligation.selectBy(month=day.month, year=day.year)
         
         obligation = Decimal(0)
         obligation += sum(o.amount for o in obligations
@@ -352,6 +345,19 @@ class Affiliate(SQLObject):
                           if self.cotizacion.jubilados)
         
         return obligation
+    
+    def get_prestamo(self):
+        
+        loans = Decimal(0)
+        if self.autorizacion or self.cotizacion.jubilados:
+            
+            # Cobrar solo el primer préstamo
+            for loan in self.loans:
+                
+                loans = loan.get_payment()
+                break
+        
+        return loans
     
     def populate(self, year):
         
@@ -453,6 +459,24 @@ class Affiliate(SQLObject):
     def get_age(self):
         
         return (date.today() - self.birthday).days / 365
+    
+    def get_phone(self):
+        
+        if self.phone != None:
+            phone = self.phone.replace('-', '').replace('/', '')
+            if len(phone) > 11:
+                return phone[:11]
+            return phone
+        
+        return ""
+    
+    def get_email(self):
+        
+        if self.email != None:
+            
+            return self.email
+        
+        return ""
 
 class CuentaRetrasada(SQLObject):
     
@@ -1699,14 +1723,14 @@ class PagoBancarioBanhcafe(SQLObject):
     
     identidad = UnicodeCol(length=13)
     cantidad = CurrencyCol()
-    fecha = DateTimeCol(default=datetime.now)
+    aplicado = DateTimeCol(default=datetime.now)
     referencia = IntCol()
     agencia = IntCol()
     cajero = UnicodeCol(length=10)
-    terminal = UnicodeCol(length=10)
+    terminal = UnicodeCol(length=1)
     aplicado = BoolCol(default=False)
 
-class ReversionBancariaBanhcafe(SQLObject):
+class ReversionBancariaBanhcafe():
     
     fecha = DateTimeCol(default=datetime.now)
     referencia = IntCol()
