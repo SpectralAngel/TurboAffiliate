@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../../master.html" />
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Detalle de Deducciones Bancarias${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</title>
+</head>
+<body>
+  <h1>${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</h1>
+  <table class="striped flotante-izquierdo ui-widget-content ui-corner-all">
+    <caption>Todas las Deducciones Efectuadas</caption>
+    <thead>
+      <tr>
+        <th>Deducci&oacute;n</th>
+        <th>Banco</th>
+        <th>Cantidad</th>
+        <th>Detalle</th>
+        <th>Mes</th>
+        <th>A&ntilde;o</th>
+        <th class="no-print">Acciones</th>
+        <th class="no-print" py:if="tg.identity.user.has_permission('Deductor')">Eliminar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="deduced-${d.account.id}" py:for="d in affiliate.deduccionesBancarias">
+        <td>${d.account.name}</td>
+        <td>${d.banco.nombre}</td>
+        <td>${locale.currency(d.amount, True, True)}</td>
+        <td>${d.detail}</td>
+        <td>${d.month}</td>
+        <td>${d.year}</td>
+        <td class="no-print">
+            <a href="${tg.url('/affiliate/deduced/cambiar/{0}'.format(d.id))}">Cambiar Cuenta</a>
+        </td>
+        <td class="no-print" py:if="tg.identity.user.has_permission('Deductor')">
+            <a href="${tg.url('/affiliate/deduced/delete/{0}'.format(d.id))}" >X</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <form class="ui-widget-content ui-corner-all" py:if="tg.identity.user.has_permission('Deductor')" action="${tg.url('/affiliate/deduced/save')}">
+    <fieldset>
+      <legend>Datos de la Deducci&oacute;n</legend>
+      <ul>
+        <li>
+          <label for="account">Cuenta:</label>
+          <select name="account">
+            <option py:for="account in accounts" value="${account.id}">${account.id} - ${account.name}</option>
+          </select>
+          <input type="hidden" name="affiliate" value="${affiliate.id}" />
+        </li>
+        <li>
+          <label for="amount">Monto:</label>
+          <input name="amount" />
+        </li>
+        <li>
+          <label for="month">Mes:</label>
+          <input name="month" />
+        </li>
+        <li>
+          <label for="year">A&ntilde;o:</label>
+          <input name="year" />
+        </li>
+        <li>
+          <label for="detail">Detalle</label>
+          <input name="detail" />
+        </li>
+        <li><input type="submit" value="Agregar Deducci&oacute;n" /></li>
+      </ul>
+    </fieldset>
+  </form>
+</body>
+</html>

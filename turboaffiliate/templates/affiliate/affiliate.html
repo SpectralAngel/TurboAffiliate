@@ -45,6 +45,9 @@
             <a class="button" href="${tg.url('/affiliate/deduced/{0}'.format(affiliate.id))}">Deducciones</a>
           </li>
           <li>
+            <a class="button" href="${tg.url('/affiliate/deduced/banco/{0}'.format(affiliate.id))}">Deducciones Banco</a>
+          </li>
+          <li>
             <strong class="enfasis">Afiliado desde <span py:if="not affiliate.joined is None">${affiliate.joined.strftime('%d de %B de %Y')}</span></strong>
           </li>
           <li py:if="affiliate.cotizacion.nombre == 'INPREMA' and affiliate.jubilated != None">

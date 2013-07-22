@@ -37,6 +37,13 @@ class Deduced(controllers.Controller):
 		return dict(affiliate=model.Affiliate.get(code), accounts=model.Account.select())
 	
 	@identity.require(identity.not_anonymous())
+	@expose(template='turboaffiliate.templates.affiliate.deduced.banco')
+	@validate(validators=dict(code=validators.Int()))
+	def banco(self, code):
+		
+		return dict(affiliate=model.Affiliate.get(code), accounts=model.Account.select())
+	
+	@identity.require(identity.not_anonymous())
 	@expose(template='turboaffiliate.templates.affiliate.deduced.mostrar')
 	@validate(validators=dict(afiliado=validators.Int(), mes=validators.Int(),
 							  anio=validators.Int()))
