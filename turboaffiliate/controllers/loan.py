@@ -768,7 +768,9 @@ class Loan(controllers.Controller):
         payedLoans = model.PayedLoan.select(AND(model.PayedLoan.q.startDate>=start,
                                            model.PayedLoan.q.startDate<=end, model.PayedLoan.q.casa==casa))
         
-        return deduccionesInterno(loans, payedLoans, start, end)
+        interno = deduccionesInterno(loans, payedLoans, start, end)
+        interno['casa'] = casa
+        return interno
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.deducciones')
