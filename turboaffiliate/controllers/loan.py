@@ -59,7 +59,7 @@ def separacion(loan):
     afiliado = loan.affiliate
     return model.AuxiliarPrestamo(loan.id, afiliado, monto, neto, papeleo, aportaciones, intereses, retencion, reintegros)
 
-def deduccionesInterno(self, loans, payedLoans, start, end):
+def deduccionesInterno(loans, payedLoans, start, end):
     
     prestamos = map(separacion, loans)
     prestamos.extend(map(separacion, payedLoans))
