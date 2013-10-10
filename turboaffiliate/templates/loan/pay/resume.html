@@ -32,9 +32,9 @@
 				<td>${locale.currency(pay.interest, True, True)}</td>
 			</tr>
 			<tr py:for="pay in oldpays">
-				<td>${pay.payedloan.id}</td>
-				<td>${pay.payedloan.affiliate.id}</td>
-				<td>${pay.payedloan.affiliate.firstName} ${pay.payedloan.affiliate.lastName}</td>
+				<td>${pay.payedLoan.id}</td>
+				<td>${pay.payedLoan.affiliate.id}</td>
+				<td>${pay.payedLoan.affiliate.firstName} ${pay.payedLoan.affiliate.lastName}</td>
 				<td>${pay.day}</td>
 				<td>${locale.currency(pay.amount, True, True)}</td>
 				<td>${locale.currency(pay.capital, True, True)}</td>
