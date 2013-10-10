@@ -218,12 +218,13 @@ class Pay(controllers.Controller):
     def resume(self, start, end):
         
         pays = model.Pay.select(AND(model.Pay.q.day>=start,model.Pay.q.day<=end))
-        count = pays.count()
-        capital = sum(pay.capital for pay in pays)
-        interest = sum(pay.interest for pay in pays)
+		oldpays = model.OldPay.select(AND(model.OldPay.q.day>=start,model.OldPay.q.day<=end))
+        count = pays.count() + oldpays.count()
+        capital = sum(pay.capital for pay in pays) + sum(pay.capital for pay in oldpays)
+        interest = sum(pay.interest for pay in pays) + sum(pay.interest for pay in oldpays)
         
         return dict(start=start, end=end, pays=pays, count=count, capital=capital,
-                    interest=interest)
+                    interest=interest, oldpays=oldpays)
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))

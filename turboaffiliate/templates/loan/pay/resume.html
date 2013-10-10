@@ -15,6 +15,8 @@
 				<th>Pr&eacute;stamo</th>
 				<th>COPEMH</th>
 				<th>Afiliado</th>
+				<th>Fecha</th>
+				<th>Monto</th>
 				<th>Capital</th>
 				<th>Intereses</th>
 			</tr>
@@ -24,13 +26,24 @@
 				<td>${pay.loan.id}</td>
 				<td>${pay.loan.affiliate.id}</td>
 				<td>${pay.loan.affiliate.firstName} ${pay.loan.affiliate.lastName}</td>
+				<td>${pay.day}</td>
+				<td>${locale.currency(pay.amount, True, True)}</td>
+				<td>${locale.currency(pay.capital, True, True)}</td>
+				<td>${locale.currency(pay.interest, True, True)}</td>
+			</tr>
+			<tr py:for="pay in oldpays">
+				<td>${pay.loan.id}</td>
+				<td>${pay.loan.affiliate.id}</td>
+				<td>${pay.loan.affiliate.firstName} ${pay.loan.affiliate.lastName}</td>
+				<td>${pay.day}</td>
+				<td>${locale.currency(pay.amount, True, True)}</td>
 				<td>${locale.currency(pay.capital, True, True)}</td>
 				<td>${locale.currency(pay.interest, True, True)}</td>
 			</tr>
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="2">Total</td>
+				<td colspan="4">Total</td>
 				<td>${locale.currency(capital + interest, True, True)}</td>
 				<td>${locale.currency(capital, True, True)}</td>
 				<td>${locale.currency(interest, True, True)}</td>
