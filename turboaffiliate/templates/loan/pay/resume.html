@@ -15,8 +15,8 @@
 				<th>Pr&eacute;stamo</th>
 				<th>COPEMH</th>
 				<th>Afiliado</th>
-				<th>Fecha</th>
                 <th>Recibo</th>
+				<th>Fecha</th>
 				<th>Monto</th>
 				<th>Capital</th>
 				<th>Intereses</th>
@@ -27,7 +27,7 @@
 				<td>${pay.loan.id}</td>
 				<td>${pay.loan.affiliate.id}</td>
 				<td>${pay.loan.affiliate.firstName} ${pay.loan.affiliate.lastName}</td>
-                <td>${pay.recibo}</td>
+                <td>${pay.receipt}</td>
 				<td>${pay.day}</td>
 				<td>${locale.currency(pay.amount, True, True)}</td>
 				<td>${locale.currency(pay.capital, True, True)}</td>
@@ -37,7 +37,7 @@
 				<td>${pay.payedLoan.id}</td>
 				<td>${pay.payedLoan.affiliate.id}</td>
 				<td>${pay.payedLoan.affiliate.firstName} ${pay.payedLoan.affiliate.lastName}</td>
-                <td>${pay.recibo}</td>
+                <td>${pay.receipt}</td>
 				<td>${pay.day}</td>
 				<td>${locale.currency(pay.amount, True, True)}</td>
 				<td>${locale.currency(pay.capital, True, True)}</td>
