@@ -181,6 +181,12 @@ class Municipio(SQLObject):
     afiliados = MultipleJoin('Affiliate')
     viaticos = MultipleJoin('Viatico')
 
+class Instituto(SQLObject):
+
+    municipio = ForeignKey('Municipio')
+    nombre = UnicodeCol(length=50, default=None)
+    afiliados = MultipleJoin('Affiliate')
+
 class Casa(SQLObject):
     
     """Sucursal del COPEMH
@@ -244,6 +250,8 @@ class Affiliate(SQLObject):
     
     departamento = ForeignKey('Departamento', default=Departamento.get(19))
     municipio = ForeignKey('Municipio', default=Municipio.get(299))
+    instituto = ForeignKey('Instituto', default=Instituto.get(1))
+
     state = UnicodeCol(length=50, default=None)
     school = UnicodeCol(length=255, default=None)
     town = UnicodeCol(length=50, default=None)
