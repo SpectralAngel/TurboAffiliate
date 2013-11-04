@@ -82,30 +82,30 @@
     </fieldset>
   </form>
   <form class="ui-widget-content ui-corner-all" action="${tg.url('deduced')}">
-    <fieldset>
-      <legend>Mostrar Cobros Efecutados</legend>
-      <ul>
-        <li>
-          <label for="account">Cuenta:</label>
-          <select name="account">
-            <option py:for="account in accounts" value="${account.id}" py:content="account.name" />
-          </select>
-        </li>
-        <li>
-          <label for="month">Mes:</label>
-          <input name="month" />
-        </li>
-        <li>
-          <label for="year">A&ntilde;o:</label>
-          <input name="year" />
-        </li>
-        <li><input type="submit" value="Mostrar Reporte" /></li>
-      </ul>
-    </fieldset>
+      <fieldset>
+          <legend>Mostrar Cobros Efecutados</legend>
+          <ul>
+              <li>
+                  <label for="account">Cuenta:</label>
+                  <select name="account">
+                      <option py:for="account in accounts" value="${account.id}" py:content="account.name" />
+                  </select>
+              </li>
+              <li>
+                  <label for="month">Mes:</label>
+                  <input name="month" />
+              </li>
+              <li>
+                  <label for="year">A&ntilde;o:</label>
+                  <input name="year" />
+              </li>
+              <li><input type="submit" value="Mostrar Reporte" /></li>
+          </ul>
+      </fieldset>
   </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('deduced')}">
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('deducedBank')}">
     <fieldset>
-      <legend>Mostrar Reporte Por Cuenta</legend>
+      <legend>Mostrar Cobros Efectuados por Banco</legend>
       <ul>
         <li>
           <label for="account">Cuenta:</label>
