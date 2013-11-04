@@ -29,7 +29,7 @@ class Obligation(controllers.Controller):
     @expose(template="turboaffiliate.templates.obligation.index")
     def index(self):
         
-        return dict(accounts=model.Account.select(orderBy="code"))
+        return dict(accounts=model.Account.select())
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.obligation.obligation")
@@ -43,7 +43,7 @@ class Obligation(controllers.Controller):
     @expose(template="turboaffiliate.templates.obligation.add")
     def add(self):
         
-        return dict(accounts=model.Account.select(orderBy="code"))
+        return dict(accounts=model.Account.select())
     
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.obligation.edit")
