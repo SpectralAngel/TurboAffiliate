@@ -181,11 +181,13 @@ class Municipio(SQLObject):
     afiliados = MultipleJoin('Affiliate')
     viaticos = MultipleJoin('Viatico')
 
+
 class Instituto(SQLObject):
 
     municipio = ForeignKey('Municipio')
     nombre = UnicodeCol(length=50, default=None)
     afiliados = MultipleJoin('Affiliate')
+
 
 class Casa(SQLObject):
     
@@ -250,7 +252,7 @@ class Affiliate(SQLObject):
     
     departamento = ForeignKey('Departamento', default=Departamento.get(19))
     municipio = ForeignKey('Municipio', default=Municipio.get(299))
-    instituto = ForeignKey('Instituto', default=Instituto.get(1))
+    instituto = ForeignKey('Instituto')
 
     state = UnicodeCol(length=50, default=None)
     school = UnicodeCol(length=255, default=None)
@@ -693,6 +695,7 @@ class Loan(SQLObject):
     pays = MultipleJoin("Pay", orderBy="day")
     deductions = MultipleJoin("Deduction")
     aproval = ForeignKey("User")
+    cobrar = BoolCol(default=True)
     
     def percent(self):
         
@@ -1732,6 +1735,7 @@ class PagoBancarioBanhcafe(SQLObject):
     identidad = UnicodeCol(length=13)
     cantidad = CurrencyCol()
     aplicado = DateTimeCol(default=datetime.now)
+    fecha = DateTimeCol(default=datetime.now)
     referencia = IntCol()
     agencia = IntCol()
     cajero = UnicodeCol(length=10)
