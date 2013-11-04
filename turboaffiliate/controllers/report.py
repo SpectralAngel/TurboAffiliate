@@ -282,7 +282,7 @@ class Report(controllers.Controller):
 
 
     @identity.require(identity.not_anonymous())
-    @expose(template="turboaffiliate.templates.report.deduced")
+    @expose(template="turboaffiliate.templates.report.deducedBank")
     @validate(validators=dict(account=validators.Int(), year=validators.Int(),
                               month=validators.Int(min=1, max=12)))
     def deducedBank(self, account, month, year):

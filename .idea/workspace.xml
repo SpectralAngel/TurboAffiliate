@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6f2b13b9-8aec-4593-aa11-21379f444948" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/turboaffiliate/templates/asamblea/asistentes.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/templates/affiliate/cuota/affiliate.html" afterPath="$PROJECT_DIR$/turboaffiliate/templates/affiliate/cuota/affiliate.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py" afterPath="$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/templates/asamblea/index.html" afterPath="$PROJECT_DIR$/turboaffiliate/templates/asamblea/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/templates/report/index.html" afterPath="$PROJECT_DIR$/turboaffiliate/templates/report/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/model.py" afterPath="$PROJECT_DIR$/turboaffiliate/model.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/controllers/obligation.py" afterPath="$PROJECT_DIR$/turboaffiliate/controllers/obligation.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/controllers/report.py" afterPath="$PROJECT_DIR$/turboaffiliate/controllers/report.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TurboAffiliate.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -19,7 +14,8 @@
     <file path="/asistentes.html" changelist="6f2b13b9-8aec-4593-aa11-21379f444948" time="1382973799774" ignored="false" />
     <file path="/index.html" changelist="6f2b13b9-8aec-4593-aa11-21379f444948" time="1383578826870" ignored="false" />
     <file path="/a.py" changelist="6f2b13b9-8aec-4593-aa11-21379f444948" time="1383577727497" ignored="false" />
-    <file path="/report.py" changelist="6f2b13b9-8aec-4593-aa11-21379f444948" time="1383577812882" ignored="false" />
+    <file path="/report.py" changelist="6f2b13b9-8aec-4593-aa11-21379f444948" time="1383579006820" ignored="false" />
+    <file path="/deducedBank.html" changelist="6f2b13b9-8aec-4593-aa11-21379f444948" time="1383579017500" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,7 +97,7 @@
       <file leaf-file-name="report.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/report.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="297" column="43" selection-start="11997" selection-end="11997" vertical-scroll-proportion="0.0">
+            <state line="284" column="65" selection-start="11445" selection-end="11445" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#842#916#0" expanded="true" />
               </folding>
@@ -109,10 +105,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="124" column="11" selection-start="4261" selection-end="4261" vertical-scroll-proportion="0.71257484">
+            <state line="124" column="11" selection-start="4261" selection-end="4261" vertical-scroll-proportion="-22.884615">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="deducedBank.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="22" column="46" selection-start="979" selection-end="979" vertical-scroll-proportion="0.4479042">
               <folding />
             </state>
           </provider>
@@ -168,9 +173,10 @@
         <option value="$PROJECT_DIR$/turboaffiliate/templates/asamblea/index.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/asamblea/asistentes.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py" />
-        <option value="$PROJECT_DIR$/turboaffiliate/controllers/report.py" />
         <option value="$PROJECT_DIR$/turboaffiliate/controllers/obligation.py" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/report/index.html" />
+        <option value="$PROJECT_DIR$/turboaffiliate/controllers/report.py" />
+        <option value="$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html" />
       </list>
     </option>
   </component>
@@ -333,6 +339,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Carlos\Documents\GitHub\TurboAffiliate\turboaffiliate\templates\report" />
       <recent name="C:\Users\Carlos\Documents\GitHub\TurboAffiliate\turboaffiliate\templates\asamblea" />
     </key>
   </component>
@@ -613,13 +620,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/asamblea/asistentes.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="23" selection-start="1594" selection-end="1594" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/asamblea/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="53" column="18" selection-start="1909" selection-end="1909" vertical-scroll-proportion="0.0">
@@ -707,18 +707,25 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="124" column="11" selection-start="4261" selection-end="4261" vertical-scroll-proportion="-22.884615">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/report.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="297" column="43" selection-start="11997" selection-end="11997" vertical-scroll-proportion="0.0">
+        <state line="284" column="65" selection-start="11445" selection-end="11445" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#842#916#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/index.html">
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="124" column="11" selection-start="4261" selection-end="4261" vertical-scroll-proportion="0.71257484">
+        <state line="22" column="46" selection-start="979" selection-end="979" vertical-scroll-proportion="0.4479042">
           <folding />
         </state>
       </provider>
