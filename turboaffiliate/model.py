@@ -252,7 +252,7 @@ class Affiliate(SQLObject):
     
     departamento = ForeignKey('Departamento', default=Departamento.get(19))
     municipio = ForeignKey('Municipio', default=Municipio.get(299))
-    instituto = ForeignKey('Instituto')
+    instituto = ForeignKey('Instituto', default=None)
 
     state = UnicodeCol(length=50, default=None)
     school = UnicodeCol(length=255, default=None)
