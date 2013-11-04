@@ -47,6 +47,22 @@
       </ol>
     </fieldset>
   </form>
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/asistentes')}">
+      <fieldset>
+          <legend>Mostrar Asistentes de una Asamblea</legend>
+          <ol>
+              <li>
+                  <label>Asamblea:</label>
+                  <select name="asamblea">
+                      <option value="${a.id}" py:for="a in asambleas">
+                          ${a.numero} - ${a.nombre}
+                      </option>
+                  </select>
+              </li>
+              <li><input type="submit" value="Mostrar Formulario" /></li>
+          </ol>
+      </fieldset>
+  </form>
   <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/ach')}">
     <fieldset>
       <legend>Transferencias ACH excluyendo a un banco</legend>

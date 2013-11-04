@@ -566,19 +566,16 @@ class Asamblea(controllers.Controller):
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
-    @expose()
-    @validate(validators=dict(asamblea=validators.Int(),
-                              enviado=validators.Bool(),
-                              municipio=validators.Int()))
-    def asistentes(self, asamblea, municipio, enviado):
-        
+    @expose(template='turboaffiliate.templates.asamblea.asistentes')
+    @validate(validators=dict(asamblea=validators.Int()))
+    def asistentes(self, asamblea):
+
         asamblea = model.Asamblea.get(asamblea)
-        municipio = model.Municipio.get(municipio)
-        
-        viaticos = model.Viatico.selectBy(asamblea=asamblea, municipio=municipio,
-                                          enviado=enviado)
-        
-        return dict(asamblea=asamblea, municipio=municipio, viaticos=viaticos)
+        cantidad = len(asamblea.inscripciones)
+        monto = sum(i.monto() for i in asamblea.inscripciones)
+
+        return dict(asamblea=asamblea, inscripciones=asamblea.inscripciones,
+                    cantidad=cantidad, monto=monto)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.asamblea.pendientes')
