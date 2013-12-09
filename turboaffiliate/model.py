@@ -534,11 +534,11 @@ class CuotaTable(SQLObject):
         
         return start, end
     
-    def todos(self):
+    def todos(self, gracia=False):
         
         """Verifica si el afiliado ha realizado todos los pagos del año"""
         
-        inicio, fin = self.periodo()
+        inicio, fin = self.periodo(gracia=gracia)
         for n in range(inicio, fin):
             if not getattr(self, 'month{0}'.format(n)):
                 return False
