@@ -436,12 +436,12 @@ class Affiliate(SQLObject):
         
         return self.obtenerAportaciones(year).all()
     
-    def multisolvent(self, year):
+    def multisolvent(self, year, gracia=False):
         
         for cuota in self.cuotaTables:
             if cuota.year > year:
                 break
-            if not cuota.todos():
+            if not cuota.todos(gracia=gracia):
                 return False
         return True
     
@@ -513,7 +513,7 @@ class CuotaTable(SQLObject):
     month11 = BoolCol(default=False)
     month12 = BoolCol(default=False)
     
-    def periodo(self, retrasada=False):
+    def periodo(self, retrasada=False, gracia=False):
         
         (start, end) = (1, 13)
         
@@ -524,9 +524,12 @@ class CuotaTable(SQLObject):
             if retrasada:
                 end = date.today().month
             else:
-                end = date.today().month + 1
+                if gracia:
+                    end = date.today().month - 3
+                else:
+                    end = date.today().month + 1
         
-        if end == 0:
+        if end <= 0:
             end = 1
         
         return start, end
