@@ -575,8 +575,9 @@ class Asamblea(controllers.Controller):
         asamblea = model.Asamblea.get(asamblea)
         cantidad = len(asamblea.inscripciones)
         monto = sum(i.viatico.monto for i in asamblea.inscripciones)
+        inscripciones = (i for i in asamblea.inscripciones if i.afiliado.multisolvent(2013, gracia=True))
 
-        return dict(asamblea=asamblea, inscripciones=asamblea.inscripciones,
+        return dict(asamblea=asamblea, inscripciones=inscripciones,
                     cantidad=cantidad, monto=monto)
     
     @identity.require(identity.not_anonymous())
