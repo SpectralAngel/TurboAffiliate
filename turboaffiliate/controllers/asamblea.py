@@ -572,8 +572,7 @@ class Asamblea(controllers.Controller):
 
         asamblea = model.Asamblea.get(asamblea)
         cantidad = len(asamblea.inscripciones)
-        inscripciones = sorted(asamblea.inscripciones, key=lambda i: i.afiliado.id)
-        monto = sum(i.monto() for i in asamblea.inscripciones)
+        monto = sum(i.viatico.monto for i in asamblea.inscripciones)
 
         return dict(asamblea=asamblea, inscripciones=asamblea.inscripciones,
                     cantidad=cantidad, monto=monto)
