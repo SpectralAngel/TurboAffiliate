@@ -507,11 +507,11 @@ class Asamblea(controllers.Controller):
                         orderBy=model.Affiliate.q.banco)
         query = model.__connection__.sqlrepr(select)
         pagos = model.__connection__.queryAll(query)
-
-        pagos = (i for i in asamblea.inscripciones if i.afiliado.multisolvent(2013, gracia=True))
         
         asamblea = model.Asamblea.get(asamblea)
         banco = model.Banco.get(banco)
+
+        pagos = (i for i in asamblea.inscripciones if i.afiliado.multisolvent(2013, gracia=True))
         
         return dict(pagos=pagos, asamblea=asamblea, banco=banco)
     
