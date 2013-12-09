@@ -8,6 +8,6 @@
 <body>
   <h1>Transferencia ACH a Banco ${banco.nombre} de Asamblea ${asamblea.id} ${asamblea.nombre}</h1>
   <p py:for="pago in pagos">${pago.afiliado.banco}, A, ${pago.viatico.monto}, 2, 2, ${pago.afiliado.cuenta}</p>
-  <p>Total de Transferencia: <span>${sum(pago.viatico.monto for p in pagos)}</span></p>
+  <p>Total de Transferencia: <span>${total}</span></p>
 </body>
 </html>
