@@ -586,7 +586,8 @@ class Asamblea(controllers.Controller):
         asamblea = model.Asamblea.get(asamblea)
         departamento = model.Departamento.get(departamento)
         viaticos = model.Municipio.selectBy(departamento=departamento).throughTo.viaticos
-        inscripciones = viaticos.throughTo.inscripciones.filter(model.Inscripcion.q.asamblea==asamblea)
+        inscripciones = viaticos.throughTo.inscripciones.filter(model.Inscripcion.q.asamblea==asamblea).orderBy('afiliado_id')
+
         return dict(asamblea=asamblea, inscripciones=inscripciones)
     
     @identity.require(identity.All(identity.in_any_group('admin'),
