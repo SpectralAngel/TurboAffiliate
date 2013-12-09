@@ -572,9 +572,10 @@ class Asamblea(controllers.Controller):
 
         asamblea = model.Asamblea.get(asamblea)
         cantidad = len(asamblea.inscripciones)
+        inscripciones = asamblea.inscripciones.orderBy('afiliado_id')
         monto = sum(i.monto() for i in asamblea.inscripciones)
 
-        return dict(asamblea=asamblea, inscripciones=asamblea.inscripciones.orderBy('afiliado_id'),
+        return dict(asamblea=asamblea, inscripciones=asamblea.inscripciones,
                     cantidad=cantidad, monto=monto)
     
     @identity.require(identity.not_anonymous())
