@@ -7,6 +7,6 @@
 </head>
 <body>
   <h1>Transferencia Planilla a Banco ${banco.nombre} de Asamblea ${asamblea.id} ${asamblea.nombre}</h1>
-  <p py:for="pago in pagos">A, ${pago.afiliado.cuenta}, ${pago.viatico.monto}</p>
+  <p py:for="pago in pagos">A, ${pago.afiliado.cuenta}, ${pago.viatico.monto}, ${pago.afiliado.id} ${pago.afiliado.firstName} ${pago.afiliado.lastName}</p>
 </body>
 </html>
