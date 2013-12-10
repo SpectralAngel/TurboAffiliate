@@ -525,7 +525,7 @@ class CuotaTable(SQLObject):
                 end = date.today().month
             else:
                 if gracia:
-                    end = date.today().month - 3
+                    end = date.today().month - 4
                 else:
                     end = date.today().month + 1
         
