@@ -565,9 +565,9 @@ class Asamblea(controllers.Controller):
         asamblea = model.Asamblea.get(asamblea)
         banco = model.Banco.get(banco)
 
-        pagos = (i for i in asamblea.inscripciones if i.afiliado.multisolvent(2013, gracia=True) and i.afiliado.banco != banco.id)
+        pagos = (i for i in asamblea.inscripciones if i.afiliado.multisolvent(2013, gracia=True) and i.afiliado.banco == banco.id)
         total = sum(i.viatico.monto for i in pagos)
-        pagos = (i for i in asamblea.inscripciones if i.afiliado.multisolvent(2013, gracia=True) and i.afiliado.banco != banco.id)
+        pagos = (i for i in asamblea.inscripciones if i.afiliado.multisolvent(2013, gracia=True) and i.afiliado.banco == banco.id)
         
         return dict(pagos=pagos, asamblea=asamblea, banco=banco, total=total)
     
