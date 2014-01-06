@@ -510,10 +510,16 @@ class Asamblea(controllers.Controller):
         
         asamblea = model.Asamblea.get(asamblea)
         banco = model.Banco.get(banco)
+        total = 0
+        inscripciones = model.Inscripcion.selectBy(asamblea=asamblea, enviado=False)
+        pagos = list()
 
-        pagos = (i for i in asamblea.inscripciones if i.afiliado.multisolvent(2013, gracia=True) and i.afiliado.banco != banco.id)
-        total = sum(i.viatico.monto for i in pagos)
-        pagos = (i for i in asamblea.inscripciones if i.afiliado.multisolvent(2013, gracia=True) and i.afiliado.banco != banco.id)
+        for inscripcion in inscripciones:
+            if inscripcion.afiliado.multisolvent(2013, gracia=True) and inscripcion.afiliado.banco != banco.id:
+                total += inscripcion.viatico.monto
+                inscripcion.enviado = True
+                pagos.append(inscripcion)
+
         return dict(pagos=pagos, asamblea=asamblea, banco=banco, total=total)
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
@@ -564,11 +570,16 @@ class Asamblea(controllers.Controller):
         
         asamblea = model.Asamblea.get(asamblea)
         banco = model.Banco.get(banco)
+        total = 0
+        inscripciones = model.Inscripcion.selectBy(asamblea=asamblea, enviado=False)
+        pagos = list()
 
-        pagos = (i for i in asamblea.inscripciones if i.afiliado.multisolvent(2013, gracia=True) and i.afiliado.banco == banco.id)
-        total = sum(i.viatico.monto for i in pagos)
-        pagos = (i for i in asamblea.inscripciones if i.afiliado.multisolvent(2013, gracia=True) and i.afiliado.banco == banco.id)
-        
+        for inscripcion in inscripciones:
+            if inscripcion.afiliado.multisolvent(2013, gracia=True) and inscripcion.afiliado.banco == banco.id:
+                total += inscripcion.viatico.monto
+                inscripcion.enviado = True
+                pagos.append(inscripcion)
+
         return dict(pagos=pagos, asamblea=asamblea, banco=banco, total=total)
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
