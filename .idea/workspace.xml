@@ -2,15 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6f2b13b9-8aec-4593-aa11-21379f444948" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py" afterPath="$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/model.py" afterPath="$PROJECT_DIR$/turboaffiliate/model.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TurboAffiliate.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="6f2b13b9-8aec-4593-aa11-21379f444948" time="1386969795498" ignored="false" />
-    <file path="/model.py" changelist="6f2b13b9-8aec-4593-aa11-21379f444948" time="1383583730306" ignored="false" />
-    <file path="/asamblea.py" changelist="6f2b13b9-8aec-4593-aa11-21379f444948" time="1386970052960" ignored="false" />
+    <file path="/Dummy.txt" changelist="6f2b13b9-8aec-4593-aa11-21379f444948" time="1389038046269" ignored="false" />
+    <file path="/model.py" changelist="6f2b13b9-8aec-4593-aa11-21379f444948" time="1389038530044" ignored="false" />
+    <file path="/asamblea.py" changelist="6f2b13b9-8aec-4593-aa11-21379f444948" time="1389038350621" ignored="false" />
     <file path="/asistentes.html" changelist="6f2b13b9-8aec-4593-aa11-21379f444948" time="1382973799774" ignored="false" />
     <file path="/index.html" changelist="6f2b13b9-8aec-4593-aa11-21379f444948" time="1383578826870" ignored="false" />
     <file path="/a.py" changelist="6f2b13b9-8aec-4593-aa11-21379f444948" time="1383577727497" ignored="false" />
@@ -77,10 +76,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="model.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="model.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/turboaffiliate/model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1652" column="36" selection-start="51270" selection-end="51270" vertical-scroll-proportion="0.0">
+            <state line="533" column="8" selection-start="17053" selection-end="17053" vertical-scroll-proportion="0.68306637">
               <folding />
             </state>
           </provider>
@@ -95,28 +94,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="col.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://C:/Python27/Lib/site-packages/sqlobject/col.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="401" column="61" selection-start="13633" selection-end="13633" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="asamblea.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="asamblea.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="519" column="42" selection-start="22583" selection-end="22583" vertical-scroll-proportion="0.6576687">
+            <state line="516" column="40" selection-start="22376" selection-end="22376" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="report.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/report.py">
+      <file leaf-file-name="dev.cfg" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dev.cfg">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="284" column="65" selection-start="11445" selection-end="11445" vertical-scroll-proportion="0.0">
+            <state line="15" column="60" selection-start="608" selection-end="608" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -126,42 +116,6 @@
         <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/index.html">
           <provider selected="true" editor-type-id="text-editor">
             <state line="124" column="11" selection-start="4261" selection-end="4261" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="deducedBank.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="33" selection-start="1122" selection-end="1122" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pendientes.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/asamblea/pendientes.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="7" selection-start="660" selection-end="668" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="asistentes.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/asamblea/asistentes.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="47" column="23" selection-start="1600" selection-end="1600" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/asamblea/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="53" column="18" selection-start="1909" selection-end="1909" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -192,9 +146,9 @@
         <option value="$PROJECT_DIR$/turboaffiliate/templates/report/index.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/controllers/report.py" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html" />
-        <option value="$PROJECT_DIR$/turboaffiliate/model.py" />
         <option value="$PROJECT_DIR$/turboaffiliate/controllers/loan.py" />
         <option value="$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py" />
+        <option value="$PROJECT_DIR$/turboaffiliate/model.py" />
       </list>
     </option>
   </component>
@@ -231,6 +185,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -251,7 +206,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -269,11 +223,11 @@
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="restartRequiresConfirmation" value="true" />
-    <property name="MemberChooser.showClasses" value="true" />
     <property name="FullScreen" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -296,6 +250,14 @@
       <option name="PROGRAM_PARAMETERS" />
       <method />
     </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <method />
+    </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -311,14 +273,6 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
-      <method />
-    </configuration>
-    <configuration default="true" type="Remote" factoryName="Remote">
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="false" />
-      <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="localhost" />
-      <option name="PORT" value="5005" />
       <method />
     </configuration>
     <configuration default="true" type="#com.intellij.j2meplugin.run.J2MEConfigurationType" factoryName="J2ME">
@@ -352,6 +306,19 @@
       <option name="SUSPEND_AFTER_CONNECT" value="true" />
       <method />
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -380,19 +347,6 @@
       <listeners />
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method />
-    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" />
@@ -406,13 +360,6 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="" />
       <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavascriptDebugSession" factoryName="Local" singleton="true">
-      <JSDebuggerConfigurationSettings>
-        <option name="engineId" value="embedded" />
-        <option name="fileUrl" />
-      </JSDebuggerConfigurationSettings>
       <method />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
@@ -434,6 +381,13 @@
       </option>
       <envs />
       <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugSession" factoryName="Local" singleton="true">
+      <JSDebuggerConfigurationSettings>
+        <option name="engineId" value="embedded" />
+        <option name="fileUrl" />
+      </JSDebuggerConfigurationSettings>
       <method />
     </configuration>
     <configuration default="false" name="Run" type="PythonConfigurationType" factoryName="Python">
@@ -566,13 +520,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/sqlobject-history/2013-10-22a/Inscripcion_mysql.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
@@ -626,13 +573,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/report.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="284" column="65" selection-start="11445" selection-end="11445" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="28" column="33" selection-start="1122" selection-end="1122" vertical-scroll-proportion="0.0">
@@ -654,16 +594,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/model.py">
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/report.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1652" column="36" selection-start="51270" selection-end="51270" vertical-scroll-proportion="0.0">
+        <state line="284" column="65" selection-start="11445" selection-end="11445" vertical-scroll-proportion="0.01992966">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dev.cfg">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="60" selection-start="608" selection-end="608" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="519" column="42" selection-start="22583" selection-end="22583" vertical-scroll-proportion="0.6576687">
+        <state line="516" column="40" selection-start="22376" selection-end="22376" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="533" column="8" selection-start="17053" selection-end="17053" vertical-scroll-proportion="0.68306637">
           <folding />
         </state>
       </provider>

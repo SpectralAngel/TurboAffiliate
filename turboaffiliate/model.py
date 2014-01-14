@@ -528,6 +528,9 @@ class CuotaTable(SQLObject):
                     end = date.today().month - 4
                 else:
                     end = date.today().month + 1
+        else:
+            if gracia:
+                end = 8
         
         if end <= 0:
             end = 1
