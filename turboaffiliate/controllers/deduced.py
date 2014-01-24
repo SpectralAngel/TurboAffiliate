@@ -20,88 +20,131 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, 
 # Boston, MA  02110-1301  USA
 
-from turbogears import controllers, flash, redirect, identity
-from turbogears import expose, validate, validators
-from turboaffiliate import model
 from decimal import Decimal
 
+from turbogears import controllers, flash, redirect, identity
+from turbogears import expose, validate, validators
+
+from turboaffiliate import model
+
+
 class Deduced(controllers.Controller):
-	
-	"""Permite administrar las deducciones realizadas a un afiliado"""
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.deduced.deduced')
-	@validate(validators=dict(code=validators.Int()))
-	def default(self, code):
-		
-		return dict(affiliate=model.Affiliate.get(code), accounts=model.Account.select())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.deduced.banco')
-	@validate(validators=dict(code=validators.Int()))
-	def banco(self, code):
-		
-		return dict(affiliate=model.Affiliate.get(code), accounts=model.Account.select())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.deduced.mostrar')
-	@validate(validators=dict(afiliado=validators.Int(), mes=validators.Int(),
-							  anio=validators.Int()))
-	def mostrar(self, afiliado, mes, anio):
-		
-		afiliado = model.Affiliate.get(afiliado)
-		deducciones = model.Deduced.selectBy(affiliate=afiliado, month=mes, year=anio)
-		return dict(affiliate=afiliado, deducciones=deducciones)
-	
-	@expose()
-	@validate(validators=dict(deduced=validators.Int(), account=validators.Int()))
-	def convert(self, deduced, account):
-		
-		deduced = model.Deduced.get(deduced)
-		deduced.account = model.Account.get(account)
-		
-		raise redirect("/affiliate/deduced/{0}".format(deduced.affiliate.id))
-	
-	@expose(template='turboaffiliate.templates.affiliate.deduced.cambiar')
-	@validate(validators=dict(deduced=validators.Int()))
-	def cambiar(self, deduced):
-		
-		deduced = model.Deduced.get(deduced)
-		
-		return dict(deduced=deduced, accounts=model.Account.select())
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template='turboaffiliate.templates.affiliate.deduced.mostrar')
-	@validate(validators=dict(afiliado=validators.Int(), anio=validators.Int()))
-	def anual(self, afiliado, anio):
-		
-		afiliado = model.Affiliate.get(afiliado)
-		deducciones = model.Deduced.selectBy(affiliate=afiliado, year=anio)
-		return dict(affiliate=afiliado, deducciones=deducciones, anio=anio)
-	
-	@identity.require(identity.has_permission("Deductor"))
-	@expose()
-	@validate(validators=dict(affiliate=validators.Int(), account=validators.Int(),
-							amount=validators.String(), year=validators.Int(),
-							month=validators.Int()))
-	def save(self, affiliate, account, **kw):
-	
-		kw['affiliate'] = model.Affiliate.get(affiliate)
-		kw['amount'] = Decimal(kw['amount'].replace(',', ''))
-		kw['account'] = model.Account.get(account)
-		model.Deduced(**kw)
-		
-		flash(u"Agregado Detalle de Deducción")
-		
-		raise redirect("/affiliate/deduced/{0}".format(affiliate))
-	
-	@identity.require(identity.has_permission("Deductor"))
-	@expose()
-	@validate(validators=dict(deduced=validators.Int()))
-	def delete(self, deduced):
-		
-		deduced = model.Deduced.get(deduced)
-		affiliate = deduced.affiliate
-		deduced.destroySelf()
-		
-		raise redirect("/affiliate/deduced/{0}".format(affiliate.id))
+    """Permite administrar las deducciones realizadas a un afiliado"""
+
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.deduced.deduced')
+    @validate(validators=dict(code=validators.Int()))
+    def default(self, code):
+        return dict(affiliate=model.Affiliate.get(code),
+                    accounts=model.Account.select())
+
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.deduced.banco')
+    @validate(validators=dict(code=validators.Int()))
+    def banco(self, code):
+        return dict(affiliate=model.Affiliate.get(code),
+                    bancos=model.Banco.select(),
+                    accounts=model.Account.select())
+
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.deduced.mostrar')
+    @validate(validators=dict(afiliado=validators.Int(), mes=validators.Int(),
+                              anio=validators.Int()))
+    def mostrar(self, afiliado, mes, anio):
+        afiliado = model.Affiliate.get(afiliado)
+        deducciones = model.Deduced.selectBy(affiliate=afiliado, month=mes,
+                                             year=anio)
+        return dict(affiliate=afiliado, deducciones=deducciones)
+
+    @expose()
+    @validate(
+        validators=dict(deduced=validators.Int(), account=validators.Int()))
+    def convert(self, deduced, account):
+        deduced = model.Deduced.get(deduced)
+        deduced.account = model.Account.get(account)
+
+        raise redirect("/affiliate/deduced/{0}".format(deduced.affiliate.id))
+
+    @expose(template='turboaffiliate.templates.affiliate.deduced.cambiar')
+    @validate(validators=dict(deduced=validators.Int()))
+    def cambiar(self, deduced):
+        deduced = model.Deduced.get(deduced)
+
+        return dict(deduced=deduced, accounts=model.Account.select())
+
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.deduced.mostrar')
+    @validate(validators=dict(afiliado=validators.Int(), anio=validators.Int()))
+    def anual(self, afiliado, anio):
+        afiliado = model.Affiliate.get(afiliado)
+        deducciones = model.Deduced.selectBy(affiliate=afiliado, year=anio)
+        return dict(affiliate=afiliado, deducciones=deducciones, anio=anio)
+
+    @identity.require(identity.has_permission("Deductor"))
+    @expose()
+    @validate(
+        validators=dict(affiliate=validators.Int(), account=validators.Int(),
+                        amount=validators.String(), year=validators.Int(),
+                        month=validators.Int()))
+    def save(self, affiliate, account, **kw):
+        kw['affiliate'] = model.Affiliate.get(affiliate)
+        kw['amount'] = Decimal(kw['amount'].replace(',', ''))
+        kw['account'] = model.Account.get(account)
+        model.Deduced(**kw)
+
+        flash(u"Agregado Detalle de Deducción")
+
+        raise redirect("/affiliate/deduced/{0}".format(affiliate))
+
+    @identity.require(identity.has_permission("Deductor"))
+    @expose()
+    @validate(validators=dict(deduced=validators.Int()))
+    def delete(self, deduced):
+        deduced = model.Deduced.get(deduced)
+        affiliate = deduced.affiliate
+        deduced.destroySelf()
+
+        raise redirect("/affiliate/deduced/{0}".format(affiliate.id))
+
+    @expose()
+    @validate(
+        validators=dict(deduced=validators.Int(), account=validators.Int()))
+    def convertBanco(self, deduced, account):
+        deduced = model.DeduccionBancaria.get(deduced)
+        deduced.account = model.Account.get(account)
+
+        raise redirect("/affiliate/deduced/banco/{0}".format(deduced.afiliado.id))
+
+    @expose(template='turboaffiliate.templates.affiliate.deduced.cambiarBanco')
+    @validate(validators=dict(deduced=validators.Int()))
+    def cambiarBanco(self, deduced):
+        deduced = model.DeduccionBancaria.get(deduced)
+
+        return dict(deduced=deduced, accounts=model.Account.select())
+
+    @identity.require(identity.has_permission("Deductor"))
+    @expose()
+    @validate(validators=dict(deduced=validators.Int()))
+    def deleteBanco(self, deduced):
+        deduced = model.DeduccionBancaria.get(deduced)
+        affiliate = deduced.afiliado
+        deduced.destroySelf()
+
+        raise redirect("/affiliate/deduced/banco/{0}".format(affiliate.id))
+
+    @identity.require(identity.has_permission("Deductor"))
+    @expose()
+    @validate(
+        validators=dict(affiliate=validators.Int(), account=validators.Int(),
+                        amount=validators.String(), year=validators.Int(),
+                        month=validators.Int(), banco=validators.Int()))
+    def saveBanco(self, affiliate, account, banco, **kw):
+        kw['afiliado'] = model.Affiliate.get(affiliate)
+        kw['amount'] = Decimal(kw['amount'].replace(',', ''))
+        kw['account'] = model.Account.get(account)
+        kw['banco'] = model.Banco.get(banco)
+        model.DeduccionBancaria(**kw)
+
+        flash(u"Agregado Detalle de Deducción")
+
+        raise redirect("/affiliate/deduced/banco/{0}".format(affiliate))

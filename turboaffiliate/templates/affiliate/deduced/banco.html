@@ -31,15 +31,15 @@
         <td>${d.month}</td>
         <td>${d.year}</td>
         <td class="no-print">
-            <a href="${tg.url('/affiliate/deduced/cambiar/{0}'.format(d.id))}">Cambiar Cuenta</a>
+            <a href="${tg.url('/affiliate/deduced/cambiarBanco/{0}'.format(d.id))}">Cambiar Cuenta</a>
         </td>
         <td class="no-print" py:if="tg.identity.user.has_permission('Deductor')">
-            <a href="${tg.url('/affiliate/deduced/delete/{0}'.format(d.id))}" >X</a>
+            <a href="${tg.url('/affiliate/deduced/deleteBanco/{0}'.format(d.id))}" >X</a>
         </td>
       </tr>
     </tbody>
   </table>
-  <form class="ui-widget-content ui-corner-all" py:if="tg.identity.user.has_permission('Deductor')" action="${tg.url('/affiliate/deduced/save')}">
+  <form class="ui-widget-content ui-corner-all" py:if="tg.identity.user.has_permission('Deductor')" action="${tg.url('/affiliate/deduced/saveBanco')}">
     <fieldset>
       <legend>Datos de la Deducci&oacute;n</legend>
       <ul>
@@ -49,6 +49,12 @@
             <option py:for="account in accounts" value="${account.id}">${account.id} - ${account.name}</option>
           </select>
           <input type="hidden" name="affiliate" value="${affiliate.id}" />
+        </li>
+        <li>
+            <label for="banco">Banco:</label>
+            <select name="banco">
+                <option py:for="banco in bancos" value="${banco.id}">${banco.id} - ${banco.nombre}</option>
+            </select>
         </li>
         <li>
           <label for="amount">Monto:</label>

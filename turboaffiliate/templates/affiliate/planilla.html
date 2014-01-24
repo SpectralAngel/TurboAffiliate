@@ -71,12 +71,13 @@
               <input type="submit" value="Pagar" />
             </fieldset>
           </form>
-          <form class="ui-widget-content reducido ui-corner-all postear" action="${tg.url('/affiliate/cuota/pagoPlanilla')}">
+          <form class="ui-widget-content reducido ui-corner-all postear" action="${tg.url('/deduced/save')}">
             <fieldset>
               <legend>Devoluci&oacute;n</legend>
-              <input name="afiliado" value="${afiliado.id}" type="hidden" />
-              <input name="day" value="${day.strftime('%d/%m/%Y')}" type="hidden" />
-              <input name="cuenta" value="${excedente}" type="hidden" />
+              <input name="affiliate" value="${afiliado.id}" type="hidden" />
+              <input name="month" value="${day.month" type="hidden" />
+              <input name="year" value="${day.month" type="hidden" />
+              <input name="account" value="${excedente}" type="hidden" />
               <label>Monto: </label>
               <input name="amount" />
               <input type="submit" value="Pagar" />
