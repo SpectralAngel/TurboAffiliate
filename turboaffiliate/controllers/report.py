@@ -19,10 +19,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import controllers, expose, identity, validate, validators
-from turboaffiliate import model
 from decimal import Decimal
 from collections import defaultdict
+
+from turbogears import controllers, expose, identity, validate, validators
+
+from turboaffiliate import model
+
 
 months = {
     1: 'Enero', 2: 'Febrero', 3: 'Marzo',
@@ -40,6 +43,7 @@ class Report(controllers.Controller):
     @expose(template="turboaffiliate.templates.report.index")
     def index(self):
         return dict(accounts=model.Account.select(),
+                    bancos=model.Banco.select(),
                     departamentos=model.Departamento.select())
 
     @identity.require(identity.not_anonymous())
@@ -263,6 +267,31 @@ class Report(controllers.Controller):
         return dict(cotizacion=cotizacion, day=day,
                     afiliados=model.Affiliate.selectBy(cotizacion=cotizacion,
                                                        active=True))
+
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.report.banco")
+    @validate(validators=dict(banco=validators.Int(), year=validators.Int(),
+                              month=validators.Int(min=1, max=12)))
+    def banco(self, banco, month, year):
+
+        banco = model.Banco.get(banco)
+        
+        deducciones = model.DeduccionBancaria.selectBy(banco=banco, year=year,
+                                                       month=month)
+        cuentas = dict()
+
+        for deduccion in deducciones:
+
+            if deduccion.account in cuentas:
+                cuentas[deduccion.account] += deduccion.amount
+            else:
+                cuentas[deduccion.account] = deduccion.amount
+
+        total = sum(cuentas[c] for c in cuentas)
+
+        return dict(banco=banco, month=month, year=year, cuentas=cuentas,
+                    total=total)
+
 
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.deduced")

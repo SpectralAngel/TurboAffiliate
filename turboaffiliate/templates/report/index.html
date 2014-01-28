@@ -67,6 +67,29 @@
       </ul>
     </fieldset>
   </form>
+
+  <form class="ui-widget-content ui-corner-all" action="${tg.url('banco')}">
+      <fieldset>
+          <legend>Reporte de Ingresos por Banco</legend>
+          <ul>
+              <li>
+                  <label for="banco">Cuenta:</label>
+                  <select name="banco">
+                      <option py:for="banco in bancos" value="${banco.id}" py:content="banco.nombre" />
+                  </select>
+              </li>
+              <li>
+                  <label for="month">Mes:</label>
+                  <input name="month" />
+              </li>
+              <li>
+                  <label for="year">A&ntilde;o:</label>
+                  <input name="year" />
+              </li>
+              <li><input type="submit" value="Mostrar Reporte" /></li>
+          </ul>
+      </fieldset>
+  </form>
   <form class="ui-widget-content ui-corner-all" action="${tg.url('extra')}">
     <fieldset>
       <legend>Mostrar Cuentas por Cobrar</legend>
