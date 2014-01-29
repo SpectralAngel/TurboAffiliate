@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6f2b13b9-8aec-4593-aa11-21379f444948" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/turboaffiliate/templates/report/banco.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/templates/report/index.html" afterPath="$PROJECT_DIR$/turboaffiliate/templates/report/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/controllers/report.py" afterPath="$PROJECT_DIR$/turboaffiliate/controllers/report.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html" afterPath="$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TurboAffiliate.iws" />
@@ -72,16 +70,16 @@
       <file leaf-file-name="loan.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/loan.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="43" column="17" selection-start="1445" selection-end="1445" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="14552">
+            <state line="43" column="17" selection-start="1445" selection-end="1445" vertical-scroll-proportion="0.0" vertical-offset="731" max-vertical-offset="14705">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="report.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="report.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/report.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="277" column="8" selection-start="11084" selection-end="11084" vertical-scroll-proportion="0.38913524" vertical-offset="4358" max-vertical-offset="6885">
+            <state line="278" column="0" selection-start="11085" selection-end="11085" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="6885">
               <folding>
                 <element signature="e#842#869#0" expanded="true" />
               </folding>
@@ -98,10 +96,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="banco.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/banco.html">
+      <file leaf-file-name="deducedBank.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="54" selection-start="1087" selection-end="1087" vertical-scroll-proportion="-18.307692" vertical-offset="0" max-vertical-offset="680">
+            <state line="30" column="33" selection-start="1176" selection-end="1176" vertical-scroll-proportion="0.59096175" vertical-offset="0" max-vertical-offset="863">
               <folding />
             </state>
           </provider>
@@ -110,7 +108,7 @@
       <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="70" column="71" selection-start="2350" selection-end="2350" vertical-scroll-proportion="-5.6346154" vertical-offset="897" max-vertical-offset="5627">
+            <state line="70" column="71" selection-start="2350" selection-end="2350" vertical-scroll-proportion="0.0" vertical-offset="897" max-vertical-offset="5627">
               <folding />
             </state>
           </provider>
@@ -138,24 +136,24 @@
         <option value="$PROJECT_DIR$/turboaffiliate/templates/asamblea/index.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/asamblea/asistentes.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/controllers/obligation.py" />
-        <option value="$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/model.py" />
         <option value="$PROJECT_DIR$/turboaffiliate/controllers/loan.py" />
         <option value="$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/cambiarBanco.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/controllers/deduced.py" />
-        <option value="$PROJECT_DIR$/turboaffiliate/templates/report/banco.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/report/index.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/controllers/report.py" />
+        <option value="$PROJECT_DIR$/turboaffiliate/templates/report/banco.html" />
+        <option value="$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html" />
       </list>
     </option>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
+    <option name="x" value="558" />
     <option name="y" value="-8" />
-    <option name="width" value="1399" />
+    <option name="width" value="1370" />
     <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -185,6 +183,7 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -321,7 +320,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -358,6 +356,22 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.Run">
+    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails" singleton="true">
+      <module name="" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="run-app" />
+      <setting name="depsClasspath" value="false" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
+      <option name="PROGRAM_PARAMETERS" />
+      <method />
+    </configuration>
     <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -436,6 +450,50 @@
     <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
       <method />
     </configuration>
+    <configuration default="true" type="PyRemoteDebugConfigurationType" factoryName="Python Remote Debug">
+      <module name="" />
+      <option name="PORT" value="0" />
+      <option name="HOST" value="null" />
+      <PathMappingSettings>
+        <option name="pathMappings">
+          <list />
+        </option>
+      </PathMappingSettings>
+      <option name="REDIRECT_OUTPUT" value="true" />
+      <option name="SUSPEND_AFTER_CONNECT" value="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+      <method />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
       <module name="" />
       <option name="MAIN_CLASS_NAME" />
@@ -447,6 +505,47 @@
       <option name="VM_PARAMETERS" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="TurboAffiliate" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
       <method />
     </configuration>
     <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
@@ -511,6 +610,41 @@
       <TestRunner />
       <method />
     </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:/Python27/python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="TurboAffiliate" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="#com.intellij.j2meplugin.run.J2MEConfigurationType" factoryName="J2ME">
+      <module name="" />
+      <USER_OPTIONS />
+      <option name="TARGET_DEVICE_NAME" />
+      <option name="COMMAND_LINE_PARAMETERS" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="JAD_NAME" value="" />
+      <option name="IS_CLASSES" value="false" />
+      <option name="IS_OTA" value="false" />
+      <option name="INSTALL" />
+      <option name="REMOVE" />
+      <option name="RUN" />
+      <option name="TRANSIENT" />
+      <option name="FORCE" />
+      <option name="TO_START" />
+      <option name="SELECTION" value="0" />
+      <method />
+    </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -532,6 +666,20 @@
       <option name="PUREUNITTEST" value="true" />
       <option name="PARAMS" value="" />
       <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="FlexUnitRunConfigurationType" factoryName="FlexUnit" appDescriptorForEmulator="Android" class_name="" emulatorAdlOptions="" method_name="" output_log_level="null" package_name="" scope="Class">
+      <option name="BCName" value="" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browserFamily" value="FIREFOX" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
+          <option name="playerPath" value="FlashPlayerDebugger.exe" />
+        </LauncherParameters>
+      </option>
+      <option name="moduleName" value="" />
+      <option name="trusted" value="true" />
       <method />
     </configuration>
     <configuration default="true" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java">
@@ -568,175 +716,6 @@
       <envs />
       <method />
     </configuration>
-    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
-      <module name="" />
-      <option name="ACTIVITY_CLASS" value="" />
-      <option name="MODE" value="default_activity" />
-      <option name="DEPLOY" value="true" />
-      <option name="ARTIFACT_NAME" value="" />
-      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="USE_COMMAND_LINE" value="true" />
-      <option name="COMMAND_LINE" value="" />
-      <option name="WIPE_USER_DATA" value="false" />
-      <option name="DISABLE_BOOT_ANIMATION" value="false" />
-      <option name="NETWORK_SPEED" value="full" />
-      <option name="NETWORK_LATENCY" value="none" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
-      <method />
-    </configuration>
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true">
-      <module name="" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
-      <option name="PROGRAM_PARAMETERS" />
-      <method />
-    </configuration>
-    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails" singleton="true">
-      <module name="" />
-      <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="run-app" />
-      <setting name="depsClasspath" value="false" />
-      <setting name="passParentEnv" value="true" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <setting name="launchBrowser" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
-      <method />
-    </configuration>
-    <configuration default="true" type="PyRemoteDebugConfigurationType" factoryName="Python Remote Debug">
-      <module name="" />
-      <option name="PORT" value="0" />
-      <option name="HOST" value="null" />
-      <PathMappingSettings>
-        <option name="pathMappings">
-          <list />
-        </option>
-      </PathMappingSettings>
-      <option name="REDIRECT_OUTPUT" value="true" />
-      <option name="SUSPEND_AFTER_CONNECT" value="true" />
-      <method />
-    </configuration>
-    <configuration default="true" type="TestNG" factoryName="TestNG">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="SUITE_NAME" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="GROUP_NAME" />
-      <option name="TEST_OBJECT" value="CLASS" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="OUTPUT_DIRECTORY" />
-      <option name="ANNOTATION_TYPE" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <option name="USE_DEFAULT_REPORTERS" value="false" />
-      <option name="PROPERTIES_FILE" />
-      <envs />
-      <properties />
-      <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Doctests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="TurboAffiliate" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JUnit" factoryName="JUnit">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="C:/Python27/python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="TurboAffiliate" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <method />
-    </configuration>
-    <configuration default="true" type="#com.intellij.j2meplugin.run.J2MEConfigurationType" factoryName="J2ME">
-      <module name="" />
-      <USER_OPTIONS />
-      <option name="TARGET_DEVICE_NAME" />
-      <option name="COMMAND_LINE_PARAMETERS" />
-      <option name="MAIN_CLASS_NAME" value="" />
-      <option name="JAD_NAME" value="" />
-      <option name="IS_CLASSES" value="false" />
-      <option name="IS_OTA" value="false" />
-      <option name="INSTALL" />
-      <option name="REMOVE" />
-      <option name="RUN" />
-      <option name="TRANSIENT" />
-      <option name="FORCE" />
-      <option name="TO_START" />
-      <option name="SELECTION" value="0" />
-      <method />
-    </configuration>
-    <configuration default="true" type="FlexUnitRunConfigurationType" factoryName="FlexUnit" appDescriptorForEmulator="Android" class_name="" emulatorAdlOptions="" method_name="" output_log_level="null" package_name="" scope="Class">
-      <option name="BCName" value="" />
-      <option name="launcherParameters">
-        <LauncherParameters>
-          <option name="browserFamily" value="FIREFOX" />
-          <option name="launcherType" value="OSDefault" />
-          <option name="newPlayerInstance" value="false" />
-          <option name="playerPath" value="FlashPlayerDebugger.exe" />
-        </LauncherParameters>
-      </option>
-      <option name="moduleName" value="" />
-      <option name="trusted" value="true" />
-      <method />
-    </configuration>
     <configuration default="true" type="tests" factoryName="Attests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -755,6 +734,25 @@
       <option name="TEST_TYPE" value="TEST_SCRIPT" />
       <option name="PATTERN" value="" />
       <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
+      <module name="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="DEPLOY" value="true" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
       <method />
     </configuration>
     <configuration default="false" name="Run" type="PythonConfigurationType" factoryName="Python">
@@ -794,14 +792,15 @@
       <workItem from="1390580671003" duration="1692000" />
       <workItem from="1390693895096" duration="20000" />
       <workItem from="1390942258632" duration="2528000" />
+      <workItem from="1391028524595" duration="98000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5714000" />
+    <option name="totallyTimeSpent" value="5812000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1399" height="1056" extended-state="6" />
+    <frame x="558" y="-8" width="1370" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -818,18 +817,18 @@
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24832214" sideWeight="0.67081445" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24771342" sideWeight="0.67081445" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24832214" sideWeight="0.67081445" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24771342" sideWeight="0.67081445" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -853,6 +852,36 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/report.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="277" column="0" selection-start="11076" selection-end="11076" vertical-scroll-proportion="0.0" vertical-offset="85" max-vertical-offset="6885">
+          <folding>
+            <element signature="e#842#869#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/post.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="0" selection-start="1168" selection-end="1168" vertical-scroll-proportion="0.0" vertical-offset="578" max-vertical-offset="680">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/banco.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="54" selection-start="1087" selection-end="1087" vertical-scroll-proportion="0.0" vertical-offset="476" max-vertical-offset="680">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="70" column="71" selection-start="2350" selection-end="2350" vertical-scroll-proportion="0.0" vertical-offset="897" max-vertical-offset="5627">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/loan.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="5" column="27" selection-start="102" selection-end="102" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="14705">
@@ -862,46 +891,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="0" selection-start="1087" selection-end="1087" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="10965">
-          <folding />
-        </state>
+        <state line="30" column="0" selection-start="1087" selection-end="1087" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="10965" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/deduced.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="142" column="61" selection-start="5896" selection-end="5896" vertical-scroll-proportion="0.0" vertical-offset="1733" max-vertical-offset="2652">
-          <folding>
-            <element signature="e#832#859#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="142" column="61" selection-start="5896" selection-end="5896" vertical-scroll-proportion="0.0" vertical-offset="1733" max-vertical-offset="2652" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/cambiarBanco.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="127" selection-start="511" selection-end="511" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="544">
-          <folding />
-        </state>
+        <state line="6" column="127" selection-start="511" selection-end="511" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="544" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="12" selection-start="2321" selection-end="2321" vertical-scroll-proportion="0.0" vertical-offset="480" max-vertical-offset="1462">
-          <folding />
-        </state>
+        <state line="52" column="12" selection-start="2321" selection-end="2321" vertical-scroll-proportion="0.0" vertical-offset="480" max-vertical-offset="1462" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1713" column="26" selection-start="52971" selection-end="52971" vertical-scroll-proportion="0.0" vertical-offset="29121" max-vertical-offset="29988">
-          <folding />
-        </state>
+        <state line="1713" column="26" selection-start="52971" selection-end="52971" vertical-scroll-proportion="0.0" vertical-offset="29121" max-vertical-offset="29988" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dev.cfg">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="60" selection-start="608" selection-end="608" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="1122">
-          <folding />
-        </state>
+        <state line="15" column="60" selection-start="608" selection-end="608" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="1122" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/index.html">
@@ -920,46 +935,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="0" selection-start="1087" selection-end="1087" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="10965">
-          <folding />
-        </state>
+        <state line="30" column="0" selection-start="1087" selection-end="1087" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="10965" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/deduced.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="142" column="61" selection-start="5896" selection-end="5896" vertical-scroll-proportion="0.0" vertical-offset="1648" max-vertical-offset="2652">
-          <folding>
-            <element signature="e#832#859#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="142" column="61" selection-start="5896" selection-end="5896" vertical-scroll-proportion="0.0" vertical-offset="1648" max-vertical-offset="2652" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/cambiarBanco.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="127" selection-start="511" selection-end="511" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="544">
-          <folding />
-        </state>
+        <state line="6" column="127" selection-start="511" selection-end="511" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="544" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="12" selection-start="2321" selection-end="2321" vertical-scroll-proportion="0.0" vertical-offset="480" max-vertical-offset="1462">
-          <folding />
-        </state>
+        <state line="52" column="12" selection-start="2321" selection-end="2321" vertical-scroll-proportion="0.0" vertical-offset="480" max-vertical-offset="1462" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1713" column="26" selection-start="52971" selection-end="52971" vertical-scroll-proportion="0.0" vertical-offset="29121" max-vertical-offset="29988">
-          <folding />
-        </state>
+        <state line="1713" column="26" selection-start="52971" selection-end="52971" vertical-scroll-proportion="0.0" vertical-offset="29121" max-vertical-offset="29988" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dev.cfg">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="60" selection-start="608" selection-end="608" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="1122">
-          <folding />
-        </state>
+        <state line="15" column="60" selection-start="608" selection-end="608" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="1122" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/index.html">
@@ -978,16 +979,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="0" selection-start="1087" selection-end="1087" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="10965">
-          <folding />
-        </state>
+        <state line="30" column="0" selection-start="1087" selection-end="1087" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="10965" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dev.cfg">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="60" selection-start="608" selection-end="608" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="1122">
-          <folding />
-        </state>
+        <state line="15" column="60" selection-start="608" selection-end="608" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="1122" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/index.html">
@@ -999,9 +996,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="533" column="8" selection-start="17053" selection-end="17053" vertical-scroll-proportion="0.0" vertical-offset="9061" max-vertical-offset="29801">
-          <folding />
-        </state>
+        <state line="533" column="8" selection-start="17053" selection-end="17053" vertical-scroll-proportion="0.0" vertical-offset="9061" max-vertical-offset="29801" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/loan.py">
@@ -1013,16 +1008,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="516" column="40" selection-start="22376" selection-end="22376" vertical-scroll-proportion="0.0" vertical-offset="8772" max-vertical-offset="10863">
-          <folding />
-        </state>
+        <state line="516" column="40" selection-start="22376" selection-end="22376" vertical-scroll-proportion="0.0" vertical-offset="8772" max-vertical-offset="10863" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dev.cfg">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="60" selection-start="608" selection-end="608" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="1122">
-          <folding />
-        </state>
+        <state line="15" column="60" selection-start="608" selection-end="608" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="1122" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/index.html">
@@ -1072,11 +1063,6 @@
         <state line="34" column="67" selection-start="1356" selection-end="1356" vertical-scroll-proportion="0.66132724" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="33" selection-start="1122" selection-end="1122" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
-      </provider>
-    </entry>
     <entry file="file://C:/Python27/Lib/site-packages/sqlobject/col.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="401" column="61" selection-start="13633" selection-end="13633" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
@@ -1086,46 +1072,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dev.cfg">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="60" selection-start="608" selection-end="608" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
-          <folding />
-        </state>
+        <state line="15" column="60" selection-start="608" selection-end="608" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="12" selection-start="2321" selection-end="2321" vertical-scroll-proportion="0.0" vertical-offset="480" max-vertical-offset="1462">
-          <folding />
-        </state>
+        <state line="52" column="12" selection-start="2321" selection-end="2321" vertical-scroll-proportion="0.0" vertical-offset="480" max-vertical-offset="1462" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1713" column="26" selection-start="52971" selection-end="52971" vertical-scroll-proportion="0.0" vertical-offset="28549" max-vertical-offset="29801">
-          <folding />
-        </state>
+        <state line="1713" column="26" selection-start="52971" selection-end="52971" vertical-scroll-proportion="0.0" vertical-offset="28549" max-vertical-offset="29801" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/cambiarBanco.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="127" selection-start="511" selection-end="511" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="544">
-          <folding />
-        </state>
+        <state line="6" column="127" selection-start="511" selection-end="511" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="544" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/deduced.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="123" column="0" selection-start="5040" selection-end="5040" vertical-scroll-proportion="0.41089672" vertical-offset="1729" max-vertical-offset="2652">
-          <folding>
-            <element signature="e#832#859#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="123" column="0" selection-start="5040" selection-end="5040" vertical-scroll-proportion="0.41089672" vertical-offset="1729" max-vertical-offset="2652" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="0" selection-start="1087" selection-end="1087" vertical-scroll-proportion="-0.13385826" vertical-offset="510" max-vertical-offset="10846">
-          <folding />
-        </state>
+        <state line="30" column="0" selection-start="1087" selection-end="1087" vertical-scroll-proportion="-0.13385826" vertical-offset="510" max-vertical-offset="10846" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/loan.py">
@@ -1137,7 +1109,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/report.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="10" selection-start="1113" selection-end="1113" vertical-scroll-proportion="0.571263" vertical-offset="0" max-vertical-offset="863">
+        <state line="29" column="10" selection-start="1113" selection-end="1113" vertical-scroll-proportion="0.571263" vertical-offset="0" max-vertical-offset="863" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="70" column="71" selection-start="2350" selection-end="2350" vertical-scroll-proportion="0.0" vertical-offset="897" max-vertical-offset="5627">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/report.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="278" column="0" selection-start="11085" selection-end="11085" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="6885">
+          <folding>
+            <element signature="e#842#869#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/banco.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="17" selection-start="882" selection-end="882" vertical-scroll-proportion="0.41367322" vertical-offset="0" max-vertical-offset="863">
           <folding />
         </state>
       </provider>
@@ -1149,26 +1142,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/banco.html">
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="54" selection-start="1087" selection-end="1087" vertical-scroll-proportion="-18.307692" vertical-offset="0" max-vertical-offset="680">
+        <state line="30" column="33" selection-start="1176" selection-end="1176" vertical-scroll-proportion="0.59096175" vertical-offset="0" max-vertical-offset="863">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="71" selection-start="2350" selection-end="2350" vertical-scroll-proportion="-5.6346154" vertical-offset="897" max-vertical-offset="5627">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/report.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="277" column="8" selection-start="11084" selection-end="11084" vertical-scroll-proportion="0.38913524" vertical-offset="4358" max-vertical-offset="6885">
-          <folding>
-            <element signature="e#842#869#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
