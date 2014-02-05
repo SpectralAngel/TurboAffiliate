@@ -80,7 +80,7 @@ class Deduced(controllers.Controller):
         deducciones = model.Deduced.selectBy(affiliate=afiliado, year=anio)
         return dict(affiliate=afiliado, deducciones=deducciones, anio=anio)
 
-    @identity.require(identity.has_permission("Deductor"))
+
     @expose()
     @validate(
         validators=dict(affiliate=validators.Int(), account=validators.Int(),
@@ -122,7 +122,7 @@ class Deduced(controllers.Controller):
 
         return dict(deduced=deduced, accounts=model.Account.select())
 
-    @identity.require(identity.has_permission("Deductor"))
+
     @expose()
     @validate(validators=dict(deduced=validators.Int()))
     def deleteBanco(self, deduced):
@@ -132,7 +132,7 @@ class Deduced(controllers.Controller):
 
         raise redirect("/affiliate/deduced/banco/{0}".format(affiliate.id))
 
-    @identity.require(identity.has_permission("Deductor"))
+
     @expose()
     @validate(
         validators=dict(affiliate=validators.Int(), account=validators.Int(),

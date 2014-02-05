@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6f2b13b9-8aec-4593-aa11-21379f444948" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html" afterPath="$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html" afterPath="$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/controllers/deduced.py" afterPath="$PROJECT_DIR$/turboaffiliate/controllers/deduced.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TurboAffiliate.iws" />
@@ -80,9 +81,7 @@
         <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/report.py">
           <provider selected="true" editor-type-id="text-editor">
             <state line="278" column="0" selection-start="11085" selection-end="11085" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="6885">
-              <folding>
-                <element signature="e#842#869#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -96,19 +95,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="deducedBank.html" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html">
+      <file leaf-file-name="banco.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="33" selection-start="1176" selection-end="1176" vertical-scroll-proportion="0.59096175" vertical-offset="0" max-vertical-offset="863">
+            <state line="41" column="48" selection-start="1812" selection-end="1812" vertical-scroll-proportion="-17.0" vertical-offset="255" max-vertical-offset="1462">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/index.html">
+      <file leaf-file-name="deduced.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/deduced.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="70" column="71" selection-start="2350" selection-end="2350" vertical-scroll-proportion="0.0" vertical-offset="897" max-vertical-offset="5627">
+            <state line="74" column="47" selection-start="3001" selection-end="3001" vertical-scroll-proportion="1.0144124" vertical-offset="258" max-vertical-offset="2567">
               <folding />
             </state>
           </provider>
@@ -139,21 +138,21 @@
         <option value="$PROJECT_DIR$/turboaffiliate/model.py" />
         <option value="$PROJECT_DIR$/turboaffiliate/controllers/loan.py" />
         <option value="$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py" />
-        <option value="$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/cambiarBanco.html" />
-        <option value="$PROJECT_DIR$/turboaffiliate/controllers/deduced.py" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/report/index.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/controllers/report.py" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/report/banco.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html" />
+        <option value="$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html" />
+        <option value="$PROJECT_DIR$/turboaffiliate/controllers/deduced.py" />
       </list>
     </option>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="558" />
+    <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1370" />
+    <option name="width" value="1936" />
     <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -182,8 +181,8 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -275,6 +274,32 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="affiliate" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TurboAffiliate" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TurboAffiliate" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="turboaffiliate" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="affiliate" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="deduced" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -527,6 +552,9 @@
       <option name="USE_PATTERN" value="false" />
       <method />
     </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
+      <method />
+    </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -546,9 +574,6 @@
       </option>
       <envs />
       <patterns />
-      <method />
-    </configuration>
-    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
       <method />
     </configuration>
     <configuration default="true" type="FlashRunConfigurationType" factoryName="Flash App">
@@ -586,6 +611,10 @@
       <option name="usbDebugPort" value="7936" />
       <method />
     </configuration>
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
       <module name="" />
       <option name="TESTING_TYPE" value="0" />
@@ -604,10 +633,6 @@
       <option name="NETWORK_LATENCY" value="none" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
-      <method />
-    </configuration>
-    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
-      <TestRunner />
       <method />
     </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
@@ -792,15 +817,16 @@
       <workItem from="1390580671003" duration="1692000" />
       <workItem from="1390693895096" duration="20000" />
       <workItem from="1390942258632" duration="2528000" />
-      <workItem from="1391028524595" duration="98000" />
+      <workItem from="1391028524595" duration="730000" />
+      <workItem from="1391621796742" duration="83000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5812000" />
+    <option name="totallyTimeSpent" value="6527000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="558" y="-8" width="1370" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -817,18 +843,18 @@
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24771342" sideWeight="0.67081445" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15282215" sideWeight="0.67081445" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24771342" sideWeight="0.67081445" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24760383" sideWeight="0.67081445" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -855,9 +881,7 @@
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/report.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="277" column="0" selection-start="11076" selection-end="11076" vertical-scroll-proportion="0.0" vertical-offset="85" max-vertical-offset="6885">
-          <folding>
-            <element signature="e#842#869#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -870,9 +894,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/banco.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="54" selection-start="1087" selection-end="1087" vertical-scroll-proportion="0.0" vertical-offset="476" max-vertical-offset="680">
-          <folding />
-        </state>
+        <state line="28" column="54" selection-start="1087" selection-end="1087" vertical-scroll-proportion="0.0" vertical-offset="476" max-vertical-offset="680" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/index.html">
@@ -1075,11 +1097,6 @@
         <state line="15" column="60" selection-start="608" selection-end="608" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="12" selection-start="2321" selection-end="2321" vertical-scroll-proportion="0.0" vertical-offset="480" max-vertical-offset="1462" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/model.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="1713" column="26" selection-start="52971" selection-end="52971" vertical-scroll-proportion="0.0" vertical-offset="28549" max-vertical-offset="29801" />
@@ -1088,11 +1105,6 @@
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/cambiarBanco.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="127" selection-start="511" selection-end="511" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="544" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/deduced.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="123" column="0" selection-start="5040" selection-end="5040" vertical-scroll-proportion="0.41089672" vertical-offset="1729" max-vertical-offset="2652" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/asamblea.py">
@@ -1122,17 +1134,18 @@
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/report.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="278" column="0" selection-start="11085" selection-end="11085" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="6885">
-          <folding>
-            <element signature="e#842#869#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/banco.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="17" selection-start="882" selection-end="882" vertical-scroll-proportion="0.41367322" vertical-offset="0" max-vertical-offset="863">
-          <folding />
-        </state>
+        <state line="21" column="17" selection-start="882" selection-end="882" vertical-scroll-proportion="0.41367322" vertical-offset="0" max-vertical-offset="863" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="0" selection-start="1276" selection-end="1276" vertical-scroll-proportion="0.72885287" vertical-offset="0" max-vertical-offset="863" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/post.html">
@@ -1142,9 +1155,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html">
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="33" selection-start="1176" selection-end="1176" vertical-scroll-proportion="0.59096175" vertical-offset="0" max-vertical-offset="863">
+        <state line="41" column="48" selection-start="1812" selection-end="1812" vertical-scroll-proportion="-17.0" vertical-offset="255" max-vertical-offset="1462">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/deduced.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="74" column="47" selection-start="3001" selection-end="3001" vertical-scroll-proportion="1.0144124" vertical-offset="258" max-vertical-offset="2567">
           <folding />
         </state>
       </provider>
