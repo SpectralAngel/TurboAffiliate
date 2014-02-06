@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6f2b13b9-8aec-4593-aa11-21379f444948" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html" afterPath="$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/templates/affiliate/planilla.html" afterPath="$PROJECT_DIR$/turboaffiliate/templates/affiliate/planilla.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TurboAffiliate.iws" />
@@ -94,10 +94,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="banco.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="banco.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="28" selection-start="1518" selection-end="1518" vertical-scroll-proportion="0.6210046" vertical-offset="51" max-vertical-offset="1462">
+            <state line="15" column="22" selection-start="819" selection-end="819" vertical-scroll-proportion="-0.0" vertical-offset="255" max-vertical-offset="1462">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="planilla.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/planilla.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="66" column="52" selection-start="2970" selection-end="2970" vertical-scroll-proportion="0.3696408" vertical-offset="803" max-vertical-offset="1666">
               <folding />
             </state>
           </provider>
@@ -106,7 +115,7 @@
       <file leaf-file-name="deduced.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/deduced.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="0" selection-start="1010" selection-end="1010" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="2567">
+            <state line="29" column="0" selection-start="1010" selection-end="1010" vertical-scroll-proportion="0.0" vertical-offset="493" max-vertical-offset="2652">
               <folding />
             </state>
           </provider>
@@ -144,6 +153,7 @@
         <option value="$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/controllers/deduced.py" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html" />
+        <option value="$PROJECT_DIR$/turboaffiliate/templates/affiliate/planilla.html" />
       </list>
     </option>
   </component>
@@ -180,7 +190,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -343,6 +352,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -551,6 +561,9 @@
       <option name="USE_PATTERN" value="false" />
       <method />
     </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
+      <method />
+    </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -570,9 +583,6 @@
       </option>
       <envs />
       <patterns />
-      <method />
-    </configuration>
-    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
       <method />
     </configuration>
     <configuration default="true" type="FlashRunConfigurationType" factoryName="Flash App">
@@ -610,6 +620,10 @@
       <option name="usbDebugPort" value="7936" />
       <method />
     </configuration>
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
       <module name="" />
       <option name="TESTING_TYPE" value="0" />
@@ -628,10 +642,6 @@
       <option name="NETWORK_LATENCY" value="none" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
-      <method />
-    </configuration>
-    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
-      <TestRunner />
       <method />
     </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
@@ -818,12 +828,13 @@
       <workItem from="1390942258632" duration="2528000" />
       <workItem from="1391028524595" duration="730000" />
       <workItem from="1391621796742" duration="787000" />
-      <workItem from="1391706694179" duration="501000" />
+      <workItem from="1391706694179" duration="1071000" />
+      <workItem from="1391711401174" duration="45000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7732000" />
+    <option name="totallyTimeSpent" value="8347000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -878,13 +889,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/report.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="277" column="0" selection-start="11076" selection-end="11076" vertical-scroll-proportion="0.0" vertical-offset="85" max-vertical-offset="6885">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/post.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="34" column="0" selection-start="1168" selection-end="1168" vertical-scroll-proportion="0.0" vertical-offset="578" max-vertical-offset="680">
@@ -1077,9 +1081,7 @@
     </entry>
     <entry file="file://C:/Python27/Lib/site-packages/sqlobject/col.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="401" column="61" selection-start="13633" selection-end="13633" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
-          <folding />
-        </state>
+        <state line="401" column="61" selection-start="13633" selection-end="13633" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dev.cfg">
@@ -1152,7 +1154,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="28" selection-start="1518" selection-end="1518" vertical-scroll-proportion="0.6210046" vertical-offset="51" max-vertical-offset="1462">
+        <state line="15" column="22" selection-start="819" selection-end="819" vertical-scroll-proportion="-0.0" vertical-offset="255" max-vertical-offset="1462">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/planilla.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="66" column="52" selection-start="2970" selection-end="2970" vertical-scroll-proportion="0.3696408" vertical-offset="803" max-vertical-offset="1666">
           <folding />
         </state>
       </provider>
