@@ -19,7 +19,7 @@
         <th>Mes</th>
         <th>A&ntilde;o</th>
         <th class="no-print">Acciones</th>
-        <th class="no-print" py:if="tg.identity.user.has_permission('Deductor')">Eliminar</th>
+        <th class="no-print">Eliminar</th>
       </tr>
     </thead>
     <tbody>
@@ -33,7 +33,7 @@
         <td class="no-print">
             <a href="${tg.url('/affiliate/deduced/cambiarBanco/{0}'.format(d.id))}">Cambiar Cuenta</a>
         </td>
-        <td class="no-print" py:if="tg.identity.user.has_permission('Deductor')">
+        <td class="no-print">
             <a href="${tg.url('/affiliate/deduced/deleteBanco/{0}'.format(d.id))}" >X</a>
         </td>
       </tr>
