@@ -56,6 +56,7 @@ class Deduced(controllers.Controller):
                                              year=anio)
         return dict(affiliate=afiliado, deducciones=deducciones)
 
+    @identity.require(identity.not_anonymous())
     @expose()
     @validate(
         validators=dict(deduced=validators.Int(), account=validators.Int()))
@@ -65,6 +66,7 @@ class Deduced(controllers.Controller):
 
         raise redirect("/affiliate/deduced/{0}".format(deduced.affiliate.id))
 
+    @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.deduced.cambiar')
     @validate(validators=dict(deduced=validators.Int()))
     def cambiar(self, deduced):
@@ -80,7 +82,7 @@ class Deduced(controllers.Controller):
         deducciones = model.Deduced.selectBy(affiliate=afiliado, year=anio)
         return dict(affiliate=afiliado, deducciones=deducciones, anio=anio)
 
-
+    @identity.require(identity.not_anonymous())
     @expose()
     @validate(
         validators=dict(affiliate=validators.Int(), account=validators.Int(),
@@ -96,7 +98,7 @@ class Deduced(controllers.Controller):
 
         raise redirect("/affiliate/deduced/{0}".format(affiliate))
 
-    @identity.require(identity.has_permission("Deductor"))
+    @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(deduced=validators.Int()))
     def delete(self, deduced):
@@ -106,6 +108,7 @@ class Deduced(controllers.Controller):
 
         raise redirect("/affiliate/deduced/{0}".format(affiliate.id))
 
+    @identity.require(identity.not_anonymous())
     @expose()
     @validate(
         validators=dict(deduced=validators.Int(), account=validators.Int()))
@@ -122,7 +125,7 @@ class Deduced(controllers.Controller):
 
         return dict(deduced=deduced, accounts=model.Account.select())
 
-
+    @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(deduced=validators.Int()))
     def deleteBanco(self, deduced):
@@ -132,7 +135,7 @@ class Deduced(controllers.Controller):
 
         raise redirect("/affiliate/deduced/banco/{0}".format(affiliate.id))
 
-
+    @identity.require(identity.not_anonymous())
     @expose()
     @validate(
         validators=dict(affiliate=validators.Int(), account=validators.Int(),

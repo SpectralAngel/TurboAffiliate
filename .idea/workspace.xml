@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6f2b13b9-8aec-4593-aa11-21379f444948" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/templates/affiliate/planilla.html" afterPath="$PROJECT_DIR$/turboaffiliate/templates/affiliate/planilla.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/turboaffiliate/controllers/deduced.py" afterPath="$PROJECT_DIR$/turboaffiliate/controllers/deduced.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TurboAffiliate.iws" />
@@ -97,25 +97,34 @@
       <file leaf-file-name="banco.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="22" selection-start="819" selection-end="819" vertical-scroll-proportion="-0.0" vertical-offset="255" max-vertical-offset="1462">
+            <state line="15" column="22" selection-start="819" selection-end="819" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="1462">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="planilla.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="planilla.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/planilla.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="66" column="52" selection-start="2970" selection-end="2970" vertical-scroll-proportion="0.3696408" vertical-offset="803" max-vertical-offset="1666">
+            <state line="72" column="17" selection-start="3294" selection-end="3294" vertical-scroll-proportion="-17.73077" vertical-offset="763" max-vertical-offset="1666">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="deduced.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="affiliate.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/affiliate.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="46" column="25" selection-start="1629" selection-end="1629" vertical-scroll-proportion="0.0" vertical-offset="17" max-vertical-offset="12801">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="deduced.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/deduced.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="0" selection-start="1010" selection-end="1010" vertical-scroll-proportion="0.0" vertical-offset="493" max-vertical-offset="2652">
+            <state line="86" column="14" selection-start="3569" selection-end="3569" vertical-scroll-proportion="0.69733924" vertical-offset="748" max-vertical-offset="2618">
               <folding />
             </state>
           </provider>
@@ -151,9 +160,10 @@
         <option value="$PROJECT_DIR$/turboaffiliate/controllers/report.py" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/report/banco.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/report/deducedBank.html" />
-        <option value="$PROJECT_DIR$/turboaffiliate/controllers/deduced.py" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html" />
         <option value="$PROJECT_DIR$/turboaffiliate/templates/affiliate/planilla.html" />
+        <option value="$PROJECT_DIR$/turboaffiliate/controllers/deduced.py" />
+        <option value="$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/deduced.html" />
       </list>
     </option>
   </component>
@@ -190,6 +200,8 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -352,8 +364,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -829,12 +839,14 @@
       <workItem from="1391028524595" duration="730000" />
       <workItem from="1391621796742" duration="787000" />
       <workItem from="1391706694179" duration="1071000" />
-      <workItem from="1391711401174" duration="45000" />
+      <workItem from="1391711401174" duration="1249000" />
+      <workItem from="1391799032312" duration="1415000" />
+      <workItem from="1392054920657" duration="115000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8347000" />
+    <option name="totallyTimeSpent" value="11081000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -864,8 +876,8 @@
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -889,23 +901,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/post.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="0" selection-start="1168" selection-end="1168" vertical-scroll-proportion="0.0" vertical-offset="578" max-vertical-offset="680">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/banco.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="54" selection-start="1087" selection-end="1087" vertical-scroll-proportion="0.0" vertical-offset="476" max-vertical-offset="680" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/report/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="71" selection-start="2350" selection-end="2350" vertical-scroll-proportion="0.0" vertical-offset="897" max-vertical-offset="5627" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/loan.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="5" column="27" selection-start="102" selection-end="102" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="14705">
@@ -1145,13 +1140,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/deduced.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="0" selection-start="1010" selection-end="1010" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="2567">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/banco.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="15" column="22" selection-start="819" selection-end="819" vertical-scroll-proportion="-0.0" vertical-offset="255" max-vertical-offset="1462">
@@ -1159,9 +1147,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/extra.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="0" selection-start="840" selection-end="840" vertical-scroll-proportion="0.37694013" vertical-offset="0" max-vertical-offset="1938" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/deduced/deduced.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="32" column="84" selection-start="1601" selection-end="1601" vertical-scroll-proportion="0.14611872" vertical-offset="416" max-vertical-offset="1292" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/affiliate.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="25" selection-start="1629" selection-end="1629" vertical-scroll-proportion="0.0" vertical-offset="17" max-vertical-offset="12801">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/turboaffiliate/templates/affiliate/planilla.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="52" selection-start="2970" selection-end="2970" vertical-scroll-proportion="0.3696408" vertical-offset="803" max-vertical-offset="1666">
+        <state line="72" column="17" selection-start="3294" selection-end="3294" vertical-scroll-proportion="-17.73077" vertical-offset="763" max-vertical-offset="1666">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/turboaffiliate/controllers/deduced.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="86" column="14" selection-start="3569" selection-end="3569" vertical-scroll-proportion="0.69733924" vertical-offset="748" max-vertical-offset="2618">
           <folding />
         </state>
       </provider>
