@@ -96,8 +96,8 @@ class Extra(controllers.Controller):
         flash(u'Se agrego la deducción a los afiliados')
         
         raise redirect('/affiliate/extra')
-    
-    @identity.require(identity.All(identity.in_any_group('admin'),
+
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose('json')
     @validate(validators=dict(extra=validators.Int(),
