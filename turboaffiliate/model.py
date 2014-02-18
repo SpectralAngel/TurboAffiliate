@@ -208,6 +208,7 @@ class Cotizacion(SQLObject):
     nombre = UnicodeCol(length=50, default=None)
     jubilados = BoolCol(default=True)
     usuarios = RelatedJoin("User")
+    afiliados = MultipleJoin("Affiliate")
 
 class Affiliate(SQLObject):
 

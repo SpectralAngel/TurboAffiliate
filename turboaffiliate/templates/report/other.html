@@ -1,31 +1,39 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="../master.html" />
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html"/>
 <head>
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-  <title>TurboAffiliate &bull; Reporte de Ingresos ${cotizacion.nombre} de ${month} de ${year}</title>
-  <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"
+          py:replace="''"/>
+    <title>TurboAffiliate &bull; Reporte de Ingresos ${cotizacion.nombre} de
+        ${month} de ${year}</title>
+    <link rel="stylesheet" type="text/css"
+          href="${tg.url('/static/css/status.css')}"/>
 </head>
 <body>
-  <h1>Reporte de Ingresos ${cotizacion.nombre} de ${month} de ${year}</h1>
-  <table class="striped full-size ui-corner-all ui-widget-content">
+<h1>Reporte de Ingresos ${cotizacion.nombre} de ${month} de ${year}</h1>
+<table class="striped full-size ui-corner-all ui-widget-content">
     <thead>
-      <tr>
-        <th>C&oacute;digo</th>
+    <tr>
         <th>Cuenta</th>
-        <th>Afiliados</th>
-        <th>Total</th>
-      </tr>
+        <th>Cantidad</th>
+        <th>Monto</th>
+    </tr>
     </thead>
     <tbody>
-      <tr py:for="account in report.otherAccounts">
-        <td>${account.account.code}</td>
-        <td>${account.account.name}</td>
-        <td>${account.quantity}</td>
-        <td>${locale.currency(account.amount, True, True)}</td>
-      </tr>
+    <tr py:for="account in cuentas">
+        <td>${account.name}</td>
+        <td></td>
+        <td>${locale.currency(cuentas[account], True, True)}</td>
+    </tr>
     </tbody>
-  </table>
-  <h2>Total de Ingresos: ${locale.currency(report.total(), True, True)}</h2>
+    <tfoot>
+    <tr>
+        <th colspan="2">Total:</th>
+        <th>${locale.currency(total, True, True)}</th>
+    </tr>
+    </tfoot>
 </body>
 </html>

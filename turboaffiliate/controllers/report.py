@@ -140,6 +140,21 @@ class Report(controllers.Controller):
         respecto a un tipo de pago"""
 
         cotizacion = model.Cotizacion.get(cotizacion)
+        afiliados = cotizacion.afiliados
+        deducciones = afiliados.throughTo.deduced.filter(
+            model.Deduced.q.year == year,
+            model.Deduced.q.month == month)
+        cuentas = dict()
+
+        for deduccion in deducciones:
+
+            if deduccion.account in cuentas:
+                cuentas[deduccion.account] += deduccion.amount
+            else:
+                cuentas[deduccion.account] = deduccion.amount
+
+        total = sum(cuentas[c] for c in cuentas)
+
         report = model.OtherReport.selectBy(cotizacion=cotizacion,
                                             year=year, month=month).getOne()
         return dict(month=month, year=year, report=report,
@@ -275,7 +290,7 @@ class Report(controllers.Controller):
     def banco(self, banco, month, year):
 
         banco = model.Banco.get(banco)
-        
+
         deducciones = model.DeduccionBancaria.selectBy(banco=banco, year=year,
                                                        month=month)
         cuentas = dict()
