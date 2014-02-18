@@ -344,15 +344,18 @@ class Report(controllers.Controller):
     @validate(validators=dict(account=validators.Int(), year=validators.Int(),
                               month=validators.Int(min=1, max=12),
                               payment=validators.String()))
-    def deducedPayment(self, account, month, year, payment):
+    def deducedPayment(self, cotizacion, account, month, year):
 
-        deduced = model.Deduced.selectBy(account=account, year=year,
-                                         month=month)
-        deduced = [d for d in deduced if d.affiliate.payment == payment]
-        total = sum(d.amount for d in deduced if d.affiliate.payment == payment)
+
+        cotizacion = model.Cotizacion.get(cotizacion)
+        afiliados = model.Affiliate.selectBy(cotizacion=cotizacion)
+        deduced = afiliados.throughTo.deduced.filter(AND(
+            model.Deduced.q.year == year,
+            model.Deduced.q.month == month))
+        total = sum(d.amount for d in deduced)
 
         return dict(deduced=deduced, account=account, month=months[month],
-                    year=year, total=total, payment=payment)
+                    year=year, total=total, payment=cotizacion.nombre)
 
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.affiliate.show")
