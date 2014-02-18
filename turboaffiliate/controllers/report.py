@@ -21,6 +21,7 @@
 
 from decimal import Decimal
 from collections import defaultdict
+from sqlobject import AND
 
 from turbogears import controllers, expose, identity, validate, validators
 
@@ -141,9 +142,9 @@ class Report(controllers.Controller):
 
         cotizacion = model.Cotizacion.get(cotizacion)
         afiliados = model.Affiliate.selectBy(cotizacion=cotizacion)
-        deducciones = afiliados.throughTo.deduced.filter(
+        deducciones = afiliados.throughTo.deduced.filter(AND(
             model.Deduced.q.year == year,
-            model.Deduced.q.month == month)
+            model.Deduced.q.month == month))
         cuentas = dict()
 
         for deduccion in deducciones:
