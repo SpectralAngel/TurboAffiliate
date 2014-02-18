@@ -140,7 +140,7 @@ class Report(controllers.Controller):
         respecto a un tipo de pago"""
 
         cotizacion = model.Cotizacion.get(cotizacion)
-        afiliados = cotizacion.afiliados
+        afiliados = model.Affiliate.selectBy(cotizacion=cotizacion)
         deducciones = afiliados.throughTo.deduced.filter(
             model.Deduced.q.year == year,
             model.Deduced.q.month == month)
