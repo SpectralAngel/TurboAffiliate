@@ -348,9 +348,11 @@ class Report(controllers.Controller):
 
 
         cotizacion = model.Cotizacion.get(cotizacion)
+        account = model.Account.get(account)
         afiliados = model.Affiliate.selectBy(cotizacion=cotizacion)
         deduced = afiliados.throughTo.deduced.filter(AND(
             model.Deduced.q.year == year,
+            model.Deduced.q.account == account,
             model.Deduced.q.month == month))
         total = sum(d.amount for d in deduced)
 
