@@ -134,7 +134,7 @@ class Report(controllers.Controller):
     @validate(validators=dict(year=validators.Int(), month=validators.Int(
         min=1,
         max=12),
-                              cotizacion=validators.String()))
+        cotizacion=validators.String()))
     def cotizacion(self, year, month, cotizacion):
 
         """Muestra los cobros efectuados correspondientes a un mes y año con
@@ -343,7 +343,7 @@ class Report(controllers.Controller):
     @expose(template="turboaffiliate.templates.report.payment")
     @validate(validators=dict(account=validators.Int(), year=validators.Int(),
                               month=validators.Int(min=1, max=12),
-                              payment=validators.String()))
+                              cotizacion=validators.String()))
     def deducedPayment(self, cotizacion, account, month, year):
 
 
