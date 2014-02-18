@@ -155,10 +155,7 @@ class Report(controllers.Controller):
                 cuentas[deduccion.account] = deduccion.amount
 
         total = sum(cuentas[c] for c in cuentas)
-
-        report = model.OtherReport.selectBy(cotizacion=cotizacion,
-                                            year=year, month=month).getOne()
-        return dict(month=month, year=year, report=report,
+        return dict(month=month, year=year, cuentas=cuentas, total=total,
                     cotizacion=cotizacion)
 
     @identity.require(identity.not_anonymous())
