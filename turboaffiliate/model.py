@@ -305,7 +305,9 @@ class Affiliate(SQLObject):
     seguros = MultipleJoin("Seguro", joinColumn="afiliado_id")
     inscripciones = MultipleJoin("Inscripcion", joinColumn="afiliado_id")
     depositos = MultipleJoin("Deposito", joinColumn="afiliado_id")
-    deduccionesBancarias = MultipleJoin("DeduccionBancaria", joinColumn="afiliado_id")
+    deduccionesBancarias = MultipleJoin("DeduccionBancaria",
+                                        joinColumn="afiliado_id",
+                                        orderBy=['-year', '-month'])
     
     def tiempo(self):
         
