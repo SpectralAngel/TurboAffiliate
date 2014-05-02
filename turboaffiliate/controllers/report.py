@@ -385,7 +385,8 @@ class Report(controllers.Controller):
         max=12)))
     def aportaron(self, year, month):
 
-        cuotas = model.CuotaTable.selectBy(year=year, month=month)
+        query = "cuota_table.month%s = true AND cuota_table.year = %s" % (month, year)
+        cuotas = model.CuotaTable.select(query)
         show = u"que Cotizaron en {0} de {1}".format(month, year)
 
         affiliates = [c.affiliate for c in cuotas]
@@ -396,8 +397,8 @@ class Report(controllers.Controller):
         min=1,
         max=12)))
     def noAportaron(self, year, month):
-
-        cuotas = model.CuotaTable.selectBy(year=year, month=month)
+        query = "cuota_table.month%s = 0 AND cuota_table.year = %s" % (month, year)
+        cuotas = model.CuotaTable.select(query)
         show = u"que no Cotizaron en {0} de {1}".format(month, year)
 
         affiliates = [c.affiliate for c in cuotas]
