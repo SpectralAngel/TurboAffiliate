@@ -768,7 +768,7 @@ class AutoSeguro(SQLObject):
                 total += sum(o.amount_compliment for o in os
                              if mes < self.affiliate.jubilated.month)
 
-                total += sum(o.inprema for o in os
+                total += sum(o.inprema_compliment for o in os
                              if mes >= self.affiliate.jubilated.month)
 
             elif self.affiliate.jubilated.year > self.year:
