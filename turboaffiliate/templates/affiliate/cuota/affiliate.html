@@ -81,6 +81,59 @@
       </tr>
     </tfoot>
   </table>
+  <table class="small striped ui-widget-content ui-corner-all">
+      <caption>Complemento de Aportaciones</caption>
+      <thead>
+      <tr>
+          <th>A&ntilde;o</th>
+          <th>Enero</th>
+          <th>Febrero</th>
+          <th>Marzo</th>
+          <th>Abril</th>
+          <th>Mayo</th>
+          <th>Junio</th>
+          <th>Julio</th>
+          <th>Agosto</th>
+          <th>Sept</th>
+          <th>Oct</th>
+          <th>Nov</th>
+          <th>Dic</th>
+          <th class="deuda">Total</th>
+          <th class="deuda">Deuda</th>
+          <th class="noprint">E</th>
+          <th class="noprint">B</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr py:for="table in affiliate.autoseguros">
+          <td>${table.year}</td>
+          <td>${table.pago_mes(1)}</td>
+          <td>${table.pago_mes(2)}</td>
+          <td>${table.pago_mes(3)}</td>
+          <td>${table.pago_mes(4)}</td>
+          <td>${table.pago_mes(5)}</td>
+          <td>${table.pago_mes(6)}</td>
+          <td>${table.pago_mes(7)}</td>
+          <td>${table.pago_mes(8)}</td>
+          <td>${table.pago_mes(9)}</td>
+          <td>${table.pago_mes(10)}</td>
+          <td>${table.pago_mes(11)}</td>
+          <td>${table.pago_mes(12)}</td>
+          <td class="deuda">${table.pagado()}</td>
+          <td class="deuda">${table.deuda()}</td>
+          <td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/editcompliment/{0}'.format(table.id))}">X</a></td>
+          <td class="noprint"><a class="delete" href="${tg.url('/affiliate/cuota/removecompliment/{0}'.format(table.id))}">X</a></td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr class="total">
+          <th colspan="13">Totales</th>
+          <th class="deuda">${locale.currency(sum(table.pagado() for table in affiliate.autoseguro), True, True)}</th>
+          <th class="deuda">${locale.currency(sum(table.deuda() for table in affiliate.autoseguro), True, True)}</th>
+          <td class="noprint" colspan="2" />
+      </tr>
+      </tfoot>
+  </table>
   <table class="striped ui-widget-content ui-corner-all" py:if="affiliate.active">
     <caption>Cobros a Efectuar</caption>
     <thead>
@@ -205,6 +258,19 @@
         <li><input type="submit" value="A&ntilde;adir" /></li>
       </ul>
     </fieldset>
+  </form>
+  <form action="${tg.url('/affiliate/cuota/addcompliment')}" method="post" class="ui-widget-content ui-corner-all noprint">
+      <fieldset>
+          <legend>A&ntilde;adir A&ntilde;o de Complemento</legend>
+          <input type="hidden" value="${affiliate.id}" name="affiliate" />
+          <ul>
+              <li>
+                  <label for="year">A&ntilde;o</label>
+                  <input name="year" />
+              </li>
+              <li><input type="submit" value="A&ntilde;adir" /></li>
+          </ul>
+      </fieldset>
   </form>
 </body>
 </html>

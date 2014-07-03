@@ -278,6 +278,7 @@ class Affiliate(SQLObject):
     """Método de Cotización"""
 
     cuotaTables = MultipleJoin("CuotaTable", orderBy='year')
+    autoseguros = MultipleJoin("AutoSeguro", orderBy='year')
     """Historial de aportaciones"""
     loans = MultipleJoin("Loan", orderBy='startDate')
     """Préstamos activos"""
@@ -386,6 +387,15 @@ class Affiliate(SQLObject):
         kw['affiliate'] = self
         kw['year'] = year
         CuotaTable(**kw)
+
+    def complete_compliment(self, year):
+
+        """Agrega un año de aportaciones al estado de cuenta del afiliado"""
+
+        kw = dict()
+        kw['affiliate'] = self
+        kw['year'] = year
+        AutoSeguro(**kw)
 
     def get_delayed(self):
 
@@ -639,6 +649,187 @@ class CuotaTable(SQLObject):
     def delayed(self):
 
         if self.affiliate.joined == None:
+            return Zero
+
+        """Obtiene el primer mes en el que no se haya efectuado un pago en las
+        aportaciones.
+        """
+
+        inicio, fin = self.periodo(retrasada=True)
+        for n in range(inicio, fin):
+            if not getattr(self, 'month{0}'.format(n)):
+                return n
+
+        return Zero
+
+    def edit_line(self, month):
+        text = ' name="month{0}"'.format(month)
+        if getattr(self, 'month{0}'.format(month)):
+            return text + ' checked'
+        else:
+            return text + ' '
+
+    def pagar_mes(self, mes):
+        setattr(self, 'month{0}'.format(mes), True)
+
+    def pay_month(self, month):
+        setattr(self, 'month{0}'.format(month), True)
+
+    def remove_month(self, month):
+        setattr(self, 'month{0}'.format(month), False)
+
+    def all(self):
+
+        return self.todos()
+
+    def empty(self):
+
+        return self.vacio()
+
+
+class AutoSeguro(SQLObject):
+    """Contains the payed months as Boolean values"""
+
+    affiliate = ForeignKey("Affiliate")
+    year = IntCol()
+    affiliateYear = DatabaseIndex("affiliate", "year", unique=True)
+
+    month1 = BoolCol(default=False)
+    month2 = BoolCol(default=False)
+    month3 = BoolCol(default=False)
+    month4 = BoolCol(default=False)
+    month5 = BoolCol(default=False)
+    month6 = BoolCol(default=False)
+    month7 = BoolCol(default=False)
+    month8 = BoolCol(default=False)
+    month9 = BoolCol(default=False)
+    month10 = BoolCol(default=False)
+    month11 = BoolCol(default=False)
+    month12 = BoolCol(default=False)
+
+    def periodo(self, retrasada=False, gracia=False):
+
+        (start, end) = (1, 13)
+
+        if self.affiliate.joined.year == self.year:
+            start = self.affiliate.joined.month
+
+        if self.year == date.today().year:
+            if retrasada:
+                end = date.today().month
+            else:
+                if gracia:
+                    end = date.today().month - 4
+                else:
+                    end = date.today().month + 1
+        else:
+            if gracia:
+                end = 8
+
+        if end <= 0:
+            end = 1
+
+        return start, end
+
+    def todos(self, gracia=False):
+
+        """Verifica si el afiliado ha realizado todos los pagos del año"""
+
+        inicio, fin = self.periodo(gracia=gracia)
+        for n in range(inicio, fin):
+            if not getattr(self, 'month{0}'.format(n)):
+                return False
+
+        return True
+
+    def vacio(self):
+
+        """Responde si el afiliado no ha realizado pagos durante el año"""
+
+        inicio, fin = self.periodo()
+        for n in range(inicio, fin):
+            if getattr(self, 'month{0}'.format(n)):
+                return False
+
+        return True
+
+    def cantidad(self, mes):
+
+        total = Zero
+        os = Obligation.selectBy(year=self.year, month=mes)
+
+        if (self.affiliate.cotizacion.jubilados and
+                not self.affiliate.jubilated is None):
+
+            if self.affiliate.jubilated.year < self.year:
+                total = sum(o.inprema_compliment for o in os)
+
+            elif self.affiliate.jubilated.year == self.year:
+                total += sum(o.amount_compliment for o in os
+                             if mes < self.affiliate.jubilated.month)
+
+                total += sum(o.inprema for o in os
+                             if mes >= self.affiliate.jubilated.month)
+
+            elif self.affiliate.jubilated.year > self.year:
+                total = sum(o.amount_compliment for o in os)
+
+        else:
+            total = sum(o.amount_compliment for o in os)
+
+        return total
+
+    def pago_mes(self, mes, periodo=None):
+
+        """Muestra la cantidad pagada en el mes especificado"""
+
+        if periodo == None:
+            inicio, fin = self.periodo()
+            periodo = range(inicio, fin)
+
+        if not mes in periodo:
+            return Zero
+
+        if not getattr(self, 'month{0}'.format(mes)):
+            return Zero
+
+        return self.cantidad(mes)
+
+    def deuda_mes(self, mes, periodo=None):
+
+        """Muestra la cantidad debida en el mes especificado"""
+
+        if periodo == None:
+            inicio, fin = self.periodo()
+            periodo = range(inicio, fin)
+
+        if not mes in periodo:
+            return Zero
+
+        if getattr(self, 'month{0}'.format(mes)):
+            return Zero
+
+        return self.cantidad(mes)
+
+    def deuda(self):
+
+        """Obtiene la cantidad total debida durante el año"""
+
+        inicio, fin = self.periodo()
+        periodo = range(inicio, fin)
+        return sum(self.deuda_mes(mes, periodo) for mes in periodo)
+
+    def pagado(self):
+
+        """Obtiene la cantidad total pagada durante el año"""
+
+        inicio, fin = self.periodo()
+        periodo = range(inicio, fin)
+        return sum(self.pago_mes(mes, periodo) for mes in periodo)
+
+    def delayed(self):
+
+        if self.affiliate.joined is None:
             return Zero
 
         """Obtiene el primer mes en el que no se haya efectuado un pago en las
@@ -1336,6 +1527,8 @@ class Obligation(SQLObject):
     year = IntCol()
     account = ForeignKey("Account")
     filiales = CurrencyCol(default=4, notNone=True)
+    inprema_compliment = CurrencyCol(default=0, notNone=True)
+    amount_compliment = CurrencyCol(default=0, notNone=True)
 
 
 class ReportAccount(SQLObject):

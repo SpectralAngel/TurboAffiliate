@@ -70,6 +70,17 @@ class Cuota(controllers.Controller):
         affiliate = table.affiliate
         table.destroySelf()
         raise redirect('/affiliate/cuota/{0}'.format(affiliate.id))
+
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose()
+    @validate(validators=dict(id=validators.Int()))
+    def removecompliment(self, id):
+
+        table = model.AutoSeguro.get(id)
+        affiliate = table.affiliate
+        table.destroySelf()
+        raise redirect('/affiliate/cuota/{0}'.format(affiliate.id))
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
@@ -83,6 +94,19 @@ class Cuota(controllers.Controller):
         """
         
         return dict(table=model.CuotaTable.get(code))
+
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose(template='turboaffiliate.templates.affiliate.cuota.editcompliment')
+    @validate(validators=dict(code=validators.Int()))
+    def editcompliment(self, code):
+
+        """Muestra el formulario de edicion de un año de aportaciones
+
+        :param code: identificador de la Tabla de Aportaciones
+        """
+
+        return dict(table=model.AutoSeguro.get(code))
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
@@ -117,6 +141,40 @@ class Cuota(controllers.Controller):
                  identity.current.user)
         
         raise redirect('/affiliate/cuota/{0}'.format(table.affiliate.id))
+
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose()
+    @validate(validators=dict(id=validators.Int(),
+                              month1=validators.Bool(),
+                              month2=validators.Bool(),
+                              month3=validators.Bool(),
+                              month4=validators.Bool(),
+                              month5=validators.Bool(),
+                              month6=validators.Bool(),
+                              month7=validators.Bool(),
+                              month8=validators.Bool(),
+                              month9=validators.Bool(),
+                              month10=validators.Bool(),
+                              month11=validators.Bool(),
+                              month12=validators.Bool()))
+    def changecompliment(self, id, **kw):
+
+        table = model.AutoSeguro.get(id)
+        for n in range(1, 13):
+            try:
+                setattr(table, "month{0}".format(n), kw["month{0}".format(n)])
+                self.log(u"Cambio en aportaciones año {0} mes {1} afiliado {2} 1".format(table.year, n,table.affiliate.id),
+                         identity.current.user)
+            except KeyError:
+                setattr(table, "month{0}".format(n), False)
+                self.log(u"Cambio en aportaciones año {0} mes {1} afiliado {2} 0".format(table.year, n,table.affiliate.id),
+                         identity.current.user)
+
+        self.log(u"Cambio en aportaciones año {0} afiliado {1}".format(table.year, table.affiliate.id),
+                 identity.current.user)
+
+        raise redirect('/affiliate/cuota/{0}'.format(table.affiliate.id))
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
@@ -127,6 +185,17 @@ class Cuota(controllers.Controller):
         affiliate = model.Affiliate.get(affiliate)
         affiliate.complete(year)
         
+        raise redirect('/affiliate/cuota/{0}'.format(affiliate.id))
+
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose()
+    @validate(validators=dict(affiliate=validators.Int(),year=validators.Int()))
+    def addcompliment(self, affiliate, year):
+
+        affiliate = model.Affiliate.get(affiliate)
+        affiliate.complete_compliment(year)
+
         raise redirect('/affiliate/cuota/{0}'.format(affiliate.id))
     
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
