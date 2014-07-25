@@ -42,6 +42,7 @@ Zeros = Decimal(0)
 hub = PackageHub("turboaffiliate")
 __connection__ = hub
 
+
 # identity models.
 class Visit(SQLObject):
     class sqlmeta:
@@ -162,7 +163,7 @@ class Logger(SQLObject):
     action = UnicodeCol(default="")
     day = DateTimeCol(default=datetime.now)
 
-# ###############################################################################
+################################################################################
 # Clases Especificas del Negocio
 ################################################################################
 
@@ -196,7 +197,7 @@ class Instituto(SQLObject):
 
 class Casa(SQLObject):
     """Sucursal del COPEMH
-    
+
     Representa un lugar físico donde se encuentra una sede del COPEMH.
     """
 
@@ -213,30 +214,31 @@ class Cotizacion(SQLObject):
     jubilados = BoolCol(default=True)
     usuarios = RelatedJoin("User")
     afiliados = MultipleJoin("Affiliate")
+    bank_main = BoolCol(default=False)
 
 
 class Affiliate(SQLObject):
     """Representa un miembro de la institución, cada afiliado puede tener
     Prestamos, tiene Cuota mensual que es Deducido por planilla o pagado en
     ventanilla en algunos casos.
-    
+
     Ademas, puede deducirsele por diferentes métodos, como ser:
-        
+
         * Escalafon
         * UPN
         * INPREMA
         * Ventanilla
         * Ministerio de Educación.
-    
+
     El afiliado puede asistir a diferentes eventos de la institucion como ser
     asambleas, elecciones u otras actividades extraordinarias que se programen.
-    
+
     Es necesario para efectuar los diversos cobros:
-        
+
         1. Escalafon: Número de Identidad.
         2. INPREMA: Número de cobro.
         3. UPN: Número de empleado.
-    
+
     Algunos datos son requeridos para obtener información estadística acerca de
     la institución.
     @DynamicAttrs
@@ -313,6 +315,7 @@ class Affiliate(SQLObject):
     deduccionesBancarias = MultipleJoin("DeduccionBancaria",
                                         joinColumn="afiliado_id",
                                         orderBy=['-year', '-month'])
+    banco_completo = BoolCol(default=False, notNone=True)
 
     def tiempo(self):
 
@@ -331,20 +334,27 @@ class Affiliate(SQLObject):
 
         return Banco.get(self.banco)
 
-    def get_monthly(self, day=date.today()):
+    def get_monthly(self, day=date.today(), bank=False):
 
         """Obtiene el pago mensual que debe efectuar el afiliado"""
-
-        extras = sum(e.amount for e in self.extras)
-        #loans = sum(l.get_payment() for l in self.loans)
+        total = sum(e.amount for e in self.extras)
+        # loans = sum(l.get_payment() for l in self.loans)
         #reintegros = sum(r.monto for r in self.reintegros if not r.pagado)
-        reintegros = Decimal(0)
+
         for reintegro in self.reintegros:
             if reintegro.pagado:
                 break
-            reintegros += reintegro.monto
+            total += reintegro.monto
 
-        return extras + self.get_prestamo() + reintegros + self.get_cuota(day)
+        if bank:
+            total += self.get_bank_cuota(day)
+        else:
+            total += self.get_cuota(day)
+
+        if self.cotizacion.bank_main or self.banco_completo:
+            total += self.get_prestamo()
+
+        return total
 
     def get_cuota(self, day=date.today()):
 
@@ -353,12 +363,35 @@ class Affiliate(SQLObject):
 
         obligations = Obligation.selectBy(month=day.month, year=day.year)
 
-        obligation = Decimal(0)
+        obligation = Zero
         obligation += sum(o.amount for o in obligations
                           if not self.cotizacion.jubilados)
 
         obligation += sum(o.inprema for o in obligations
                           if self.cotizacion.jubilados)
+
+        return obligation
+
+    def get_bank_cuota(self, day=date.today()):
+
+        """Obtiene la cuota de aportación que el :class:`Affiliate` debera pagar
+        en el mes actual"""
+
+        obligations = Obligation.selectBy(month=day.month, year=day.year)
+
+        obligation = Zero
+        if self.banco_completo:
+            obligation += sum(o.amount_compliment for o in obligations
+                              if not self.cotizacion.jubilados)
+
+            obligation += sum(o.inprema for o in obligations
+                              if self.cotizacion.jubilados)
+        else:
+            obligation += sum(o.amount for o in obligations
+                              if not self.cotizacion.jubilados)
+
+            obligation += sum(o.inprema_compliment for o in obligations
+                              if self.cotizacion.jubilados)
 
         return obligation
 
@@ -871,7 +904,7 @@ class AutoSeguro(SQLObject):
 class Loan(SQLObject):
     """Guarda los datos que pertenecen a un préstamo personal otorgado a un
     :class:`Affiliate` de la organización
-    
+
     @DynamicAttrs
     """
 
@@ -941,7 +974,7 @@ class Loan(SQLObject):
         """Calcula la cantidad de pagos que el :class:`Affiliate` no ha
         efectuado desde que se le otorgo el :class:`Loan`"""
 
-        #pagos = self.prediccion_pagos_actuales()
+        # pagos = self.prediccion_pagos_actuales()
         # Utilizar el número de pagos almacenado, para evitar calcular intereses
         # sobre cuotas pagadas y eliminadas accidentalmente.
         #total = pagos - self.number - 1
@@ -969,7 +1002,7 @@ class Loan(SQLObject):
     def pago_retrasado(self):
 
         """Muestra el monto debido en cantidades vencidas a la fecha
-        
+
         Difiere de :function:__pago_retrasado en que se limitá a calcular hasta
         el monto nominal del :class:`Loan` con sus intereses normales.
         """
@@ -1005,7 +1038,7 @@ class Loan(SQLObject):
 
         """Obtiene el cobro a efectuar del prestamo"""
 
-        #if self.debt < self.payment and self.number != self.months - 1:
+        # if self.debt < self.payment and self.number != self.months - 1:
         #    return self.debt
 
         return self.payment
@@ -1020,14 +1053,14 @@ class Loan(SQLObject):
               deposito=False, descripcion=None):
 
         """Carga un nuevo pago para el préstamo
-        
+
         Dependiendo de si se marca como libre de intereses o no, calculará el
         interés compuesto a pagar.
-        
+
         En caso de ingresar un pago mayor que la deuda actual del préstamo,
         ingresará el sobrante como intereses y marcará el préstamo como
         pagado.
-        
+
         :param amount:      El monto pagado
         :param receipt:     Código del comprobante de pago
         :param day:         Fecha en que se realiza el pago
@@ -1076,7 +1109,7 @@ class Loan(SQLObject):
         # Decrease debt by the amount of the payed capital
         self.debt -= kw['capital']
         # Change the last payment date
-        #if day.date > self.last:
+        # if day.date > self.last:
         self.last = day
         # Register the payment in the database
         Pay(**kw)
@@ -1268,7 +1301,7 @@ class Loan(SQLObject):
 
 class Pay(SQLObject):
     """Pagos que se han efectuado a un :class:`Loan`
-    
+
     @DynamicAttrs
     """
 
@@ -1415,7 +1448,7 @@ class Deduction(SQLObject):
 class PayedLoan(SQLObject):
     """Representa un :class:`Loan` al que ya se le han efectuado pagos
     suficientes para cubrir su capital
-    
+
     @DynamicAttrs
     """
 
@@ -1476,7 +1509,7 @@ class PayedLoan(SQLObject):
 
 class OldPay(SQLObject):
     """Pagos que se han efectuado a un :class:`PayedLoan`
-    
+
     @DynamicAttrs
     """
 
@@ -1850,7 +1883,7 @@ class Inscripcion(SQLObject):
 
 class Deposito(SQLObject):
     """Pagos efectuados mediante un deposito bancario
-    
+
     @DynamicAttrs
     """
 
@@ -1867,7 +1900,7 @@ class Deposito(SQLObject):
 class DepositoAnonimo(SQLObject):
     """Depositos efectuados en el :class:`Banco` que no pueden ser rastreados
     a su depositante
-    
+
     @DynamicAttrs"""
 
     referencia = UnicodeCol(length=100)
