@@ -59,8 +59,11 @@ class Obligation(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose()
     @validate(validators=dict(account=validators.Int(), year=validators.Int(),
-                            month=validators.Int(), filiales=validators.Int(),
-                            inprema=validators.Number(), amount=validators.Number()))
+                              month=validators.Int(), filiales=validators.Int(),
+                              inprema=validators.Number(),
+                              amount=validators.Number(),
+                              inprema_compliment=validators.Number(),
+                              amount_compliment=validators.Number()))
     def save(self, account,  **kw):
         
         account = model.Account.get(account)
