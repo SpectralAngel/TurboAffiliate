@@ -1,6 +1,5 @@
 $(document).ready(function(e)
-{ 
-  $('#menu').ptMenu();
+{
   $('.ui-button').hover(
       function(){ $(this).addClass("ui-state-hover"); },
       function(){ $(this).removeClass("ui-state-hover"); }
@@ -25,6 +24,7 @@ $(document).ready(function(e)
   $('#AgregarAfiliado').dialog(
   {
     title : "Agregar un Afiliado",
+    width: 350,
     autoOpen:false,
     buttons :   {
             'Agregar Afiliado' : function() { $(this).submit() },
@@ -65,8 +65,7 @@ $(document).ready(function(e)
   $(".striped tbody tr:odd").addClass("odd");
   $(".striped tbody tr:even").addClass("even");
   $(".deduced-674").addClass("ui-state-error").addClass("ui-corner-all");
-  $('.button, button').button();
+  //$('.button, button').button();
   // Workaround a bug found added in JQuery 1.5 + JQuery UI 1.8.x
   // $('#ui-datepicker-div').hide();
 });
-

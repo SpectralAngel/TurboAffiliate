@@ -1,6 +1,6 @@
 @CHARSET "UTF-8";
 body {
-  margin: 0;
+  padding-top: 30px;
   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
   font-size: small;
   min-width: 750px;

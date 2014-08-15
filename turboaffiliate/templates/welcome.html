@@ -6,63 +6,44 @@
   <title>TurboAffiliate &bull; Inicio</title>
 </head>
 <body>
-  <h1>Bienvenido al Sistema de Gesti&oacute;n de Afiliaciones</h1>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/affiliate/carnet')}">
-    <fieldset>
-      <legend>Buscar Afiliado</legend>
-      <ul>
-        <li>
-          <label>Carnet:</label>
-          <input name="carnet" />
-        </li>
-        <li><input type="submit" value="Buscar" /></li>
-      </ul>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/affiliate/solvencia')}">
-    <fieldset>
-      <legend>Solvencia</legend>
-      <ul>
-        <li>
-          <label for="afiliado">Afiliaci&oacute;n</label>
-          <input name="afiliado"/>
-        </li>
-        <li>
-          <label>Mes</label>
-          <select name="mes">
-            <option>Enero</option>
-            <option>Febrero</option>
-            <option>Marzo</option>
-            <option>Abril</option>
-            <option>Mayo</option>
-            <option>Junio</option>
-            <option>Julio</option>
-            <option>Agosto</option>
-            <option>Septiembre</option>
-            <option>Octubre</option>
-            <option>Noviembre</option>
-            <option>Diciembre</option>
-          </select>
-        </li>
-        <li>
-          <label for="anio">A&ntilde;o</label>
-          <input name="anio"/>
-        </li>
-        <li><input type="submit" value="Agregar" /></li>
-      </ul>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/affiliate/cuota')}">
-    <fieldset>
-      <legend>Ver Estado de Cuenta Aportaciones</legend>
-      <ul>
-        <li>
-          <label for="affiliate">Carnet:</label>
-          <input name="affiliate" />
-        </li>
-        <li><input type="submit" value="Mostrar" /></li>
-      </ul>
-    </fieldset>
-  </form>
+<div class="row">
+  <section class="page-header">
+      <h1>Bienvenido al Sistema de Gesti&oacute;n de Afiliaciones</h1>
+  </section>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form class="form-horizontal" role="form" action="${tg.url('/affiliate/carnet')}">
+            <fieldset>
+                <legend>Buscar Afiliado</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Carnet:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="carnet" />
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="btn btn-primary" type="submit" value="Buscar" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <form class="form-horizontal" role="form" action="${tg.url('/affiliate/card')}">
+            <fieldset>
+                <legend>Buscar Afiliado por Identidad</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Identidad:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="cardID" />
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="btn btn-primary" type="submit" value="Buscar" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
 </body>
 </html>
