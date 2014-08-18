@@ -1,23 +1,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude" py:strip="">
-<?python
-  
-    import os
-    import locale
-    
-    locale_name = None
-    if os.name == 'nt':
-        locale_name = 'Spanish_Honduras.1252'
-    else:
-        locale_name = "es_HN.utf8"
-    
-    locale.setlocale(locale.LC_ALL, locale_name)
-?>
 <head py:match="head" py:attrs="select('@*')">
   <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title py:replace="''">Sistema Gestor de Afiliaciones</title>
+
+<?python
+    import os
+    import locale
+
+    locale_name = None
+    if os.name == 'nt':
+        locale_name = 'Spanish_Honduras.1252'
+    else:
+        locale_name = "es_HN.utf8"
+
+    locale.setlocale(locale.LC_ALL, locale_name)
+?>
     <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/bootstrap.min.css')}" media="screen" />
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/ui-lightness/jquery-ui.css')}" media="screen" />
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/menu.css')}" media="screen" />
