@@ -1,80 +1,132 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python import locale ?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="../../master.html" />
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../../master.html"/>
 <head>
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-  <title>TurboAffiliate &bull; Detalle de Deducciones Bancarias${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"
+          py:replace="''"/>
+    <title>TurboAffiliate &bull; Detalle de Deducciones Bancarias${affiliate.id}
+        - ${affiliate.firstName} ${affiliate.lastName}</title>
 </head>
 <body>
-  <h1>${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</h1>
-  <table class="striped flotante-izquierdo ui-widget-content ui-corner-all">
-    <caption>Todas las Deducciones Efectuadas</caption>
-    <thead>
-      <tr>
-        <th>Deducci&oacute;n</th>
-        <th>Banco</th>
-        <th>Cantidad</th>
-        <th>Detalle</th>
-        <th>Mes</th>
-        <th>A&ntilde;o</th>
-        <th class="no-print">Acciones</th>
-        <th class="no-print">Eliminar</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="deduced-${d.account.id}" py:for="d in affiliate.deduccionesBancarias">
-        <td>${d.account.name}</td>
-        <td>${d.banco.nombre}</td>
-        <td>${locale.currency(d.amount, True, True)}</td>
-        <td>${d.detail}</td>
-        <td>${d.month}</td>
-        <td>${d.year}</td>
-        <td class="no-print">
-            <a href="${tg.url('/affiliate/deduced/cambiarBanco/{0}'.format(d.id))}">Cambiar Cuenta</a>
-        </td>
-        <td class="no-print">
-            <a href="${tg.url('/affiliate/deduced/deleteBanco/{0}'.format(d.id))}" >X</a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/affiliate/deduced/saveBanco')}">
-    <fieldset>
-      <legend>Datos de la Deducci&oacute;n</legend>
-      <ul>
-        <li>
-          <label for="account">Cuenta:</label>
-          <select name="account">
-            <option py:for="account in accounts" value="${account.id}">${account.id} - ${account.name}</option>
-          </select>
-          <input type="hidden" name="affiliate" value="${affiliate.id}" />
-        </li>
-        <li>
-            <label for="banco">Banco:</label>
-            <select name="banco">
-                <option py:for="banco in bancos" value="${banco.id}">${banco.id} - ${banco.nombre}</option>
-            </select>
-        </li>
-        <li>
-          <label for="amount">Monto:</label>
-          <input name="amount" />
-        </li>
-        <li>
-          <label for="month">Mes:</label>
-          <input name="month" />
-        </li>
-        <li>
-          <label for="year">A&ntilde;o:</label>
-          <input name="year" />
-        </li>
-        <li>
-          <label for="detail">Detalle</label>
-          <input name="detail" />
-        </li>
-        <li><input type="submit" value="Agregar Deducci&oacute;n" /></li>
-      </ul>
-    </fieldset>
-  </form>
+
+<div class="row">
+    <div class="col-md-12">
+        <section class="page-header">
+            <h1>
+                <a href="${tg.url('/affiliate/{0}'.format(affiliate.id))}">
+                    ${affiliate.id}
+                </a>
+                - ${affiliate.firstName} ${affiliate.lastName}
+            </h1>
+        </section>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-5 noprint">
+        <form class="form-horizontal"
+              py:if="tg.identity.user.has_permission('Deductor')"
+              action="${tg.url('/affiliate/deduced/saveBanco')}">
+            <fieldset>
+                <input type="hidden" name="affiliate" value="${affiliate.id}"/>
+                <legend>Datos de la Deducci&oacute;n</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Cuenta:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="account" class="select form-control">
+                            <option py:for="account in accounts"
+                                    value="${account.id}">${account.id} -
+                                ${account.name}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Cuenta:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="banco" class="select form-control">
+                            <option py:for="banco in bancos"
+                                    value="${banco.id}">${banco.id} -
+                                ${banco.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Monto:</label>
+
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="amount"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Mes:</label>
+
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="month"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">A&ntilde;o:</label>
+
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="year"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Detalle:</label>
+
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="detail"/>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="btn btn-primary" type="submit"
+                           value="Agregar Deducci&oacute;n"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-md-7 table-responsive">
+        <table class="table">
+            <caption>Todas las Deducciones Efectuadas</caption>
+            <thead>
+            <tr>
+                <th>Deducci&oacute;n</th>
+                <th>Banco</th>
+                <th>Cantidad</th>
+                <th>Detalle</th>
+                <th>Mes</th>
+                <th>A&ntilde;o</th>
+                <th class="noprint">Acciones</th>
+                <th class="noprint">Eliminar</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="deduced-${d.account.id}"
+                py:for="d in affiliate.deduccionesBancarias">
+                <td>${d.account.name}</td>
+                <td>${d.banco.nombre}</td>
+                <td>${locale.currency(d.amount, True, True)}</td>
+                <td>${d.detail}</td>
+                <td>${d.month}</td>
+                <td>${d.year}</td>
+                <td class="noprint">
+                    <a class="btn btn-info" href="${tg.url('/affiliate/deduced/cambiarBanco/{0}'.format(d.id))}">Cambiar
+                        Cuenta</a>
+                </td>
+                <td class="noprint">
+                    <a class="btn btn-danger" href="${tg.url('/affiliate/deduced/deleteBanco/{0}'.format(d.id))}">X</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>

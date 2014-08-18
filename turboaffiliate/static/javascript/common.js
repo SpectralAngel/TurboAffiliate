@@ -64,7 +64,7 @@ $(document).ready(function(e)
   
   $(".striped tbody tr:odd").addClass("odd");
   $(".striped tbody tr:even").addClass("even");
-  $(".deduced-674").addClass("ui-state-error").addClass("ui-corner-all");
+  $(".deduced-674").addClass("bg-danger");
   //$('.button, button').button();
   // Workaround a bug found added in JQuery 1.5 + JQuery UI 1.8.x
   // $('#ui-datepicker-div').hide();
