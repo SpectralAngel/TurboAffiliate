@@ -539,96 +539,123 @@
     </div>
 </form>
 <form class="editar" action="${tg.url('/affiliate/save')}" method="post">
-    <div>
+    <fieldset>
         <input type="hidden" value="${affiliate.id}" name="affiliate"/>
-        <ul>
-            <li>
-                <label for="firstName">Nombre:</label>
-                <input name="firstName" value="${affiliate.firstName}"/>
-            </li>
-            <li>
-                <label for="lastName">Apellido:</label>
-                <input name="lastName" value="${affiliate.lastName}"/>
-            </li>
-            <li>
-                <label for="birthPlace">Lugar de Nacimiento:</label>
-                <input name="birthPlace" value="${affiliate.birthPlace}"/>
-            </li>
-            <li>
-                <label for="phone">Tel&eacute;fono:</label>
-                <input name="phone" value="${affiliate.phone}"/>
-            </li>
-            <li>
-                <label>Identidad:</label>
-                <input name="cardID" value="${affiliate.cardID}"
-                       maxlength="15"/>
-            </li>
-            <li>
-                <label for="birthday">Fecha de Nacimiento</label>
+        <div class="form-group">
+            <label class="control-label col-md-4">Identidad:</label>
+            <div class="controls col-md-7">
+                <input class="form-control" name="cardID" maxlength="15" value="${affiliate.cardID}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Nombres:</label>
+            <div class="controls col-md-7">
+                <input class="form-control" name="firstName" value="${affiliate.firstName}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Apellidos:</label>
+            <div class="controls col-md-7">
+                <input class="form-control" name="lastName" value="${affiliate.lastName}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Lugar de Nacimiento:</label>
+            <div class="controls col-md-7">
+                <input class="form-control" name="birthPlace" value="${affiliate.birthPlace}" />
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Tel&eacute;fono:</label>
+            <div class="controls col-md-7">
+                <input class="form-control" name="phone" value="${affiliate.phone}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Email:</label>
+            <div class="controls col-md-7">
+                <input class="form-control" name="email" value="${affiliate.email}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Fecha de Nacimiento:</label>
+            <div class="controls col-md-7">
                 <input name="birthday" py:if="affiliate.birthday != None"
                        value="${affiliate.birthday.strftime('%d/%m/%Y')}"
-                       class="datepicker"/>
+                       class="datepicker form-control"/>
                 <input name="birthday" py:if="affiliate.birthday == None"
-                       class="datepicker"/>
-            </li>
-            <li>
-                <label for="cotizacion">Cotiza por:</label>
-                <select name="cotizacion" class="cotizaciones">
+                       class="datepicker form-control"/>
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Cotiza por:</label>
+            <div class="controls col-md-7">
+                <select name="cotizacion" class="cotizaciones select form-control">
                     <option selected="selected"
                             value="${affiliate.cotizacion.id}">
                         ${affiliate.cotizacion.nombre}
                     </option>
                 </select>
-            </li>
-            <li>
-                <label for="escalafon">Escalaf&oacute;n:</label>
-                <input name="escalafon" value="${affiliate.escalafon}"/>
-            </li>
-            <li>
-                <label for="email">Correo Electr&oacute;nico:</label>
-                <input name="email" value="${affiliate.email}"/>
-            </li>
-            <li>
-                <label for="school">Instituto:</label>
-                <input name="school" value="${affiliate.school}"/>
-            </li>
-            <li>
-                <label for="departamento">Departamento:</label>
-                <select class="departamento" name="departamento"
-                        id="editarDepartamento"
-                        onchange="JSON.municipioE('${tg.url('/json')}', $('#editarDepartamento' + ' option:selected').val(), '#editarMunicipios')">
-                    <option selected="selected"
-                            value="${affiliate.departamento.id}">
-                        ${affiliate.departamento.nombre}
-                    </option>
-                </select>
-            </li>
-            <li>
-                <label for="municipio">Municipio:</label>
-                <select name="municipio" class="municipio"
-                        id="editarMunicipios">
-                    <option selected="selected"
-                            value="${affiliate.municipio.id}">
-                        ${affiliate.municipio.nombre}
-                    </option>
-                </select>
-            </li>
-            <li>
-                <label for="cuenta">Cuenta:</label>
-                <input name="cuenta" value="${affiliate.cuenta}"/>
-            </li>
-            <li>
-                <label for="banco">Banco:</label>
-                <select name="banco">
+            </div>
+        </div>
+
+        <div class="row">
+
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Escalafon:</label>
+            <div class="controls col-md-7">
+                <input class="form-control" name="escalafon" value="${affiliate.escalafon}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Instituto:</label>
+            <div class="controls col-md-7">
+                <input class="form-control" name="school" value="${affiliate.school}"  />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Banco:</label>
+            <div class="controls col-md-7">
+                <select name="banco" class="form-control select">
                     <option py:for="b in bancos" py:if="b.id == affiliate.banco"
                             selected="selected" value="${b.id}">${b.nombre}
                     </option>
                     <option py:for="b in bancos" value="${b.id}">${b.nombre}
                     </option>
                 </select>
-            </li>
-        </ul>
-    </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Departamento:</label>
+            <div class="controls col-md-7">
+                <select name="departamento" class="departamento select form-control" id="agregarDepartamento"
+                        onchange="JSON.municipio('${tg.url('/json')}', $('#agregarDepartamento' + ' option:selected').val(), '#agregarMunicipios')">
+                    <option selected="selected"
+                            value="${affiliate.departamento.id}">
+                        ${affiliate.departamento.nombre}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">Municipio:</label>
+            <div class="controls col-md-7">
+                <select name="municipio" class="municipio select form-control" id="agregarMunicipios">
+                    <option selected="selected"
+                            value="${affiliate.municipio.id}">
+                        ${affiliate.municipio.nombre}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </fieldset>
 </form>
 <form class="extra" action="${tg.url('/affiliate/extra/save')}" method="post">
     <div>
