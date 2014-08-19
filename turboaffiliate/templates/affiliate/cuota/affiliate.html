@@ -65,8 +65,7 @@
                 <th>Dic</th>
                 <th class="deuda">Total</th>
                 <th class="deuda">Deuda</th>
-                <th class="noprint">E</th>
-                <th class="noprint">B</th>
+                <th class="noprint">Acciones</th>
             </tr>
             </thead>
             <tbody>
@@ -86,11 +85,13 @@
                 <td>${table.pago_mes(12)}</td>
                 <td class="deuda">${table.pagado()}</td>
                 <td class="deuda">${table.deuda()}</td>
-                <td class="noprint"><a class="delete"
-                                       href="${tg.url('/affiliate/cuota/edit/{0}'.format(table.id))}">X</a>
-                </td>
-                <td class="noprint"><a class="delete"
-                                       href="${tg.url('/affiliate/cuota/remove/{0}'.format(table.id))}">X</a>
+                <td class="noprint">
+                    <a class="btn btn-info" href="${tg.url('/affiliate/cuota/edit/{0}'.format(table.id))}">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
+                    <a class="btn btn-danger" href="${tg.url('/affiliate/cuota/remove/{0}'.format(table.id))}">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </a>
                 </td>
             </tr>
             </tbody>
@@ -103,7 +104,7 @@
                 <th class="deuda">
                     ${locale.currency(sum(table.deuda() for table in affiliate.cuotaTables), True, True)}
                 </th>
-                <td class="noprint" colspan="2"/>
+                <td class="noprint" />
             </tr>
             </tfoot>
         </table>
@@ -130,8 +131,7 @@
                 <th>Dic</th>
                 <th class="deuda">Total</th>
                 <th class="deuda">Deuda</th>
-                <th class="noprint">E</th>
-                <th class="noprint">B</th>
+                <th class="noprint">Acciones</th>
             </tr>
             </thead>
             <tbody>
@@ -151,11 +151,13 @@
                 <td>${table.pago_mes(12)}</td>
                 <td class="deuda">${table.pagado()}</td>
                 <td class="deuda">${table.deuda()}</td>
-                <td class="noprint"><a class="delete"
-                                       href="${tg.url('/affiliate/cuota/editcompliment/{0}'.format(table.id))}">X</a>
-                </td>
-                <td class="noprint"><a class="delete"
-                                       href="${tg.url('/affiliate/cuota/removecompliment/{0}'.format(table.id))}">X</a>
+                <td class="noprint">
+                    <a class="btn btn-info" href="${tg.url('/affiliate/cuota/editcompliment/{0}'.format(table.id))}">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
+                    <a class="btn btn-danger" href="${tg.url('/affiliate/cuota/removecompliment/{0}'.format(table.id))}">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </a>
                 </td>
             </tr>
             </tbody>
@@ -168,7 +170,7 @@
                 <th class="deuda">
                     ${locale.currency(sum(table.deuda() for table in affiliate.autoseguro), True, True)}
                 </th>
-                <td class="noprint" colspan="2"/>
+                <td class="noprint" />
             </tr>
             </tfoot>
         </table>
