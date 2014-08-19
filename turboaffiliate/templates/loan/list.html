@@ -8,39 +8,49 @@
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
 </head>
 <body>
-  <h1>Pr&eacute;stamos ${payment}</h1>
-  <table class="ui-corner-all striped full-size ui-widget-content">
-    <thead>
-      <tr>
-        <th>Pr&eacute;stamo</th>
-        <th>Afiliaci&oacute;n</th>
-        <th>Afiliado</th>
-        <th>Cotiza</th>
-        <th>Monto</th>
-        <th>Saldo</th>
-        <th>Otorgado</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr py:for="loan in loans">
-        <td><a class="print" href="${tg.url('/loan/{0}'.format(loan.id))}">${loan.id}</a></td>
-        <td><a class="print" href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}" py:content="loan.affiliate.id" /></td>
-        <td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
-        <td>${loan.affiliate.cotizacion.nombre}</td>
-        <td>${locale.currency(loan.capital, True, True)}</td>
-        <td>${locale.currency(loan.totaldebt(), True, True)}</td>
-        <td>${loan.startDate}</td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <th>Cantidad</th>
-        <th colspan="3">${count}</th>
-        <th>${locale.currency(capital, True, True)}</th>
-        <th>${locale.currency(debt, True, True)}</th>
-        <th></th>
-      </tr>
-    </tfoot>
-  </table>
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h1>Pr&eacute;stamos ${payment}</h1>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Pr&eacute;stamo</th>
+                <th>Afiliaci&oacute;n</th>
+                <th>Afiliado</th>
+                <th>Cotiza</th>
+                <th>Monto</th>
+                <th>Saldo</th>
+                <th>Otorgado</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr py:for="loan in loans">
+                <td><a href="${tg.url('/loan/{0}'.format(loan.id))}">${loan.id}</a></td>
+                <td><a href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}"></a></td>
+                <td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
+                <td>${loan.affiliate.cotizacion.nombre}</td>
+                <td>${locale.currency(loan.capital, True, True)}</td>
+                <td>${locale.currency(loan.totaldebt(), True, True)}</td>
+                <td>${loan.startDate}</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>Cantidad</th>
+                <th colspan="3">${count}</th>
+                <th>${locale.currency(capital, True, True)}</th>
+                <th>${locale.currency(debt, True, True)}</th>
+                <th></th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
 </body>
 </html>

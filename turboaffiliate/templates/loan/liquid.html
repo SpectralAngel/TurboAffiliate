@@ -7,38 +7,49 @@
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
 </head>
 <body>
-  <h1>Pr&eacute;stamos por Liquidaci&oacute;n</h1>
-  <table class="striped full-size ui-corner-all ui-widget-content">
-    <thead>
-      <tr>
-        <th>Pr&eacute;stamo</th>
-        <th>Afiliaci&oacute;n</th>
-        <th>Afiliado</th>
-        <th>Capital</th>
-        <th>Liquidado</th>
-        <th>Fecha de Inicio</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr py:for="loan in loans">
-        <td><a href="${tg.url('/loan/{0}'.format(loan.id))}">${loan.id}</a></td>
-        <td><a href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}">${loan.affiliate.id}</a></td>
-        <td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
-        <td>${locale.currency(loan.capital, True, True)}</td>
-        <td>${locale.currency(loan.net(), True, True)}</td>
-        <td>${loan.startDate}</td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td>Cantidad</td>
-        <td>${count}</td>
-        <td></td>
-        <td>${locale.currency(capital, True, True)}</td>
-        <td>${locale.currency(debt, True, True)}</td>
-        <td></td>
-      </tr>
-    </tfoot>
-  </table>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h1>Pr&eacute;stamos por Liquidaci&oacute;n</h1>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Pr&eacute;stamo</th>
+                <th>Afiliaci&oacute;n</th>
+                <th>Afiliado</th>
+                <th>Capital</th>
+                <th>Liquidado</th>
+                <th>Fecha de Inicio</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr py:for="loan in loans">
+                <td><a href="${tg.url('/loan/{0}'.format(loan.id))}">${loan.id}</a></td>
+                <td><a href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}">${loan.affiliate.id}</a></td>
+                <td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
+                <td>${locale.currency(loan.capital, True, True)}</td>
+                <td>${locale.currency(loan.net(), True, True)}</td>
+                <td>${loan.startDate}</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td>Cantidad</td>
+                <td>${count}</td>
+                <td></td>
+                <td>${locale.currency(capital, True, True)}</td>
+                <td>${locale.currency(debt, True, True)}</td>
+                <td></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
 </body>
 </html>
