@@ -1,36 +1,51 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python import locale ?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="../master.html" />
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html"/>
 <head>
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-  <title>TurboAffiliate &bull; Afiliados ${show}</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"
+          py:replace="''"/>
+    <title>TurboAffiliate &bull; Afiliados ${show}</title>
 </head>
 <body>
-  <h1>Afiliados ${show}</h1>
-  <table class="ui-corner-all full-size striped ui-widget-content">
-    <thead>
-      <tr>
-        <th>Carnet</th>
-        <th>Apellido</th>
-        <th>Nombre</th>
-        <th>Identidad</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr py:for="affiliate in affiliates">
-        <td><a href="${tg.url('/affiliate/{0}'.format(affiliate.id))}">${affiliate.id}</a></td>
-        <td>${affiliate.lastName}</td>
-        <td>${affiliate.firstName}</td>
-        <td>${affiliate.cardID}</td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <th colspan="3">Total de Afiliados:</th>
-        <th>${count}</th>
-      </tr>
-    </tfoot>
-  </table>
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h1>Afiliados ${show}</h1>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Carnet</th>
+                <th>Apellido</th>
+                <th>Nombre</th>
+                <th>Identidad</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr py:for="affiliate in affiliates">
+                <td><a class="btn btn-success" href="${tg.url('/affiliate/{0}'.format(affiliate.id))}">${affiliate.id}</a>
+                </td>
+                <td>${affiliate.lastName}</td>
+                <td>${affiliate.firstName}</td>
+                <td>${affiliate.cardID}</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="3">Total de Afiliados:</th>
+                <th>${count}</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
 </body>
 </html>
