@@ -1,91 +1,122 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python import locale ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="../../master.html" />
+<xi:include href="../../master.html"/>
 <head>
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-  <title>TurboAffiliate &bull; Pr&eacute;stamos</title>
-  <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+    <title>TurboAffiliate &bull; Pr&eacute;stamos</title>
+    <link rel="stylesheet" type="text/css"
+          href="${tg.url('/static/css/status.css')}"/>
 </head>
 <body>
-  <div id="contenedor">
-    <div id="contenido">
-    <div class="noprint">&nbsp;</div>
-    <div class="centrado" id="titulo-prestamo">
-        <h1>COPEMH</h1>
-        <h1>Estado de Cuenta Pr&eacute;stamos Pagados</h1>
-        <div>Pr&eacute;stamo N&uacute;mero ${loan.id}</div>
-        <span>Al: ${day.strftime('%d de %B de %Y')}</span>
-      </div>
-    <h3 class="centrado">Capital Prestado: ${locale.currency(loan.capital, True, True)}</h3>
-      <h4 class="flotante-izquierdo"> Prestatario:
-          <a class="print" href="${tg.url('/affiliate/%s' % loan.affiliate.id)}">${loan.affiliate.id}</a>
-          ${loan.affiliate.firstName} ${loan.affiliate.lastName}
-      </h4>
-      <h4 class="flotante-derecho">Fecha de Otorgamiento: ${loan.startDate.strftime('%d de %B de %Y')}</h4>
-    <table class="ui-widget-content ui-corner-all striped full-size">
-      <caption>Deducciones</caption>
-      <tbody>
-        <tr py:for="d in loan.deductions">
-          <td>${d.account.name}</td>
-          <td>${locale.currency(d.amount, True, True)}</td>
-        </tr>
-        <tr>
-          <td>Total deducciones</td>
-          <td><strong>${locale.currency(sum(d.amount for d in loan.deductions), True, True)}</strong></td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td>Remanente o Monto Liquidado</td>
-          <td><strong>${locale.currency(loan.capital - sum(d.amount for d in loan.deductions), True, True)}</strong></td>
-        </tr>
-      </tfoot>
-    </table>
-    <table class="ui-widget-content ui-corner-all striped full-size pay" py:if="len(loan.pays) != 0">
-        <caption>Pagos Efectuados</caption>
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>N&uacute;mero</th>
-            <th>Intereses</th>
-            <th>Capital</th>
-            <th>Valor</th>
-            <th>Recibo</th>
-            <th class="noprint">Descripcion</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?python i = 1 ?>
-          <tr py:for="pay in loan.pays">
-            <td>${pay.day.strftime('%d de %B de %Y')}</td>
-            <td>${i}/${loan.months}</td>					
-            <?python i += 1 ?>
-            <td>${locale.currency(pay.interest, True, True)}</td>
-            <td>${locale.currency(pay.capital, True, True)}</td>
-            <td>${locale.currency(pay.amount, True, True)}</td>
-            <td>${pay.receipt}</td>
-            <td class="noprint">${pay.description}</td>
-          </tr>
-        </tbody>
-        <tfoot class="noprint">
-          <tr>
-            <th colspan="2">Total Pagado:</th>
-            <th>${locale.currency(loan.interesesPagados(), True, True)}</th>
-            <th>${locale.currency(loan.capitalPagado(), True, True)}</th>
-            <th>${locale.currency(loan.pagado(), True, True)}</th>
-            <th class="noprint"></th>
-          </tr>
-        </tfoot>
-    </table>
+<div class="row">
+    <div class="col-md-9">
+        <div class="centrado" id="titulo-prestamo">
+            <h1>COPEMH</h1>
+
+            <h1>Estado de Cuenta Pr&eacute;stamos Pagados</h1>
+
+            <div>Pr&eacute;stamo N&uacute;mero ${loan.id}</div>
+            <span>Al: ${day.strftime('%d de %B de %Y')}</span>
+        </div>
+        <h3 class="centrado">Capital Prestado:
+            ${locale.currency(loan.capital, True, True)}</h3>
+        <h4 class="flotante-izquierdo"> Prestatario:
+            <a class="print"
+               href="${tg.url('/affiliate/%s' % loan.affiliate.id)}">${loan.affiliate.id}</a>
+            ${loan.affiliate.firstName} ${loan.affiliate.lastName}
+        </h4>
+        <h4 class="flotante-derecho">Fecha de Otorgamiento:
+            ${loan.startDate.strftime('%d de %B de %Y')}</h4>
+        <div class="row">
+            <div class="col-md-12 table-responsive">
+                <table class="table table-striped">
+                    <caption>Deducciones</caption>
+                    <tbody>
+                    <tr py:for="d in loan.deductions">
+                        <td>${d.account.name}</td>
+                        <td>${locale.currency(d.amount, True, True)}</td>
+                    </tr>
+                    <tr>
+                        <td>Total deducciones</td>
+                        <td><strong>${locale.currency(sum(d.amount for d in loan.deductions), True, True)}</strong>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td>Remanente o Monto Liquidado</td>
+                        <td><strong>${locale.currency(loan.capital - sum(d.amount for d in loan.deductions), True, True)}</strong>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 table-responsive">
+                <table class="table table-striped" py:if="len(loan.pays) != 0">
+                    <caption>Pagos Efectuados</caption>
+                    <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>N&uacute;mero</th>
+                        <th>Intereses</th>
+                        <th>Capital</th>
+                        <th>Valor</th>
+                        <th>Recibo</th>
+                        <th class="noprint">Descripcion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?python i = 1 ?>
+                    <tr py:for="pay in loan.pays">
+                        <td>${pay.day.strftime('%d de %B de %Y')}</td>
+                        <td>${i}/${loan.months}</td>
+                        <?python i += 1 ?>
+                        <td>${locale.currency(pay.interest, True, True)}</td>
+                        <td>${locale.currency(pay.capital, True, True)}</td>
+                        <td>${locale.currency(pay.amount, True, True)}</td>
+                        <td>${pay.receipt}</td>
+                        <td class="noprint">${pay.description}</td>
+                    </tr>
+                    </tbody>
+                    <tfoot class="noprint">
+                    <tr>
+                        <th colspan="2">Total Pagado:</th>
+                        <th>${locale.currency(loan.interesesPagados(), True, True)}</th>
+                        <th>${locale.currency(loan.capitalPagado(), True, True)}</th>
+                        <th>${locale.currency(loan.pagado(), True, True)}</th>
+                        <th class="noprint"></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
-  <div id="lateral" class="noprint">
-    <a class="button-size button" href="${tg.url('/payed/pagare/%s' % loan.id)}">Mostrar Pagare</a>
-    <a class="button-size button" href="${tg.url('/payed/recibo/%s' % loan.id)}">Mostrar Recibo</a>
-    <a class="button-size button" href="${tg.url('/payed/toLoan/%s' % loan.id)}">Enviar a Pr&eacute;stamos Normales</a>
-    <a class="button-size button" href="javascript:print();">Imprimir</a>
-    <a class="button-size button" href="${tg.url('/payed/remove/%s' % loan.id)}" py:if="'delete' in tg.identity.permissions">Eliminar</a>
-  </div>
+    <aside class="col-md-3 noprint">
+        <ul class="nav nav-stacked">
+            <li>
+                <a href="${tg.url('/payed/pagare/%s' % loan.id)}">Mostrar
+                    Pagare</a>
+            </li>
+            <li>
+                <a href="${tg.url('/payed/recibo/%s' % loan.id)}">Mostrar
+                    Recibo</a>
+            </li>
+            <li>
+                <a href="${tg.url('/payed/toLoan/%s' % loan.id)}">Enviar a Pr&eacute;stamos
+                    Normales</a>
+            </li>
+            <li>
+                <a href="javascript:print();">Imprimir</a>
+            </li>
+            <li>
+                <a href="${tg.url('/payed/remove/%s' % loan.id)}"
+                   py:if="'delete' in tg.identity.permissions">Eliminar</a>
+            </li>
+        </ul>
+    </aside>
+</div>
 </body>
 </html>
