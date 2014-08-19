@@ -26,67 +26,114 @@
   </script>
 </head>
 <body>
-  <h1>Planilla de ${cotizacion.nombre}</h1>
-  <table class="full-size striped ui-corner-all ui-widget-content">
-    <caption>Lista de Afiliados</caption>
-    <thead>
-      <tr>
-        <th>Afiliaci&oacute;n</th>
-        <th>Nombre</th>
-        <th>Acciones</th>
-        <th>Total Deducci&oacute;n</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr py:for="afiliado in afiliados">
-        <td><a href="${tg.url('/affiliate/{0}'.format(afiliado.id))}">${afiliado.id}</a></td>
-        <td>${afiliado.lastName} ${afiliado.firstName}</td>
-        <td>
-          <form class="ui-widget-content reducido ui-corner-all postear" action="${tg.url('/affiliate/cuota/pagoPlanilla')}">
-            <fieldset>
-              <legend>Aportaciones ${locale.currency(afiliado.get_cuota(), True, True)}</legend>
-              <input name="afiliado" value="${afiliado.id}" type="hidden" />
-              <input name="day" value="${day.strftime('%d/%m/%Y')}" type="hidden" />
-              <input name="cuenta" value="${aportaciones}" type="hidden" />
-              <input type="submit" value="Pagar" />
-            </fieldset>
-          </form>
-          <form class="ui-widget-content reducido ui-corner-all postear" py:for="loan in afiliado.loans" action="${tg.url('/loan/pay/agregarPlanilla')}">
-            <fieldset>
-              <legend>Pr&eacute;stamo ${loan.id}</legend>
-              <input name="loan" value="${loan.id}" type="hidden" />
-              <input name="day" value="${day.strftime('%d/%m/%Y')}" type="hidden" />
-              <input name="cuenta" value="${prestamos}" type="hidden" />
-              <label>Pago: </label>
-              <input name="amount" value="${loan.get_payment()}" />
-              <input type="submit" value="pagar" />
-            </fieldset>
-          </form>
-          <form class="ui-widget-content reducido ui-corner-all postear" py:for="extra in afiliado.extras" action="${tg.url('/affiliate/extra/pagarPlanilla')}">
-            <fieldset>
-              <legend>${extra.account.name}</legend>
-              <strong>Cantidad: ${locale.currency(extra.amount)}</strong>
-              <input type="hidden" name="extra" value="${extra.id}" />
-              <input name="day" value="${day.strftime('%d/%m/%Y')}" type="hidden" />
-              <input type="submit" value="Pagar" />
-            </fieldset>
-          </form>
-          <form class="ui-widget-content reducido ui-corner-all postear" action="${tg.url('/deduced/save')}">
-            <fieldset>
-              <legend>Devoluci&oacute;n</legend>
-              <input name="affiliate" value="${afiliado.id}" type="hidden" />
-              <input name="month" value="${day.month}" type="hidden" />
-              <input name="year" value="${day.year}" type="hidden" />
-              <input name="account" value="${excedente}" type="hidden" />
-              <label>Monto: </label>
-              <input name="amount" />
-              <input type="submit" value="Pagar" />
-            </fieldset>
-          </form>
-        </td>
-        <td>${locale.currency(afiliado.get_monthly(), True, True)}</td>
-      </tr>
-    </tbody>
-  </table>
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h1>${cotizacion.nombre} <small>Planilla</small></h1>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 table-responsive">
+        <table class="table table-striped">
+            <caption>Lista de Afiliados</caption>
+            <thead>
+            <tr>
+                <th>Afiliaci&oacute;n</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+                <th>Total Deducci&oacute;n</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr py:for="afiliado in afiliados">
+                <td><a class="btn btn-success   " href="${tg.url('/affiliate/{0}'.format(afiliado.id))}">${afiliado.id}</a></td>
+                <td>${afiliado.lastName} ${afiliado.firstName}</td>
+                <td>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form class="form-horizontal postear" action="${tg.url('/affiliate/cuota/pagoPlanilla')}">
+                                <fieldset>
+                                    <legend>Aportaciones ${locale.currency(afiliado.get_cuota(), True, True)}</legend>
+                                    <input name="afiliado" value="${afiliado.id}" type="hidden" />
+                                    <input name="day" value="${day.strftime('%d/%m/%Y')}" type="hidden" />
+                                    <input name="cuenta" value="${aportaciones}" type="hidden" />
+                                    <div class="form-actions">
+                                        <input class="btn btn-primary" type="submit" value="Pagar" />
+                                    </div>
+                                </fieldset>
+                            </form>
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form class="form-horizontal postear" py:for="loan in afiliado.loans" action="${tg.url('/loan/pay/agregarPlanilla')}">
+                                <fieldset>
+                                    <legend>Pr&eacute;stamo ${loan.id}</legend>
+                                    <input name="loan" value="${loan.id}" type="hidden" />
+                                    <input name="day" value="${day.strftime('%d/%m/%Y')}" type="hidden" />
+                                    <input name="cuenta" value="${prestamos}" type="hidden" />
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4">Pago:</label>
+                                        <div class="controls col-md-7">
+                                            <input name="amount" value="${loan.get_payment()}" />
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <input class="btn btn-primary" type="submit" value="Pagar Pr&eacute;stamo" />
+                                    </div>
+                                </fieldset>
+                                <hr />
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form class="form-horizontal postear" py:for="extra in afiliado.extras" action="${tg.url('/affiliate/extra/pagarPlanilla')}">
+                                <fieldset>
+                                    <legend>${extra.account.name}</legend>
+                                    <strong>Cantidad: ${locale.currency(extra.amount)}</strong>
+                                    <input type="hidden" name="extra" value="${extra.id}" />
+                                    <input name="day" value="${day.strftime('%d/%m/%Y')}" type="hidden" />
+                                    <div class="form-actions">
+                                        <input class="btn btn-primary" type="submit" value="Pagar ${extra.account.name}" />
+                                    </div>
+                                </fieldset>
+                                <hr />
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form class="form-horizontal postear" action="${tg.url('/deduced/save')}">
+                                <fieldset>
+                                    <legend>Devoluci&oacute;n</legend>
+                                    <input name="affiliate" value="${afiliado.id}" type="hidden" />
+                                    <input name="month" value="${day.month}" type="hidden" />
+                                    <input name="year" value="${day.year}" type="hidden" />
+                                    <input name="account" value="${excedente}" type="hidden" />
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4">Pago:</label>
+                                        <div class="controls col-md-7">
+                                            <input name="amount" />
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <input class="btn btn-primary" type="submit" value="Pagar Devoluci&oacute;n" />
+                                    </div>
+                                    <hr />
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </td>
+                <td>${locale.currency(afiliado.get_monthly(), True, True)}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>

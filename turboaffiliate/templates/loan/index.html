@@ -7,9 +7,13 @@
   <title>TurboAffiliate &bull; Afiliados</title>
 </head>
 <body>
-  <div id="contenedor">
-    <div id="contenido">
-    <h1>Pr&eacute;stamos</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Pr&eacute;stamos</h1>
+        </div>
+    </div>
+    <div class="row">
+    <div class="col-md-9">
     <form class="ui-widget-content ui-corner-all" action="${tg.url('search')}">
       <fieldset>
         <legend>Buscar Pr&eacute;stamo</legend>
@@ -444,10 +448,16 @@
       </fieldset>
     </form>
     </div>
-  </div>
-  <div id="lateral">
-    <a class="button button-size" href="${tg.url('dobles')}">Ver Afiliados con varios pr&eacute;stamos</a>
-    <a class="button button-size" href="${tg.url('limpiar')}">Limpiar Préstamos Terminados</a>
-  </div>
+  <aside class="col-md-3">
+      <ul class="nav nav-stacked">
+          <li>
+            <a class="button button-size" href="${tg.url('dobles')}">Ver Afiliados con varios pr&eacute;stamos</a>
+          </li>
+          <li>
+            <a class="button button-size" href="${tg.url('limpiar')}">Limpiar Préstamos Terminados</a>
+          </li>
+      </ul>
+  </aside>
+    </div>
 </body>
 </html>

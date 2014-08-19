@@ -7,28 +7,38 @@
   <title>TurboAffiliate &bull; Afiliados de ${departamento.nombre}</title>
 </head>
 <body>
-  <h1>Reporte de Afiliados del Departamento de ${departamento.nombre}</h1>
-  <table>
-    <thead>
-        <tr>
-          <th>Carnet</th>
-          <th>Nombre</th>
-          <th>Ingreso</th>
-        </tr>
-    </thead>
-    <tbody>
-      <tr py:for="affiliate in affiliates">
-        <td><a href="${tg.url('/affiliate/{0}'.format(affiliate.id))}">${affiliate.id}</a></td>
-        <td>${affiliate.firstName} ${affiliate.lastName}</td>
-        <td>${affiliate.joined}</td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <th colspan="2">Total de Afiliados:</th>
-        <th>${count}</th>
-      </tr>
-    </tfoot>
-  </table>
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h1>Reporte de Afiliados del Departamento de ${departamento.nombre}</h1>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Carnet</th>
+                <th>Nombre</th>
+                <th>Ingreso</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr py:for="affiliate in affiliates">
+                <td><a href="${tg.url('/affiliate/{0}'.format(affiliate.id))}">${affiliate.id}</a></td>
+                <td>${affiliate.firstName} ${affiliate.lastName}</td>
+                <td>${affiliate.joined}</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="2">Total de Afiliados:</th>
+                <th>${count}</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
 </body>
 </html>
