@@ -1,13 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <?python import locale ?>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:py="http://genshi.edgewall.org/"
-      xmlns:xi="http://www.w3.org/2001/XInclude">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="../../master.html"/>
 <head>
-    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"
-          py:replace="''"/>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
     <title>TurboAffiliate &bull; Detalle de Deducciones Bancarias${affiliate.id}
         - ${affiliate.firstName} ${affiliate.lastName}</title>
 </head>
@@ -26,7 +22,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-5 noprint">
+    <div class="col-md-4 noprint">
         <form class="form-horizontal"
               py:if="tg.identity.user.has_permission('Deductor')"
               action="${tg.url('/affiliate/deduced/saveBanco')}">
@@ -92,7 +88,7 @@
             </fieldset>
         </form>
     </div>
-    <div class="col-md-7 table-responsive">
+    <div class="col-md-8 table-responsive">
         <table class="table">
             <caption>Todas las Deducciones Efectuadas</caption>
             <thead>
