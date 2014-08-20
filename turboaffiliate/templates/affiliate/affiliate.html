@@ -157,8 +157,8 @@
                 <li><strong>Lugar de Nacimiento: </strong>
                     ${affiliate.birthPlace}
                 </li>
-                <li><strong>Fecha de Nacimiento: </strong><span
-                        py:if="not affiliate.birthday is None">${affiliate.birthday.strftime('%d de %B de %Y')}</span>
+                <li><strong>Fecha de Nacimiento: </strong>
+                    <span py:if="not affiliate.birthday is None">${affiliate.birthday.strftime('%d de %B de %Y')}</span>
                 </li>
                 <li>
                     <strong>Sexo:</strong>
@@ -197,10 +197,11 @@
                     <td>${locale.currency(affiliate.get_cuota(), True, True)}
                     </td>
                     <td class="noprint">
-                        <a class="noprint btn btn-primary inline"
+                        <a class="btn btn-primary"
                            onclick="javascript:$('#pagarAportaciones').dialog('open');">
                             Pagar
-                        </a></td>
+                        </a>
+                    </td>
                 </tr>
                 <tr py:for="loan in affiliate.loans">
                     <td>Cuota de Pr&eacute;stamo</td>
@@ -212,7 +213,7 @@
                     <td>${extra.account.name}</td>
                     <td>${extra.mes} de ${extra.anio}</td>
                     <td>${locale.currency(extra.amount, True, True)}</td>
-                    <td><a class="noprint button inline"
+                    <td class="noprint"><a class="btn btn-danger"
                            href="${tg.url('/affiliate/extra/delete/{0}'.format(extra.id))}">Borrar</a>
                     </td>
                 </tr>
@@ -222,7 +223,7 @@
                     <td>${reintegro.motivo}</td>
                     <td>${reintegro.emision.strftime('%d/%m/%Y')}</td>
                     <td>${locale.currency(reintegro.monto, True, True)}</td>
-                    <td class="noprint"><a class="button inline"
+                    <td class="noprint"><a class="btn btn-danger"
                                            href="${tg.url('/reintegro/eliminar/{0}'.format(reintegro.id))}">Borrar</a>
                     </td>
                 </tr>
