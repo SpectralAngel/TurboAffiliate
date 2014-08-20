@@ -388,7 +388,7 @@
                     <td>${inscripcion.monto()}</td>
                     <td py:if="inscripcion.enviado">S&iacute;</td>
                     <td py:if="not inscripcion.enviado">No</td>
-                    <td class="noprint"><a py:if="inscripcion.reenviable()"
+                    <td class="noprint"><a class="btn btn-info" py:if="inscripcion.reenviable()"
                                            href="${tg.url('/asamblea/inscripcion/reenviar/?inscripcion={0}'.format(inscripcion.id))}">Reenviar</a>
                     </td>
                 </tr>
@@ -805,22 +805,31 @@
         </div>
     </fieldset>
 </form>
-<form id="pagarAportaciones" action="${tg.url('/affiliate/cuota/pagarVarias')}"
+<form id="pagarAportaciones" class="form-horizontal" action="${tg.url('/affiliate/cuota/pagarVarias')}"
       method="post">
     <div>
         <input type="hidden" name="afiliado" value="${affiliate.id}"/>
         <input type="hidden" name="redir"
                value="${'/affiliate/{0}'.format(affiliate.id)}"/>
-        <ul>
-            <li>
-                <label for="meses">Mes:</label>
-                <input name="meses"/>
-            </li>
-            <li>
-                <label for="anio">A&ntilde;o:</label>
-                <input name="anio"/>
-            </li>
-        </ul>
+
+        <div class="form-group">
+            <label class="control-label col-md-4">Mes:</label>
+
+            <div class="controls col-md-7">
+                <input name="meses" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-4">A&ntilde;o:</label>
+
+            <div class="controls col-md-7">
+                <input name="anio" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-actions">
+            <input class="btn btn-primary" type="submit" value="Pagar"/>
+        </div>
     </div>
 </form>
 </div>
