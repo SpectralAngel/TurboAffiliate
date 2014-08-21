@@ -365,7 +365,7 @@
     </div>
     <div class="row">
         <div class="col-md-12 table-responsive">
-            <table class="ui-widget-content ui-corner-all striped" py:if="len(affiliate.depositos) != 0">
+            <table class="table table-striped" py:if="len(affiliate.depositos) != 0">
                 <caption>
                   Dep&oacute;sitos Efectuados
                 </caption>
@@ -386,7 +386,11 @@
                     <td>${locale.currency(deposito.monto, True, True)}</td>
                     <td>${deposito.concepto}</td>
                     <td>${deposito.descripcion}</td>
-                    <td><a class="btn btn-danger" href="${tg.url('/deposito/eliminar/{0}'.format(deposito.id))}">Eliminar</a></td>
+                    <td class="no-print">
+                        <a class="btn btn-danger" href="${tg.url('/deposito/eliminar/{0}'.format(deposito.id))}">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
                   </tr>
                 </tbody>
           </table>
