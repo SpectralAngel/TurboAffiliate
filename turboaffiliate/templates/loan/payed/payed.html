@@ -11,23 +11,25 @@
 <body>
 <div class="row">
     <div class="col-md-9">
-        <div class="centrado" id="titulo-prestamo">
-            <h1>COPEMH</h1>
-
-            <h1>Estado de Cuenta Pr&eacute;stamos Pagados</h1>
-
-            <div>Pr&eacute;stamo N&uacute;mero ${loan.id}</div>
-            <span>Al: ${day.strftime('%d de %B de %Y')}</span>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="centrado" id="titulo-prestamo">
+                    <h1>COPEMH</h1>
+                    <h1>Estado de Cuenta Pr&eacute;stamos Pagados</h1>
+                    <div>Pr&eacute;stamo N&uacute;mero ${loan.id}</div>
+                    <span>Al: ${day.strftime('%d de %B de %Y')}</span>
+                </div>
+                <h3 class="centrado">Capital Prestado:
+                    ${locale.currency(loan.capital, True, True)}</h3>
+                <h4 class="flotante-izquierdo"> Prestatario:
+                    <a class="print"
+                       href="${tg.url('/affiliate/%s' % loan.affiliate.id)}">${loan.affiliate.id}</a>
+                    ${loan.affiliate.firstName} ${loan.affiliate.lastName}
+                </h4>
+                <h4 class="">Fecha de Otorgamiento:
+                    ${loan.startDate.strftime('%d de %B de %Y')}</h4>
+            </div>
         </div>
-        <h3 class="centrado">Capital Prestado:
-            ${locale.currency(loan.capital, True, True)}</h3>
-        <h4 class="flotante-izquierdo"> Prestatario:
-            <a class="print"
-               href="${tg.url('/affiliate/%s' % loan.affiliate.id)}">${loan.affiliate.id}</a>
-            ${loan.affiliate.firstName} ${loan.affiliate.lastName}
-        </h4>
-        <h4 class="flotante-derecho">Fecha de Otorgamiento:
-            ${loan.startDate.strftime('%d de %B de %Y')}</h4>
         <div class="row">
             <div class="col-md-12 table-responsive">
                 <table class="table table-striped">
