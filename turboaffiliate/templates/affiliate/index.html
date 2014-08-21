@@ -48,13 +48,13 @@
                         </form>
                     </div>
                     <div class="col-md-4">
-                        <form class="form-horizontal" role="form" action="${tg.url('/affiliate/carnet')}">
+                        <form class="form-horizontal" action="${tg.url('/affiliate/search')}">
                             <fieldset>
-                                <legend>Buscar Afiliado</legend>
+                                <legend>Buscar Afiliado por Nombre</legend>
                                 <div class="form-group">
-                                    <label class="control-label col-md-4">Carnet:</label>
+                                    <label class="control-label col-md-4">Nombre o Apellidos:</label>
                                     <div class="controls col-md-7">
-                                        <input class="form-control" name="carnet" />
+                                        <input class="form-control" name="name" />
                                     </div>
                                 </div>
                                 <div class="form-actions">
@@ -81,22 +81,6 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
-                        <form class="form-horizontal" action="${tg.url('/affiliate/search')}">
-                            <fieldset>
-                                <legend>Buscar Afiliado por Nombre</legend>
-                                <div class="form-group">
-                                    <label class="control-label col-md-4">Afiliaci&oacute;n:</label>
-                                    <div class="controls col-md-7">
-                                        <input class="form-control" name="name" />
-                                    </div>
-                                </div>
-                                <div class="form-actions">
-                                    <input class="btn btn-primary" type="submit" value="Buscar" />
-                                </div>
-                            </fieldset>
-                        </form>
-                    </div>
                     <div class="col-md-4">
                         <form class="form-horizontal" role="form" action="${tg.url('autorizar')}">
                             <fieldset>
