@@ -141,8 +141,8 @@
                         <th>Capital</th>
                         <th>Valor</th>
                         <th>Recibo</th>
+                        <th class="noprint">Descripci&oacute;n</th>
                         <th class="noprint">Borrar</th>
-                        <th class="noprint">Descripcion</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -155,11 +155,12 @@
                         <td>${locale.currency(pay.capital, True, True)}</td>
                         <td>${locale.currency(pay.amount, True, True)}</td>
                         <td>${pay.receipt}</td>
-                        <td class="noprint">
-                            <a class="btn btn-danger"
-                               href="${tg.url('/loan/pay/remove/{0}'.format(pay.id))}">X</a>
-                        </td>
                         <td class="noprint">${pay.description}</td>
+                        <td class="noprint">
+                           <a class="btn btn-danger" href="${tg.url('/loan/pay/remove/{0}'.format(pay.id))}">
+                                <span class="glyphicon glyphicon-trash"></span>
+                           </a>
+                        </td>
                     </tr>
                     </tbody>
                     <tfoot class="noprint">
