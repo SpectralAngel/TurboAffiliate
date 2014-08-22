@@ -322,6 +322,7 @@
                     <th>Monto</th>
                     <th>Cuota</th>
                     <th>Otorgado</th>
+                    <th>&Uacute;ltimo Pago</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -332,6 +333,7 @@
                     <td>${locale.currency(loan.capital, True, True)}</td>
                     <td>${locale.currency(loan.payment, True, True)}</td>
                     <td>${loan.startDate.strftime('%d de %B de %Y')}</td>
+                    <td>${loan.last.strftime('%d de %B de %Y')}</td>
                 </tr>
                 </tbody>
             </table>
