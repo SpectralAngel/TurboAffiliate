@@ -215,6 +215,8 @@ class Cotizacion(SQLObject):
     usuarios = RelatedJoin("User")
     afiliados = MultipleJoin("Affiliate")
     bank_main = BoolCol(default=False)
+    alternate = BoolCol(default=True)
+    normal = BoolCol(default=True)
 
 
 class Affiliate(SQLObject):
@@ -322,14 +324,14 @@ class Affiliate(SQLObject):
         """Permite mostrar el tiempo que tiene el afiliado de ser parte de la
         organizacion"""
 
-        if self.joined == None:
+        if self.joined is None:
             return 1
 
         return (date.today() - self.joined).days / 365
 
     def get_banco(self):
 
-        if self.banco == None:
+        if self.banco is None:
             return None
 
         return Banco.get(self.banco)
@@ -365,10 +367,13 @@ class Affiliate(SQLObject):
 
         obligation = Zero
         obligation += sum(o.amount for o in obligations
-                          if not self.cotizacion.jubilados)
+                          if self.cotizacion.normal)
 
         obligation += sum(o.inprema for o in obligations
                           if self.cotizacion.jubilados)
+
+        obligation += sum(o.alternate for o in obligations
+                          if self.cotizacion.alternate)
 
         return obligation
 
@@ -386,12 +391,18 @@ class Affiliate(SQLObject):
 
             obligation += sum(o.inprema for o in obligations
                               if self.cotizacion.jubilados)
+
+            obligation += sum(o.amount for o in obligations
+                              if not self.cotizacion.alternate)
         else:
             obligation += sum(o.amount for o in obligations
                               if not self.cotizacion.jubilados)
 
             obligation += sum(o.inprema_compliment for o in obligations
                               if self.cotizacion.jubilados)
+
+            obligation += sum(o.amount_compliment for o in obligations
+                              if not self.cotizacion.alternate)
 
         return obligation
 
@@ -506,7 +517,7 @@ class Affiliate(SQLObject):
 
         # en caso que el afiliado sea de afiliación más reciente que el año
         # solicitado
-        if table == None:
+        if table is None:
             return False
 
         return getattr(table, "month{0}".format(month))
@@ -625,6 +636,9 @@ class CuotaTable(SQLObject):
 
             elif self.affiliate.jubilated.year > self.year:
                 total = sum(o.amount for o in os)
+
+        elif self.affiliate.cotizacion.alternate:
+            total = sum(o.alternate for o in os)
 
         else:
             total = sum(o.amount for o in os)
@@ -1562,6 +1576,7 @@ class Obligation(SQLObject):
     filiales = CurrencyCol(default=4, notNone=True)
     inprema_compliment = CurrencyCol(default=0, notNone=True)
     amount_compliment = CurrencyCol(default=0, notNone=True)
+    alternate = CurrencyCol(default=0, notNone=True)
 
 
 class ReportAccount(SQLObject):
