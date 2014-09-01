@@ -21,13 +21,15 @@
               <tr>
                   <th>N&uacute;mero</th>
                   <th>Nombre</th>
+                  <th>Apellido</th>
                   <th>Cantidad</th>
               </tr>
               </thead>
               <tbody>
               <tr py:for="d in deduced">
                   <td><a href="${tg.url('/affiliate/{0}'.format(d.affiliate.id))}">${d.affiliate.id}</a></td>
-                  <td>${d.affiliate.firstName} ${d.affiliate.lastName}</td>
+                  <td>${d.affiliate.firstName}</td>
+                  <td>${d.affiliate.lastName}</td>
                   <td>${locale.currency(d.amount, True, True)}</td>
               </tr>
               </tbody>
