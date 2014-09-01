@@ -1,44 +1,64 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="../master.html" />
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html"/>
 <head>
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-  <title>TurboAffiliate &bull; Reporte de Ingresos ${legend}</title>
-  <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+    <title>TurboAffiliate &bull; Reporte de Ingresos ${legend}</title>
+    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}"/>
 </head>
 <body>
-  <h1>Reporte de Ingresos ${legend}</h1>
-  <table class="striped full-size ui-corner-all ui-widget-content">
-    <thead>
-      <tr>
-        <th>Concepto</th>
-        <th>Cantidad de Afiliados</th>
-        <th>Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Aportaciones Ordinarias</td>
-        <td>${count}</td>
-        <td>${locale.currency(count * obligation, True, True)}</td>
-      </tr>
-      <tr>
-        <td>Cuota Pr&eacute;stamo</td>
-        <td>${loans['count']}</td>
-        <td>${locale.currency(loans['amount'], True, True)}</td>
-      </tr>
-      <tr>
-        <td>Reintegros</td>
-        <td>${reintegro['count']}</td>
-        <td>${locale.currency(reintegro['amount'], True, True)}</td>
-      </tr>
-      <tr py:for="deduccion in sorted(deductions)">
-        <td>${deduccion.name}</td>
-        <td>${deductions[deduccion]['count']}</td>
-        <td>${locale.currency(deductions[deduccion]['amount'], True, True)}</td>
-      </tr>
-    </tbody>
-  </table>
-  <h2>Total de Ingresos: ${locale.currency(total + loans['amount'] + count * obligation, True, True)}</h2>
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h1>Reporte de Ingresos ${legend}</h1>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Concepto</th>
+                <th>Cantidad de Afiliados</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Aportaciones Ordinarias</td>
+                <td>${count}</td>
+                <td>${locale.currency(count * obligation, True, True)}</td>
+            </tr>
+            <tr>
+                <td>Cuota Pr&eacute;stamo</td>
+                <td>${loans['count']}</td>
+                <td>${locale.currency(loans['amount'], True, True)}</td>
+            </tr>
+            <tr>
+                <td>Reintegros</td>
+                <td>${reintegro['count']}</td>
+                <td>${locale.currency(reintegro['amount'], True, True)}</td>
+            </tr>
+            <tr py:for="deduccion in sorted(deductions)">
+                <td>${deduccion.name}</td>
+                <td>${deductions[deduccion]['count']}</td>
+                <td>
+                    ${locale.currency(deductions[deduccion]['amount'], True, True)}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h2>Total de Ingresos:
+            ${locale.currency(total + loans['amount'] + count * obligation, True, True)}</h2>
+    </div>
+</div>
 </body>
 </html>

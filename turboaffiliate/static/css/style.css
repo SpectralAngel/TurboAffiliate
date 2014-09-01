@@ -40,11 +40,9 @@ h4.flotante-izquierdo { margin:0; padding: 5px; }
 h4.flotante-derecho { margin:0; padding: 5px; }
 .centrado { text-align: center; }
 footer {
-    position: fixed;
+    position: relative;
     bottom: 0;
     width: 100%;
-    /* Set the fixed height of the footer here */
-    height: 40px;
     background-color: #f5f5f5;
 }
 .container .text-muted {
