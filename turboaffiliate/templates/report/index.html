@@ -134,7 +134,6 @@
                 </form>
             </div>
             <div class="col-md-4">
-
                 <form class="form-horizontal" role="form" action="${tg.url('deducedBank')}">
                     <fieldset>
                         <legend>Ver Reporte de Ingresos por Banco y Cuenta</legend>
@@ -167,102 +166,152 @@
         </div>
     </div>
 </div>
-
-
-
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('extra')}">
-    <fieldset>
-      <legend>Mostrar Cuentas por Cobrar</legend>
-      <ul>
-        <li>
-          <label for="account">Cuenta:</label>
-          <select name="account">
-            <option py:for="account in accounts" value="${account.id}" py:content="account.name" />
-          </select>
-        </li>
-        <li><input type="submit" value="Mostrar Reporte" /></li>
-      </ul>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('deduced')}">
-      <fieldset>
-          <legend>Mostrar Cobros Efecutados</legend>
-          <ul>
-              <li>
-                  <label for="account">Cuenta:</label>
-                  <select name="account">
-                      <option py:for="account in accounts" value="${account.id}" py:content="account.name" />
-                  </select>
-              </li>
-              <li>
-                  <label for="month">Mes:</label>
-                  <input name="month" />
-              </li>
-              <li>
-                  <label for="year">A&ntilde;o:</label>
-                  <input name="year" />
-              </li>
-              <li><input type="submit" value="Mostrar Reporte" /></li>
-          </ul>
-      </fieldset>
-  </form>
-
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('deducedPayment')}">
-    <fieldset>
-      <legend>Mostrar Reporte Por Cuenta y Cotizaci&oacute;n</legend>
-      <ul>
-          <li>
-              <label for="cotizacion">Cotizaci&oacute;n:</label>
-              <select name="cotizacion" class="cotizaciones"></select>
-          </li>
-        <li>
-          <label for="account">Cuenta:</label>
-          <select name="account">
-            <option py:for="account in accounts" value="${account.id}" py:content="account.name" />
-          </select>
-        </li>
-        <li>
-          <label for="month">Mes:</label>
-          <input name="month" />
-        </li>
-        <li>
-          <label for="year">A&ntilde;o:</label>
-          <input name="year" />
-        </li>
-        <li>
-          <input type="submit" value="Mostrar Reporte" />
-        </li>
-      </ul>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('filialesResumen')}">
-    <fieldset>
-      <legend>Mostrar Resumen de Filiales</legend>
-      <ul>
-        <li>
-          <label for="departamento">Departamento:</label>
-          <select name="departamento">
-            <option py:for="d in departamentos" value="${d.id}">${d.nombre}</option>
-          </select>
-        </li>
-        <li>
-          <label for="year">A&ntilde;o:</label>
-          <input name="year" />
-        </li>
-        <li>
-          <label for="start">Mes Inicio:</label>
-          <input name="start" />
-        </li>
-        <li>
-          <label for="end">Mes Final:</label>
-          <input name="end" />
-        </li>
-        <li>
-          <input type="submit" value="Mostrar Reporte" />
-        </li>
-      </ul>
-    </fieldset>
-  </form>
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header">
+                    <h1>Reportes por Cuenta</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <form class="form-horizontal" role="form" action="${tg.url('extra')}">
+                    <fieldset>
+                        <legend>Mostrar Cuentas por Cobrar</legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Cuenta:</label>
+                            <div class="controls col-md-7">
+                                <select name="account" class="form-control select">
+                                    <option py:for="account in accounts" value="${account.id}" py:content="account.name" />
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit" value="Mostrar" />
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <form class="form-horizontal" role="form" action="${tg.url('deduced')}">
+                    <fieldset>
+                        <legend>Mostrar Cobros Efectuados por Cuenta</legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Cuenta:</label>
+                            <div class="controls col-md-7">
+                                <select name="account" class="form-control select">
+                                    <option py:for="account in accounts" value="${account.id}" py:content="account.name" />
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">A&ntilde;o:</label>
+                            <div class="controls col-md-7">
+                                <input name="year" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Mes:</label>
+                            <div class="controls col-md-7">
+                                <input name="month" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit" value="Mostrar" />
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <form class="form-horizontal" role="form" action="${tg.url('deducedPayment')}">
+                    <fieldset>
+                        <legend>Mostrar Cobros Efectuados por Cuenta y Cotizaci&oacute;n</legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Cotizaci&oacute;n:</label>
+                            <div class="controls col-md-7">
+                                <select name="cotizacion" class="cotizaciones select form-control"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Cuenta:</label>
+                            <div class="controls col-md-7">
+                                <select name="account" class="form-control select">
+                                    <option py:for="account in accounts" value="${account.id}" py:content="account.name" />
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">A&ntilde;o:</label>
+                            <div class="controls col-md-7">
+                                <input name="year" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Mes:</label>
+                            <div class="controls col-md-7">
+                                <input name="month" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit" value="Mostrar" />
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header">
+                    <h1>Colegiaci&oacute;n</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <form class="form-horizontal" role="form" action="${tg.url('filialesResumen')}">
+                    <fieldset>
+                        <legend>Mostrar Cobros Efectuados por Cuenta</legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Cuenta:</label>
+                            <div class="controls col-md-7">
+                                <select name="departamento" class="form-control select">
+                                    <option py:for="d in departamentos" value="${d.id}">${d.nombre}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">A&ntilde;o:</label>
+                            <div class="controls col-md-7">
+                                <input name="year" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Mes Inicial:</label>
+                            <div class="controls col-md-7">
+                                <input name="start" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Mes Final:</label>
+                            <div class="controls col-md-7">
+                                <input name="end" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit" value="Mostrar" />
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
   <form class="ui-widget-content ui-corner-all" action="${tg.url('filialesDept')}">
     <fieldset>
       <legend>Mostrar Reporte de Filiales</legend>

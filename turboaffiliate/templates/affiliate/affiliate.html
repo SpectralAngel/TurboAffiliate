@@ -9,22 +9,6 @@
           py:replace="''"/>
     <title>TurboAffiliate &bull; ${affiliate.id} - ${affiliate.firstName}
         ${affiliate.lastName}</title>
-    <script src="${tg.url('/static/javascript/afiliado.js')}"
-            type="text/javascript"></script>
-    <script type="text/javascript" py:if="affiliate.id in (2515, 3387, 4298, 4371,4980,
-    6395, 7109,7165,8926,9933,
-    10584,12266,13524,
-    15395,16367,16387,16963,16085,
-    21661,22382,21448)">
-        $(document).ready(function (e) {
-            var text = $('<div />');
-            text.html('Enviar Afiliado a Sistema, Corroboración Asamblea 2011');
-            text.dialog({
-                modal: true
-            });
-        });
-    </script>
-    <script type="text/javascript">JSON.jubilados("${tg.url('/json')}");</script>
 </head>
 <body>
 <div class="row">
@@ -941,5 +925,21 @@
     </ul>
 </aside>
 </div>
+<script src="${tg.url('/static/javascript/afiliado.js')}"
+        type="text/javascript"></script>
+<script type="text/javascript" py:if="affiliate.id in (2515, 3387, 4298, 4371,4980,
+    6395, 7109,7165,8926,9933,
+    10584,12266,13524,
+    15395,16367,16387,16963,16085,
+    21661,22382,21448)">
+    $(document).ready(function (e) {
+        var text = $('<div />');
+        text.html('Enviar Afiliado a Sistema, Corroboración Asamblea 2011');
+        text.dialog({
+            modal: true
+        });
+    });
+</script>
+<script type="text/javascript">JSON.jubilados("${tg.url('/json')}");</script>
 </body>
 </html>

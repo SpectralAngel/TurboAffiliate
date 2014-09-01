@@ -68,4 +68,5 @@ $(document).ready(function(e)
   //$('.button, button').button();
   // Workaround a bug found added in JQuery 1.5 + JQuery UI 1.8.x
   // $('#ui-datepicker-div').hide();
+    $('.table').tablesorter({theme : 'blue'});
 });
