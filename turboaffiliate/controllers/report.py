@@ -343,7 +343,7 @@ class Report(controllers.Controller):
     @expose(template="turboaffiliate.templates.report.payment")
     @validate(validators=dict(account=validators.Int(), year=validators.Int(),
                               month=validators.Int(min=1, max=12),
-                              cotizacion=validators.String()))
+                              cotizacion=validators.Int()))
     def deducedPayment(self, cotizacion, account, month, year):
 
 
@@ -358,6 +358,25 @@ class Report(controllers.Controller):
 
         return dict(deduced=deduced, account=account, month=months[month],
                     year=year, total=total, payment=cotizacion.nombre)
+
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.report.distribution")
+    @validate(validators=dict(account=validators.Int(), year=validators.Int(),
+                              month=validators.Int(min=1, max=12),
+                              bank=validators.String()))
+    def distribution(self, bank, account, month, year):
+
+        bank = model.Cotizacion.get(bank)
+        account = model.Account.get(account)
+        deduced = model.DeduccionBancaria.selectBy(banco=bank,
+                                                   account=account).count()
+
+        distribute = {}
+        for distribution in account.distributions:
+            distribute[distribution.name] = deduced * distribution.amount
+
+        return dict(deduced=deduced, account=account, month=months[month],
+                    year=year, distribute=distribute, banco=bank)
 
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.affiliate.show")

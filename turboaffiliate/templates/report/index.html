@@ -104,7 +104,7 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <form class="form-horizontal" role="form" action="${tg.url('banco')}">
+                <form class="form-horizontal" role="form" action="${tg.url('/account/distribution')}">
                     <fieldset>
                         <legend>Ver Reporte de Ingresos por Banco</legend>
                         <div class="form-group">
@@ -142,6 +142,44 @@
                             <div class="controls col-md-7">
                                 <select name="account" class="form-control select">
                                     <option py:for="account in accounts" value="${account.id}" py:content="account.name" />
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Nombre:</label>
+                            <div class="controls col-md-7">
+                                <input name="name" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Cantidad:</label>
+                            <div class="controls col-md-7">
+                                <input name="amount" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit" value="Mostrar" />
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <form class="form-horizontal" role="form" action="${tg.url('distribution')}">
+                    <fieldset>
+                        <legend>Ver Distribuci&oacute;n de Ingresos por Banco</legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Cuenta:</label>
+                            <div class="controls col-md-7">
+                                <select name="account" class="form-control select">
+                                    <option py:for="account in accounts" value="${account.id}" py:content="account.name" />
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Banco:</label>
+                            <div class="controls col-md-7">
+                                <select name="bank" class="form-control select">
+                                    <option py:for="banco in bancos" value="${banco.id}" py:content="banco.nombre" />
                                 </select>
                             </div>
                         </div>

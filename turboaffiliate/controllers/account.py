@@ -20,66 +20,78 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turboaffiliate import model
 from turbogears import (controllers, identity, expose, validate, validators,
                         redirect, flash)
 
+from turboaffiliate import model
+
+
 class Account(controllers.Controller):
-    
     """Controller for Accounts in Affiliate Program"""
-    
+
     @identity.require(identity.not_anonymous())
-    #@expose(template="turboaffiliate.templates.account.index")
+    @expose(template="turboaffiliate.templates.account.index")
     def index(self):
-        return dict()
-    
+        return dict(accounts=model.Account.select())
+
     @identity.require(identity.not_anonymous())
     #@expose(template="turboaffiliate.templates.account.account")
     @expose("json")
     @validate(validators=dict(code=validators.Int()))
     def default(self, code):
-    
         account = model.Account.get(code)
         return dict(account=account)
-    
+
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.account.add")
     def add(self):
         return dict()
-    
+
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose()
-    @validate(validators=dict(code=validators.Int(),name=validators.String()))
+    @validate(validators=dict(code=validators.Int(), name=validators.String()))
     def save(self, **kw):
-        
         account = model.Account(**kw)
         flash(u"La cuenta ha sido grabada")
-        
+
         log = dict()
         log['user'] = identity.current.user
-        log['action'] = u"Agregada cuenta {0} {1}".format(account.id, account.name)
+        log['action'] = u"Agregada cuenta {0} {1}".format(account.id,
+                                                          account.name)
         model.Logger(**log)
         raise redirect('/account/{0}'.format(account.id))
-    
+
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose(template="turboaffiliate.templates.account.retrasada")
     def retrasada(self):
-        
         return dict(accounts=model.Account.select())
-    
+
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose()
     @validate(validators=dict(mes=validators.Int(), anio=validators.Int(),
                               account=validators.Int()))
     def agregarRetrasada(self, account, **kw):
-        
         account = model.Account.get(account)
         kw['account'] = account
         retrasada = model.CuentaRetrasada(**kw)
         retrasada.account = account
-        
+
         flash(u"La cuenta para restradas ha sido grabada")
         raise redirect('/account/retrasada')
+
+    @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
+                                   identity.not_anonymous()))
+    @expose()
+    @validate(validators=dict(account=validators.Int(), amount=validators.Number(),
+                              name=validators.String()))
+    def distribution(self, account, **kwargs):
+
+        kwargs['account'] = model.Account.get(account)
+        distribucion = model.Distribution(**kwargs)
+
+        flash(u"La distribucion ha sido grabada")
+
+        redirect('/account/{0}'.format(kwargs['account'].id))

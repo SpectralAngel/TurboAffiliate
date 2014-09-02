@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title py:replace="''">Sistema Gestor de Afiliaciones</title>
-
 <?python
     import os
     import locale
@@ -18,7 +17,7 @@
 
     locale.setlocale(locale.LC_ALL, locale_name)
 ?>
-    <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/bootstrap.min.css')}" media="screen" />
+  <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/bootstrap.min.css')}" media="screen" />
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/ui-lightness/jquery-ui.css')}" media="screen" />
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/menu.css')}" media="screen" />
   <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/tabla.css')}" media="screen" />
@@ -60,6 +59,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Organizaci&oacute;n <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="${tg.url('/obligation')}">Obligaciones</a></li>
+                        <li><a href="${tg.url('/account')}">Cuentas</a></li>
                         <li><a href="${tg.url('/asamblea')}">Asambleas</a></li>
                         <li><a href="${tg.url('/elecciones')}">Elecciones</a></li>
                         <li><a href="${tg.url('/affiliate/extra')}">Deducciones Extra</a></li>

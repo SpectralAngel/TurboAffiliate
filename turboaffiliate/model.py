@@ -1360,9 +1360,15 @@ class Account(SQLObject):
 
     name = UnicodeCol()
     loan = BoolCol(default=False)
-
     extras = MultipleJoin("Extra")
     retrasadas = MultipleJoin("CuentaRetrasada")
+    distributions = MultipleJoin("Distribution")
+
+
+class Distribution(SQLObject):
+    account = ForeignKey("Account")
+    name = UnicodeCol()
+    amount = CurrencyCol(default=0)
 
 
 class Extra(SQLObject):
