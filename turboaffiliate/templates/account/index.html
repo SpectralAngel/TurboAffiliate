@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                    <input class="btn btn-primary" type="submit" value="Mostrar" />
+                    <input class="btn btn-primary" type="submit" value="Guardar" />
                 </div>
             </fieldset>
         </form>
@@ -55,20 +55,20 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                    <input class="btn btn-primary" type="submit" value="Mostrar" />
+                    <input class="btn btn-primary" type="submit" value="Guardar" />
                 </div>
             </fieldset>
         </form>
     </div>
     <div class="col-md-4">
-        <form class="form-horizontal" role="form" action="${tg.url('cotizacion')}">
+        <form class="form-horizontal" role="form" action="${tg.url('distribution')}">
             <fieldset>
                 <legend>Agregar Distribuci&oacute;n</legend>
                 <div class="form-group">
                     <label class="control-label col-md-4">Cuenta:</label>
                     <div class="controls col-md-7">
                         <select name="account" class="select form-control">
-                            <option py:for="a in accounts" value="${a.id}">${a.name}</option>
+                            <option py:for="a in accounts" value="${a.id}">${a.id} - ${a.name}</option>
                         </select>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                    <input class="btn btn-primary" type="submit" value="Mostrar" />
+                    <input class="btn btn-primary" type="submit" value="Guardar" />
                 </div>
             </fieldset>
         </form>

@@ -50,7 +50,7 @@ class Account(controllers.Controller):
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose()
-    @validate(validators=dict(code=validators.Int(), name=validators.String()))
+    @validate(validators=dict(name=validators.String()))
     def save(self, **kw):
         account = model.Account(**kw)
         flash(u"La cuenta ha sido grabada")

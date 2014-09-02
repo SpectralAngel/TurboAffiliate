@@ -366,7 +366,7 @@ class Report(controllers.Controller):
                               bank=validators.String()))
     def distribution(self, bank, account, month, year):
 
-        bank = model.Cotizacion.get(bank)
+        bank = model.Banco.get(bank)
         account = model.Account.get(account)
         deduced = model.DeduccionBancaria.selectBy(banco=bank,
                                                    account=account).count()
