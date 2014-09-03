@@ -318,6 +318,7 @@ class Affiliate(SQLObject):
                                         joinColumn="afiliado_id",
                                         orderBy=['-year', '-month'])
     banco_completo = BoolCol(default=False, notNone=True)
+    autorizaciones = MultipleJoin('Autorizacion')
 
     def tiempo(self):
 
@@ -542,6 +543,11 @@ class Affiliate(SQLObject):
             return self.email
 
         return ""
+
+
+class Autorizacion(SQLObject):
+    affiliate = ForeignKey("Affiliate")
+    fecha = DateCol(default=date.today)
 
 
 class CuentaRetrasada(SQLObject):

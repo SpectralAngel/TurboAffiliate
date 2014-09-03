@@ -163,6 +163,15 @@
             </ul>
         </div>
         <div class="col-md-7 table-responsive">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul>
+                        <li py:for="autorizacion in affiliate.autorizaciones">
+                            ${autorizacion.fecha}
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <table class="table table-striped table-condensed" py:if="affiliate.active">
                 <caption>
                     Cobros a Efectuar

@@ -741,6 +741,9 @@ class Affiliate(controllers.Controller):
 
         affiliate = model.Affiliate.get(affiliate)
         affiliate.autorizacion = True
+
+        autorizacion = model.Autorizacion(affiliate=affiliate)
+
         log(identity.current.user,
             u"Se registro la autorización del afiliado {0}".format(
                 affiliate.id))
@@ -765,6 +768,9 @@ class Affiliate(controllers.Controller):
             affiliate = model.Affiliate.selectBy(cardID=cardID).limit(
                 1).getOne()
             affiliate.autorizacion = True
+
+            autorizacion = model.Autorizacion(affiliate=affiliate)
+
             log(identity.current.user,
                 u"Se registro la autorización del afiliado {0}".format(
                     affiliate.id))
