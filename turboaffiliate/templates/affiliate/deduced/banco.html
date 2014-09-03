@@ -23,8 +23,7 @@
 </div>
 <div class="row">
     <div class="col-md-4 noprint">
-        <form class="form-horizontal"
-              py:if="tg.identity.user.has_permission('Deductor')"
+        <form class="form-horizontal" 
               action="${tg.url('/affiliate/deduced/saveBanco')}">
             <fieldset>
                 <input type="hidden" name="affiliate" value="${affiliate.id}"/>
