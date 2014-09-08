@@ -399,7 +399,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 table-responsive">
             <table class="table table-striped table-condensed"
                    py:if="len(affiliate.inscripciones) != 0">
                 <caption>
@@ -430,7 +430,34 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 table-responsive">
+            <table class="table table-condensed table-striped">
+                <caption>Recibos Emitidos</caption>
+                <thead>
+                <tr>
+                    <th>N&uacute;mero</th>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Detalle</th>
+                    <th class="valor">Valor</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr id="recibo-${recibo.id}" py:for="recibo in recibos">
+                    <td><a class="btn btn-success" href="'/casa/tegucigalpa/recibo/{0}'.format(recibo.id))}">${recibo.id}</a></td>
+                    <td>${recibo.cliente}</td>
+                    <td>${recibo.dia}</td>
+                    <td>
+                        <span class="oneliner" py:for="venta in recibo.ventas">${venta.descripcion}</span>
+                    </td>
+                    <td class="valor">${locale.currency(recibo.total(), True, True)}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 table-responsive">
             <table class="table table-striped">
                 <caption>
                     Cheques Extendidos
