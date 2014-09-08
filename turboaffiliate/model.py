@@ -2050,7 +2050,7 @@ class ReciboSPS(SQLObject):
     dia = DateTimeCol()
     # Marca si el recibo ya ha sido impreso
     impreso = BoolCol()
-    ventas = MultipleJoin("VentaSPS")
+    ventas = MultipleJoin("VentaSPS", joinColumn="recibo_id")
 
     def total(self):
         """Retorna el total de las ventas de un recibo"""
