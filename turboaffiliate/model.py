@@ -548,6 +548,10 @@ class Affiliate(SQLObject):
 
         return Recibo.selectBy(afiliado=self.id)
 
+    def recibos_sps(self):
+
+        return ReciboSPS.selectBy(afiliado=self.id)
+
 
 class Autorizacion(SQLObject):
     affiliate = ForeignKey("Affiliate")
@@ -2034,3 +2038,42 @@ class Producto(SQLObject):
 
     nombre = UnicodeCol()
     descripcion = UnicodeCol()
+
+
+class ReciboSPS(SQLObject):
+    class sqlmeta:
+        table = "recibo_sps"
+
+    casa = ForeignKey("Casa")
+    afiliado = IntCol()
+    cliente = UnicodeCol()
+    dia = DateTimeCol()
+    # Marca si el recibo ya ha sido impreso
+    impreso = BoolCol()
+    ventas = MultipleJoin("VentaSPS")
+
+    def total(self):
+        """Retorna el total de las ventas de un recibo"""
+
+        return sum(venta.valor() for venta in self.ventas)
+
+
+class VentaSPS(SQLObject):
+    """Descripción de Venta
+
+    Contiene los datos sobre la venta de determinado producto en un recibo."""
+    class sqlmeta:
+        table = "venta_sps"
+
+    recibo = ForeignKey("ReciboSPS")
+    producto = ForeignKey("Producto")
+    descripcion = UnicodeCol()
+    cantidad = IntCol()
+    # No siempre el precio unitario esta determinado por el precio nominal de un
+    # producto, este puede cambiar como en el caso de los préstamos
+    unitario = CurrencyCol()
+
+    def valor(self):
+        """Retorna el total de una venta"""
+
+        return self.cantidad * self.unitario
