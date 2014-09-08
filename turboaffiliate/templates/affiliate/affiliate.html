@@ -62,6 +62,7 @@
     <li class="active"><a href="#afiliado" role="tab" data-toggle="tab">Informaci&oacute;n</a>
     </li>
     <li><a href="#otros" role="tab" data-toggle="tab">Otros</a></li>
+    <li><a href="#recibos" role="tab" data-toggle="tab">Recibos</a></li>
 </ul>
 <div class="tab-content">
 <div class="tab-pane active" id="afiliado">
@@ -340,6 +341,44 @@
         </div>
     </div>
 </div>
+<div class="tab-pane" id="recibos">
+    <div class="row">
+        <div class="col-md-12 table-responsive">
+            <table class="table table-condensed table-striped">
+                <caption>Recibos Emitidos</caption>
+                <thead>
+                <tr>
+                    <th>N&uacute;mero</th>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Detalle</th>
+                    <th class="valor">Valor</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr id="recibo-${recibo.id}" py:for="recibo in affiliate.recibos()">
+                    <td><a class="btn btn-success" href="${'/caja/tegucigalpa/recibo/{0}'.format(recibo.id)}">${recibo.id}</a></td>
+                    <td>${recibo.cliente}</td>
+                    <td>${recibo.dia}</td>
+                    <td>
+                        <span class="oneliner" py:for="venta in recibo.ventas">${venta.descripcion}</span>
+                    </td>
+                    <td class="valor">${locale.currency(recibo.total(), True, True)}</td>
+                </tr>
+                <tr id="recibo-${recibo.id}" py:for="recibo in affiliate.recibos_sps()">
+                    <td><a class="btn btn-success" href="${'/caja/sps/recibo/{0}'.format(recibo.id)}">${recibo.id}</a></td>
+                    <td>${recibo.cliente}</td>
+                    <td>${recibo.dia}</td>
+                    <td>
+                        <span class="oneliner" py:for="venta in recibo.ventas">${venta.descripcion}</span>
+                    </td>
+                    <td class="valor">${locale.currency(recibo.total(), True, True)}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 <div class="tab-pane" id="otros">
     <div class="row">
         <div class="col-md-12 table-responsive">
@@ -424,42 +463,6 @@
                     <td class="noprint"><a class="btn btn-info btn-sm" py:if="inscripcion.reenviable()"
                                            href="${tg.url('/asamblea/inscripcion/reenviar/?inscripcion={0}'.format(inscripcion.id))}">Reenviar</a>
                     </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 table-responsive">
-            <table class="table table-condensed table-striped">
-                <caption>Recibos Emitidos</caption>
-                <thead>
-                <tr>
-                    <th>N&uacute;mero</th>
-                    <th>Cliente</th>
-                    <th>Fecha</th>
-                    <th>Detalle</th>
-                    <th class="valor">Valor</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr id="recibo-${recibo.id}" py:for="recibo in affiliate.recibos()">
-                    <td><a class="btn btn-success" href="${'/caja/tegucigalpa/recibo/{0}'.format(recibo.id)}">${recibo.id}</a></td>
-                    <td>${recibo.cliente}</td>
-                    <td>${recibo.dia}</td>
-                    <td>
-                        <span class="oneliner" py:for="venta in recibo.ventas">${venta.descripcion}</span>
-                    </td>
-                    <td class="valor">${locale.currency(recibo.total(), True, True)}</td>
-                </tr>
-                <tr id="recibo-${recibo.id}" py:for="recibo in affiliate.recibos_sps()">
-                    <td><a class="btn btn-success" href="${'/caja/sps/recibo/{0}'.format(recibo.id)}">${recibo.id}</a></td>
-                    <td>${recibo.cliente}</td>
-                    <td>${recibo.dia}</td>
-                    <td>
-                        <span class="oneliner" py:for="venta in recibo.ventas">${venta.descripcion}</span>
-                    </td>
-                    <td class="valor">${locale.currency(recibo.total(), True, True)}</td>
                 </tr>
                 </tbody>
             </table>
