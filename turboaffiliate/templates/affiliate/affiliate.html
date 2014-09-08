@@ -374,6 +374,16 @@
                     </td>
                     <td class="valor">${locale.currency(recibo.total(), True, True)}</td>
                 </tr>
+
+                <tr id="recibo-${recibo.id}" py:for="recibo in affiliate.recibos_ceiba()">
+                    <td><a class="btn btn-success" href="${'/caja/ceiba/recibo/{0}'.format(recibo.id)}">${recibo.id}</a></td>
+                    <td>${recibo.cliente}</td>
+                    <td>${recibo.dia}</td>
+                    <td>
+                        <span class="oneliner" py:for="venta in recibo.ventas">${venta.descripcion}</span>
+                    </td>
+                    <td class="valor">${locale.currency(recibo.total(), True, True)}</td>
+                </tr>
                 </tbody>
             </table>
         </div>
