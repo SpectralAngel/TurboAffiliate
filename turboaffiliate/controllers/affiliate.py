@@ -78,10 +78,15 @@ class Affiliate(controllers.Controller):
         
         :param affiliate: Número de afiliación
         """
+        affiliate = model.Affiliate.get(affiliate)
 
-        return dict(affiliate=model.Affiliate.get(affiliate),
+        logs = model.Logger.select(
+            model.Logger.q.action.contains(str(affiliate.id)))
+
+        return dict(affiliate=affiliate,
                     accounts=model.Account.select(),
-                    bancos=model.Banco.select())
+                    bancos=model.Banco.select(),
+                    logs=logs)
 
     @error_handler(error)
     @identity.require(identity.not_anonymous())
