@@ -443,7 +443,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr id="recibo-${recibo.id}" py:for="recibo in recibos">
+                <tr id="recibo-${recibo.id}" py:for="recibo in affiliate.recibos()">
                     <td><a class="btn btn-success" href="'/casa/tegucigalpa/recibo/{0}'.format(recibo.id))}">${recibo.id}</a></td>
                     <td>${recibo.cliente}</td>
                     <td>${recibo.dia}</td>
