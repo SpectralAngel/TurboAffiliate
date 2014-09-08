@@ -2015,7 +2015,7 @@ class Venta(SQLObject):
     recibo = ForeignKey("Recibo")
     producto = ForeignKey("Producto")
     descripcion = UnicodeCol()
-    cantidad = IntCol
+    cantidad = IntCol()
     # No siempre el precio unitario esta determinado por el precio nominal de un
     # producto, este puede cambiar como en el caso de los préstamos
     unitario = CurrencyCol()
