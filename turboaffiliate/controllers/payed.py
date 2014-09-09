@@ -66,8 +66,9 @@ class Pay(controllers.Controller):
 
         model.OldPay(payedLoan=payedLoan, **kw)
 
-        log(u"Agregar pago al prestamo {0}".format(payedLoan.id),
-            identity.current.user, payedLoan.affiliate)
+        log(identity.current.user,
+            u"Agregar pago al prestamo {0}".format(payedLoan.id),
+            payedLoan.affiliate)
 
         flash(u'El pago se ha efecutado')
         raise redirect('/payed/{0}'.format(payedLoan.id))
@@ -149,8 +150,8 @@ class PayedLoan(controllers.Controller):
         affiliate = loan.affiliate
         loan_id = loan.id
 
-        log(u"Prestamo {0} eliminado".format(loan_id),
-            identity.current.user, affiliate)
+        log(identity.current.user, u"Prestamo {0} eliminado".format(loan_id),
+            affiliate)
 
         loan.remove()
         raise redirect('/affiliate/{0}'.format(affiliate.id))

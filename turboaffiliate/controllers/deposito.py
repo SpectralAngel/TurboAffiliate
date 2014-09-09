@@ -126,11 +126,10 @@ class Deposito(controllers.Controller):
         deposito = model.Deposito(**kw)
         kw['afiliado'].pay_cuota(sistema.year, sistema.month)
 
-        log(
+        log(identity.current.user,
             u"Registrado deposito con fecha {0} al afiliado {1}, posteo {"
             u"2}".format(
-                kw['fecha'], kw['afiliado'], sistema),
-            identity.current.user, kw['afiliado'])
+                kw['fecha'], kw['afiliado'], sistema), kw['afiliado'])
 
         return dict(mensaje=u"Se registró el depósito al afiliado {0}".format(
             deposito.afiliado.id))
@@ -164,12 +163,11 @@ class Deposito(controllers.Controller):
         monto = kw['monto']
         prestamo.pagar(amount=monto, receipt=banco.nombre, day=sistema,
                        remove=False, descripcion=kw['descripcion'])
-
-        log(
+        log(identity.current.user,
             u"Registrado deposito con fecha {0} al afiliado {1}, posteo {"
             u"2}".format(
-                kw['fecha'], kw['afiliado'], sistema),
-            identity.current.user, kw['afiliado'])
+                kw['fecha'], kw['afiliado'], sistema), kw['afiliado'])
+
 
         return dict(mensaje=u"Se registró el depósito al afiliado {0}".format(
             deposito.afiliado.id))
@@ -199,10 +197,9 @@ class Deposito(controllers.Controller):
         kw['concepto'] = cuenta.name
         deposito = model.Deposito(**kw)
 
-        log(
+        log(identity.current.user,
             u"Registrado deposito con fecha {0} al afiliado {1}".format(
-                kw['fecha'], kw['afiliado']),
-            identity.current.user, kw['afiliado'])
+                kw['fecha'], kw['afiliado']), kw['afiliado'])
 
         return dict(mensaje=u"Se registró el depósito al afiliado {0}".format(
             deposito.afiliado.id))

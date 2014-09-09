@@ -26,6 +26,7 @@ from turbogears import (controllers, expose, identity, redirect, validate,
 
 from turboaffiliate import model
 
+
 def log(user, message, affiliate):
     """Guarda un mensaje en el registro del sistema"""
 
@@ -62,10 +63,10 @@ class Cuota(controllers.Controller):
         if end > date.today().year:
             end = start
 
-        log(
+        log(identity.current.user,
             u"Posteo aportaciones de  {0} a {1} afiliado {2}".format(start, end,
                                                                      affiliate.id),
-            identity.current.user, affiliate)
+            affiliate)
 
         for n in range(start, end + 1):
             [affiliate.pay_cuota(n, month) for month in range(1, 13)]
@@ -142,18 +143,16 @@ class Cuota(controllers.Controller):
         for n in range(1, 13):
             try:
                 setattr(table, "month{0}".format(n), kw["month{0}".format(n)])
-                log(
+                log(identity.current.user,
                     u"Cambio en aportaciones año {0} mes {1} afiliado {2} "
                     u"1".format(
-                        table.year, n, table.affiliate.id),
-                    identity.current.user, table.affiliate)
+                        table.year, n, table.affiliate.id), table.affiliate)
             except KeyError:
                 setattr(table, "month{0}".format(n), False)
-                log(
+                log(identity.current.user,
                     u"Cambio en aportaciones año {0} mes {1} afiliado {2} "
                     u"0".format(
-                        table.year, n, table.affiliate.id),
-                    identity.current.user, table.affiliate)
+                        table.year, n, table.affiliate.id), table.affiliate)
 
         log(
             u"Cambio en aportaciones año {0} afiliado {1}".format(table.year,
@@ -184,18 +183,16 @@ class Cuota(controllers.Controller):
         for n in range(1, 13):
             try:
                 setattr(table, "month{0}".format(n), kw["month{0}".format(n)])
-                log(
+                log(identity.current.user,
                     u"Cambio en complemento año {0} mes {1} afiliado {2} "
                     u"1".format(
-                        table.year, n, table.affiliate.id),
-                    identity.current.user, table.affiliate)
+                        table.year, n, table.affiliate.id), table.affiliate)
             except KeyError:
                 setattr(table, "month{0}".format(n), False)
-                log(
+                log(identity.current.user,
                     u"Cambio en complemento año {0} mes {1} afiliado {2} "
                     u"0".format(
-                        table.year, n, table.affiliate.id),
-                    identity.current.user, table.affiliate)
+                        table.year, n, table.affiliate.id), table.affiliate)
 
         log(
             u"Cambio en aportaciones año {0} afiliado {1}".format(table.year,
@@ -238,8 +235,9 @@ class Cuota(controllers.Controller):
 
         afiliado = model.Affiliate.get(afiliado)
         afiliado.pay_cuota(anio, mes)
-        log(u"Pago Aportaciones año {0} mes {1} afiliado {2} "
-            u"0".format(anio, mes, afiliado.id), identity.current.user,
+        log(identity.current.user,
+            u"Pago Aportaciones año {0} mes {1} afiliado {2} "
+            u"0".format(anio, mes, afiliado.id),
             afiliado)
 
         flash(u'Pagadas Aportaciones de {0} de {1}'.format(mes, anio))
@@ -259,9 +257,9 @@ class Cuota(controllers.Controller):
         afiliado = model.Affiliate.get(afiliado)
         for mes in meses.split():
             afiliado.pay_cuota(anio, int(mes))
-            log(u"Pago Aportaciones año {0} mes {1} afiliado {2} "
-                u"0".format(anio, mes, afiliado.id), identity.current.user,
-                afiliado)
+            log(identity.current.user,
+                u"Pago Aportaciones año {0} mes {1} afiliado {2} "
+                u"0".format(anio, mes, afiliado.id),  afiliado)
 
         flash(u'Pagadas Aportaciones de {0} de {1}'.format(meses, anio))
 
@@ -290,9 +288,8 @@ class Cuota(controllers.Controller):
         deduccion['amount'] = affiliate.get_cuota(day)
         model.Deduced(**deduccion)
 
-        log(
+        log(identity.current.user,
             u"Pago por Planilla de cuota de aportaciones afiliado {0}".format(
-                affiliate.id),
-            identity.current.user, affiliate)
+                affiliate.id), affiliate)
 
         return dict(pago=affiliate.get_cuota(day))
