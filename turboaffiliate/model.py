@@ -162,6 +162,7 @@ class Logger(SQLObject):
     user = ForeignKey("User")
     action = UnicodeCol(default="")
     day = DateTimeCol(default=datetime.now)
+    affiliate = ForeignKey("Affiliate")
 
 ################################################################################
 # Clases Especificas del Negocio
@@ -319,6 +320,7 @@ class Affiliate(SQLObject):
                                         orderBy=['-year', '-month'])
     banco_completo = BoolCol(default=False, notNone=True)
     autorizaciones = MultipleJoin('Autorizacion')
+    logs = MultipleJoin('Logger')
 
     def tiempo(self):
 
@@ -1400,12 +1402,13 @@ class Extra(SQLObject):
     mes = IntCol(default=None)
     anio = IntCol(default=None)
 
-    def act(self, decrementar=True, day=date.today(), banco=False):
+    def act(self, decrementar=True, day=date.today(), banco=False,
+            cobro=date.today()):
 
         """Registra que la deducción se efectuó y disminuye la cantidad"""
 
         if banco:
-            self.deduccion_bancaria(day)
+            self.deduccion_bancaria(day, cobro)
         else:
             self.to_deduced(day=day)
 
@@ -1439,7 +1442,7 @@ class Extra(SQLObject):
 
         Deduced(**kw)
 
-    def deduccion_bancaria(self, dia=date.today()):
+    def deduccion_bancaria(self, dia=date.today(), cobro=date.today()):
 
         kw = dict()
         kw['amount'] = self.amount
@@ -1448,7 +1451,7 @@ class Extra(SQLObject):
         kw['account'] = self.account
         kw['month'] = dia.month
         kw['year'] = dia.year
-        kw['day'] = dia
+        kw['day'] = cobro
 
         if self.retrasada:
 
@@ -1759,7 +1762,7 @@ class Reintegro(SQLObject):
 
         Deduced(**kw)
 
-    def deduccion_bancaria(self, dia=date.today()):
+    def deduccion_bancaria(self, dia=date.today(), cobro=date.today()):
         self.cancelar(dia)
         self.formaPago = FormaPago.get(1)
 
@@ -1770,7 +1773,7 @@ class Reintegro(SQLObject):
         kw['account'] = self.cuenta
         kw['month'] = dia.month
         kw['year'] = dia.year
-        kw['day'] = dia
+        kw['day'] = cobro
 
         kw['detail'] = "Reintegro {0} por {0}".format(
             self.emision.strftime('%d/%m/%Y'),

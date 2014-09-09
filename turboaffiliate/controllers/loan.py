@@ -29,6 +29,7 @@ from sqlobject.main import SQLObjectNotFound
 from cherrypy import request
 
 from turboaffiliate import model, wording
+from affiliate import log
 
 
 def daterange(start_date, end_date):
@@ -95,13 +96,12 @@ class Deduction(controllers.Controller):
         kw['account'] = model.Account.get(kw['account'])
         kw['amount'] = Decimal(kw['amount'].replace(',', ''))
 
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = "Deduccion de {0} al prestamo {1}".format(kw['amount'],
-                                                                  kw['loan'].id)
-        model.Logger(**log)
+        deduction = model.Deduction(**kw)
 
-        model.Deduction(**kw)
+        log(u"Deduccion de {0} al prestamo {1}".format(kw['amount'],
+                                                       kw['loan'].id),
+            identity.current.user, deduction.loan.affiliate)
+
         raise redirect('/loan/{0}'.format(kw['loan'].id))
 
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
@@ -113,10 +113,9 @@ class Deduction(controllers.Controller):
         loan = deduction.loan
         deduction.destroySelf()
 
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = u"Eliminada deducción préstamo {0}".format(loan.id)
-        model.Logger(**log)
+        log(
+            u"Eliminada deducción préstamo {0}".format(loan.id),
+            identity.current.user, loan.affiliate)
 
         raise redirect('/loan/{0}'.format(loan.id))
 
@@ -162,13 +161,12 @@ class Pay(controllers.Controller):
         if 'deposito' in kw:
             deposito = kw['deposito']
 
-        if day == None:
+        if day is None:
             day = date.today()
 
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = "Pago de {0} al prestamo {1}".format(amount, loan.id)
-        model.Logger(**log)
+        log(
+            u"Pago de {0} al prestamo {1}".format(amount, loan.id),
+            identity.current.user, loan.affiliate)
 
         if loan.pagar(amount, receipt, day, free, deposito=deposito,
                       descripcion=kw['description']):
@@ -204,15 +202,14 @@ class Pay(controllers.Controller):
         if 'deposito' in kw:
             deposito = kw['deposito']
 
-        if day == None:
+        if day is None:
             day = date.today()
 
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = "{0} Pagos de {1} al prestamo {2}".format(numero,
-                                                                  amount,
-                                                                  loan.id)
-        model.Logger(**log)
+        log(
+            u"{0} Pagos de {1} al prestamo {2}".format(numero,
+                                                       amount,
+                                                       loan.id),
+            identity.current.user, loan.affiliate)
 
         for n in range(numero):
 
@@ -263,10 +260,10 @@ class Pay(controllers.Controller):
         if 'free' in kw:
             free = kw['free']
 
-        if day == None:
+        if day is None:
             day = date.today()
 
-        deduccion = dict()
+        deduccion = {}
         deduccion['account'] = cuenta
         deduccion['month'] = day.month
         deduccion['year'] = day.year
@@ -274,11 +271,10 @@ class Pay(controllers.Controller):
         deduccion['amount'] = amount
         model.Deduced(**deduccion)
 
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = u"Pago por Planilla de {0} al prestamo {1}".format(
-            amount, loan.id)
-        model.Logger(**log)
+        log(
+            u"Pago por Planilla de {0} al prestamo {1}".format(
+                amount, loan.id),
+            identity.current.user, loan.affiliate)
 
         loan.pagar(amount, u'Planilla', day, free)
 
@@ -368,10 +364,8 @@ class Loan(controllers.Controller):
                               payment=validators.UnicodeString()))
     def save(self, loan, capital, months, payment):
 
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = u"Modificaciones al prestamo {0}".format(loan.id)
-        model.Logger(**log)
+        log(u"Modificaciones al prestamo {0}".format(loan.id),
+            identity.current.user, loan.affiliate)
 
         loan = model.Loan.get(loan)
         loan.capital = capital.replace(',', '')
@@ -411,11 +405,9 @@ class Loan(controllers.Controller):
         kw["casa"] = kw["aproval"].casa
 
         loan = model.Loan(affiliate=affiliate, **kw)
-
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = u"Otorgar préstamo al afiliado {0}".format(affiliate.id)
-        model.Logger(**log)
+        log(
+            u"Otorgar préstamo al afiliado {0}".format(affiliate.id),
+            identity.current.user, loan.affiliate)
 
         raise redirect("/loan/{0}".format(loan.id))
 
@@ -447,11 +439,11 @@ class Loan(controllers.Controller):
 
         loan = model.Loan.get(code)
         loan = loan.remove()
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = "Enviado el prestamo {0} a pagados".format(loan.id)
+
+        log(u"Enviado el prestamo {0} a pagados".format(loan.id),
+            identity.current.user, loan.affiliate)
+
         flash('El prestamo ha sido removido')
-        model.Logger(**log)
         raise redirect('/payed/{0}'.format(loan.id))
 
     @expose()
@@ -614,11 +606,10 @@ class Loan(controllers.Controller):
         loan = model.Loan.get(loan)
         loan.payment = Decimal(payment.replace(',', ''))
 
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = "Cambio de cuota de prestamo {0} a {1}".format(loan.id,
-                                                                       payment)
-        model.Logger(**log)
+        log(
+            u"Cambio de cuota de prestamo {0} a {1}".format(loan.id,
+                                                            payment),
+            identity.current.user, loan.affiliate)
 
         raise redirect('/loan/{0}'.format(loan.id))
 
@@ -631,6 +622,10 @@ class Loan(controllers.Controller):
 
         loan = model.Loan.get(loan)
         loan.debt = Decimal(debt.replace(',', ''))
+        log(
+            u"Cambio de deuda de prestamo {0} a {1}".format(loan.id,
+                                                            debt),
+            identity.current.user, loan.affiliate)
         raise redirect('/loan/{0}'.format(loan.id))
 
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
@@ -642,6 +637,10 @@ class Loan(controllers.Controller):
 
         loan = model.Loan.get(loan)
         loan.amount = Decimal(amount.replace(',', ''))
+        log(
+            u"Cambio de capital de prestamo {0} a {1}".format(loan.id,
+                                                            amount),
+            identity.current.user, loan.affiliate)
         raise redirect('/loan/{0}'.format(loan.id))
 
     @identity.require(identity.not_anonymous())

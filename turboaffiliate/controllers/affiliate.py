@@ -33,12 +33,13 @@ from turboaffiliate.controllers import (cuota, extra, billing, deduced,
                                         observacion)
 
 
-def log(user, message):
+def log(user, message, affiliate):
     """Guarda un mensaje en el registro del sistema"""
 
     log = dict()
     log['user'] = user
     log['action'] = message
+    log['affiliate'] = affiliate
     model.Logger(**log)
 
 
@@ -193,7 +194,7 @@ class Affiliate(controllers.Controller):
 
             # Logs del sistema
             log(identity.current.user,
-                u"Modificado el afiliado {0}".format(affiliate.id))
+                u"Modificado el afiliado {0}".format(affiliate.id), affiliate)
 
             del kw['affiliate']
 
@@ -217,7 +218,7 @@ class Affiliate(controllers.Controller):
             affiliate.cotizacion = cotizacion
 
             log(identity.current.user,
-                u"Agregado el afiliado {0}".format(affiliate.id))
+                u"Agregado el afiliado {0}".format(affiliate.id), affiliate)
 
             flash(u'¡El afiliado ha sido guardado!')
 
@@ -243,7 +244,7 @@ class Affiliate(controllers.Controller):
             cuota.destroySelf()
 
         log(identity.current.user,
-            u"Eliminado el afiliado {0}".format(affiliate.id))
+            u"Eliminado el afiliado {0}".format(affiliate.id), affiliate)
 
         affiliate.destroySelf()
         flash(u'El afiliado ha sido removido!')
@@ -360,7 +361,7 @@ class Affiliate(controllers.Controller):
         affiliate.desactivacion = day
 
         log(identity.current.user,
-            u"Desactivado el afiliado {0}".format(affiliate.id))
+            u"Desactivado el afiliado {0}".format(affiliate.id), affiliate)
 
         raise redirect('/affiliate/{0}'.format(affiliate.id))
 
@@ -386,7 +387,7 @@ class Affiliate(controllers.Controller):
         affiliate.desactivacion = date.today()
 
         log(identity.current.user,
-            u"Afiliado {0} reportado como fallecido".format(affiliate.id))
+            u"Afiliado {0} reportado como fallecido".format(affiliate.id), affiliate)
 
         raise redirect('/affiliate/{0}'.format(affiliate.id))
 
@@ -404,7 +405,7 @@ class Affiliate(controllers.Controller):
         affiliate = model.Affiliate.get(affiliate)
         affiliate.active = True
         log(identity.current.user,
-            u"Activado el afiliado {0}".format(affiliate.id))
+            u"Activado el afiliado {0}".format(affiliate.id), affiliate)
 
         raise redirect('/affiliate/{0}'.format(affiliate.id))
 
@@ -678,7 +679,7 @@ class Affiliate(controllers.Controller):
 
         log(identity.current.user,
             u"Excedente Deducido por planilla afiliado {0}".format(
-                affiliate.id))
+                affiliate.id), affiliate)
 
         return dict(pago=affiliate.get_monthly())
 
@@ -746,7 +747,7 @@ class Affiliate(controllers.Controller):
 
         log(identity.current.user,
             u"Se registro la autorización del afiliado {0}".format(
-                affiliate.id))
+                affiliate.id), affiliate)
 
         flash(u'Se ha registrado la autorización del afiliado {0}'.format(
             affiliate.id))
@@ -773,7 +774,7 @@ class Affiliate(controllers.Controller):
 
             log(identity.current.user,
                 u"Se registro la autorización del afiliado {0}".format(
-                    affiliate.id))
+                    affiliate.id), affiliate)
 
             flash(u'Se ha registrado la autorización del afiliado {0}'.format(
                 affiliate.id))

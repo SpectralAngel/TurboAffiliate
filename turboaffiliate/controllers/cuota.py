@@ -25,6 +25,7 @@ from turbogears import (controllers, expose, identity, redirect, validate,
                         validators, flash)
 
 from turboaffiliate import model
+from turboaffiliate.controllers.affiliate import log
 
 
 class Cuota(controllers.Controller):
@@ -53,10 +54,10 @@ class Cuota(controllers.Controller):
         if end > date.today().year:
             end = start
 
-        self.log(
+        log(
             u"Posteo aportaciones de  {0} a {1} afiliado {2}".format(start, end,
                                                                      affiliate.id),
-            identity.current.user)
+            identity.current.user, affiliate)
 
         for n in range(start, end + 1):
             [affiliate.pay_cuota(n, month) for month in range(1, 13)]
@@ -133,23 +134,23 @@ class Cuota(controllers.Controller):
         for n in range(1, 13):
             try:
                 setattr(table, "month{0}".format(n), kw["month{0}".format(n)])
-                self.log(
+                log(
                     u"Cambio en aportaciones año {0} mes {1} afiliado {2} "
                     u"1".format(
                         table.year, n, table.affiliate.id),
-                    identity.current.user)
+                    identity.current.user, table.affiliate)
             except KeyError:
                 setattr(table, "month{0}".format(n), False)
-                self.log(
+                log(
                     u"Cambio en aportaciones año {0} mes {1} afiliado {2} "
                     u"0".format(
                         table.year, n, table.affiliate.id),
-                    identity.current.user)
+                    identity.current.user, table.affiliate)
 
-        self.log(
+        log(
             u"Cambio en aportaciones año {0} afiliado {1}".format(table.year,
                                                                   table.affiliate.id),
-            identity.current.user)
+            identity.current.user, table.affiliate)
 
         raise redirect('/affiliate/cuota/{0}'.format(table.affiliate.id))
 
@@ -175,23 +176,23 @@ class Cuota(controllers.Controller):
         for n in range(1, 13):
             try:
                 setattr(table, "month{0}".format(n), kw["month{0}".format(n)])
-                self.log(
-                    u"Cambio en aportaciones año {0} mes {1} afiliado {2} "
+                log(
+                    u"Cambio en complemento año {0} mes {1} afiliado {2} "
                     u"1".format(
                         table.year, n, table.affiliate.id),
-                    identity.current.user)
+                    identity.current.user, table.affiliate)
             except KeyError:
                 setattr(table, "month{0}".format(n), False)
-                self.log(
-                    u"Cambio en aportaciones año {0} mes {1} afiliado {2} "
+                log(
+                    u"Cambio en complemento año {0} mes {1} afiliado {2} "
                     u"0".format(
                         table.year, n, table.affiliate.id),
-                    identity.current.user)
+                    identity.current.user, table.affiliate)
 
-        self.log(
+        log(
             u"Cambio en aportaciones año {0} afiliado {1}".format(table.year,
                                                                   table.affiliate.id),
-            identity.current.user)
+            identity.current.user, table.affiliate)
 
         raise redirect('/affiliate/cuota/{0}'.format(table.affiliate.id))
 
@@ -228,8 +229,10 @@ class Cuota(controllers.Controller):
     def pagar(self, afiliado, mes, anio, redir):
 
         afiliado = model.Affiliate.get(afiliado)
-        # afiliado.pagar_cuota(mes, anio)
         afiliado.pay_cuota(anio, mes)
+        log(u"Pago Aportaciones año {0} mes {1} afiliado {2} "
+            u"0".format(anio, mes, afiliado.id), identity.current.user,
+            afiliado)
 
         flash(u'Pagadas Aportaciones de {0} de {1}'.format(mes, anio))
 
@@ -246,9 +249,11 @@ class Cuota(controllers.Controller):
         """Permite pagar varios meses en una sola operación"""
 
         afiliado = model.Affiliate.get(afiliado)
-        # afiliado.pagar_cuota(mes, anio)
         for mes in meses.split():
             afiliado.pay_cuota(anio, int(mes))
+            log(u"Pago Aportaciones año {0} mes {1} afiliado {2} "
+                u"0".format(anio, mes, afiliado.id), identity.current.user,
+                afiliado)
 
         flash(u'Pagadas Aportaciones de {0} de {1}'.format(meses, anio))
 
@@ -267,7 +272,6 @@ class Cuota(controllers.Controller):
 
         affiliate = model.Affiliate.get(afiliado)
         cuenta = model.Account.get(cuenta)
-        # affiliate.pagar_cuota(day.month, day.year)
         affiliate.pay_cuota(day.year, day.month)
 
         deduccion = dict()
@@ -278,9 +282,9 @@ class Cuota(controllers.Controller):
         deduccion['amount'] = affiliate.get_cuota(day)
         model.Deduced(**deduccion)
 
-        self.log(
+        log(
             u"Pago por Planilla de cuota de aportaciones afiliado {0}".format(
                 affiliate.id),
-            identity.current.user)
+            identity.current.user, affiliate)
 
         return dict(pago=affiliate.get_cuota(day))

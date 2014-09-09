@@ -56,10 +56,6 @@ class Account(controllers.Controller):
         flash(u"La cuenta ha sido grabada")
 
         log = dict()
-        log['user'] = identity.current.user
-        log['action'] = u"Agregada cuenta {0} {1}".format(account.id,
-                                                          account.name)
-        model.Logger(**log)
         raise redirect('/account/{0}'.format(account.id))
 
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),

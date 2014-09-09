@@ -63,283 +63,284 @@
     </li>
     <li><a href="#otros" role="tab" data-toggle="tab">Otros</a></li>
     <li><a href="#recibos" role="tab" data-toggle="tab">Recibos</a></li>
+    <li><a href="#cambios" role="tab" data-toggle="tab">Registro de Cambios</a></li>
 </ul>
 <div class="tab-content">
 <div class="tab-pane active" id="afiliado">
-    <div class="row">
-        <div class="col-md-12">
-            <div py:if="not affiliate.active">
-                <div class="bg-danger" style="padding: 0.5em;">
-                    <span class="glyphicon glyphicon-warning-sign"></span>
-                    Afiliado desactivado por
-                    <strong>${affiliate.reason}</strong>
-                    <ul>
-                        <li py:if="not affiliate.muerte == None and affiliate.reason == u'Fallecimiento'">
-                            Fecha de Fallecimiento:
-                            ${affiliate.muerte.strftime('%d de %B de %Y')}
-                        </li>
-                        <li py:if="not affiliate.desactivacion == None">
-                            Fecha de Desactivaci&oacute;n:
-                            ${affiliate.desactivacion.strftime('%d de %B de %Y')}
-                        </li>
-                    </ul>
+<div class="row">
+    <div class="col-md-12">
+        <div py:if="not affiliate.active">
+            <div class="bg-danger" style="padding: 0.5em;">
+                <span class="glyphicon glyphicon-warning-sign"></span>
+                Afiliado desactivado por
+                <strong>${affiliate.reason}</strong>
+                <ul>
+                    <li py:if="not affiliate.muerte == None and affiliate.reason == u'Fallecimiento'">
+                        Fecha de Fallecimiento:
+                        ${affiliate.muerte.strftime('%d de %B de %Y')}
+                    </li>
+                    <li py:if="not affiliate.desactivacion == None">
+                        Fecha de Desactivaci&oacute;n:
+                        ${affiliate.desactivacion.strftime('%d de %B de %Y')}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6"
+         py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated == None">
+        <div class="bg-danger" style="padding: 0.5em;">
+            <span class="glyphicon glyphicon-warning-sign"></span>
+            <strong>Este afiliado requiere actualizar sus datos de jubilaci&oacute;n</strong>
+        </div>
+    </div>
+    <div class="col-md-6" py:if="affiliate.cardID == None">
+        <div class="bg-danger" style="padding: 0.5em;">
+            <span class="glyphicon glyphicon-warning-sign"></span>
+            <strong>Este afiliado no tiene tarjeta de identidad
+                ingresada</strong>
+        </div>
+    </div>
+    <div class="col-md-6" py:if="affiliate.departamento.id == 19">
+        <div class="bg-danger" style="padding: 0.5em;">
+            <span class="glyphicon glyphicon-warning-sign"></span>
+            <strong>Este afiliado no tiene Departamento</strong>
+        </div>
+    </div>
+    <div class="col-md-6" py:if="affiliate.municipio.id == 299">
+        <div class="bg-danger" style="padding: 0.5em;">
+            <span class="glyphicon glyphicon-warning-sign"></span>
+            <strong>Este afiliado no tiene Ciudad</strong>
+        </div>
+    </div>
+    <div class="col-md-6" py:if="affiliate.birthday == None">
+        <div class="bg-danger" style="padding: 0.5em;">
+            <span class="glyphicon glyphicon-warning-sign"></span>
+            <strong>Este afiliado no tiene Fecha de nacimiento</strong>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <section class="page-header">
+            <h2>Informaci&oacute;n Personal</h2>
+        </section>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-5">
+        <ul>
+            <li><strong>Identidad:</strong> ${affiliate.cardID}</li>
+            <li py:if="not affiliate.joined is None">
+                <strong>Afiliado desde <span>${affiliate.joined.strftime('%d de %B de %Y')}</span></strong>
+            </li>
+            <li py:if="affiliate.cotizacion.id != 1">N&uacute;mero de Cobro:
+                ${affiliate.escalafon}
+            </li>
+            <li><strong>Lugar de Nacimiento: </strong>
+                ${affiliate.birthPlace}
+            </li>
+            <li><strong>Fecha de Nacimiento: </strong>
+                <span py:if="not affiliate.birthday is None">${affiliate.birthday.strftime('%d de %B de %Y')}</span>
+            </li>
+            <li>
+                <strong>Sexo:</strong>
+                <span py:if="affiliate.gender == 'M'">Masculino</span>
+                <span py:if="affiliate.gender == 'F'">Femenino</span>
+            </li>
+            <li><strong>Tel&eacute;fono: </strong>${affiliate.phone}</li>
+            <li><strong>Instituto: </strong>${affiliate.school}</li>
+            <li><strong>Municipio: </strong>${affiliate.municipio.nombre}
+            </li>
+            <li><strong>Departamento: </strong>${affiliate.departamento.nombre}
+            </li>
+            <li><strong>Banco: </strong>${affiliate.get_banco().nombre}</li>
+            <li><strong>Cuenta: </strong>${affiliate.cuenta}</li>
+            <li py:if="affiliate.cotizacion.nombre == 'INPREMA' and affiliate.jubilated != None">
+                <strong>Jubilado desde
+                    ${affiliate.jubilated.strftime('%d de %B de %Y')}</strong>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-7 table-responsive">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header">
+                    <h3>Autorizaciones</h3>
                 </div>
+                <ul>
+                    <li py:for="autorizacion in affiliate.autorizaciones">
+                        ${autorizacion.fecha}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped table-condensed" py:if="affiliate.active">
+                    <caption>
+                        Cobros a Efectuar
+                    </caption>
+                    <thead>
+                    <th>Concepto</th>
+                    <th>Mes y A&ntilde;o</th>
+                    <th>Cantidad</th>
+                    <th class="noprint">Acciones</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Aportaci&oacute;n Ordinaria</td>
+                        <td></td>
+                        <td>${locale.currency(affiliate.get_cuota(), True, True)}
+                        </td>
+                        <td class="noprint">
+                            <a class="btn btn-primary"
+                               onclick="javascript:$('#pagarAportaciones').dialog('open');">
+                                Pagar
+                            </a>
+                        </td>
+                    </tr>
+                    <tr py:for="loan in affiliate.loans">
+                        <td>Cuota de Pr&eacute;stamo</td>
+                        <td></td>
+                        <td>${locale.currency(loan.get_payment(), True, True)}</td>
+                        <td class="noprint">&nbsp;</td>
+                    </tr>
+                    <tr py:for="extra in affiliate.extras">
+                        <td>${extra.account.name}</td>
+                        <td>${extra.mes} de ${extra.anio}</td>
+                        <td>${locale.currency(extra.amount, True, True)}</td>
+                        <td class="noprint"><a class="btn btn-danger"
+                                               href="${tg.url('/affiliate/extra/delete/{0}'.format(extra.id))}">Borrar</a>
+                        </td>
+                    </tr>
+                    <tr py:for="reintegro in affiliate.reintegros"
+                        py:if="not reintegro.pagado">
+                        <td>Reintegro</td>
+                        <td>${reintegro.motivo}</td>
+                        <td>${reintegro.emision.strftime('%d/%m/%Y')}</td>
+                        <td>${locale.currency(reintegro.monto, True, True)}</td>
+                        <td class="noprint"><a class="btn btn-danger"
+                                               href="${tg.url('/reintegro/eliminar/{0}'.format(reintegro.id))}">Borrar</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="2">Total de Deducciones</td>
+                        <td>
+                            ${locale.currency(affiliate.get_monthly(), True, True)}
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-6"
-             py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated == None">
-            <div class="bg-danger" style="padding: 0.5em;">
-                <span class="glyphicon glyphicon-warning-sign"></span>
-                <strong>Este afiliado requiere actualizar sus datos de jubilaci&oacute;n</strong>
-            </div>
-        </div>
-        <div class="col-md-6" py:if="affiliate.cardID == None">
-            <div class="bg-danger" style="padding: 0.5em;">
-                <span class="glyphicon glyphicon-warning-sign"></span>
-                <strong>Este afiliado no tiene tarjeta de identidad
-                    ingresada</strong>
-            </div>
-        </div>
-        <div class="col-md-6" py:if="affiliate.departamento.id == 19">
-            <div class="bg-danger" style="padding: 0.5em;">
-                <span class="glyphicon glyphicon-warning-sign"></span>
-                <strong>Este afiliado no tiene Departamento</strong>
-            </div>
-        </div>
-        <div class="col-md-6" py:if="affiliate.municipio.id == 299">
-            <div class="bg-danger" style="padding: 0.5em;">
-                <span class="glyphicon glyphicon-warning-sign"></span>
-                <strong>Este afiliado no tiene Ciudad</strong>
-            </div>
-        </div>
-        <div class="col-md-6" py:if="affiliate.birthday == None">
-            <div class="bg-danger" style="padding: 0.5em;">
-                <span class="glyphicon glyphicon-warning-sign"></span>
-                <strong>Este afiliado no tiene Fecha de nacimiento</strong>
-            </div>
-        </div>
+</div>
+<div class="row">
+    <div class="col-md-12 table-responsive">
+        <table class="table table-striped table-condensed"
+               py:if="len(affiliate.loans) != 0">
+            <caption>
+                Pr&eacute;stamos Personales
+            </caption>
+            <thead>
+            <tr>
+                <th>Solicitud</th>
+                <th>Monto</th>
+                <th>Deuda</th>
+                <th>Cuota</th>
+                <th>Otorgado</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr py:for="loan in affiliate.loans">
+                <td><a class="btn btn-success"
+                       href="${tg.url('/loan/{0}'.format(loan.id))}">${loan.id}</a>
+                </td>
+                <td>${locale.currency(loan.capital, True, True)}</td>
+                <td>${locale.currency(loan.debt, True, True)}</td>
+                <td>${locale.currency(loan.payment, True, True)}</td>
+                <td>${loan.startDate.strftime('%d/%b/%Y')}</td>
+                <td>
+                    <a class="btn btn-primary btn-sm"
+                       onclick="javascript:pagarPrestamo(${loan.id}, ${loan.get_payment()})">
+                        Pagar
+                    </a></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <section class="page-header">
-                <h2>Informaci&oacute;n Personal</h2>
-            </section>
-        </div>
+</div>
+<div class="row">
+    <div class="col-md-12 table-responsive">
+        <table class="table table-striped  table-condensed"
+               py:if="len(affiliate.solicitudes) != 0">
+            <caption>
+                Solicitudes de Pr&eacute;stamo
+            </caption>
+            <thead>
+            <tr>
+                <th>Monto</th>
+                <th>Periodo</th>
+                <th>Recibido</th>
+                <th>Entrega</th>
+                <th>Liquidar</th>
+                <th>Eliminar</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr py:for="solicitud in affiliate.solicitudes">
+                <td>${locale.currency(solicitud.monto, True, True)}</td>
+                <td>${solicitud.periodo}</td>
+                <td>${solicitud.ingreso.strftime('%d de %B de %Y')}</td>
+                <td>${solicitud.entrega.strftime('%d de %B de %Y')}</td>
+                <td><a class="btn btn-success btn-sm"
+                       href="${tg.url('/solicitud/convertir/{0}'.format(solicitud.id))}">Liquidar</a>
+                </td>
+                <td><a class="btn btn-danger btn-sm"
+                       href="${tg.url('/solicitud/eliminar/{0}'.format(solicitud.id))}">Eliminar</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="row">
-        <div class="col-md-5">
-            <ul>
-                <li><strong>Identidad:</strong> ${affiliate.cardID}</li>
-                <li py:if="not affiliate.joined is None">
-                    <strong>Afiliado desde <span>${affiliate.joined.strftime('%d de %B de %Y')}</span></strong>
-                </li>
-                <li py:if="affiliate.cotizacion.id != 1">N&uacute;mero de Cobro:
-                    ${affiliate.escalafon}
-                </li>
-                <li><strong>Lugar de Nacimiento: </strong>
-                    ${affiliate.birthPlace}
-                </li>
-                <li><strong>Fecha de Nacimiento: </strong>
-                    <span py:if="not affiliate.birthday is None">${affiliate.birthday.strftime('%d de %B de %Y')}</span>
-                </li>
-                <li>
-                    <strong>Sexo:</strong>
-                    <span py:if="affiliate.gender == 'M'">Masculino</span>
-                    <span py:if="affiliate.gender == 'F'">Femenino</span>
-                </li>
-                <li><strong>Tel&eacute;fono: </strong>${affiliate.phone}</li>
-                <li><strong>Instituto: </strong>${affiliate.school}</li>
-                <li><strong>Municipio: </strong>${affiliate.municipio.nombre}
-                </li>
-                <li><strong>Departamento: </strong>${affiliate.departamento.nombre}
-                </li>
-                <li><strong>Banco: </strong>${affiliate.get_banco().nombre}</li>
-                <li><strong>Cuenta: </strong>${affiliate.cuenta}</li>
-                <li py:if="affiliate.cotizacion.nombre == 'INPREMA' and affiliate.jubilated != None">
-                    <strong>Jubilado desde
-                        ${affiliate.jubilated.strftime('%d de %B de %Y')}</strong>
-                </li>
-            </ul>
-        </div>
-        <div class="col-md-7 table-responsive">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="page-header">
-                        <h3>Autorizaciones</h3>
-                    </div>
-                    <ul>
-                        <li py:for="autorizacion in affiliate.autorizaciones">
-                            ${autorizacion.fecha}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-            <table class="table table-striped table-condensed" py:if="affiliate.active">
-                <caption>
-                    Cobros a Efectuar
-                </caption>
-                <thead>
-                <th>Concepto</th>
-                <th>Mes y A&ntilde;o</th>
-                <th>Cantidad</th>
-                <th class="noprint">Acciones</th>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Aportaci&oacute;n Ordinaria</td>
-                    <td></td>
-                    <td>${locale.currency(affiliate.get_cuota(), True, True)}
-                    </td>
-                    <td class="noprint">
-                        <a class="btn btn-primary"
-                           onclick="javascript:$('#pagarAportaciones').dialog('open');">
-                            Pagar
-                        </a>
-                    </td>
-                </tr>
-                <tr py:for="loan in affiliate.loans">
-                    <td>Cuota de Pr&eacute;stamo</td>
-                    <td></td>
-                    <td>${locale.currency(loan.get_payment(), True, True)}</td>
-                    <td class="noprint">&nbsp;</td>
-                </tr>
-                <tr py:for="extra in affiliate.extras">
-                    <td>${extra.account.name}</td>
-                    <td>${extra.mes} de ${extra.anio}</td>
-                    <td>${locale.currency(extra.amount, True, True)}</td>
-                    <td class="noprint"><a class="btn btn-danger"
-                           href="${tg.url('/affiliate/extra/delete/{0}'.format(extra.id))}">Borrar</a>
-                    </td>
-                </tr>
-                <tr py:for="reintegro in affiliate.reintegros"
-                    py:if="not reintegro.pagado">
-                    <td>Reintegro</td>
-                    <td>${reintegro.motivo}</td>
-                    <td>${reintegro.emision.strftime('%d/%m/%Y')}</td>
-                    <td>${locale.currency(reintegro.monto, True, True)}</td>
-                    <td class="noprint"><a class="btn btn-danger"
-                                           href="${tg.url('/reintegro/eliminar/{0}'.format(reintegro.id))}">Borrar</a>
-                    </td>
-                </tr>
-                </tbody>
-                <tfoot>
-                <tr>
-                    <td colspan="2">Total de Deducciones</td>
-                    <td>
-                        ${locale.currency(affiliate.get_monthly(), True, True)}
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
-                </tfoot>
-            </table>
-                </div>
-            </div>
-        </div>
+</div>
+<div class="row">
+    <div class="col-md-12 table-responsive">
+        <table class="table table-striped  table-condensed"
+               py:if="len(affiliate.payedLoans) != 0">
+            <caption>
+                Historial de Pr&eacute;stamos Cancelados
+            </caption>
+            <thead>
+            <tr>
+                <th>Solicitud</th>
+                <th>Monto</th>
+                <th>Cuota</th>
+                <th>Otorgado</th>
+                <th>&Uacute;ltimo Pago</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr py:for="loan in affiliate.payedLoans">
+                <td><a class="btn btn-success btn-sm"
+                       href="${tg.url('/payed/{0}'.format(loan.id))}">${loan.id}</a>
+                </td>
+                <td>${locale.currency(loan.capital, True, True)}</td>
+                <td>${locale.currency(loan.payment, True, True)}</td>
+                <td>${loan.startDate.strftime('%d de %B de %Y')}</td>
+                <td>${loan.last.strftime('%d de %B de %Y')}</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="row">
-        <div class="col-md-12 table-responsive">
-            <table class="table table-striped table-condensed"
-                   py:if="len(affiliate.loans) != 0">
-                <caption>
-                    Pr&eacute;stamos Personales
-                </caption>
-                <thead>
-                <tr>
-                    <th>Solicitud</th>
-                    <th>Monto</th>
-                    <th>Deuda</th>
-                    <th>Cuota</th>
-                    <th>Otorgado</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr py:for="loan in affiliate.loans">
-                    <td><a class="btn btn-success"
-                           href="${tg.url('/loan/{0}'.format(loan.id))}">${loan.id}</a>
-                    </td>
-                    <td>${locale.currency(loan.capital, True, True)}</td>
-                    <td>${locale.currency(loan.debt, True, True)}</td>
-                    <td>${locale.currency(loan.payment, True, True)}</td>
-                    <td>${loan.startDate.strftime('%d/%b/%Y')}</td>
-                    <td>
-                        <a class="btn btn-primary btn-sm"
-                           onclick="javascript:pagarPrestamo(${loan.id}, ${loan.get_payment()})">
-                            Pagar
-                        </a></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 table-responsive">
-            <table class="table table-striped  table-condensed"
-                   py:if="len(affiliate.solicitudes) != 0">
-                <caption>
-                    Solicitudes de Pr&eacute;stamo
-                </caption>
-                <thead>
-                <tr>
-                    <th>Monto</th>
-                    <th>Periodo</th>
-                    <th>Recibido</th>
-                    <th>Entrega</th>
-                    <th>Liquidar</th>
-                    <th>Eliminar</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr py:for="solicitud in affiliate.solicitudes">
-                    <td>${locale.currency(solicitud.monto, True, True)}</td>
-                    <td>${solicitud.periodo}</td>
-                    <td>${solicitud.ingreso.strftime('%d de %B de %Y')}</td>
-                    <td>${solicitud.entrega.strftime('%d de %B de %Y')}</td>
-                    <td><a class="btn btn-success btn-sm"
-                           href="${tg.url('/solicitud/convertir/{0}'.format(solicitud.id))}">Liquidar</a>
-                    </td>
-                    <td><a class="btn btn-danger btn-sm"
-                           href="${tg.url('/solicitud/eliminar/{0}'.format(solicitud.id))}">Eliminar</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 table-responsive">
-            <table class="table table-striped  table-condensed"
-                   py:if="len(affiliate.payedLoans) != 0">
-                <caption>
-                    Historial de Pr&eacute;stamos Cancelados
-                </caption>
-                <thead>
-                <tr>
-                    <th>Solicitud</th>
-                    <th>Monto</th>
-                    <th>Cuota</th>
-                    <th>Otorgado</th>
-                    <th>&Uacute;ltimo Pago</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr py:for="loan in affiliate.payedLoans">
-                    <td><a class="btn btn-success btn-sm"
-                           href="${tg.url('/payed/{0}'.format(loan.id))}">${loan.id}</a>
-                    </td>
-                    <td>${locale.currency(loan.capital, True, True)}</td>
-                    <td>${locale.currency(loan.payment, True, True)}</td>
-                    <td>${loan.startDate.strftime('%d de %B de %Y')}</td>
-                    <td>${loan.last.strftime('%d de %B de %Y')}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+</div>
 </div>
 <div class="tab-pane" id="recibos">
     <div class="row">
@@ -418,20 +419,20 @@
         <div class="col-md-12 table-responsive">
             <table class="table table-striped table-condensed" py:if="len(affiliate.depositos) != 0">
                 <caption>
-                  Dep&oacute;sitos Efectuados
+                    Dep&oacute;sitos Efectuados
                 </caption>
                 <thead>
-                  <tr>
+                <tr>
                     <th>Fecha</th>
                     <th>Banco</th>
                     <th>Monto</th>
                     <th>Concepto</th>
                     <th>Descripci&oacute;n</th>
                     <th class="noprint">Acciones</th>
-                  </tr>
+                </tr>
                 </thead>
                 <tbody>
-                  <tr py:for="deposito in affiliate.depositos">
+                <tr py:for="deposito in affiliate.depositos">
                     <td>${deposito.fecha.strftime('%d/%m/%Y')}</td>
                     <td>${deposito.banco.nombre}</td>
                     <td>${locale.currency(deposito.monto, True, True)}</td>
@@ -442,9 +443,9 @@
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
                     </td>
-                  </tr>
+                </tr>
                 </tbody>
-          </table>
+            </table>
         </div>
     </div>
     <div class="row">
@@ -532,14 +533,45 @@
         </div>
     </div>
 </div>
+<div class="tab-pane" id="cambios">
+    <div class="row">
+        <div class="col-md-12 table-responsive">
+            <a class="btn btn-info" href="${tg.url('/logger/{0}'.format(affiliate.id)}">Ver Registros Anteriores</a></div>
+            <table class="table table-condensed table-hover table-striped">
+                <caption>Registro de Cambios</caption>
+                <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Accion</th>
+                    <th>Fecha</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr py:for="log in affiliate.logs">
+                    <td>${log.user.display_name}</td>
+                    <td>${log.action}</td>
+                    <td>${log.day}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 </div>
 </div>
-<form class="verDeducciones" action="${tg.url('/affiliate/deduced/mostrar')}"
+</div>
+<form class="verDeducciones form-horizontal" action="${tg.url('/affiliate/deduced/mostrar')}"
       method="get">
-    <div>
+    <fieldset>
+        <input type="hidden" value="${affiliate.id}" name="afiliado"/>
+        <div class="form-group">
+            <label class="control-label col-md-4">Identidad:</label>
+            <div class="controls col-md-7">
+                <input class="form-control" name="mes" />
+            </div>
+        </div>
         <ul>
-            <input type="hidden" value="${affiliate.id}" name="afiliado"/>
+
             <li>
                 <label>Mes:</label>
                 <input name="mes"/>
@@ -549,7 +581,7 @@
                 <input name="anio"/>
             </li>
         </ul>
-    </div>
+    </fieldset>
 </form>
 <form id="deduccionAnual" action="${tg.url('/affiliate/deduced/anual')}"
       method="get">

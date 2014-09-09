@@ -21,23 +21,41 @@
 
 from turbogears import controllers, identity
 from turbogears import expose, validate, validators
-from turboaffiliate import model
 from sqlobject.sqlbuilder import AND
 
+from turboaffiliate import model
+
+
 class Logger(controllers.Controller):
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.log.index")
-	def index(self):
-		
-		return dict()
-	
-	@identity.require(identity.not_anonymous())
-	@expose(template="turboaffiliate.templates.log.day")
-	@validate(validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
-							  end=validators.DateTimeConverter(format='%Y-%m-%d')))
-	def day(self, start, end):
-		
-		logs = model.Logger.select(AND(model.Logger.q.day>=start,model.Logger.q.day<=end))
-		
-		return dict(logs=logs,start=start,end=end)
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.log.index")
+    def index(self):
+        return dict()
+
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.log.day")
+    @validate(
+        validators=dict(start=validators.DateTimeConverter(format='%Y-%m-%d'),
+                        end=validators.DateTimeConverter(format='%Y-%m-%d')))
+    def day(self, start, end):
+        logs = model.Logger.select(
+            AND(model.Logger.q.day >= start, model.Logger.q.day <= end))
+
+        return dict(logs=logs, start=start, end=end)
+
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.log.affiliate')
+    @validate(validators=dict(affiliate=validators.Int()))
+    def default(self, affiliate):
+
+        """Permite mostrar un afiliado mediante su numero de afiliación
+
+        :param affiliate: Número de afiliación
+        """
+
+        affiliate = model.Affiliate.get(affiliate)
+
+        logs = model.Logger.select(
+            model.Logger.q.action.contains(u"afiliado " + str(affiliate.id)))
+
+        return dict(affiliate=affiliate, logs=logs)

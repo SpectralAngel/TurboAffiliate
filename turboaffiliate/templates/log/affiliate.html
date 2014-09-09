@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html"/>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"
+          py:replace="''"/>
+    <title>TurboAffiliate &bull; Registro de Cambios</title>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h1>Registro de Cambios de ${affiliate.id} - ${affiliate.firstName}
+                ${affiliate.lastName}</h1>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 table-responsive">
+        <table class="table table-condensed table-hover table-striped">
+            <caption>Registro de Cambios</caption>
+            <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Accion</th>
+                <th>Fecha</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr py:for="log in logs">
+                <td>${log.user.display_name}</td>
+                <td>${log.action}</td>
+                <td>${log.day}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -27,6 +27,7 @@ from turbogears import (controllers, identity, expose, validate, validators,
 from sqlobject.sqlbuilder import *
 
 from turboaffiliate import model
+from turboaffiliate.controllers.affiliate import log
 
 
 def inscripcionRealizada(afiliado):
@@ -324,12 +325,11 @@ class Asamblea(controllers.Controller):
 
         kw = dict()
         afiliado = model.Affiliate.get(afiliado)
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = "Inscrito afiliado {0} en asamblea {1}".format(
-            afiliado.id,
-            asamblea.id)
-        model.Logger(**log)
+
+        log(identity.current.user,
+            u"Inscrito afiliado {0} en asamblea {1}".format(
+                afiliado.id,
+                asamblea.id), afiliado)
 
         kw['afiliado'] = afiliado
         kw['asamblea'] = asamblea
@@ -362,12 +362,11 @@ class Asamblea(controllers.Controller):
         departamento = model.Departamento.get(departamento)
         afiliado.departamento = departamento
         afiliado.municipio = model.Municipio.get(municipio)
-        log = dict()
-        log['user'] = identity.current.user
-        log['action'] = "Inscrito afiliado {0} en asamblea {1}".format(
-            afiliado.id,
-            asamblea.id)
-        model.Logger(**log)
+
+        log(identity.current.user,
+            u"Inscrito afiliado {0} en asamblea {1}".format(
+                afiliado.id,
+                asamblea.id), afiliado)
 
         banco = model.Banco.get(banco)
         afiliado.banco = banco.id
