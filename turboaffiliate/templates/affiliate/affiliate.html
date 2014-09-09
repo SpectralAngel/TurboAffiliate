@@ -565,22 +565,17 @@
     <fieldset>
         <input type="hidden" value="${affiliate.id}" name="afiliado"/>
         <div class="form-group">
-            <label class="control-label col-md-4">Identidad:</label>
+            <label class="control-label col-md-4">Mes:</label>
             <div class="controls col-md-7">
                 <input class="form-control" name="mes" />
             </div>
         </div>
-        <ul>
-
-            <li>
-                <label>Mes:</label>
-                <input name="mes"/>
-            </li>
-            <li>
-                <label>A&ntilde;o:</label>
-                <input name="anio"/>
-            </li>
-        </ul>
+        <div class="form-group">
+            <label class="control-label col-md-4">A&ntilde;o:</label>
+            <div class="controls col-md-7">
+                <input class="form-control" name="anio" />
+            </div>
+        </div>
     </fieldset>
 </form>
 <form id="deduccionAnual" action="${tg.url('/affiliate/deduced/anual')}"
@@ -767,7 +762,7 @@
         </div>
     </fieldset>
 </form>
-<form class="extra" action="${tg.url('/affiliate/extra/save')}" method="post">
+<form class="extra form-horizontal" action="${tg.url('/affiliate/extra/save')}" method="post">
     <div>
         <input type="hidden" name="affiliate" value="${affiliate.id}"/>
         <ul>
@@ -868,7 +863,7 @@
         </ul>
     </div>
 </form>
-<form class="pagar" id="pagoPrestamo"
+<form class="pagar form-horizontal" id="pagoPrestamo"
       action="${tg.url('/loan/pay/agregarVarios')}" method="post">
     <fieldset>
         <input type="hidden" name="loan" id="loan"/>
@@ -901,6 +896,12 @@
 
             <div class="controls col-md-7">
                 <input name="description" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">N&uacute;mero:</label>
+            <div class="controls col-md-7">
+                <input name="numero" class="form-control"/>
             </div>
         </div>
         <div class="form-group">
