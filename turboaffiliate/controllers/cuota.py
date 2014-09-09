@@ -25,7 +25,15 @@ from turbogears import (controllers, expose, identity, redirect, validate,
                         validators, flash)
 
 from turboaffiliate import model
-from turboaffiliate.controllers.affiliate import log
+
+def log(user, message, affiliate):
+    """Guarda un mensaje en el registro del sistema"""
+
+    log = {}
+    log['user'] = user
+    log['action'] = message
+    log['affiliate'] = affiliate
+    model.Logger(**log)
 
 
 class Cuota(controllers.Controller):
