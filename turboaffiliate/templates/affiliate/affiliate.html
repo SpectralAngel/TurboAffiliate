@@ -536,7 +536,7 @@
 <div class="tab-pane" id="cambios">
     <div class="row">
         <div class="col-md-12 table-responsive">
-            <a class="btn btn-info" href="${tg.url('/logger/{0}'.format(affiliate.id)}">Ver Registros Anteriores</a></div>
+            <a class="btn btn-info" href="${tg.url('/logger/{0}'.format(affiliate.id)}">Ver Registros Anteriores</a>
             <table class="table table-condensed table-hover table-striped">
                 <caption>Registro de Cambios</caption>
                 <thead>
@@ -922,7 +922,7 @@
 </form>
 <form id="pagarAportaciones" class="form-horizontal" action="${tg.url('/affiliate/cuota/pagarVarias')}"
       method="post">
-    <div>
+    <fieldset>
         <input type="hidden" name="afiliado" value="${affiliate.id}"/>
         <input type="hidden" name="redir"
                value="${'/affiliate/{0}'.format(affiliate.id)}"/>
@@ -945,7 +945,7 @@
         <div class="form-actions">
             <input class="btn btn-primary" type="submit" value="Pagar"/>
         </div>
-    </div>
+    </fieldset>
 </form>
 </div>
 <aside class="col-md-3 noprint">
