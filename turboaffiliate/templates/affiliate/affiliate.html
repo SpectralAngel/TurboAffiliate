@@ -63,7 +63,6 @@
     </li>
     <li><a href="#otros" role="tab" data-toggle="tab">Otros</a></li>
     <li><a href="#recibos" role="tab" data-toggle="tab">Recibos</a></li>
-    <li><a href="#cambios" role="tab" data-toggle="tab">Registro de Cambios</a></li>
 </ul>
 <div class="tab-content">
 <div class="tab-pane active" id="afiliado">
@@ -528,29 +527,6 @@
                     <td>${s.indemnizacion.nombre}</td>
                     <td>${locale.currency(s.monto(), True, True)}</td>
                 </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-<div class="tab-pane" id="cambios">
-    <div class="row">
-        <div class="col-md-12 table-responsive">
-            <table class="table table-condensed table-hover table-striped">
-                <caption>Registro de Cambios</caption>
-                <thead>
-                    <tr>
-                        <th>Usuario</th>
-                        <th>Accion</th>
-                        <th>Fecha</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr py:for="log in logs">
-                        <td>${log.user.display_name}</td>
-                        <td>${log.action}</td>
-                        <td>${log.day}</td>
-                    </tr>
                 </tbody>
             </table>
         </div>
