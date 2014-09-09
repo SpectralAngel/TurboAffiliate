@@ -154,10 +154,10 @@ class Cuota(controllers.Controller):
                     u"0".format(
                         table.year, n, table.affiliate.id), table.affiliate)
 
-        log(
+        log(identity.current.user,
             u"Cambio en aportaciones año {0} afiliado {1}".format(table.year,
                                                                   table.affiliate.id),
-            identity.current.user, table.affiliate)
+            table.affiliate)
 
         raise redirect('/affiliate/cuota/{0}'.format(table.affiliate.id))
 
@@ -194,10 +194,10 @@ class Cuota(controllers.Controller):
                     u"0".format(
                         table.year, n, table.affiliate.id), table.affiliate)
 
-        log(
+        log(identity.current.user,
             u"Cambio en aportaciones año {0} afiliado {1}".format(table.year,
                                                                   table.affiliate.id),
-            identity.current.user, table.affiliate)
+            table.affiliate)
 
         raise redirect('/affiliate/cuota/{0}'.format(table.affiliate.id))
 
@@ -259,7 +259,7 @@ class Cuota(controllers.Controller):
             afiliado.pay_cuota(anio, int(mes))
             log(identity.current.user,
                 u"Pago Aportaciones año {0} mes {1} afiliado {2} "
-                u"0".format(anio, mes, afiliado.id),  afiliado)
+                u"0".format(anio, mes, afiliado.id), afiliado)
 
         flash(u'Pagadas Aportaciones de {0} de {1}'.format(meses, anio))
 
