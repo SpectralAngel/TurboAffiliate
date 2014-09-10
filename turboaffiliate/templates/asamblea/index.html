@@ -1,231 +1,353 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="../master.html" />
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html"/>
 <head>
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-  <title>TurboAffiliate &bull; Asambleas</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"
+          py:replace="''"/>
+    <title>TurboAffiliate &bull; Asambleas</title>
 </head>
 <body>
-    <div>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/agregar')}">
-    <fieldset>
-      <legend>Registrar Asamblea</legend>
-      <ol>
-        <li>
-          <label for="nombre">Nombre:</label>
-          <input name="nombre" />
-        </li>
-        <li>
-          <label for="numero">N&uacute;mero:</label>
-          <input name="numero" />
-        </li>
-        <li>
-          <label for="departamento">Departamento:</label>
-          <select name="departamento">
-            <option py:for="d in departamentos" value="${d.id}">
-              ${d.nombre}
-            </option>
-          </select>
-        </li>
-        <li><input type="submit" value="Registrar" /></li>
-      </ol>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/inscripcion')}">
-    <fieldset>
-      <legend>Inscribir Afiliados a una Asamblea</legend>
-      <ol>
-        <li>
-          <label>Asamblea:</label>
-          <select name="asamblea">
-            <option value="${a.id}" py:for="a in asambleas" py:if="a.habilitado">
-              ${a.numero} - ${a.nombre}
-            </option>
-          </select>
-        </li>
-        <li><input type="submit" value="Mostrar Formulario" /></li>
-      </ol>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/asistentes')}">
-      <fieldset>
-          <legend>Mostrar Asistentes de una Asamblea</legend>
-          <ol>
-              <li>
-                  <label>Asamblea:</label>
-                  <select name="asamblea">
-                      <option value="${a.id}" py:for="a in asambleas">
-                          ${a.numero} - ${a.nombre}
-                      </option>
-                  </select>
-              </li>
-              <li><input type="submit" value="Mostrar Formulario" /></li>
-          </ol>
-      </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/ach')}">
-    <fieldset>
-      <legend>Transferencias ACH excluyendo a un banco</legend>
-      <ol>
-        <li>
-          <label>Asamblea:</label>
-          <select name="asamblea">
-            <option value="${a.id}" py:for="a in asambleas">
-              ${a.id} - ${a.nombre}
-            </option>
-          </select>
-        </li>
-        <li>
-          <label>Banco:</label>
-          <select name="banco">
-            <option value="${b.id}" py:for="b in bancos">
-              ${b.id} - ${b.nombre}
-            </option>
-          </select>
-        </li>
-        <li><input type="submit" value="Mostrar" /></li>
-      </ol>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/achBanco')}">
-    <fieldset>
-      <legend>Transferencias ACH a un banco</legend>
-      <ol>
-        <li>
-          <label>Asamblea:</label>
-          <select name="asamblea">
-            <option value="${a.id}" py:for="a in asambleas">
-              ${a.id} - ${a.nombre}
-            </option>
-          </select>
-        </li>
-        <li>
-          <label>Banco:</label>
-          <select name="banco">
-            <option value="${b.id}" py:for="b in bancos">
-              ${b.id} - ${b.nombre}
-            </option>
-          </select>
-        </li>
-        <li><input type="submit" value="Mostrar" /></li>
-      </ol>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/planilla')}">
-    <fieldset>
-      <legend>Transferencias Planilla a un banco</legend>
-      <ol>
-        <li>
-          <label>Asamblea:</label>
-          <select name="asamblea">
-            <option value="${a.id}" py:for="a in asambleas">
-              ${a.id} - ${a.nombre}
-            </option>
-          </select>
-        </li>
-        <li>
-          <label>Banco:</label>
-          <select name="banco">
-            <option value="${b.id}" py:for="b in bancos">
-              ${b.id} - ${b.nombre}
-            </option>
-          </select>
-        </li>
-        <li><input type="submit" value="Mostrar" /></li>
-      </ol>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/enviarMasa')}">
-    <fieldset>
-      <legend>Marcar Inscripciones como enviadas</legend>
-      <ol>
-        <li>
-          <label>Asamblea:</label>
-          <select name="asamblea">
-            <option value="${a.id}" py:for="a in asambleas">
-              ${a.id} - ${a.nombre}
-            </option>
-          </select>
-        </li>
-        <li><input type="submit" value="Enviar" /></li>
-      </ol>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('inscripcion/pendientesDepartamento')}">
-    <fieldset>
-      <legend>Mostrar Inscripciones Pendientes por Departamento</legend>
-      <ol>
-        <li>
-          <label>Asamblea:</label>
-          <select name="asamblea">
-            <option value="${a.id}" py:for="a in asambleas">
-              ${a.id} - ${a.nombre}
-            </option>
-          </select>
-        </li>
-        <li>
-          <label for="departamento">Departamento:</label>
-          <select name="departamento">
-            <option py:for="d in departamentos" value="${d.id}">
-              ${d.nombre}
-            </option>
-          </select>
-        </li>
-        <li><input type="submit" value="Mostrar" /></li>
-      </ol>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('inscripcion/enviarDepartamento')}">
-    <fieldset>
-      <legend>Enviar por Departamento</legend>
-      <ol>
-        <li>
-          <label>Asamblea:</label>
-          <select name="asamblea">
-            <option value="${a.id}" py:for="a in asambleas">
-              ${a.id} - ${a.nombre}
-            </option>
-          </select>
-        </li>
-        <li>
-          <label for="departamento">Departamento:</label>
-          <select name="departamento">
-            <option py:for="d in departamentos" value="${d.id}">
-              ${d.nombre}
-            </option>
-          </select>
-        </li>
-        <li><input type="submit" value="Mostrar" /></li>
-      </ol>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('asistentesDepto')}">
-    <fieldset>
-      <legend>Asistentes por Departamento</legend>
-      <ol>
-        <li>
-          <label>Asamblea:</label>
-          <select name="asamblea">
-            <option value="${a.id}" py:for="a in asambleas">
-              ${a.id} - ${a.nombre}
-            </option>
-          </select>
-        </li>
-        <li>
-          <label for="departamento">Departamento:</label>
-          <select name="departamento">
-            <option py:for="d in departamentos" value="${d.id}">
-              ${d.nombre}
-            </option>
-          </select>
-        </li>
-        <li><input type="submit" value="Mostrar" /></li>
-      </ol>
-    </fieldset>
-  </form>
-  </div>
-  <div id="lateral" class="noprint">
-    <a class="button button-size" href="${tg.url('/asamblea/viatico')}">Control de Vi&aacute;ticos</a>
-  </div>
+<div class="row">
+    <div class="col-md-9">
+        <div class="page-header">
+            <h1>Gesti&oacute;n de Asambleas</h1>
+        </div>
+    </div>
+    <div class="col-md-3">
+            <a class="btn btn-primary" href="${tg.url('/asamblea/viatico')}">Control
+                de Vi&aacute;ticos</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form class="form-horizontal" role="form"
+              action="${tg.url('/asamblea/agregar')}">
+            <fieldset>
+                <legend>Registrar Asamblea</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Nombre:</label>
+
+                    <div class="controls col-md-7">
+                        <input name="nombre" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">N&uacute;mero:</label>
+
+                    <div class="controls col-md-7">
+                        <input name="numero" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Departamento:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="departamento" class="select form-control">
+                            <option py:for="d in departamentos" value="${d.id}">
+                                ${d.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="btn btn-primary" type="submit"
+                           value="Regsitrar"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <form class="form-horizontal" role="form"
+              action="${tg.url('/asamblea/inscripcion')}">
+            <fieldset>
+                <legend>Inscribir Afiliados a una Asamblea</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Asamblea:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="asamblea" class="select form-control">
+                            <option value="${a.id}" py:for="a in asambleas"
+                                    py:if="a.habilitado">
+                                ${a.numero} - ${a.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="btn btn-primary" type="submit"
+                           value="Registrar"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <form class="form-horizontal" role="form"
+              action="${tg.url('/asamblea/asistentes')}">
+            <fieldset>
+                <legend>Mostrar Asistentes de una Asamblea</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Asamblea:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="asamblea" class="select form-control">
+                            <option value="${a.id}" py:for="a in asambleas"
+                                    py:if="a.habilitado">
+                                ${a.numero} - ${a.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="btn btn-primary" type="submit"
+                           value="Mostrar"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form class="form-horizontal" role="form"
+              action="${tg.url('/asamblea/ach')}">
+            <fieldset>
+                <legend>Transferencias ACH excluyendo a un banco</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Asamblea:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="asamblea" class="select form-control">
+                            <option value="${a.id}" py:for="a in asambleas"
+                                    py:if="a.habilitado">
+                                ${a.numero} - ${a.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Banco:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="banco" class="select form-control">
+                            <option value="${b.id}" py:for="b in bancos">
+                                ${b.id} - ${b.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="btn btn-primary" type="submit"
+                           value="Mostrar"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <form class="form-horizontal" role="form"
+              action="${tg.url('/asamblea/achBanco')}">
+            <fieldset>
+                <legend>Transferencias ACH a un banco</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Asamblea:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="asamblea" class="select form-control">
+                            <option value="${a.id}" py:for="a in asambleas"
+                                    py:if="a.habilitado">
+                                ${a.numero} - ${a.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Banco:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="banco" class="select form-control">
+                            <option value="${b.id}" py:for="b in bancos">
+                                ${b.id} - ${b.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="btn btn-primary" type="submit"
+                           value="Mostrar"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <form class="form-horizontal" role="form"
+              action="${tg.url('/asamblea/planilla')}">
+            <fieldset>
+                <legend>Transferencias Planilla a un banco</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Asamblea:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="asamblea" class="select form-control">
+                            <option value="${a.id}" py:for="a in asambleas"
+                                    py:if="a.habilitado">
+                                ${a.numero} - ${a.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Banco:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="banco" class="select form-control">
+                            <option value="${b.id}" py:for="b in bancos">
+                                ${b.id} - ${b.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="btn btn-primary" type="submit"
+                           value="Mostrar"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form class="form-horizontal" role="form"
+              action="${tg.url('/asamblea/enviarMasa')}">
+            <fieldset>
+                <legend>Marcar Inscripciones como enviadas</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Asamblea:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="asamblea" class="select form-control">
+                            <option value="${a.id}" py:for="a in asambleas"
+                                    py:if="a.habilitado">
+                                ${a.numero} - ${a.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="btn btn-primary" type="submit"
+                           value="Enviar"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <form class="form-horizontal" role="form"
+              action="${tg.url('inscripcion/pendientesDepartamento')}">
+            <fieldset>
+                <legend>Mostrar Inscripciones Pendientes por Departamento
+                </legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Asamblea:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="asamblea" class="select form-control">
+                            <option value="${a.id}" py:for="a in asambleas"
+                                    py:if="a.habilitado">
+                                ${a.numero} - ${a.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Departamento:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="departamento" class="select form-control">
+                            <option py:for="d in departamentos" value="${d.id}">
+                                ${d.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="btn btn-primary" type="submit"
+                           value="Enviar"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <form class="form-horizontal" role="form"
+              action="${tg.url('inscripcion/enviarDepartamento')}">
+            <fieldset>
+                <legend>Enviar por Departamento</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Asamblea:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="asamblea" class="select form-control">
+                            <option value="${a.id}" py:for="a in asambleas"
+                                    py:if="a.habilitado">
+                                ${a.numero} - ${a.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Departamento:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="departamento" class="select form-control">
+                            <option py:for="d in departamentos" value="${d.id}">
+                                ${d.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="btn btn-primary" type="submit"
+                           value="Enviar"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form class="form-horizontal" role="form"
+              action="${tg.url('asistentesDepto')}">
+            <fieldset>
+                <legend>Enviar por Departamento</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Asamblea:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="asamblea" class="select form-control">
+                            <option value="${a.id}" py:for="a in asambleas"
+                                    py:if="a.habilitado">
+                                ${a.numero} - ${a.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Departamento:</label>
+
+                    <div class="controls col-md-7">
+                        <select name="departamento" class="select form-control">
+                            <option py:for="d in departamentos" value="${d.id}">
+                                ${d.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="btn btn-primary" type="submit"
+                           value="Enviar"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
 </body>
 </html>
