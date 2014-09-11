@@ -6,64 +6,88 @@
   <title>TurboAffiliate &bull; Confirmar Inscripci&oacute;n de Afiliado ${afiliado.id}</title>
 </head>
 <body>
-  <div class="ui-widget" py:if="deshabilitado">
-    <div class="ui-state-error ui-corner-all advertencia" style="padding: 0.5em;">
-      <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-      ${msg}
-  </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-danger" role="alert" py:if="deshabilitado">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <strong>Advertencia!</strong> ${msg}
+        </div>
+    </div>
 </div>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/inscribir')}">
-    <fieldset>
-      <input name="asamblea" type="hidden" value="${asamblea.id}" />
-      <input name="afiliado" type="hidden" value="${afiliado.id}" />
-      <legend>Confirmar e Inscribir</legend>
-      <ol>
-        <li>${afiliado.id} - ${afiliado.firstName} ${afiliado.lastName}</li>
-        <li>Identidad: ${afiliado.cardID}</li>
-        <li>Banco: ${afiliado.banco} - <span py:for="b in bancos" py:if="b.id == afiliado.banco">${b.nombre}</span></li>
-        <li>Cuenta: ${afiliado.cuenta}</li>
-        <li>Departamento: ${afiliado.departamento.nombre}</li>
-        <li>Municipio: ${afiliado.municipio.nombre}</li>
-        <li><input py:if="not deshabilitado" type="submit" value="Inscribir" /></li>
-      </ol>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/corregir')}">
-    <fieldset>
-      <input name="asamblea" type="hidden" value="${asamblea.id}" />
-      <input name="afiliado" type="hidden" value="${afiliado.id}" />
-      <legend>Corregir Datos</legend>
-      <ol>
-        <li>${afiliado.id} - ${afiliado.firstName} ${afiliado.lastName}</li>
-        <li>Identidad: ${afiliado.cardID}</li>
-        <li>
-          <label for="banco">Banco:</label>
-          <select name="banco">
-            <option py:for="b in bancos" py:if="b.id == afiliado.banco" selected="selected" value="${b.id}">${b.nombre}</option>
-            <option py:for="b in bancos" value="${b.id}">${b.nombre}</option>
-          </select>
-        </li>
-        <li>
-          <label for="cuenta">Cuenta:</label>
-          <input name="cuenta" value="${afiliado.cuenta}" />
-        </li>
-        <li>
-          <label for="departamento">Departamento:</label>
-          <select name="departamento" id="depto-inscripcion" onchange="JSON.municipio('${tg.url('/json')}', $('#depto-inscripcion' + ' option:selected').val(), '#ins-municipios')">
-            <option py:for="d in departamentos" py:if="d == afiliado.departamento" selected="selected" value="${d.id}">${d.nombre}</option>
-            <option py:for="d in departamentos" value="${d.id}">${d.nombre}</option>
-          </select>
-        </li>
-        <li>
-          <label for="municipio">Municipio:</label>
-          <select name="municipio" class="municipio" id="ins-municipios">
-            <option py:for="m in afiliado.departamento.municipios" py:if="m == afiliado.municipio" selected="selected" value="${m.id}">${m.nombre}</option>
-            <option py:for="m in afiliado.departamento.municipios" value="${m.id}">${m.nombre}</option>
-          </select>
-        </li>
-        <li><input py:if="not deshabilitado" type="submit" value="Inscribir" /></li>
-      </ol>
-    </fieldset>
-  </form>
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h1>
+                Inscribir a ${afiliado.id} - ${afiliado.firstName} ${afiliado.lastName}
+                <small>Identidad: ${afiliado.cardID}</small>
+            </h1>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <form class="form-horizontal" role="form" action="${tg.url('/asamblea/inscribir')}">
+            <fieldset>
+                <input name="asamblea" type="hidden" value="${asamblea.id}" />
+                <input name="afiliado" type="hidden" value="${afiliado.id}" />
+                <legend>Confirmar e Inscribir</legend>
+                <ul>
+                    <li>Banco: ${afiliado.banco} - <span py:for="b in bancos" py:if="b.id == afiliado.banco">${b.nombre}</span></li>
+                    <li>Cuenta: ${afiliado.cuenta}</li>
+                    <li>Departamento: ${afiliado.departamento.nombre}</li>
+                    <li>Municipio: ${afiliado.municipio.nombre}</li>
+                </ul>
+                <div class="form-actions">
+                    <input py:if="not deshabilitado" class="btn btn-primary" type="submit" value="Inscribir" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <form class="form-horizontal" role="form" action="${tg.url('/asamblea/inscribir')}">
+            <fieldset>
+                <input name="asamblea" type="hidden" value="${asamblea.id}" />
+                <input name="afiliado" type="hidden" value="${afiliado.id}" />
+                <legend>Corregir Datos</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Banco:</label>
+                    <div class="controls col-md-7">
+                        <select name="banco" class="form-control select">
+                            <option py:for="b in bancos" py:if="b.id == afiliado.banco" selected="selected" value="${b.id}">${b.nombre}</option>
+                            <option py:for="b in bancos" value="${b.id}">${b.nombre}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Cuenta:</label>
+                    <div class="controls col-md-7">
+                        <input name="cuenta" class="form-control" value="${afiliado.cuenta}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Departamento</label>
+                    <div class="controls col-md-7">
+                        <select class="form-control select" name="departamento" id="depto-inscripcion" onchange="JSON.municipio('${tg.url('/json')}', $('#depto-inscripcion' + ' option:selected').val(), '#ins-municipios')">
+                            <option py:for="d in departamentos" py:if="d == afiliado.departamento" selected="selected" value="${d.id}">${d.nombre}</option>
+                            <option py:for="d in departamentos" value="${d.id}">${d.nombre}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Municipio:</label>
+                    <div class="controls col-md-7">
+                        <select name="municipio" class="municipio form-control select" id="ins-municipios">
+                            <option py:for="m in afiliado.departamento.municipios" py:if="m == afiliado.municipio" selected="selected" value="${m.id}">${m.nombre}</option>
+                            <option py:for="m in afiliado.departamento.municipios" value="${m.id}">${m.nombre}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input py:if="not deshabilitado" class="btn btn-primary" type="submit" value="Inscribir" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
 </body>
 </html>

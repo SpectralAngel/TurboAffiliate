@@ -6,31 +6,48 @@
   <title>TurboAffiliate &bull; Inscripciones para Asamblea ${asamblea.numero}: ${asamblea.nombre}</title>
 </head>
 <body>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/confirmar')}">
-    <fieldset>
-      <input name="asamblea" type="hidden" value="${asamblea.id}" />
-      <legend>Inscribir por Afiliaci&oacute;n</legend>
-      <ol>
-        <li>
-          <label for="afiliado">Carnet:</label>
-          <input name="afiliado" />
-        </li>
-        <li><input type="submit" value="Revisar Datos" /></li>
-      </ol>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('/asamblea/confirmarIdentidad')}">
-    <fieldset>
-      <input name="asamblea" type="hidden" value="${asamblea.id}" />
-      <legend>Inscribir por Identidad</legend>
-      <ol>
-        <li>
-          <label for="identidad">Carnet:</label>
-          <input name="identidad" />
-        </li>
-        <li><input type="submit" value="Revisar Datos" /></li>
-      </ol>
-    </fieldset>
-  </form>
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h1>Inscribir Afiliados a Asamblea ${asamblea.nombre}</h1>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form class="form-horizontal" role="form" action="${tg.url('/asamblea/confirmar')}">
+            <fieldset>
+                <legend>Inscribir por Afiliaci&oacute;n</legend>
+                <input name="asamblea" type="hidden" value="${asamblea.id}" />
+                <div class="form-group">
+                    <label class="control-label col-md-4">Afiliaci&oacute;n:</label>
+                    <div class="controls col-md-7">
+                        <input name="afiliado" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="btn btn-primary" type="submit" value="Buscar" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <form class="form-horizontal" role="form" action="${tg.url('/asamblea/confirmar')}">
+            <fieldset>
+                <legend>Inscribir por Identidad</legend>
+                <input name="asamblea" type="hidden" value="${asamblea.id}" />
+                <div class="form-group">
+                    <label class="control-label col-md-4">Identidad:</label>
+                    <div class="controls col-md-7">
+                        <input name="identidad" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="btn btn-primary" type="submit" value="Buscar" />
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
 </body>
 </html>
