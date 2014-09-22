@@ -321,6 +321,7 @@ class Affiliate(SQLObject):
     banco_completo = BoolCol(default=False, notNone=True)
     autorizaciones = MultipleJoin('Autorizacion')
     logs = MultipleJoin('Logger')
+    bancario = UnicodeCol(default=None)
 
     def tiempo(self):
 

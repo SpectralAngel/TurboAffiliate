@@ -91,6 +91,27 @@
                                         <input class="form-control" name="affiliate" />
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">Banco:</label>
+                                    <div class="controls col-md-7">
+                                        <select name="banco" class="form-control select">
+                                            <option py:for="b in bancos" value="${b.id}">${b.nombre}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">Cuenta:</label>
+                                    <div class="controls col-md-7">
+                                        <input class="form-control" name="cuenta" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">Otros:</label>
+                                    <div class="controls col-md-7">
+                                        <input class="form-control" name="bancario" />
+                                    </div>
+                                </div>
                                 <div class="form-actions">
                                     <input class="btn btn-primary" type="submit" value="Buscar" />
                                 </div>
@@ -105,6 +126,27 @@
                                     <label class="control-label col-md-4">Identidad:</label>
                                     <div class="controls col-md-7">
                                         <input class="form-control" name="cardID" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">Banco:</label>
+                                    <div class="controls col-md-7">
+                                        <select name="banco" class="form-control select">
+                                            <option py:for="b in bancos" value="${b.id}">${b.nombre}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">Cuenta:</label>
+                                    <div class="controls col-md-7">
+                                        <input class="form-control" name="cuenta" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">Otros:</label>
+                                    <div class="controls col-md-7">
+                                        <input class="form-control" name="bancario" />
                                     </div>
                                 </div>
                                 <div class="form-actions">

@@ -56,7 +56,7 @@ class Affiliate(controllers.Controller):
     @expose(template='turboaffiliate.templates.affiliate.index')
     def index(self):
 
-        return dict(cuentas=model.Account.select())
+        return dict(cuentas=model.Account.select(), bancos=model.Banco.select())
 
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.error')
@@ -732,16 +732,24 @@ class Affiliate(controllers.Controller):
     @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose()
-    @validate(validators=dict(affiliate=validators.Int()))
-    def autorizar(self, affiliate):
+    @validate(validators=dict(affiliate=validators.Int(), banco=validators.Int(),
+                              cuenta=validators.UnicodeString(),
+                              bancario=validators.UnicodeString()))
+    def autorizar(self, affiliate, banco, cuenta, bancario):
 
         """Reactiva un afiliado para que pueda continuar participando
         
         :param affiliate: El número de afiliación
+        :param banco: El numero del banco de donde se efectuan los debitos
+        :param cuenta: El numero de cuenta que se utilizara para deducir
+        :param bancario: Codigos internos utilizados por el banco
         """
 
         affiliate = model.Affiliate.get(affiliate)
         affiliate.autorizacion = True
+        affiliate.banco = banco
+        affiliate.cuenta = cuenta
+        affiliate.bancario = bancario
 
         autorizacion = model.Autorizacion(affiliate=affiliate)
 
@@ -757,18 +765,26 @@ class Affiliate(controllers.Controller):
     @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose()
-    @validate(validators=dict(cardID=validators.String()))
-    def autorizarIdentidad(self, cardID):
+    @validate(validators=dict(cardID=validators.String(), banco=validators.Int(),
+                              cuenta=validators.UnicodeString(),
+                              bancario=validators.UnicodeString()))
+    def autorizarIdentidad(self, cardID, banco, cuenta, bancario):
 
         """Reactiva un afiliado para que pueda continuar participando
         
         :param affiliate: El número de afiliación
+        :param banco: El numero del banco de donde se efectuan los debitos
+        :param cuenta: El numero de cuenta que se utilizara para deducir
+        :param bancario: Codigos internos utilizados por el banco
         """
 
         try:
             affiliate = model.Affiliate.selectBy(cardID=cardID).limit(
                 1).getOne()
             affiliate.autorizacion = True
+            affiliate.banco = banco
+            affiliate.cuenta = cuenta
+            affiliate.bancario = bancario
 
             autorizacion = model.Autorizacion(affiliate=affiliate)
 

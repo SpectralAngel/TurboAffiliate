@@ -20,7 +20,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 from decimal import Decimal
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 from sqlobject import AND
 
 from turbogears import controllers, expose, identity, validate, validators
@@ -145,7 +145,7 @@ class Report(controllers.Controller):
         deducciones = afiliados.throughTo.deduced.filter(AND(
             model.Deduced.q.year == year,
             model.Deduced.q.month == month))
-        cuentas = dict()
+        cuentas = OrderedDict()
 
         for deduccion in deducciones:
 
