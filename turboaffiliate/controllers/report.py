@@ -435,3 +435,21 @@ class Report(controllers.Controller):
         show = "que Cotizaron en {0} de {1}".format(month, year)
         return dict(affiliates=affiliates, show=show, count=len(affiliates))
 
+    @expose(template="turboaffiliate.templates.report.excedente")
+    @validate(validators=dict(account=validators.Int(), year=validators.Int(),
+                              month=validators.Int(min=1, max=12),
+                              bank=validators.String()))
+    def excedenteBank(self, bank, account, month, year):
+
+        bank = model.Banco.get(bank)
+        account = model.Account.get(account)
+        deduced = model.DeduccionBancaria.selectBy(banco=bank, year=year,
+                                                   month=month, account=account)
+
+        distribute = defaultdict(Decimal)
+        for d in deduced:
+            distribute[account.name + ' ' + str(d.amount)] += d.amount
+
+        return dict(deduced=deduced, account=account, month=months[month],
+                    year=year, distribute=distribute, banco=bank)
+

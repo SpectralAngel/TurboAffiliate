@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html" />
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
+  <title>TurboAffiliate &bull; Deducciones de ${account.name} para el mes ${month} de ${year}</title>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-12">
+        <h1>Distribuci&oacute;n de Excedente de ${account.name} por ${banco.nombre}
+            para el mes ${month} de ${year}</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 table-responsive">
+        <table class="table table-striped">
+            <caption>Distribuci&oacute;n</caption>
+            <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Monto</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr py:for="d in distribute">
+                <td>${d}</td>
+                <td>${distribute[d]}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
