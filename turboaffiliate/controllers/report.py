@@ -450,6 +450,8 @@ class Report(controllers.Controller):
         for d in deduced:
             distribute[account.name + ' ' + str(d.amount)] += d.amount
 
+        total = sum(d.amount for d in deduced)
+
         return dict(deduced=deduced, account=account, month=months[month],
-                    year=year, distribute=distribute, banco=bank)
+                    year=year, distribute=distribute, banco=bank, total=total)
 
