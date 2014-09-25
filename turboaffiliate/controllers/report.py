@@ -305,6 +305,19 @@ class Report(controllers.Controller):
         return dict(banco=banco, month=month, year=year, cuentas=cuentas,
                     total=total)
 
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.report.bancoDetail")
+    @validate(validators=dict(banco=validators.Int(), year=validators.Int(),
+                              month=validators.Int(min=1, max=12)))
+    def bancoDetail(self, banco, month, year):
+
+        banco = model.Banco.get(banco)
+
+        deducciones = model.DeduccionBancaria.selectBy(banco=banco, year=year,
+                                                       month=month)
+
+        return dict(banco=banco, month=month, year=year, deducciones=deducciones)
+
 
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.deduced")

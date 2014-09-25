@@ -202,6 +202,38 @@
                 </form>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-4">
+                <form class="form-horizontal" role="form" action="${tg.url('bancoDetail')}">
+                    <fieldset>
+                        <legend>Ver Reporte de Ingresos por Banco</legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Banco:</label>
+                            <div class="controls col-md-7">
+                                <select name="banco" class="form-control select">
+                                    <option py:for="banco in bancos" value="${banco.id}" py:content="banco.nombre" />
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">A&ntilde;o:</label>
+                            <div class="controls col-md-7">
+                                <input name="year" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Mes:</label>
+                            <div class="controls col-md-7">
+                                <input name="month" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit" value="Mostrar" />
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 <div class="row">
