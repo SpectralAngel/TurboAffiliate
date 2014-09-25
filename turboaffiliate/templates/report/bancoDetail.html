@@ -26,9 +26,9 @@
             </thead>
             <tbody>
             <tr py:for="d in deducciones">
-                <td><a href="${tg.url('/affiliate/{0}'.format(d.affiliate.id))}">${d.affiliate.id}</a></td>
-                <td>${d.affiliate.firstName}</td>
-                <td>${d.affiliate.lastName}</td>
+                <td><a href="${tg.url('/affiliate/{0}'.format(d.afiliado.id))}">${d.afiliado.id}</a></td>
+                <td>${d.afiliado.firstName}</td>
+                <td>${d.afiliado.lastName}</td>
                 <td>${locale.currency(d.amount, True, True)}</td>
             </tr>
             </tbody>
