@@ -29,7 +29,7 @@
                 <td><a href="${tg.url('/affiliate/{0}'.format(d.afiliado.id))}">${d.afiliado.id}</a></td>
                 <td>${d.afiliado.firstName}</td>
                 <td>${d.afiliado.lastName}</td>
-                <td>${locale.currency(d.amount, True, True)}</td>
+                <td>${locale.currency(d.consolidar(), True, True)}</td>
             </tr>
             </tbody>
             <tfoot>

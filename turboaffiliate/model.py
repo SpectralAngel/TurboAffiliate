@@ -1963,6 +1963,14 @@ class DeduccionBancaria(SQLObject):
     month = IntCol(default=date.today().month)
     year = IntCol(default=date.today().year)
 
+    def consolidar(self):
+
+        deducciones = DeduccionBancaria.selectBy(afiliado=self.afiliado,
+                                                 month=self.month, year=self.year,
+                                                 banco=self.banco)
+
+        return sum(d.amount for d in deducciones)
+
 
 class ReporteBancario(SQLObject):
     banco = ForeignKey("Banco")

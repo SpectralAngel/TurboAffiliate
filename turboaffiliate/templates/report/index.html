@@ -344,42 +344,6 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <form class="form-horizontal" role="form" action="${tg.url('filialesResumen')}">
-                    <fieldset>
-                        <legend>Mostrar Cobros Efectuados por Cuenta</legend>
-                        <div class="form-group">
-                            <label class="control-label col-md-4">Cuenta:</label>
-                            <div class="controls col-md-7">
-                                <select name="departamento" class="form-control select">
-                                    <option py:for="d in departamentos" value="${d.id}">${d.nombre}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-4">A&ntilde;o:</label>
-                            <div class="controls col-md-7">
-                                <input name="year" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-4">Mes Inicial:</label>
-                            <div class="controls col-md-7">
-                                <input name="start" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-4">Mes Final:</label>
-                            <div class="controls col-md-7">
-                                <input name="end" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-actions">
-                            <input class="btn btn-primary" type="submit" value="Mostrar" />
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-            <div class="col-md-4">
                 <form class="form-horizontal" role="form" action="${tg.url('excedenteBank')}">
                     <fieldset>
                         <legend>Ver Distribuci&oacute;n de Excedente por Banco</legend>
