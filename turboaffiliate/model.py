@@ -24,6 +24,7 @@ from datetime import date, datetime
 import math
 import copy
 import calendar
+from dateutil.relativedelta import relativedelta
 
 from turbogears.database import PackageHub
 from sqlobject import (SQLObject, UnicodeCol, StringCol, DateCol, CurrencyCol,
@@ -322,6 +323,7 @@ class Affiliate(SQLObject):
     autorizaciones = MultipleJoin('Autorizacion')
     logs = MultipleJoin('Logger')
     bancario = UnicodeCol(default=None)
+    last = CurrencyCol(default=Zero)
 
     def tiempo(self):
 
@@ -964,6 +966,7 @@ class Loan(SQLObject):
     deductions = MultipleJoin("Deduction")
     aproval = ForeignKey("User")
     cobrar = BoolCol(default=True)
+    acumulado = CurrencyCol(default=0)
 
     def percent(self):
 
@@ -1241,6 +1244,30 @@ class Loan(SQLObject):
         self.destroySelf()
 
         return payed
+
+    def vencimiento(self):
+
+        return self.startDate + relativedelta(months=+self.months)
+
+    def calcular_vencidas(self):
+
+        return (date.today() - self.startDate).days / 30
+
+    def interes_acumulado(self, meses):
+
+        debt = copy.copy(self.debt)
+        int_month = self.interest / 1200
+        total_interest = Zero
+        for n in range(0, meses):
+
+            if debt <= 0:
+                break
+
+            interest = Decimal(debt * int_month).quantize(dot01)
+            debt = debt + interest - self.payment
+            total_interest += interest
+
+        return total_interest
 
     def future(self):
 
@@ -1651,6 +1678,26 @@ class OtherAccount(SQLObject):
     quantity = IntCol(default=0)
     amount = CurrencyCol(default=0)
     otherReport = ForeignKey("OtherReport")
+
+    def add(self, amount):
+        self.amount += amount
+        self.quantity += 1
+
+
+class BankReport(SQLObject):
+    year = IntCol()
+    month = IntCol()
+    bankAccounts = MultipleJoin("BankAccount")
+    banco = ForeignKey("Banco")
+
+    def total(self):
+        return sum(r.amount for r in self.otherAccounts)
+
+
+class BankAccount(SQLObject):
+    account = ForeignKey("Account")
+    amount = CurrencyCol(default=0)
+    bankReport = ForeignKey("BankReport")
 
     def add(self, amount):
         self.amount += amount
@@ -2132,3 +2179,10 @@ class VentaCeiba(SQLObject):
         """Retorna el total de una venta"""
 
         return self.cantidad * self.unitario
+
+
+class Rechazo(SQLObject):
+    """Permite registrar la razón de un rechazo de débito automático"""
+    affiliate = ForeignKey("Affiliate")
+    reason = UnicodeCol()
+    day = DateCol(default=date.today)

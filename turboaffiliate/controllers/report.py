@@ -21,8 +21,8 @@
 
 from decimal import Decimal
 from collections import defaultdict, OrderedDict
-from sqlobject import AND
 
+from sqlobject import AND
 from turbogears import controllers, expose, identity, validate, validators
 
 from turboaffiliate import model
@@ -95,7 +95,7 @@ class Report(controllers.Controller):
 
             li = [extra for extra in account.extras
                   if extra.affiliate.payment == payment and
-                     extra.affiliate.active == True]
+                  extra.affiliate.active == True]
 
             kw[account]['amount'] = sum(e.amount for e in li)
             kw[account]['count'] = len(li)
@@ -134,7 +134,7 @@ class Report(controllers.Controller):
     @validate(validators=dict(year=validators.Int(), month=validators.Int(
         min=1,
         max=12),
-        cotizacion=validators.String()))
+                              cotizacion=validators.String()))
     def cotizacion(self, year, month, cotizacion):
 
         """Muestra los cobros efectuados correspondientes a un mes y año con
@@ -288,17 +288,26 @@ class Report(controllers.Controller):
     def banco(self, banco, month, year):
 
         banco = model.Banco.get(banco)
+        cuentas = {}
+
+        try:
+            reporte = model.BankReport.selectBy(banco=banco, year=year,
+                                                month=month).getOne()
+        except model.SQLObjectNotFound:
+            reporte = None
 
         deducciones = model.DeduccionBancaria.selectBy(banco=banco, year=year,
                                                        month=month)
-        cuentas = dict()
+        if reporte is None:
+            for deduccion in deducciones:
 
-        for deduccion in deducciones:
-
-            if deduccion.account in cuentas:
-                cuentas[deduccion.account] += deduccion.amount
-            else:
-                cuentas[deduccion.account] = deduccion.amount
+                if deduccion.account in cuentas:
+                    cuentas[deduccion.account] += deduccion.amount
+                else:
+                    cuentas[deduccion.account] = deduccion.amount
+        else:
+            for cuenta in reporte.bankAccounts:
+                cuentas[cuenta.account] = cuenta.amount
 
         total = sum(cuentas[c] for c in cuentas)
 
@@ -316,7 +325,8 @@ class Report(controllers.Controller):
         deducciones = model.DeduccionBancaria.selectBy(banco=banco, year=year,
                                                        month=month)
 
-        return dict(banco=banco, month=month, year=year, deducciones=deducciones)
+        return dict(banco=banco, month=month, year=year,
+                    deducciones=deducciones)
 
 
     @identity.require(identity.not_anonymous())
@@ -417,7 +427,8 @@ class Report(controllers.Controller):
         max=12)))
     def aportaron(self, year, month):
 
-        query = "cuota_table.month%s = true AND cuota_table.year = %s" % (month, year)
+        query = "cuota_table.month%s = true AND cuota_table.year = %s" % (
+        month, year)
         cuotas = model.CuotaTable.select(query)
         show = u"que Cotizaron en {0} de {1}".format(month, year)
 
@@ -429,7 +440,8 @@ class Report(controllers.Controller):
         min=1,
         max=12)))
     def noAportaron(self, year, month):
-        query = "cuota_table.month%s = 0 AND cuota_table.year = %s" % (month, year)
+        query = "cuota_table.month%s = 0 AND cuota_table.year = %s" % (
+        month, year)
         cuotas = model.CuotaTable.select(query)
         show = u"que no Cotizaron en {0} de {1}".format(month, year)
 
