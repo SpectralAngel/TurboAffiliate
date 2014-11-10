@@ -328,7 +328,6 @@ class Report(controllers.Controller):
         return dict(banco=banco, month=month, year=year,
                     deducciones=deducciones)
 
-
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.deduced")
     @validate(validators=dict(account=validators.Int(), year=validators.Int(),
@@ -475,8 +474,31 @@ class Report(controllers.Controller):
         for d in deduced:
             distribute[account.name + ' ' + str(d.amount)] += d.amount
 
-        total = sum(d.amount for d in deduced)
+        total = sum(distribute[d] for d in distribute)
 
         return dict(deduced=deduced, account=account, month=months[month],
                     year=year, distribute=distribute, banco=bank, total=total)
+
+    @expose(template="turboaffiliate.templates.report.excedente")
+    @validate(validators=dict(account=validators.Int(), year=validators.Int(),
+                              month=validators.Int(min=1, max=12),
+                              cotizacion=validators.String()))
+    def excedenteDeducciones(self, cotizacion, account, month, year):
+
+        cotizacion = model.Cotizacion.get(cotizacion)
+        account = model.Account.get(account)
+        afiliados = model.Affiliate.selectBy(cotizacion=cotizacion)
+        deduced = afiliados.throughTo.deduced.filter(AND(
+            model.Deduced.q.year == year,
+            model.Deduced.q.account == account,
+            model.Deduced.q.month == month))
+
+        distribute = defaultdict(Decimal)
+        for d in deduced:
+            distribute[account.name + ' ' + str(d.amount)] += d.amount
+
+        total = sum(distribute[d] for d in distribute)
+
+        return dict(deduced=deduced, account=account, month=months[month],
+                    year=year, distribute=distribute, banco=cotizacion, total=total)
 
