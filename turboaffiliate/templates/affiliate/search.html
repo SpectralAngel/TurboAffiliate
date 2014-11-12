@@ -19,6 +19,7 @@
             <tr>
                 <th>Carnet</th>
                 <th>Nombre</th>
+                <th>Banco</th>
                 <th>Identidad</th>
                 <th>Cotizaci&oacute;n</th>
             </tr>
@@ -29,6 +30,7 @@
                 </td>
                 <td>${afiliado.firstName} ${afiliado.lastName}</td>
                 <td>${afiliado.cardID}</td>
+                <td>${afiliado.get_banco().nombre}</td>
                 <td>${afiliado.cotizacion.nombre}</td>
             </tr>
             </tbody>
