@@ -347,13 +347,13 @@ class Report(controllers.Controller):
 
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.deducedBank")
-    @validate(validators=dict(account=validators.Int(), year=validators.Int(),
+    @validate(validators=dict(banco=validators.Int(), account=validators.Int(), year=validators.Int(),
                               month=validators.Int(min=1, max=12)))
-    def deducedBank(self, account, month, year):
+    def deducedBank(self, account, month, year, banco):
 
         account = model.Account.get(account)
-
-        deduced = model.DeduccionBancaria.selectBy(account=account,
+        banco = model.Banco.get(banco)
+        deduced = model.DeduccionBancaria.selectBy(account=account, banco=banco,
                                                    year=year, month=month)
 
         total = sum(d.amount for d in deduced)
