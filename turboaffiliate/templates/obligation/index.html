@@ -45,6 +45,10 @@
           <input name="amount_compliment" />
         </li>
         <li>
+          <label for="alternate">Principal Alterno:</label>
+          <input name="alternate" />
+        </li>
+        <li>
           <label for="account">Cuenta:</label>
           <select name="account">
             <option py:for="account in accounts" value="${account.id}">${account.id} - ${account.name}</option> 
