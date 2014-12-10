@@ -18,14 +18,17 @@ var JSON = {
   {
     $.get(url + '/municipios/' + departamento + '?tg_format=json', function(data)
     {
-      $(municipios).empty();
-      $.each(data.municipios, function(i, municipio)
-      {
-        var option = $('<option />');
-        option.val(municipio.id);
-        option.text(municipio.nombre);
-        $(municipios).append(option);
-      });
+      var select = $(municipios);
+      select.empty();
+      var index;
+      for(index = 0; index < data.municipios.length; index++) {
+        var municipio = data.municipios[index];
+        select.append($('<option />', {
+          value: municipio.id,
+          text : municipio.nombre
+        }));
+      }
+      select.trigger('change', true);
     });
   },
   

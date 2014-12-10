@@ -82,6 +82,23 @@ class Affiliate(controllers.Controller):
 
         return dict(affiliate=model.Affiliate.get(affiliate),
                     accounts=model.Account.select(),
+                    departamentos=model.Departamento.select(),
+                    bancos=model.Banco.select())
+
+    @error_handler(error)
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.edit')
+    @validate(validators=dict(affiliate=validators.Int()))
+    def edit(self, affiliate):
+
+        """Permite mostrar un afiliado mediante su numero de afiliación
+
+        :param affiliate: Número de afiliación
+        """
+
+        return dict(affiliate=model.Affiliate.get(affiliate),
+                    accounts=model.Account.select(),
+                    departamentos=model.Departamento.select(),
                     bancos=model.Banco.select())
 
     @error_handler(error)
@@ -800,3 +817,17 @@ class Affiliate(controllers.Controller):
         except SQLObjectNotFound:
             flash(u'No se encontró la identidad {0}'.format(cardID))
             raise redirect('/affiliate')
+
+    @error_handler(error)
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.search')
+    @validate(validators=dict(banco=validators.Int()))
+    def bank(self, banco):
+
+        """Permite generar de manera automatizada talonarios de pago que serán
+        utilizados por los afiliados para llevar un registro de los pagos que
+        deben efectuar"""
+
+        afiliados = model.Affiliate.selectBy(banco=banco)
+
+        return dict(result=afiliados)

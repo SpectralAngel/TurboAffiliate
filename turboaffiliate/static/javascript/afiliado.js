@@ -61,7 +61,7 @@ $(document).ready(function(e)
                Cancelar :  function() { $(this).dialog('close'); }
             }
   });
-  $('.editar').dialog(
+/*  $('.editar').dialog(
   {
     title : "Editar Afiliado",
     autoOpen:false,
@@ -71,7 +71,7 @@ $(document).ready(function(e)
              'Guardar' : function() { $(this).submit() },
              Cancelar :  function() { $(this).dialog('close'); }
             }
-  });
+  });*/
   $('.extra').dialog(
   {
     title : "Añadir Deducción Extra",

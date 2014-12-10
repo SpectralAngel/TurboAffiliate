@@ -647,127 +647,6 @@
         </ul>
     </div>
 </form>
-<form class="editar form-horizontal" action="${tg.url('/affiliate/save')}" method="post">
-    <fieldset>
-        <input type="hidden" value="${affiliate.id}" name="affiliate"/>
-        <div class="form-group">
-            <label class="control-label col-md-4">Identidad:</label>
-            <div class="controls col-md-7">
-                <input class="form-control" name="cardID" maxlength="15" value="${affiliate.cardID}" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-4">Nombres:</label>
-            <div class="controls col-md-7">
-                <input class="form-control" name="firstName" value="${affiliate.firstName}" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-4">Apellidos:</label>
-            <div class="controls col-md-7">
-                <input class="form-control" name="lastName" value="${affiliate.lastName}" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-4">Lugar de Nacimiento:</label>
-            <div class="controls col-md-7">
-                <input class="form-control" name="birthPlace" value="${affiliate.birthPlace}" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-4">Tel&eacute;fono:</label>
-            <div class="controls col-md-7">
-                <input class="form-control" name="phone" value="${affiliate.phone}" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-4">Email:</label>
-            <div class="controls col-md-7">
-                <input class="form-control" name="email" value="${affiliate.email}" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-4">Fecha de Nacimiento:</label>
-            <div class="controls col-md-7">
-                <input name="birthday" py:if="affiliate.birthday != None"
-                       value="${affiliate.birthday.strftime('%d/%m/%Y')}"
-                       class="datepicker form-control"/>
-                <input name="birthday" py:if="affiliate.birthday == None"
-                       class="datepicker form-control"/>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-4">Cotiza por:</label>
-            <div class="controls col-md-7">
-                <select name="cotizacion" class="cotizaciones select form-control">
-                    <option selected="selected"
-                            value="${affiliate.cotizacion.id}">
-                        ${affiliate.cotizacion.nombre}
-                    </option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-4">Escalafon:</label>
-            <div class="controls col-md-7">
-                <input class="form-control" name="escalafon" value="${affiliate.escalafon}" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-4">Instituto:</label>
-            <div class="controls col-md-7">
-                <input class="form-control" name="school" value="${affiliate.school}"  />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-4">Banco:</label>
-            <div class="controls col-md-7">
-                <select name="banco" class="form-control select">
-                    <option py:for="b in bancos" py:if="b.id == affiliate.banco"
-                            selected="selected" value="${b.id}">${b.nombre}
-                    </option>
-                    <option py:for="b in bancos" value="${b.id}">${b.nombre}
-                    </option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-4">Cuenta:</label>
-            <div class="controls col-md-7">
-                <input class="form-control" name="cuenta" value="${affiliate.cuenta}" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-4">Departamento:</label>
-            <div class="controls col-md-7">
-                <select name="departamento" class="departamento select form-control" id="agregarDepartamento"
-                        onchange="JSON.municipio('${tg.url('/json')}', $('#agregarDepartamento' + ' option:selected').val(), '#agregarMunicipios')">
-                    <option selected="selected"
-                            value="${affiliate.departamento.id}">
-                        ${affiliate.departamento.nombre}
-                    </option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-4">Municipio:</label>
-            <div class="controls col-md-7">
-                <select name="municipio" class="municipio select form-control" id="agregarMunicipios">
-                    <option selected="selected"
-                            value="${affiliate.municipio.id}">
-                        ${affiliate.municipio.nombre}
-                    </option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-4">Ultima Deducci&oacute;n:</label>
-            <div class="controls col-md-7">
-                <input class="form-control" name="last" value="${affiliate.last}"  />
-            </div>
-        </div>
-    </fieldset>
-</form>
 <form class="extra form-horizontal" action="${tg.url('/affiliate/extra/save')}" method="post">
     <div>
         <input type="hidden" name="affiliate" value="${affiliate.id}"/>
@@ -962,7 +841,7 @@
             </a>
         </li>
         <li>
-            <a href="#" onclick="javascript:$('.editar').dialog('open');">
+            <a href="${tg.url('/affiliate/edit/{0}'.format(affiliate.id))}">
                 Editar
             </a>
         </li>

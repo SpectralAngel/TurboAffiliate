@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html"/>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"
+          py:replace="''"/>
+    <title>TurboAffiliate &bull; Afiliados ${show}</title>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h1>Editar ${affiliate.id} - ${affiliate.firstName} ${affiliate.lastName}</h1>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <form class="editar form-horizontal" action="${tg.url('/affiliate/save')}" method="post">
+            <div class="row">
+            <fieldset class="col-md-6">
+                <legend>Información Personal</legend>
+                <input type="hidden" value="${affiliate.id}" name="affiliate"/>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Identidad:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="cardID" maxlength="15" value="${affiliate.cardID}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Nombres:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="firstName" value="${affiliate.firstName}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Apellidos:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="lastName" value="${affiliate.lastName}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Sexo:</label>
+                    <div class="controls col-md-7">
+                        <select name="gender" class="form-control select">
+                            <option selected="selected" value="${affiliate.gender}">${affiliate.gender}</option>
+                            <option value="F">Femenino</option>
+                            <option value="M">Masculino</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Lugar de Nacimiento:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="birthPlace" value="${affiliate.birthPlace}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Fecha de Nacimiento:</label>
+                    <div class="controls col-md-7">
+                        <input name="birthday" py:if="affiliate.birthday != None"
+                               value="${affiliate.birthday.strftime('%d/%m/%Y')}"
+                               class="datepicker form-control"/>
+                        <input name="birthday" py:if="affiliate.birthday == None"
+                               class="datepicker form-control"/>
+                    </div>
+                </div>
+                <legend>Lugar de Residencia</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Departamento:</label>
+                    <div class="controls col-md-7">
+                        <select name="departamento" class="select form-control" id="agregarDepartamento"
+                                onchange="JSON.municipio('${tg.url('/json')}', $(this).val(), '#agregarMunicipios')">
+                            <option selected="selected"
+                                    value="${affiliate.departamento.id}">
+                                ${affiliate.departamento.nombre}
+                            </option>
+                            <option py:for="d in departamentos" value="${d.id}">
+                                ${d.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Municipio:</label>
+                    <div class="controls col-md-7">
+                        <select name="municipio" class="municipio select form-control" id="agregarMunicipios">
+                            <option selected="selected"
+                                    value="${affiliate.municipio.id}">
+                                ${affiliate.municipio.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="col-md-6">
+                <legend>Informaci&oacute;n de Contacto</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Tel&eacute;fono:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="phone" value="${affiliate.phone}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Email:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="email" value="${affiliate.email}" />
+                    </div>
+                </div>
+                <legend>Informaci&oacute;n de Cotizaci&oacute;n</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Cotiza por:</label>
+                    <div class="controls col-md-7">
+                        <select name="cotizacion" class="cotizaciones select form-control">
+                            <option selected="selected"
+                                    value="${affiliate.cotizacion.id}">
+                                ${affiliate.cotizacion.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Escalafon:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="escalafon" value="${affiliate.escalafon}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Instituto:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="school" value="${affiliate.school}"  />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Banco:</label>
+                    <div class="controls col-md-7">
+                        <select name="banco" class="form-control select">
+                            <option py:for="b in bancos" py:if="b.id == affiliate.banco"
+                                    selected="selected" value="${b.id}">${b.nombre}
+                            </option>
+                            <option py:for="b in bancos" value="${b.id}">${b.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Cuenta:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="cuenta" value="${affiliate.cuenta}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Ultima Deducci&oacute;n:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="last" value="${affiliate.last}"  />
+                    </div>
+                </div>
+            </fieldset>
+            </div>
+            <div class="form-actions">
+                <input class="btn btn-primary" type="submit" value="Guardar" />
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
