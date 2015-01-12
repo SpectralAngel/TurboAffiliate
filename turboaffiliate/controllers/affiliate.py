@@ -768,7 +768,7 @@ class Affiliate(controllers.Controller):
         affiliate.cuenta = cuenta
         affiliate.bancario = bancario
 
-        autorizacion = model.Autorizacion(affiliate=affiliate)
+        autorizacion = model.Autorizacion(affiliate=affiliate, banco=banco)
 
         log(identity.current.user,
             u"Se registro la autorización del afiliado {0}".format(
@@ -831,3 +831,17 @@ class Affiliate(controllers.Controller):
         afiliados = model.Affiliate.selectBy(banco=banco)
 
         return dict(result=afiliados)
+
+    @error_handler(error)
+    @identity.require(identity.not_anonymous())
+    @expose(template='turboaffiliate.templates.affiliate.autorizaciones')
+    @validate(validators=dict(banco=validators.Int(),
+                              inicio=validators.DateTimeConverter(format='%d/%m/%Y'),
+                              fin=validators.DateTimeConverter(format='%d/%m/%Y')))
+    def autorizaciones(self, banco, inicio, fin):
+
+        banco = model.Banco.get(banco)
+
+        return dict(autorizaciones=model.Autorizacion.select(AND(model.Autorizacion.q.banco == banco,
+                                                                 model.Autorizacion.q.fecha >= inicio,
+                                                                 model.Autorizacion.q.fecha <= fin)))

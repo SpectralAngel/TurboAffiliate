@@ -565,6 +565,7 @@ class Affiliate(SQLObject):
 class Autorizacion(SQLObject):
     affiliate = ForeignKey("Affiliate")
     fecha = DateCol(default=date.today)
+    banco = ForeignKey("Affiliate")
 
 
 class CuentaRetrasada(SQLObject):
