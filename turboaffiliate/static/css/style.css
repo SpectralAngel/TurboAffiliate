@@ -46,3 +46,13 @@ footer {
 .container .text-muted {
      margin: 20px 0;
  }
+.main-content {
+	border-radius: 5px 5px 5px 5px;
+	-moz-border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	border: 0px solid #000000;
+	-webkit-box-shadow: 5px 5px 25px 0px rgba(0,0,0,0.5);
+	-moz-box-shadow: 5px 5px 25px 0px rgba(0,0,0,0.5);
+	box-shadow: 5px 5px 25px 0px rgba(0,0,0,0.5);
+}
+ 
