@@ -433,8 +433,7 @@ class Affiliate(controllers.Controller):
     def cotizacion(self, cotizacion):
 
         cotizacion = model.Cotizacion.get(cotizacion)
-        affiliates = model.Affiliate.selectBy(cotizacion=cotizacion,
-                                              orderBy="lastName")
+        affiliates = model.Affiliate.selectBy(cotizacion=cotizacion).orderBy("lastName")
         return dict(affiliates=affiliates, count=affiliates.count(),
                     cotizacion=cotizacion)
 
