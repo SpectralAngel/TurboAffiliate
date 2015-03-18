@@ -14,23 +14,30 @@
 <div class="row">
     <div class="col-md-12 table-responsive">
         <table class="table table-striped">
-            <caption>Resultados de la busqueda</caption>
+            <caption>Autorizaciones de ${banco}</caption>
             <thead>
             <tr>
                 <th>Carnet</th>
-                <th>Nombre</th>
-                <th>Banco</th>
                 <th>Identidad</th>
+                <th>Nombre</th>
+                <th>Cuenta</th>
+                <th>C&oacute;digo</th>
+                <th>Monto</th>
                 <th>Fecha Autorizaci&oacute;n</th>
+                <th>Concepto de Cotizaci&oacute;n</th>
             </tr>
             </thead>
             <tbody>
             <tr py:for="autorizacion in autorizaciones">
-                <td><a class="btn btn-success" href="${tg.url('/affiliate/{0}'.format(autorizacion.affiliate.id))}">${autorizacion.affiliate.id}</a>
+                <td>
+                    <a class="btn btn-success" href="${tg.url('/affiliate/{0}'.format(autorizacion.affiliate.id))}">${autorizacion.affiliate.id}</a>
                 </td>
-                <td>${autorizacion.affiliate.firstName} ${autorizacion.affiliate.lastName}</td>
                 <td>${autorizacion.affiliate.cardID}</td>
-                <td>${autorizacion.affiliate.get_banco().nombre}</td>
+                <td>${autorizacion.affiliate.firstName} ${autorizacion.affiliate.lastName}</td>
+                <td>${autorizacion.affiliate.cuenta}</td>
+                <td>&nbsp;</td>
+                <td>${autorizacion.affiliate.affiliate.get_monthly()}</td>
+                <td>%{autorizacion.fecha}</td>
                 <td>${autorizacion.affiliate.cotizacion.nombre}</td>
             </tr>
             </tbody>
