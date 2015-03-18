@@ -843,4 +843,5 @@ class Affiliate(controllers.Controller):
 
         return dict(autorizaciones=model.Autorizacion.select(AND(model.Autorizacion.q.banco == banco,
                                                                  model.Autorizacion.q.fecha >= inicio,
-                                                                 model.Autorizacion.q.fecha <= fin)))
+                                                                 model.Autorizacion.q.fecha <= fin)),
+                    banco=banco)
