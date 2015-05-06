@@ -27,7 +27,8 @@
             <tbody>
             <tr py:for="afiliado in afiliados">
                 <td><a class="btn btn-success   " href="${tg.url('/affiliate/{0}'.format(afiliado.id))}">${afiliado.id}</a></td>
-                <td>${afiliado.lastName} ${afiliado.firstName}</td>
+                <td py:if="cotizacion.ordering =='lastName'">${afiliado.lastName} ${afiliado.firstName}</td>
+                <td py:if="cotizacion.ordering =='firstName'">${afiliado.firstName} ${afiliado.lastName}</td>
                 <td>
                     <div class="row">
                         <div class="col-md-12">
