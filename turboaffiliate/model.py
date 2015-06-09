@@ -219,6 +219,7 @@ class Cotizacion(SQLObject):
     bank_main = BoolCol(default=False)
     alternate = BoolCol(default=True)
     normal = BoolCol(default=True)
+    ordering = UnicodeCol(length=50, default='lastName')
 
 
 class Affiliate(SQLObject):

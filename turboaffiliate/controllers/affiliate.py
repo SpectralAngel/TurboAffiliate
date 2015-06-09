@@ -544,7 +544,7 @@ class Affiliate(controllers.Controller):
         cotizacion = model.Cotizacion.get(cotizacion)
         affiliates = model.Affiliate.select(
             model.Affiliate.q.cotizacion == cotizacion,
-            orderBy="lastName")
+            orderBy=cotizacion.ordering)
 
         return dict(afiliados=affiliates, cotizacion=cotizacion,
                     excedente=excedente, aportaciones=aportaciones,
