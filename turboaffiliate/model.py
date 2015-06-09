@@ -1924,6 +1924,7 @@ class Banco(SQLObject):
     generator = UnicodeCol(length=100, default=None)
     cuenta = UnicodeCol(length=100, default=None)
     codigo = UnicodeCol(length=100, default=None)
+    cuota = BoolCol(default=True)
     depositos = MultipleJoin("Deposito")
     depositosAnonimos = MultipleJoin("DepositoAnonimo")
 
