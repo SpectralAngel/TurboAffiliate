@@ -372,6 +372,10 @@ class Affiliate(SQLObject):
 
         obligations = Obligation.selectBy(month=day.month, year=day.year)
 
+        if self.cotizacion.jubilados and self.cotizacion.alternate:
+            return Decimal(sum(o.inprema for o in obligations
+                               if self.cotizacion.jubilados))
+        
         obligation = Zero
         obligation += sum(o.amount for o in obligations
                           if self.cotizacion.normal)
