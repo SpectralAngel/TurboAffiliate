@@ -36,11 +36,7 @@ from turboaffiliate.controllers import (cuota, extra, billing, deduced,
 def log(user, message, affiliate):
     """Guarda un mensaje en el registro del sistema"""
 
-    log = {}
-    log['user'] = user
-    log['action'] = message
-    log['affiliate'] = affiliate
-    model.Logger(**log)
+    model.Logger(**{'user': user, 'action': message, 'affiliate': affiliate})
 
 
 class Affiliate(controllers.Controller):

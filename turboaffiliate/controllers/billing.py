@@ -56,9 +56,9 @@ class Billing(controllers.Controller):
     @expose(template='turboaffiliate.templates.affiliate.billing.status')
     @validate(validators=dict(payment=validators.String()))
     def payment(self, payment):
-
-        affiliates = model.Affiliate.selectBy(payment=payment)
-        affiliates = (a for a in affiliates if a.joined != None)
+        cotizacion = model.Cotizacion.get(payment)
+        affiliates = model.Affiliate.selectBy(cotizacion=cotizacion)
+        affiliates = (a for a in affiliates if a.joined is not None)
 
         return dict(affiliates=affiliates, day=date.today())
 
@@ -67,8 +67,10 @@ class Billing(controllers.Controller):
     @validate(validators=dict(school=validators.String()))
     def school(self, school):
 
-        affiliates = model.Affiliate.selectBy(school=school)
-        affiliates = (a for a in affiliates if a.joined != None)
+        affiliates = model.Affiliate.select(
+            model.Affiliate.q.schoool.contains(school)
+        )
+        affiliates = (a for a in affiliates if a.joined is not None)
 
         return dict(affiliates=affiliates, day=date.today())
 
@@ -79,7 +81,7 @@ class Billing(controllers.Controller):
 
         affiliates = model.Affiliate.select(AND(model.Affiliate.q.id >= start,
                                                 model.Affiliate.q.id <= end))
-        affiliates = (a for a in affiliates if a.joined != None)
+        affiliates = (a for a in affiliates if a.joined is not None)
 
         return dict(affiliates=affiliates, day=date.today())
 
