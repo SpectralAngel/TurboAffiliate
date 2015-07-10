@@ -68,7 +68,7 @@ class Billing(controllers.Controller):
     def school(self, school):
 
         affiliates = model.Affiliate.select(
-            model.Affiliate.q.schoool.contains(school)
+            model.Affiliate.q.school.contains(school)
         )
         affiliates = (a for a in affiliates if a.joined is not None)
 
