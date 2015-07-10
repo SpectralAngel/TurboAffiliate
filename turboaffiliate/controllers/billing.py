@@ -114,7 +114,9 @@ class Billing(controllers.Controller):
 
         :param school: El colegio a mostrar """
 
-        affiliates = model.Affiliate.selectBy(school=school)
+        affiliates = model.Affiliate.select(
+            model.Affiliate.q.school.contains(school)
+        )
         loans = list()
         for affiliate in affiliates:
             loans.extend(affiliate.loans)
