@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 #
 # deduced.py
 # This file is part of TurboAffiliate
@@ -36,7 +36,8 @@ class Deduced(controllers.Controller):
     @validate(validators=dict(code=validators.Int()))
     def default(self, code):
         return dict(affiliate=model.Affiliate.get(code),
-                    accounts=model.Account.select())
+                    accounts=model.Account.select(),
+                    cotizaciones=model.Cotizacion.select())
 
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.deduced.banco')
@@ -87,11 +88,12 @@ class Deduced(controllers.Controller):
     @validate(
         validators=dict(affiliate=validators.Int(), account=validators.Int(),
                         amount=validators.String(), year=validators.Int(),
-                        month=validators.Int()))
-    def save(self, affiliate, account, **kw):
+                        month=validators.Int(), cotizacion=validators.Int()))
+    def save(self, affiliate, account, cotizacion, **kw):
         kw['affiliate'] = model.Affiliate.get(affiliate)
         kw['amount'] = Decimal(kw['amount'].replace(',', ''))
         kw['account'] = model.Account.get(account)
+        kw['cotizacion'] = model.Cotizacion.get(cotizacion)
         model.Deduced(**kw)
 
         flash(u"Agregado Detalle de Deducción")
@@ -116,7 +118,8 @@ class Deduced(controllers.Controller):
         deduced = model.DeduccionBancaria.get(deduced)
         deduced.account = model.Account.get(account)
 
-        raise redirect("/affiliate/deduced/banco/{0}".format(deduced.afiliado.id))
+        raise redirect(
+            "/affiliate/deduced/banco/{0}".format(deduced.afiliado.id))
 
     @expose(template='turboaffiliate.templates.affiliate.deduced.cambiarBanco')
     @validate(validators=dict(deduced=validators.Int()))

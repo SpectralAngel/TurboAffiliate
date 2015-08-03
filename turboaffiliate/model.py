@@ -1460,6 +1460,7 @@ class Extra(SQLObject):
         kw['amount'] = self.amount
         kw['affiliate'] = self.affiliate
         kw['account'] = self.account
+        kw['cotizacion'] = self.affiliate.cotizacion
         kw['month'] = day.month
         kw['year'] = day.year
 
@@ -1467,7 +1468,7 @@ class Extra(SQLObject):
 
             cuota = self.affiliate.get_delayed()
             month, year = (None, None)
-            if not cuota is None:
+            if cuota is not None:
                 month = cuota.delayed()
                 year = cuota.year
                 cuota.pay_month(month)
@@ -1490,7 +1491,7 @@ class Extra(SQLObject):
 
             cuota = self.affiliate.get_delayed()
             month, year = (None, None)
-            if not cuota is None:
+            if cuota is not None:
                 month = cuota.delayed()
                 year = cuota.year
                 cuota.pay_month(month)
@@ -1661,6 +1662,7 @@ class PostReport(SQLObject):
 
 class Deduced(SQLObject):
     affiliate = ForeignKey("Affiliate")
+    cotizacion = ForeignKey("Cotizacion")
     amount = CurrencyCol(default=0)
     account = ForeignKey("Account")
     detail = UnicodeCol(default="")
