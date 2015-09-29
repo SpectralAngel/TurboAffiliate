@@ -33,18 +33,14 @@
         <tr>
           <th class="numero">N&uacute;mero</th>
           <th class="nombre">Nombre</th>
-          <th class="nombre">Apellido</th>
-          <th class="nombre">Colegio</th>
           <th>Firma</th>
         </tr>
       </thead>
       <tbody>
         <tr py:for="afiliado in urnas[municipio][instituto]">
           <td class="numero">${afiliado.id}</td>
-          <td class="nombre">${afiliado.firstName}</td>
-          <td class="nombre">${afiliado.lastName}</td>
-          <td class="nombre">${afiliado.school}</td>
-          <td></td>
+          <td class="nombre">${afiliado.firstName} ${afiliado.lastName}</td>
+          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
         </tr>
       </tbody>
       <tfoot>
