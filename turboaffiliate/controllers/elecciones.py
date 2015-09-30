@@ -208,8 +208,9 @@ class Elecciones(controllers.Controller):
         
         cotizacion = model.Cotizacion.get(cotizacion)
         afiliados = model.Affiliate.selectBy(active=True,cotizacion=cotizacion)
+        motivo = u'{0}'.format(cotizacion.nombre)
         
-        return dict(affiliates=afiliados, count=afiliados.count())
+        return dict(affiliates=afiliados, count=afiliados.count(), motivo=motivo)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.listado')
@@ -221,8 +222,9 @@ class Elecciones(controllers.Controller):
         departamento = model.Departamento.get(departamento)
         afiliados = model.Affiliate.selectBy(active=True,cotizacion=cotizacion,
                                              departamento=departamento)
+        motivo = u'{0} {1}'.format(cotizacion.nombre, departamento.nombre)
         
-        return dict(affiliates=afiliados, count=afiliados.count())
+        return dict(affiliates=afiliados, count=afiliados.count(), motivo=motivo)
     
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.elecciones.departamento')

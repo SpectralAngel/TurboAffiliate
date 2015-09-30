@@ -1,2 +1,3 @@
+http://www.turbogears.org/2.1/downloads/current/PEAK-Rules-0.5a1.dev-r2686.tar.gz
 TurboGears >= 1.5
 SQLObject>=0.12.5
