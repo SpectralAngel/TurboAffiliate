@@ -86,14 +86,14 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <form class="form-horizontal postear" action="${tg.url('/deduced/save')}">
+                            <form class="form-horizontal postear" action="${tg.url('/affiliate/deduced/save')}">
                                 <fieldset>
                                     <legend>Devoluci&oacute;n</legend>
                                     <input name="affiliate" value="${afiliado.id}" type="hidden" />
                                     <input name="month" value="${day.month}" type="hidden" />
                                     <input name="year" value="${day.year}" type="hidden" />
                                     <input name="account" value="${excedente}" type="hidden" />
-
+                                    <input name="cotizacion" value="${afiliado.cotizacion.id}" type="hidden" />
                                     <div class="form-group">
                                         <label class="control-label col-md-4">Pago:</label>
                                         <div class="controls col-md-7">

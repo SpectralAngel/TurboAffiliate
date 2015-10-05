@@ -252,9 +252,8 @@ class Pay(controllers.Controller):
         amount = Decimal(amount.replace(',', ''))
         loan = model.Loan.get(loan)
         cuenta = model.Account.get(cuenta)
-        id = loan.id
 
-        free = False;
+        free = False
 
         if 'free' in kw:
             free = kw['free']
@@ -262,12 +261,9 @@ class Pay(controllers.Controller):
         if day is None:
             day = date.today()
 
-        deduccion = {}
-        deduccion['account'] = cuenta
-        deduccion['month'] = day.month
-        deduccion['year'] = day.year
-        deduccion['affiliate'] = loan.affiliate
-        deduccion['amount'] = amount
+        deduccion = {'account': cuenta, 'month': day.month, 'year': day.year,
+                     'affiliate': loan.affiliate, 'amount': amount,
+                     'cotizacion': loan.affiliate.cotizacion}
         model.Deduced(**deduccion)
 
         log(identity.current.user,
@@ -276,7 +272,7 @@ class Pay(controllers.Controller):
 
         loan.pagar(amount, u'Planilla', day, free)
 
-        return dict(pago=loan.affiliate.get_monthly())
+        return dict(pago=amount)
 
 
 class Loan(controllers.Controller):
@@ -574,7 +570,6 @@ class Loan(controllers.Controller):
 
         return dict(amount=amount, deuda=deuda, net=net, loans=loans,
                     first=first, last=last, count=len(loans), casa=casa)
-
 
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.carteraDepartamento')

@@ -266,12 +266,9 @@ class Cuota(controllers.Controller):
         cuenta = model.Account.get(cuenta)
         affiliate.pay_cuota(day.year, day.month)
 
-        deduccion = dict()
-        deduccion['account'] = cuenta
-        deduccion['month'] = day.month
-        deduccion['year'] = day.year
-        deduccion['affiliate'] = affiliate
-        deduccion['amount'] = affiliate.get_cuota(day)
+        deduccion = {'account': cuenta, 'month': day.month, 'year': day.year,
+                     'affiliate': affiliate, 'amount': affiliate.get_cuota(day),
+                     'cotizacion': affiliate.cotizacion}
         model.Deduced(**deduccion)
 
         log(identity.current.user,

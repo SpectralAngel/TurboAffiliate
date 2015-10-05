@@ -84,6 +84,7 @@ class Deduced(controllers.Controller):
         return dict(affiliate=afiliado, deducciones=deducciones, anio=anio)
 
     @identity.require(identity.not_anonymous())
+    @expose('json')
     @expose()
     @validate(
         validators=dict(affiliate=validators.Int(), account=validators.Int(),
