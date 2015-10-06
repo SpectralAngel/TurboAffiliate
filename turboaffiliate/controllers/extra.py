@@ -19,20 +19,19 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-from turbogears import (controllers, redirect, identity,expose, validate,
+from turbogears import (controllers, redirect, identity, expose, validate,
                         validators, flash)
 from turboaffiliate import model
 from decimal import Decimal
 
+
 class Extra(controllers.Controller):
-    
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.extra.index')
     def index(self):
         return dict(accounts=model.Account.select())
-    
-    @identity.require(identity.All(identity.in_any_group('admin'),
-                                   identity.not_anonymous()))
+
+    @identity.require(identity.All(identity.not_anonymous()))
     @expose()
     @validate(validators=dict(affiliate=validators.Int(),
                               account=validators.Int(),
@@ -40,13 +39,13 @@ class Extra(controllers.Controller):
                               retrasada=validators.Bool(),
                               amount=validators.String()))
     def save(self, affiliate, account, **kw):
-        
+
         kw['affiliate'] = model.Affiliate.get(affiliate)
         kw['account'] = model.Account.get(account)
         kw['amount'] = Decimal(kw['amount'].replace(',', ''))
         model.Extra(**kw)
         raise redirect('/affiliate/{0}'.format(kw['affiliate'].id))
-    
+
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose()
@@ -54,26 +53,26 @@ class Extra(controllers.Controller):
                               first=validators.Int(), last=validators.Int(),
                               amount=validators.Number()))
     def many(self, first, last, account, **kw):
-        
+
         kw['account'] = model.Account.get(account)
-        for n in range(first, last +1):
+        for n in range(first, last + 1):
             kw['affiliate'] = model.Affiliate.get(n)
             kw['amount'] = Decimal(kw['amount'].replace(',', ''))
             model.Extra(**kw)
         raise redirect('/affiliate')
-    
+
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose()
     @validate(validators=dict(code=validators.Int()))
     def delete(self, code):
-        
+
         extra = model.Extra.get(code)
         affiliate = extra.affiliate
         extra.destroySelf()
-        
+
         raise redirect('/affiliate/{0}'.format(affiliate.id))
-    
+
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose()
@@ -81,31 +80,31 @@ class Extra(controllers.Controller):
                               cotizacion=validators.String(),
                               amount=validators.String()))
     def payment(self, cotizacion, account, amount, **kw):
-        
+
         kw['account'] = model.Account.get(account)
         kw['amount'] = Decimal(amount)
         cotizacion = model.Cotizacion.get(cotizacion)
-        
+
         afiliados = model.Affiliate.selectBy(cotizacion=cotizacion)
-        
+
         for afiliado in afiliados:
-            
             kw['affiliate'] = afiliado
             model.Extra(**kw)
-        
+
         flash(u'Se agrego la deducción a los afiliados')
-        
+
         raise redirect('/affiliate/extra')
 
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
     @expose('json')
     @validate(validators=dict(extra=validators.Int(),
-                              day=validators.DateTimeConverter(format='%d/%m/%Y')))
+                              day=validators.DateTimeConverter(
+                                  format='%d/%m/%Y')))
     def pagarPlanilla(self, extra, day):
-    
+
         extra = model.Extra.get(extra)
         pago = extra.amount
         extra.act(day=day)
-        
+
         return dict(pago=pago)
