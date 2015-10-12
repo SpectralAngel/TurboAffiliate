@@ -27,7 +27,6 @@ from turbogears import controllers, expose, identity, validate, validators
 
 from turboaffiliate import model
 
-
 months = {
     1: 'Enero', 2: 'Febrero', 3: 'Marzo',
     4: 'Abril', 5: 'Mayo', 6: 'Junio',
@@ -63,9 +62,8 @@ class Report(controllers.Controller):
 
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.report")
-    @validate(validators=dict(year=validators.Int(), month=validators.Int(
-        min=1,
-        max=12),
+    @validate(validators=dict(year=validators.Int(),
+                              month=validators.Int(min=1, max=12),
                               payment=validators.String()))
     def report(self, payment, year, month):
 
@@ -131,9 +129,8 @@ class Report(controllers.Controller):
 
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.other")
-    @validate(validators=dict(year=validators.Int(), month=validators.Int(
-        min=1,
-        max=12),
+    @validate(validators=dict(year=validators.Int(),
+                              month=validators.Int(min=1, max=12),
                               cotizacion=validators.String()))
     def cotizacion(self, year, month, cotizacion):
 
@@ -160,9 +157,8 @@ class Report(controllers.Controller):
 
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.filiales")
-    @validate(validators=dict(year=validators.Int(), month=validators.Int(
-        min=1,
-        max=12)))
+    @validate(validators=dict(year=validators.Int(),
+                              month=validators.Int(min=1, max=12)))
     def filiales(self, year, month):
 
         affiliates = model.Affiliate.selectBy(payment="Escalafon")
@@ -215,7 +211,6 @@ class Report(controllers.Controller):
         cantidades = map(distribuir, afiliados)
         return dict(filiales=filiales, year=year, departamento=departamento,
                     start=start, end=end, cantidad=sum(cantidades))
-
 
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.listafilial")
@@ -344,10 +339,10 @@ class Report(controllers.Controller):
         return dict(deduced=deduced, account=account, month=months[month],
                     year=year, total=total)
 
-
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.deducedBank")
-    @validate(validators=dict(banco=validators.Int(), account=validators.Int(), year=validators.Int(),
+    @validate(validators=dict(banco=validators.Int(), account=validators.Int(),
+                              year=validators.Int(),
                               month=validators.Int(min=1, max=12)))
     def deducedBank(self, account, month, year, banco):
 
@@ -367,7 +362,6 @@ class Report(controllers.Controller):
                               month=validators.Int(min=1, max=12),
                               cotizacion=validators.Int()))
     def deducedPayment(self, cotizacion, account, month, year):
-
 
         cotizacion = model.Cotizacion.get(cotizacion)
         account = model.Account.get(account)
@@ -427,7 +421,7 @@ class Report(controllers.Controller):
     def aportaron(self, year, month):
 
         query = "cuota_table.month%s = true AND cuota_table.year = %s" % (
-        month, year)
+            month, year)
         cuotas = model.CuotaTable.select(query)
         show = u"que Cotizaron en {0} de {1}".format(month, year)
 
@@ -440,7 +434,7 @@ class Report(controllers.Controller):
         max=12)))
     def noAportaron(self, year, month):
         query = "cuota_table.month%s = 0 AND cuota_table.year = %s" % (
-        month, year)
+            month, year)
         cuotas = model.CuotaTable.select(query)
         show = u"que no Cotizaron en {0} de {1}".format(month, year)
 
@@ -500,5 +494,5 @@ class Report(controllers.Controller):
         total = sum(distribute[d] for d in distribute)
 
         return dict(deduced=deduced, account=account, month=months[month],
-                    year=year, distribute=distribute, banco=cotizacion, total=total)
-
+                    year=year, distribute=distribute, banco=cotizacion,
+                    total=total)

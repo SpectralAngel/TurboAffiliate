@@ -35,7 +35,6 @@ from turbogears import identity
 
 import wording
 
-
 dot01 = Decimal(".01")
 Zero = Decimal(0)
 Zeros = Decimal(0)
@@ -164,6 +163,7 @@ class Logger(SQLObject):
     action = UnicodeCol(default="")
     day = DateTimeCol(default=datetime.now)
     affiliate = ForeignKey("Affiliate")
+
 
 ################################################################################
 # Clases Especificas del Negocio
@@ -348,7 +348,7 @@ class Affiliate(SQLObject):
         """Obtiene el pago mensual que debe efectuar el afiliado"""
         total = sum(e.amount for e in self.extras)
         # loans = sum(l.get_payment() for l in self.loans)
-        #reintegros = sum(r.monto for r in self.reintegros if not r.pagado)
+        # reintegros = sum(r.monto for r in self.reintegros if not r.pagado)
 
         for reintegro in self.reintegros:
             if reintegro.pagado:
@@ -1020,12 +1020,12 @@ class Loan(SQLObject):
         # pagos = self.prediccion_pagos_actuales()
         # Utilizar el número de pagos almacenado, para evitar calcular intereses
         # sobre cuotas pagadas y eliminadas accidentalmente.
-        #total = pagos - self.number - 1
+        # total = pagos - self.number - 1
 
-        #if total < 0:
+        # if total < 0:
         #    return 0
 
-        #return total
+        # return total
         pagos = self.__pago_retrasado() / self.payment
         if pagos < 0:
             return 0
@@ -1641,7 +1641,7 @@ class Obligation(SQLObject):
 
 
 class ReportAccount(SQLObject):
-    name = name = UnicodeCol(length=100)
+    name = UnicodeCol(length=100)
     quantity = IntCol()
     amount = CurrencyCol(default=0)
     postReport = ForeignKey("PostReport")
@@ -2019,9 +2019,9 @@ class DeduccionBancaria(SQLObject):
     year = IntCol(default=date.today().year)
 
     def consolidar(self):
-
         deducciones = DeduccionBancaria.selectBy(afiliado=self.afiliado,
-                                                 month=self.month, year=self.year,
+                                                 month=self.month,
+                                                 year=self.year,
                                                  banco=self.banco)
 
         return sum(d.amount for d in deducciones)
@@ -2133,6 +2133,7 @@ class VentaSPS(SQLObject):
     """Descripción de Venta
 
     Contiene los datos sobre la venta de determinado producto en un recibo."""
+
     class sqlmeta:
         table = "venta_sps"
 
@@ -2172,6 +2173,7 @@ class VentaCeiba(SQLObject):
     """Descripción de Venta
 
     Contiene los datos sobre la venta de determinado producto en un recibo."""
+
     class sqlmeta:
         table = "venta_ceiba"
 
