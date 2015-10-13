@@ -19,16 +19,16 @@
             <thead>
             <tr>
                 <th>N&uacute;mero</th>
+                <th>Identidad</th>
                 <th>Nombre</th>
-                <th>Apellido</th>
                 <th>Cantidad</th>
             </tr>
             </thead>
             <tbody>
             <tr py:for="d in deducciones">
                 <td><a href="${tg.url('/affiliate/{0}'.format(d.afiliado.id))}">${d.afiliado.id}</a></td>
-                <td>${d.afiliado.firstName}</td>
-                <td>${d.afiliado.lastName}</td>
+                <td>${d.afiliado.cardID}</td>
+                <td>${d.afiliado.firstName} ${d.afiliado.lastName}</td>
                 <td>${locale.currency(d.consolidar(), True, True)}</td>
             </tr>
             </tbody>

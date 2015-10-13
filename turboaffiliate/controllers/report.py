@@ -316,9 +316,14 @@ class Report(controllers.Controller):
     def bancoDetail(self, banco, month, year):
 
         banco = model.Banco.get(banco)
-
-        deducciones = model.DeduccionBancaria.selectBy(banco=banco, year=year,
-                                                       month=month)
+        deducciones = []
+        afiliados = []
+        deduced = model.DeduccionBancaria.selectBy(banco=banco, year=year,
+                                                   month=month)
+        for d in deduced:
+            if d.afiliado not in afiliados:
+                deducciones.append(d)
+                afiliados.append(d.afiliado)
 
         return dict(banco=banco, month=month, year=year,
                     deducciones=deducciones)
