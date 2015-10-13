@@ -343,9 +343,13 @@ class Affiliate(SQLObject):
 
         return Banco.get(self.banco)
 
-    def get_monthly(self, day=date.today(), bank=False):
+    def get_monthly(self, day=date.today(), bank=False, loan_only=False):
 
         """Obtiene el pago mensual que debe efectuar el afiliado"""
+
+        if loan_only:
+            return self.get_prestamo()
+
         total = sum(e.amount for e in self.extras)
         # loans = sum(l.get_payment() for l in self.loans)
         # reintegros = sum(r.monto for r in self.reintegros if not r.pagado)
