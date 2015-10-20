@@ -655,23 +655,29 @@ class CuotaTable(SQLObject):
                 not self.affiliate.jubilated is None):
 
             if self.affiliate.jubilated.year < self.year:
-                total = sum(o.inprema for o in os)
+                total = os.sum('inprema')
 
             elif self.affiliate.jubilated.year == self.year:
-                total += sum(o.amount for o in os
-                             if mes < self.affiliate.jubilated.month)
+                amount_jubilated = os.filter(
+                    Obligation.q.month < self.affiliate.jubilated.month
+                ).sum('amount')
+                if amount_jubilated is not None:
+                    total += amount_jubilated
 
-                total += sum(o.inprema for o in os
-                             if mes >= self.affiliate.jubilated.month)
+                amount_jubilated = os.filter(
+                    Obligation.q.month >= self.affiliate.jubilated.month
+                ).sum('amount')
+                if amount_jubilated is not None:
+                    total += amount_jubilated
 
             elif self.affiliate.jubilated.year > self.year:
-                total = sum(o.amount for o in os)
+                total = os.sum('amount')
 
         elif self.affiliate.cotizacion.alternate:
-            total = sum(o.alternate for o in os)
+            total = os.sum('alternate')
 
         else:
-            total = sum(o.amount for o in os)
+            total = os.sum('amount')
 
         return total
 
