@@ -229,15 +229,14 @@ class Pay(controllers.Controller):
             AND(model.Pay.q.day >= start, model.Pay.q.day <= end))
         oldpays = model.OldPay.select(
             AND(model.OldPay.q.day >= start, model.OldPay.q.day <= end))
+
         count = pays.count() + oldpays.count()
-        capital = sum(pay.capital for pay in pays) + sum(
-            pay.capital for pay in oldpays)
-        interest = sum(pay.interest for pay in pays) + sum(
-            pay.interest for pay in oldpays)
+
+        capital = pays.sum('capital') + oldpays.sum('capital')
+        interest = pays.sum('interest') + oldpays.sum('interest')
 
         return dict(start=start, end=end, pays=pays, count=count,
-                    capital=capital,
-                    interest=interest, oldpays=oldpays)
+                    capital=capital, interest=interest, oldpays=oldpays)
 
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
                                    identity.not_anonymous()))
@@ -306,30 +305,24 @@ class Loan(controllers.Controller):
     @validate(
         validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
                         end=validators.DateTimeConverter(format='%d/%m/%Y'),
-                        payment=validators.String()))
-    def cotizacion(self, start, end, payment):
+                        cotizacion=validators.Int()))
+    def cotizacion(self, start, end, cotizacion):
 
-        loans = model.Loan.select(AND(model.Loan.q.startDate >= start,
-                                      model.Loan.q.startDate <= end))
+        cotizacion = model.Cotizacion.get(cotizacion)
+        loans = model.Affiliate.selectBy(
+            cotizacion=cotizacion
+        ).throughTo.loans.filter(
+            AND(model.Loan.q.startDate >= start,
+                model.Loan.q.startDate <= end)
+        )
 
-        loans = [l for l in loans if l.affiliate.payment == payment]
-
-        return dict(loans=loans, count=len(loans),
-                    payment=u"de {0} Periodo del {1} al {2}".format(payment,
-                                                                    start.strftime(
-                                                                        '%d '
-                                                                        'de '
-                                                                        '%B '
-                                                                        'de '
-                                                                        '%Y'),
-                                                                    end.strftime(
-                                                                        '%d '
-                                                                        'de '
-                                                                        '%B '
-                                                                        'de '
-                                                                        '%Y')),
-                    capital=sum(l.capital for l in loans),
-                    debt=sum(l.debt for l in loans))
+        return dict(loans=loans, count=loans.count(),
+                    payment=u"de {0} Periodo del {1} al {2}".format(
+                        cotizacion.nombre,
+                        start.strftime('%d de %B de %Y'),
+                        end.strftime('%d de %B de %Y')),
+                    capital=loans.sum('capital'),
+                    debt=loans.sum('debt'))
 
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.loan.list")
@@ -777,12 +770,15 @@ class Loan(controllers.Controller):
         incluidos los pagados"""
 
         pagos = list()
-        pagos.extend(model.Pay.select(
-            AND(model.Pay.q.day >= start, model.Pay.q.day <= end)))
-        pagos.extend(model.OldPay.select(
-            AND(model.OldPay.q.day >= start, model.OldPay.q.day <= end)))
-        capital = sum(pay.capital for pay in pagos)
-        interest = sum(pay.interest for pay in pagos)
+        pays = model.Pay.select(AND(model.Pay.q.day >= start,
+                                    model.Pay.q.day <= end))
+        pagos.extend(pays)
+        oldpays = model.OldPay.select(AND(model.OldPay.q.day >= start,
+                                          model.OldPay.q.day <= end))
+        pagos.extend(oldpays)
+
+        capital = pagos.sum('capital') + oldpays.sum('capital')
+        interest = pays.sum('interest') + oldpays.sum('interest')
 
         return dict(capital=capital, interest=interest, start=start, end=end)
 
@@ -799,7 +795,7 @@ class Loan(controllers.Controller):
                                            model.PayedLoan.q.last <= end))
 
         payed = [p for p in payed if
-                 len(p.affiliate.loans) > 0 and p.affiliate.payment == payment]
+                 p.affiliate.loans.count() > 0 and p.affiliate.payment == payment]
 
         payed = [p for p in payed if
                  p.affiliate.loans[0].get_payment() != p.payment]
