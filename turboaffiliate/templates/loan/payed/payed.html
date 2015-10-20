@@ -57,7 +57,7 @@
         </div>
         <div class="row">
             <div class="col-md-12 table-responsive">
-                <table class="table table-striped" py:if="len(loan.pays) != 0">
+                <table class="table table-striped" py:if="loan.pays.count() != 0">
                     <caption>Pagos Efectuados</caption>
                     <thead>
                     <tr>

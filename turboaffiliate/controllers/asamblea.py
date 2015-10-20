@@ -265,7 +265,7 @@ class Asamblea(controllers.Controller):
             deshabilitado = True
             msg = u"Ya esta inscrito en asamblea {0}".format(asamblea.nombre)
 
-        if afiliado.banco != None:
+        if afiliado.banco is not None:
             banco = model.Banco.get(afiliado.banco)
 
         return deshabilitado, msg, afiliado, banco, asamblea
@@ -354,8 +354,6 @@ class Asamblea(controllers.Controller):
                               municipio=validators.Int()))
     def corregir(self, afiliado, asamblea, departamento, banco, cuenta,
                  municipio):
-
-        kw = dict()
         afiliado = model.Affiliate.get(afiliado)
         asamblea = model.Asamblea.get(asamblea)
 
@@ -371,11 +369,11 @@ class Asamblea(controllers.Controller):
         banco = model.Banco.get(banco)
         afiliado.banco = banco.id
         afiliado.cuenta = cuenta
-        kw['afiliado'] = afiliado
-        kw['asamblea'] = asamblea
-        kw['viatico'] = model.Viatico.selectBy(asamblea=asamblea,
-                                               municipio=afiliado.municipio
-        ).limit(1).getOne()
+
+        kw = {'afiliado': afiliado, 'asamblea': asamblea,
+              'viatico': model.Viatico.selectBy(asamblea=asamblea,
+                                                municipio=afiliado.municipio
+                                                ).limit(1).getOne()}
 
         model.Inscripcion(**kw)
         flash(inscripcionRealizada(afiliado))
@@ -390,19 +388,17 @@ class Asamblea(controllers.Controller):
                               asamblea=validators.Int(),
                               municipio=validators.Int()))
     def corregirDepto(self, afiliado, asamblea, departamento, municipio):
-
-        kw = dict()
         afiliado = model.Affiliate.get(afiliado)
         asamblea = model.Asamblea.get(asamblea)
         departamento = model.Departamento.get(departamento)
         afiliado.departamento = departamento
         municipio = model.Municipio.get(municipio)
-        kw['afiliado'] = afiliado
-        kw['asamblea'] = asamblea
-        kw['viatico'] = model.Viatico.selectBy(asamblea=asamblea,
-                                               departamento=departamento,
-                                               municipio=municipio
-        ).limit(1).getOne()
+
+        kw = {'afiliado': afiliado, 'asamblea': asamblea,
+              'viatico': model.Viatico.selectBy(asamblea=asamblea,
+                                                departamento=departamento,
+                                                municipio=municipio
+                                                ).limit(1).getOne()}
 
         model.Inscripcion(**kw)
         flash(inscripcionRealizada(afiliado))
@@ -422,7 +418,7 @@ class Asamblea(controllers.Controller):
         for afiliado in afiliados:
             if afiliado.departamento != ndepto:
 
-                if afiliado.departamento == None:
+                if afiliado.departamento is None:
                     afiliado.departamento = ndepto
                     continue
 
@@ -432,15 +428,15 @@ class Asamblea(controllers.Controller):
 
         for afiliado in afiliados:
 
-            if afiliado.town == None:
-                if afiliado.municipio == None:
+            if afiliado.town is None:
+                if afiliado.municipio is None:
                     afiliado.municipio = ninguno
                 continue
 
-            if afiliado.departamento == None:
+            if afiliado.departamento is None:
                 afiliado.departamento = ndepto
 
-            municipios = dict()
+            municipios = {}
             for m in afiliado.departamento.municipios:
                 municipios[m.nombre.lower()] = m
 
@@ -619,12 +615,12 @@ class Asamblea(controllers.Controller):
     @validate(validators=dict(asamblea=validators.Int()))
     def enviarMasa(self, asamblea):
 
-        #update = Update('inscripcion',
+        # update = Update('inscripcion',
         #                values={'enviado':True,'envio':date.today()},
         #                where='asamblea_id={0} and enviado=false'.format(asamblea))
-        #query = model.__connection__.sqlrepr(update)
-        #model.__connection__.query(query)
-        #asamblea = model.Asamblea.get(asamblea)
+        # query = model.__connection__.sqlrepr(update)
+        # model.__connection__.query(query)
+        # asamblea = model.Asamblea.get(asamblea)
 
         inscripciones = (i for i in asamblea.inscripciones if
                          i.afiliado.multisolvent(2013, gracia=True))

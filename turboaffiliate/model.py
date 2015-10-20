@@ -30,7 +30,7 @@ from turbogears.database import PackageHub
 from sqlobject import (SQLObject, UnicodeCol, StringCol, DateCol, CurrencyCol,
                        MultipleJoin, ForeignKey, IntCol, DecimalCol, BoolCol,
                        DatabaseIndex, DateTimeCol, RelatedJoin,
-                       SQLObjectNotFound)
+                       SQLObjectNotFound, SQLMultipleJoin)
 from turbogears import identity
 
 import wording
@@ -377,17 +377,17 @@ class Affiliate(SQLObject):
         obligations = Obligation.selectBy(month=day.month, year=day.year)
 
         if self.cotizacion.jubilados and self.cotizacion.alternate:
-            return Decimal(sum(o.inprema_compliment for o in obligations))
+            return obligations.sum('inprema_compliment')
 
         obligation = Zero
-        obligation += sum(o.amount for o in obligations
-                          if self.cotizacion.normal)
+        if self.cotizacion.normal:
+            obligation += obligations.sum('amount')
 
-        obligation += sum(o.inprema for o in obligations
-                          if self.cotizacion.jubilados)
+        if self.cotizacion.jubilados:
+            obligation += obligations.sum('inprema')
 
-        obligation += sum(o.alternate for o in obligations
-                          if self.cotizacion.alternate)
+        if self.cotizacion.alternate:
+            obligation += obligations.sum('alternate')
 
         return obligation
 
@@ -400,23 +400,21 @@ class Affiliate(SQLObject):
 
         obligation = Zero
         if self.banco_completo:
-            obligation += sum(o.amount_compliment for o in obligations
-                              if not self.cotizacion.jubilados)
-
-            obligation += sum(o.inprema for o in obligations
-                              if self.cotizacion.jubilados)
-
-            obligation += sum(o.amount for o in obligations
-                              if not self.cotizacion.alternate)
+            if not self.cotizacion.jubilados:
+                obligation += obligation.sum('amount_compliment')
+            if self.cotizacion.jubilados:
+                obligation += obligation.sum('inprema')
+            if not self.cotizacion.alternate:
+                obligation += obligations.sum('amount')
         else:
-            obligation += sum(o.amount for o in obligations
-                              if not self.cotizacion.jubilados)
+            if not self.cotizacion.jubilados:
+                obligation += obligations.sum('amount')
 
-            obligation += sum(o.inprema_compliment for o in obligations
-                              if self.cotizacion.jubilados)
+            if self.cotizacion.jubilados:
+                obligation = obligations.sum('inprema')
 
-            obligation += sum(o.amount_compliment for o in obligations
-                              if not self.cotizacion.alternate)
+            if not self.cotizacion.alternate:
+                obligation = obligations.sum('amount_compliment')
 
         return obligation
 
@@ -519,9 +517,9 @@ class Affiliate(SQLObject):
 
     def remove(self):
 
-        (table.destroySelf() for table in self.cuotaTables)
+        [table.destroySelf() for table in self.cuotaTables]
 
-        (loan.remove() for loan in self.loans)
+        [loan.remove() for loan in self.loans]
 
         self.destroySelf()
 
@@ -542,7 +540,7 @@ class Affiliate(SQLObject):
 
     def get_phone(self):
 
-        if self.phone != None:
+        if self.phone is not None:
             phone = self.phone.replace('-', '').replace('/', '')
             if len(phone) > 11:
                 return phone[:11]
@@ -552,7 +550,7 @@ class Affiliate(SQLObject):
 
     def get_email(self):
 
-        if self.email != None:
+        if self.email is not None:
             return self.email
 
         return ""
@@ -971,8 +969,8 @@ class Loan(SQLObject):
     aproved = BoolCol(default=False)
     fecha_mora = DateCol(notNone=True, default=date.today)
 
-    pays = MultipleJoin("Pay", orderBy="day")
-    deductions = MultipleJoin("Deduction")
+    pays = SQLMultipleJoin("Pay", orderBy="day")
+    deductions = SQLMultipleJoin("Deduction")
     aproval = ForeignKey("User")
     cobrar = BoolCol(default=True)
     acumulado = CurrencyCol(default=0)
@@ -1148,7 +1146,7 @@ class Loan(SQLObject):
             kw['interest'] = (self.debt * self.interest / 1200).quantize(dot01)
 
         # Registra cualquier cantidad mayor a los intereses
-        if (self.debt < amount):
+        if self.debt < amount:
             kw['interest'] = amount - self.debt
 
         # Calculate how much money was used to pay the capital
@@ -1177,12 +1175,8 @@ class Loan(SQLObject):
 
         prestamo = solicitud.prestamo(usuario)
 
-        kw = dict()
-        kw['account'] = cuenta
-        kw['amount'] = pago
-        kw['name'] = kw['account'].name
-        kw['loan'] = prestamo
-        kw['description'] = descripcion
+        kw = {'account': cuenta, 'amount': pago, 'loan': prestamo,
+              'description': descripcion, 'name': cuenta.name}
 
         Deduction(**kw)
 
@@ -1231,17 +1225,11 @@ class Loan(SQLObject):
 
         """Convierte un :class:`Loan` en un :class:`PayedLoan`"""
 
-        kw = dict()
-        kw['id'] = self.id
-        kw['affiliate'] = self.affiliate
-        kw['capital'] = self.capital
-        kw['letters'] = self.letters
-        kw['interest'] = self.interest
-        kw['months'] = self.months
-        kw['last'] = self.last
-        kw['startDate'] = self.startDate
-        kw['payment'] = self.payment
-        kw['casa'] = self.casa
+        kw = {'id': self.id, 'affiliate': self.affiliate,
+              'capital': self.capital, 'letters': self.letters,
+              'interest': self.interest, 'months': self.months,
+              'last': self.last, 'startDate': self.startDate,
+              'payment': self.payment, 'casa': self.casa}
         payed = PayedLoan(**kw)
 
         for pay in self.pays:
@@ -1292,12 +1280,10 @@ class Loan(SQLObject):
         n = 1
         int_month = self.interest / 1200
         while debt > 0:
-            kw = dict()
+            kw = {'number': "{0}/{1}".format(n + self.number, self.months),
+                  'month': self.number + n + start, 'enum': self.number + n,
+                  'year': year}
             # calcular el número de pago
-            kw['number'] = "{0}/{1}".format(n + self.number, self.months)
-            kw['month'] = self.number + n + start
-            kw['enum'] = self.number + n
-            kw['year'] = year
 
             # Normalizar Meses
             while kw['month'] > 12:
@@ -1350,17 +1336,17 @@ class Loan(SQLObject):
 
         """Muestra el valor del capital pagado del :class:`Loan`"""
 
-        return sum(p.capital for p in self.pays)
+        return self.pays.sum('capital')
 
     def pagado(self):
 
         """Muestra el monto total pagado a este :class:`Loan`"""
 
-        return sum(p.amount for p in self.pays)
+        return self.pays.sum('amount')
 
     def interesesPagados(self):
 
-        return sum(p.interest for p in self.pays)
+        return self.pays.sum('interest')
 
     def reconstruirSaldo(self):
 
@@ -1386,14 +1372,9 @@ class Pay(SQLObject):
     description = UnicodeCol(length=100)
 
     def remove(self, payedLoan):
-        kw = dict()
-        kw['payedLoan'] = payedLoan
-        kw['day'] = self.day
-        kw['capital'] = self.capital
-        kw['interest'] = self.interest
-        kw['amount'] = self.amount
-        kw['receipt'] = self.receipt
-        kw['description'] = self.description
+        kw = {'payedLoan': payedLoan, 'day': self.day, 'capital': self.capital,
+              'interest': self.interest, 'amount': self.amount,
+              'receipt': self.receipt, 'description': self.description}
         self.destroySelf()
         OldPay(**kw)
 
@@ -1460,13 +1441,9 @@ class Extra(SQLObject):
 
         """Registra la deducción convirtiendola en :class:`Deduced`"""
 
-        kw = dict()
-        kw['amount'] = self.amount
-        kw['affiliate'] = self.affiliate
-        kw['account'] = self.account
-        kw['cotizacion'] = self.affiliate.cotizacion
-        kw['month'] = day.month
-        kw['year'] = day.year
+        kw = {'amount': self.amount, 'affiliate': self.affiliate,
+              'account': self.account, 'cotizacion': self.affiliate.cotizacion,
+              'month': day.month, 'year': day.year}
 
         if self.retrasada:
 
@@ -1482,14 +1459,9 @@ class Extra(SQLObject):
 
     def deduccion_bancaria(self, dia=date.today(), cobro=date.today()):
 
-        kw = dict()
-        kw['amount'] = self.amount
-        kw['afiliado'] = self.affiliate
-        kw['banco'] = self.affiliate.get_banco()
-        kw['account'] = self.account
-        kw['month'] = dia.month
-        kw['year'] = dia.year
-        kw['day'] = cobro
+        kw = {'amount': self.amount, 'afiliado': self.affiliate,
+              'banco': self.affiliate.get_banco(), 'account': self.account,
+              'month': dia.month, 'year': dia.year, 'day': cobro}
 
         if self.retrasada:
 
@@ -1515,11 +1487,8 @@ class Deduction(SQLObject):
     description = UnicodeCol(length=100)
 
     def remove(self, payedLoan):
-        kw = dict()
-        kw['payedLoan'] = payedLoan
-        kw['amount'] = self.amount
-        kw['account'] = self.account
-        kw['description'] = self.description
+        kw = {'payedLoan': payedLoan, 'amount': self.amount,
+              'account': self.account, 'description': self.description}
         PayedDeduction(**kw)
         self.destroySelf()
 
@@ -1540,8 +1509,8 @@ class PayedLoan(SQLObject):
     months = IntCol()
     last = DateCol(default=date.today)
     startDate = DateCol(notNone=True, default=date.today)
-    pays = MultipleJoin("OldPay")
-    deductions = MultipleJoin("PayedDeduction")
+    pays = SQLMultipleJoin("OldPay")
+    deductions = SQLMultipleJoin("PayedDeduction")
     debt = CurrencyCol(default=0, notNone=True)
 
     def remove(self):
@@ -1550,19 +1519,11 @@ class PayedLoan(SQLObject):
         self.destroySelf()
 
     def to_loan(self, user):
-        kw = dict()
-        kw['aproval'] = user
-        kw['affiliate'] = self.affiliate
-        kw['capital'] = self.capital
-        kw['interest'] = self.interest
-        kw['payment'] = self.payment
-        kw['months'] = self.months
-        kw['last'] = self.last
-        kw['startDate'] = self.startDate
-        kw['letters'] = self.letters
-        kw['number'] = len(self.pays)
-        kw['id'] = self.id
-        kw['casa'] = self.casa
+        kw = {'aproval': user, 'affiliate': self.affiliate,
+              'capital': self.capital, 'interest': self.interest,
+              'payment': self.payment, 'months': self.months, 'last': self.last,
+              'startDate': self.startDate, 'letters': self.letters,
+              'number': self.pays.count(), 'id': self.id, 'casa': self.casa}
         loan = Loan(**kw)
 
         [pay.to_pay(loan) for pay in self.pays]
@@ -1574,16 +1535,16 @@ class PayedLoan(SQLObject):
     def net(self):
         """Obtains the amount that was given to the affiliate in the check"""
 
-        return self.capital - sum(d.amount for d in self.deductions)
+        return self.capital - self.deductions.sum('amount')
 
     def capitalPagado(self):
-        return sum(p.capital for p in self.pays)
+        return self.pays.sum('capital')
 
     def pagado(self):
-        return sum(p.amount for p in self.pays)
+        return self.pays.sum('amount')
 
     def interesesPagados(self):
-        return sum(p.interest for p in self.pays)
+        return self.pays.sum('interest')
 
 
 class OldPay(SQLObject):
@@ -1601,14 +1562,9 @@ class OldPay(SQLObject):
     description = UnicodeCol(length=100)
 
     def to_pay(self, loan):
-        kw = dict()
-        kw['loan'] = loan
-        kw['day'] = self.day
-        kw['capital'] = self.capital
-        kw['interest'] = self.interest
-        kw['amount'] = self.amount
-        kw['receipt'] = self.receipt
-        kw['description'] = self.description
+        kw = {'loan': loan, 'day': self.day, 'capital': self.capital,
+              'interest': self.interest, 'amount': self.amount,
+              'receipt': self.receipt, 'description': self.description}
         Pay(**kw)
         self.destroySelf()
 
@@ -1620,11 +1576,8 @@ class PayedDeduction(SQLObject):
     description = StringCol()
 
     def to_deduction(self, loan):
-        kw = dict()
-        kw['loan'] = loan
-        kw['amount'] = self.amount
-        kw['description'] = self.description
-        kw['account'] = self.account
+        kw = {'loan': loan, 'amount': self.amount,
+              'description': self.description, 'account': self.account}
         Deduction(**kw)
         self.destroySelf()
 
@@ -1747,17 +1700,11 @@ class Solicitud(SQLObject):
         numerado = str(1 - math.pow(tipo + 1, -self.periodo))
         cuota = self.monto * Decimal(tipo / Decimal(numerado))
 
-        kw = dict()
-        kw['aproval'] = user
-        kw['affiliate'] = self.affiliate
-        kw['capital'] = self.monto
-        kw['interest'] = 20
-        kw['payment'] = cuota
-        kw['months'] = self.periodo
-        kw['last'] = self.entrega
-        kw['startDate'] = self.entrega
-        kw['letters'] = wording.parse(self.monto).capitalize()
-        kw['number'] = 0
+        kw = {'aproval': user, 'affiliate': self.affiliate,
+              'capital': self.monto, 'interest': 20, 'payment': cuota,
+              'months': self.periodo, 'last': self.entrega,
+              'startDate': self.entrega,
+              'letters': wording.parse(self.monto).capitalize(), 'number': 0}
         prestamo = Loan(**kw)
         prestamo.start()
 
@@ -1808,16 +1755,11 @@ class Reintegro(SQLObject):
         self.cancelar(dia)
         self.formaPago = FormaPago.get(1)
 
-        kw = dict()
-        kw['amount'] = self.monto
-        kw['affiliate'] = self.affiliate
-        kw['account'] = self.cuenta
-        kw['month'] = dia.month
-        kw['year'] = dia.year
-
-        kw['detail'] = "Reintegro {0} por {0}".format(
-            self.emision.strftime('%d/%m/%Y'),
-            self.motivo)
+        kw = {'amount': self.monto, 'affiliate': self.affiliate,
+              'account': self.cuenta, 'month': dia.month, 'year': dia.year,
+              'detail': "Reintegro {0} por {0}".format(
+                  self.emision.strftime('%d/%m/%Y'),
+                  self.motivo)}
 
         Deduced(**kw)
 
@@ -1825,18 +1767,12 @@ class Reintegro(SQLObject):
         self.cancelar(dia)
         self.formaPago = FormaPago.get(1)
 
-        kw = dict()
-        kw['amount'] = self.monto
-        kw['afiliado'] = self.affiliate
-        kw['banco'] = self.affiliate.get_banco()
-        kw['account'] = self.cuenta
-        kw['month'] = dia.month
-        kw['year'] = dia.year
-        kw['day'] = cobro
-
-        kw['detail'] = "Reintegro {0} por {0}".format(
-            self.emision.strftime('%d/%m/%Y'),
-            self.motivo)
+        kw = {'amount': self.monto, 'afiliado': self.affiliate,
+              'banco': self.affiliate.get_banco(), 'account': self.cuenta,
+              'month': dia.month, 'year': dia.year, 'day': cobro,
+              'detail': "Reintegro {0} por {0}".format(
+                  self.emision.strftime('%d/%m/%Y'),
+                  self.motivo)}
 
         DeduccionBancaria(**kw)
 
@@ -1974,7 +1910,7 @@ class Inscripcion(SQLObject):
 
         """Obtiene el monto a pagar por concepto de viaticos"""
 
-        if self.asamblea.fecha == None or self.ingresado == None:
+        if self.asamblea.fecha is None or self.ingresado is None:
             return self.viatico.monto
 
         if self.ingresado < self.asamblea.fecha:
