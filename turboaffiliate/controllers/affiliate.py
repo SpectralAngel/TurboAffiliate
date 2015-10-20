@@ -681,12 +681,8 @@ class Affiliate(controllers.Controller):
         cuenta = model.Account.get(cuenta)
         affiliate.pay_cuota(day.year, day.month)
 
-        deduccion = dict()
-        deduccion['account'] = cuenta
-        deduccion['month'] = day.month
-        deduccion['year'] = day.year
-        deduccion['affiliate'] = affiliate
-        deduccion['amount'] = Decimal(amount)
+        deduccion = {'account': cuenta, 'month': day.month, 'year': day.year,
+                     'affiliate': affiliate, 'amount': Decimal(amount)}
         model.Deduced(**deduccion)
 
         log(identity.current.user,
@@ -703,7 +699,7 @@ class Affiliate(controllers.Controller):
         afiliados = dict()
 
         for a in afo:
-            if a.cardID == None:
+            if a.cardID is None:
                 continue
             afiliados[a.cardID.replace('-', '')] = a
 

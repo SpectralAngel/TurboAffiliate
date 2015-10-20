@@ -30,10 +30,7 @@ from turboaffiliate import model
 def log(user, message, affiliate):
     """Guarda un mensaje en el registro del sistema"""
 
-    log = {}
-    log['user'] = user
-    log['action'] = message
-    log['affiliate'] = affiliate
+    log = {'user': user, 'action': message, 'affiliate': affiliate}
     model.Logger(**log)
 
 

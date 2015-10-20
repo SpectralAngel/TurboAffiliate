@@ -97,13 +97,10 @@ class PayedLoan(controllers.Controller):
         loans = [l for l in loans if l.affiliate.payment == payment]
 
         return dict(loans=loans, count=len(loans),
-                    payment="Periodo del {0} al {1}".format(payment,
-                                                            start.strftime(
-                                                                '%d de %B de '
-                                                                '%Y'),
-                                                            end.strftime(
-                                                                '%d de %B de '
-                                                                '%Y')),
+                    payment="Periodo del {0} al {1}".format(
+                        payment,
+                        start.strftime('%d de %B de %Y'),
+                        end.strftime('%d de %B de %Y')),
                     capital=sum(l.capital for l in loans))
 
     @identity.require(identity.not_anonymous())

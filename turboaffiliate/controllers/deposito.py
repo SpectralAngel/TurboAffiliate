@@ -28,20 +28,10 @@ from turbogears import (controllers, redirect, identity, expose, validate,
 from sqlobject.sqlbuilder import OR, AND
 
 from turboaffiliate import model
-
-
-def log(user, message, affiliate):
-    """Guarda un mensaje en el registro del sistema"""
-
-    log = {}
-    log['user'] = user
-    log['action'] = message
-    log['affiliate'] = affiliate
-    model.Logger(**log)
+from turboaffiliate.controllers.affiliate import log
 
 
 class Deposito(controllers.Controller):
-
     """Permite registrar depósitos que los afiliados han efectuado en una
     institución bancaria"""
 
@@ -168,7 +158,6 @@ class Deposito(controllers.Controller):
             u"2}".format(
                 kw['fecha'], kw['afiliado'], sistema), kw['afiliado'])
 
-
         return dict(mensaje=u"Se registró el depósito al afiliado {0}".format(
             deposito.afiliado.id))
 
@@ -229,8 +218,8 @@ class Deposito(controllers.Controller):
     @expose(template='turboaffiliate.templates.deposito.reporte')
     @validate(validators=dict(inicio=validators.DateTimeConverter(
         format='%d/%m/%Y'),
-                              final=validators.DateTimeConverter(
-                                  format='%d/%m/%Y')))
+        final=validators.DateTimeConverter(
+            format='%d/%m/%Y')))
     def reporte(self, inicio, fin):
         return dict(depositos=model.Deposito.select(AND(
             model.Loan.q.fecha >= inicio,
@@ -250,8 +239,8 @@ class Deposito(controllers.Controller):
             model.Deposito.q.fecha >= inicio,
             model.Deposito.q.fecha <= final,
             model.Deposito.q.banco == banco)),
-                    banco=banco, inicio=inicio,
-                    final=final)
+            banco=banco, inicio=inicio,
+            final=final)
 
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.deposito.reporteAnonimo')
@@ -267,7 +256,7 @@ class Deposito(controllers.Controller):
             model.DepositoAnonimo.q.fecha >= inicio,
             model.DepositoAnonimo.q.fecha <= final,
             model.DepositoAnonimo.q.banco == banco)),
-                    banco=banco, inicio=inicio, final=final)
+            banco=banco, inicio=inicio, final=final)
 
     @expose()
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
