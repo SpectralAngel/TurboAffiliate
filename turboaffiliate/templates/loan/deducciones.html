@@ -1,52 +1,70 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="../master.html" />
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html"/>
 <head>
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-  <title>TurboAffiliate &bull; Pr&acute;stamos</title>
-  <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" media="screen" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"
+          py:replace="''"/>
+    <title>TurboAffiliate &bull; Pr&acute;stamos</title>
+    <link rel="stylesheet" type="text/css"
+          href="${tg.url('/static/css/status.css')}" media="screen"/>
 </head>
 <body>
-  <h1>Reporte de Deducciones de Pr&eacute;stamos ${casa.nombre}</h1>
-  <h2>Del ${start.strftime('%d de %B de %Y')} al ${end.strftime('%d de %B de %Y')}</h2>
-  <table class="striped full-size ui-corner-all ui-widget-content">
-    <thead>
-      <tr>
-        <th>Pr&eacute;stamo</th>
-        <th>Afiliaci&oacute;n</th>
-        <th>Nombre</th>
-        <th>Monto</th>
-        <th>Intereses</th>
-        <th>Papeleo</th>
-        <th>Aportaciones</th>
-        <th>Prestamo</th>
-        <th>Neto</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr py:for="loan in loans">
-        <td><a href="${tg.url('/loan/{0}'.format(loan.id))}">${loan.id}</a></td>
-        <td><a href="${tg.url('/affiliate/{0}'.format(loan.afiliado.id))}">${loan.afiliado.id}</a></td>
-        <td>${loan.afiliado.firstName} ${loan.afiliado.lastName}</td>
-        <td>${locale.currency(loan.monto, False, True)}</td>
-        <td>${locale.currency(loan.intereses, False, True)}</td>
-        <td>${locale.currency(loan.papeleo, False, True)}</td>
-        <td>${locale.currency(loan.aportaciones, False, True)}</td>
-        <td>${locale.currency(loan.retencion, False, True)}</td>
-        <td>${locale.currency(loan.neto, False, True)}</td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <th colspan="3">Total:</th>
-        <th>${locale.currency(monto, False, True)}</th>
-        <th>${locale.currency(intereses, False, True)}</th>
-        <th>${locale.currency(papeleo, False, True)}</th>
-        <th>${locale.currency(aportaciones, False, True)}</th>
-        <th>${locale.currency(retencion, False, True)}</th>
-        <th>${locale.currency(neto, False, True)}</th>
-      </tr>
-    </tfoot>
-  </table>
+<div class="row">
+    <div class="col-md-12">
+        <section class="page-header">
+            <h1>Reporte de Deducciones de Pr&eacute;stamos ${casa.nombre}
+                <small>Del ${start.strftime('%d de %B de %Y')} al
+                    ${end.strftime('%d de %B de %Y')}
+                </small>
+            </h1>
+        </section>
+    </div>
+</div>
+<div class="row">
+    <table class="table table-stripped">
+        <thead>
+        <tr>
+            <th>Pr&eacute;stamo</th>
+            <th>Afiliaci&oacute;n</th>
+            <th>Nombre</th>
+            <th>Monto</th>
+            <th>Intereses</th>
+            <th>Papeleo</th>
+            <th>Aportaciones</th>
+            <th>Prestamo</th>
+            <th>Neto</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr py:for="loan in loans">
+            <td><a href="${tg.url('/loan/{0}'.format(loan.id))}">${loan.id}</a>
+            </td>
+            <td><a href="${tg.url('/affiliate/{0}'.format(loan.afiliado.id))}">${loan.afiliado.id}</a>
+            </td>
+            <td>${loan.afiliado.firstName} ${loan.afiliado.lastName}</td>
+            <td>${locale.currency(loan.monto, False, True)}</td>
+            <td>${locale.currency(loan.intereses, False, True)}</td>
+            <td>${locale.currency(loan.papeleo, False, True)}</td>
+            <td>${locale.currency(loan.aportaciones, False, True)}</td>
+            <td>${locale.currency(loan.retencion, False, True)}</td>
+            <td>${locale.currency(loan.neto, False, True)}</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan="3">Total:</th>
+            <th>${locale.currency(monto, False, True)}</th>
+            <th>${locale.currency(intereses, False, True)}</th>
+            <th>${locale.currency(papeleo, False, True)}</th>
+            <th>${locale.currency(aportaciones, False, True)}</th>
+            <th>${locale.currency(retencion, False, True)}</th>
+            <th>${locale.currency(neto, False, True)}</th>
+        </tr>
+        </tfoot>
+    </table>
+</div>
 </body>
 </html>
