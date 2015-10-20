@@ -664,7 +664,7 @@ class CuotaTable(SQLObject):
                         total += amount_jubilated
 
                 if mes >= self.affiliate.jubilated.month:
-                    amount_jubilated = os.sum('amount')
+                    amount_jubilated = os.sum('inprema')
                     if amount_jubilated is not None:
                         total += amount_jubilated
 
