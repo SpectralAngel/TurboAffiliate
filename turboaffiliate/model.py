@@ -658,17 +658,15 @@ class CuotaTable(SQLObject):
                 total = os.sum('inprema')
 
             elif self.affiliate.jubilated.year == self.year:
-                amount_jubilated = os.filter(
-                    Obligation.q.month < self.affiliate.jubilated.month
-                ).sum('amount')
-                if amount_jubilated is not None:
-                    total += amount_jubilated
+                if mes < self.affiliate.jubilated.month:
+                    amount_jubilated = os.sum('amount')
+                    if amount_jubilated is not None:
+                        total += amount_jubilated
 
-                amount_jubilated = os.filter(
-                    Obligation.q.month >= self.affiliate.jubilated.month
-                ).sum('amount')
-                if amount_jubilated is not None:
-                    total += amount_jubilated
+                if mes >= self.affiliate.jubilated.month:
+                    amount_jubilated = os.sum('amount')
+                    if amount_jubilated is not None:
+                        total += amount_jubilated
 
             elif self.affiliate.jubilated.year > self.year:
                 total = os.sum('amount')
@@ -848,17 +846,15 @@ class AutoSeguro(SQLObject):
                 total = os.sum('inprema_compliment')
 
             elif self.affiliate.jubilated.year == self.year:
-                amount_jubilated = os.filter(
-                    Obligation.q.month < self.affiliate.jubilated.month
-                ).sum('amount_compliment')
-                if amount_jubilated is not None:
-                    total += amount_jubilated
+                if mes < self.affiliate.jubilated.month:
+                    amount_jubilated = os.sum('amount_compliment')
+                    if amount_jubilated is not None:
+                        total += amount_jubilated
 
-                amount_jubilated = os.filter(
-                    Obligation.q.month >= self.affiliate.jubilated.month
-                ).sum('inprema_compliment')
-                if amount_jubilated is not None:
-                    total += amount_jubilated
+                if mes >= self.affiliate.jubilated.month:
+                    amount_jubilated = os.sum('inprema_compliment')
+                    if amount_jubilated is not None:
+                        total += amount_jubilated
 
             elif self.affiliate.jubilated.year > self.year:
                 total = os.sum('amount_compliment')
