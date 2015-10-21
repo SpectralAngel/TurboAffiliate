@@ -33,8 +33,6 @@ from sqlobject import (SQLObject, UnicodeCol, StringCol, DateCol, CurrencyCol,
                        SQLObjectNotFound, SQLMultipleJoin)
 from turbogears import identity
 
-import wording
-
 dot01 = Decimal(".01")
 Zero = Decimal(0)
 Zeros = Decimal(0)
@@ -1344,13 +1342,25 @@ class Loan(SQLObject):
 
         """Muestra el valor del capital pagado del :class:`Loan`"""
 
-        return self.pays.sum('capital')
+        pagado = self.pays.sum('capital')
+
+        if pagado is None:
+
+            return Decimal()
+
+        return pagado
 
     def pagado(self):
 
         """Muestra el monto total pagado a este :class:`Loan`"""
 
-        return self.pays.sum('amount')
+        pagado = self.pays.sum('amount')
+
+        if pagado is None:
+
+            return Decimal()
+
+        return pagado
 
     def interesesPagados(self):
 
