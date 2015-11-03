@@ -884,6 +884,9 @@ class AutoSeguro(SQLObject):
         else:
             total = os.sum('amount_compliment')
 
+        if total is None:
+            return Zero
+
         return total
 
     def pago_mes(self, mes, periodo=None):
@@ -1148,17 +1151,14 @@ class Loan(SQLObject):
         :param descripcion: Una descripción sobre la naturaleza del pago
         """
 
-        kw = dict()
-        kw['amount'] = amount = Decimal(amount).quantize(dot01)
-        kw['day'] = day
-        kw['receipt'] = receipt
-        kw['loan'] = self
-        kw['deposito'] = deposito
-        kw['description'] = descripcion
+        kw = {'amount': Decimal(amount).quantize(dot01), 'day': day,
+              'receipt': receipt, 'loan': self, 'deposito': deposito,
+              'description': descripcion}
+        amount = kw['amount']
 
         # La cantidad a pagar es igual que la deuda del préstamo, por
         # lo tanto se considera la ultima cuota y no se cargaran intereses
-        if (self.debt == amount):
+        if self.debt == amount:
 
             self.last = kw['day']
             kw['capital'] = kw['amount']
@@ -1244,14 +1244,24 @@ class Loan(SQLObject):
 
         """Obtains the amount that was given to the affiliate in the check"""
 
-        return self.capital - sum(d.amount for d in self.deductions)
+        deduced = self.deductions.sum('amount')
+
+        if deduced is None:
+            deduced = Decimal()
+
+        return self.capital - deduced
 
     def total_deductions(self):
 
         """Muestra el total de las :class:`Deduction` efectuadas a este
         :class:`Loan`"""
 
-        return sum(d.amount for d in self.deductions)
+        deduced = self.deductions.sum('amount')
+
+        if deduced is None:
+            deduced = Decimal()
+
+        return deduced
 
     def remove(self):
 
