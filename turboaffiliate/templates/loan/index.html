@@ -231,6 +231,426 @@
                     </fieldset>
                 </form>
             </div>
+            <div class="col-md-6">
+                <form class="form-horizontal"
+                      action="${tg.url('/payed/payment')}">
+                    <fieldset>
+                        <legend>
+                            Pr&eacute;stamos por Periodo y Cotizacion - Pagados
+                        </legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Inicio:</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="start"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Fin</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="end"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Cotizaci&oacute;n:</label>
+
+                            <div class="controls col-md-7">
+                                <select name="cotizacion"
+                                        class="cotizaciones select form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit"
+                                   value="Buscar"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <form class="form-horizontal"
+                      action="${tg.url('/payed/period')}">
+                    <fieldset>
+                        <legend>Pr&eacute;stamos por Periodo - Pagados</legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Inicio:</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="first"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Fin</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="last"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit"
+                                   value="Buscar"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <form class="form-horizontal"
+                      action="${tg.url('day')}">
+                    <fieldset>
+                        <legend>
+                            Mostrar Pr&eacute;stamos de un D&iacute;a
+                        </legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">D&iacute;a:</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="day"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit"
+                                   value="Buscar"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <form class="form-horizontal"
+                      action="${tg.url('monthly')}">
+                    <fieldset>
+                        <legend>Reporte de Pr&eacute;stamos Otorgados</legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Inicio:</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="first"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Fin</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="last"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit"
+                                   value="Buscar"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <form class="form-horizontal"
+                      action="${tg.url('bypayment')}">
+                    <fieldset>
+                        <legend>
+                            Pr&eacute;stamos por Tipo de Cotizaci&oacute;n
+                        </legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Cotizaci&oacute;n:</label>
+
+                            <div class="controls col-md-7">
+                                <select name="cotizacion"
+                                        class="cotizaciones select form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit"
+                                   value="Buscar"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <form class="form-horizontal"
+                      action="${tg.url('liquid')}">
+                    <fieldset>
+                        <legend>
+                            Reporte de Liquidaci&oacute;n de Pr&eacute;stamos
+                        </legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Inicio:</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="start"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Fin</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="end"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit"
+                                   value="Buscar"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <form class="form-horizontal"
+                      action="${tg.url('byCapital')}">
+                    <fieldset>
+                        <legend>Reporte de Capital e Intereses</legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">D&iacute;a:</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="day"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit"
+                                   value="Buscar"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <form class="form-horizontal"
+                      action="${tg.url('resume')}">
+                    <fieldset>
+                        <legend>Resumen de Capital e Intereses por Periodo</legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Inicio:</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="start"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Fin</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="end"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit"
+                                   value="Buscar"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <form class="form-horizontal"
+                      action="${tg.url('pay/resume')}">
+                    <fieldset>
+                        <legend>Detalle de Pagos por Periodo</legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Inicio:</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="start"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Fin</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="end"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit"
+                                   value="Buscar"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <form class="form-horizontal"
+                      action="${tg.url('diverge')}">
+                    <fieldset>
+                        <legend>Divergencia de Pr&eacute;stamos</legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Cotizaci&oacute;n:</label>
+
+                            <div class="controls col-md-7">
+                                <select name="cotizacion"
+                                        class="cotizaciones select form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Inicio:</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="start"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Fin</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="end"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit"
+                                   value="Buscar"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <form class="form-horizontal"
+                      action="${tg.url('deducciones')}">
+                    <fieldset>
+                        <legend>Deducciones de Pr&eacute;stamos</legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Casa:</label>
+
+                            <div class="controls col-md-7">
+                                <select name="casa" class="select form-control">
+                                    <option py:for="casa in casas" value="${casa.id}">
+                                        ${casa.nombre}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Inicio:</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="start"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Fin</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="end"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit"
+                                   value="Buscar"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <form class="form-horizontal"
+                      action="${tg.url('paymentDate')}">
+                    <fieldset>
+                        <legend>
+                            Pr&eacute;stamos por Tipo de Cotizaci&oacute;n y Fecha
+                        </legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Cotizaci&oacute;n:</label>
+
+                            <div class="controls col-md-7">
+                                <select name="cotizacion"
+                                        class="cotizaciones select form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Inicio:</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="start"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Fin</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="end"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit"
+                                   value="Buscar"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <form class="form-horizontal"
+                      action="${tg.url('deduccionesDia')}">
+                    <fieldset>
+                        <legend>Deducciones de Pr&eacute;stamos Diarios</legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">D&iacute;a</label>
+
+                            <div class="controls col-md-7">
+                                <input class="form-control datepicker"
+                                       name="dia"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit"
+                                   value="Buscar"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <form class="form-horizontal"
+                      action="${tg.url('cotizacionDepto')}">
+                    <fieldset>
+                        <legend>
+                            Pr&eacute;stamos por Cotizaci&oacute;n y Departamento
+                        </legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Cotizaci&oacute;n:</label>
+                            <div class="controls col-md-7">
+                                <select name="cotizacion"
+                                        class="cotizaciones select form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Casa:</label>
+
+                            <div class="controls col-md-7">
+                                <select name="departamento"
+                                        class="departamento form-control select"></select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit"
+                                   value="Buscar"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
         </div>
     </div>
     <aside class="col-md-3">
@@ -245,328 +665,6 @@
             </li>
         </ul>
     </aside>
-</div>
-<div class="row">
-    <div class="col-md-9">
-        <form class="ui-widget-content ui-corner-all"
-              action="${tg.url('/payed/payment')}">
-            <fieldset>
-                <legend>Pr&eacute;stamos por Periodo y Cotizacion - Pagados
-                </legend>
-                <ul>
-                    <li>
-                        <label>Inicio:</label>
-                        <input name="start" class="datepicker"/>
-                    </li>
-                    <li>
-                        <label>Final:</label>
-                        <input name="end" class="datepicker"/>
-                    </li>
-                    <li>
-                        <label for="payment">Cotiza por:</label>
-                        <select name="payment">
-                            <option>Escalafon</option>
-                            <option>INPREMA</option>
-                            <option>UPN</option>
-                            <option>Ministerio</option>
-                            <option>Retirado</option>
-                        </select>
-                    </li>
-                    <li>
-                        <input type="submit" value="Ver"/>
-                    </li>
-                </ul>
-            </fieldset>
-        </form>
-        <form class="ui-widget-content ui-corner-all"
-              action="${tg.url('/payed/period')}">
-            <fieldset>
-                <legend>Pr&eacute;stamos por Periodo - Pagados</legend>
-                <ul>
-                    <li>
-                        <label>Inicio:</label>
-                        <input name="start" class="datepicker"/>
-                    </li>
-                    <li>
-                        <label>Final:</label>
-                        <input name="end" class="datepicker"/>
-                    </li>
-                    <li>
-                        <input type="submit" value="Ver"/>
-                    </li>
-                </ul>
-            </fieldset>
-        </form>
-        <form class="ui-widget-content ui-corner-all" action="${tg.url('day')}">
-            <fieldset>
-                <legend>Mostrar Pr&eacute;stamos de un D&iacute;a</legend>
-                <ul>
-                    <li>
-                        <label>D&iacute;a:</label>
-                        <input name="day" class="datepicker"/>
-                    </li>
-                    <li>
-                        <input type="submit" value="Buscar"/>
-                    </li>
-                </ul>
-            </fieldset>
-        </form>
-        <form class="ui-widget-content ui-corner-all"
-              action="${tg.url('monthly')}">
-            <fieldset>
-                <legend>Reporte de Pr&eacute;stamos Otorgados</legend>
-                <ul>
-                    <li>
-                        <label>Inicio:</label>
-                        <input name="start" class="datepicker"/>
-                    </li>
-                    <li>
-                        <label>Final:</label>
-                        <input name="end" class="datepicker"/>
-                    </li>
-                    <li>
-                        <input type="submit" value="Ver"/>
-                    </li>
-                </ul>
-            </fieldset>
-        </form>
-        <form class="ui-widget-content ui-corner-all"
-              action="${tg.url('bypayment')}">
-            <fieldset>
-                <legend>Pr&eacute;stamos por Tipo de Cotizaci&oacute;n</legend>
-                <ul>
-                    <li>
-                        <label for="payment">Cotiza por:</label>
-                        <select name="payment">
-                            <option>Escalafon</option>
-                            <option>INPREMA</option>
-                            <option>UPN</option>
-                            <option>Ministerio</option>
-                            <option>Retirado</option>
-                        </select>
-                    </li>
-                    <li>
-                        <input type="submit" value="Ver"/>
-                    </li>
-                </ul>
-            </fieldset>
-        </form>
-        <form class="ui-widget-content ui-corner-all"
-              action="${tg.url('liquid')}">
-            <fieldset>
-                <legend>Reporte de Liquidaci&oacute;n de Pr&eacute;stamos
-                </legend>
-                <ul>
-                    <li>
-                        <label>Inicio:</label>
-                        <input name="start" class="datepicker"/>
-                    </li>
-                    <li>
-                        <label>Final:</label>
-                        <input name="end" class="datepicker"/>
-                    </li>
-                    <li>
-                        <input type="submit" value="Ver"/>
-                    </li>
-                </ul>
-            </fieldset>
-        </form>
-        <form class="ui-widget-content ui-corner-all"
-              action="${tg.url('byCapital')}">
-            <fieldset>
-                <legend>Reporte de Capital e Intereses</legend>
-                <ul>
-                    <li>
-                        <label>D&iacute;a:</label>
-                        <input name="day" class="datepicker"/>
-                    </li>
-                    <li>
-                        <input type="submit" value="Ver"/>
-                    </li>
-                </ul>
-            </fieldset>
-        </form>
-        <form class="ui-widget-content ui-corner-all"
-              action="${tg.url('resume')}">
-            <fieldset>
-                <legend>Resumen de Capital e Intereses por Periodo</legend>
-                <ul>
-                    <li>
-                        <label>Inicio:</label>
-                        <input name="start" class="datepicker"/>
-                    </li>
-                    <li>
-                        <label>Final:</label>
-                        <input name="end" class="datepicker"/>
-                    </li>
-                    <li>
-                        <input type="submit" value="Ver"/>
-                    </li>
-                </ul>
-            </fieldset>
-        </form>
-        <form class="ui-widget-content ui-corner-all"
-              action="${tg.url('pay/resume')}">
-            <fieldset>
-                <legend>Detalle de Pagos por Periodo</legend>
-                <ul>
-                    <li>
-                        <label>Inicio:</label>
-                        <input name="start" class="datepicker"/>
-                    </li>
-                    <li>
-                        <label>Final:</label>
-                        <input name="end" class="datepicker"/>
-                    </li>
-                    <li>
-                        <input type="submit" value="Ver"/>
-                    </li>
-                </ul>
-            </fieldset>
-        </form>
-        <form class="ui-widget-content ui-corner-all"
-              action="${tg.url('diverge')}">
-            <fieldset>
-                <legend>Divergencia de Pr&eacute;stamos</legend>
-                <ul>
-                    <li>
-                        <label for="payment">Cotiza por:</label>
-                        <select name="payment">
-                            <option>Escalafon</option>
-                            <option>INPREMA</option>
-                            <option>UPN</option>
-                            <option>Ministerio</option>
-                            <option>Retirado</option>
-                        </select>
-                    </li>
-                    <li>
-                        <label>Inicio:</label>
-                        <input name="start"/>
-                    </li>
-                    <li>
-                        <label>Final:</label>
-                        <input name="end"/>
-                    </li>
-                    <li>
-                        <input type="submit" value="Ver"/>
-                    </li>
-                </ul>
-            </fieldset>
-        </form>
-        <form class="ui-widget-content ui-corner-all"
-              action="${tg.url('cotizacionDepto')}">
-            <fieldset>
-                <legend>Pr&eacute;stamos por Cotizaci&oacute;n y Departamento
-                </legend>
-                <ul>
-                    <li>
-                        <label for="cotizacion">Cotiza por:</label>
-                        <select name="cotizacion">
-                            <option>Escalafon</option>
-                            <option>INPREMA</option>
-                            <option>UPN</option>
-                            <option>Ministerio</option>
-                            <option>Retirado</option>
-                        </select>
-                    </li>
-                    <li>
-                        <label for="depto">Departamento:</label>
-                        <select name="depto">
-                            <option>Atlantida</option>
-                            <option>Choluteca</option>
-                            <option>Colon</option>
-                            <option>Comayagua</option>
-                            <option>Copan</option>
-                            <option>Cortes</option>
-                            <option>El Paraiso</option>
-                            <option>Francisco Morazan</option>
-                            <option>Gracias a Dios</option>
-                            <option>Intibuca</option>
-                            <option>Islas de la Bahia</option>
-                            <option>La Paz</option>
-                            <option>Lempira</option>
-                            <option>Olancho</option>
-                            <option>Ocotepeque</option>
-                            <option>Santa Barbara</option>
-                            <option>Valle</option>
-                            <option>Yoro</option>
-                        </select>
-                    </li>
-                    <li>
-                        <input type="submit" value="Mostrar"/>
-                    </li>
-                </ul>
-            </fieldset>
-        </form>
-        <form class="ui-widget-content ui-corner-all"
-              action="${tg.url('deducciones')}">
-            <fieldset>
-                <legend>Deducciones de Pr&eacute;stamos</legend>
-                <ul>
-                    <li>
-                        <label>Inicio:</label>
-                        <input name="start" class="datepicker"/>
-                    </li>
-                    <li>
-                        <label>Final:</label>
-                        <input name="end" class="datepicker"/>
-                    </li>
-                    <li>
-                        <label for="casa">Casa:</label>
-                        <select name="casa">
-                            <option py:for="casa in casas" value="${casa.id}">
-                                ${casa.nombre}
-                            </option>
-                        </select>
-                    </li>
-                    <li><input type="submit" value="Ver"/></li>
-                </ul>
-            </fieldset>
-        </form>
-        <form class="ui-widget-content ui-corner-all"
-              action="${tg.url('deduccionesDia')}">
-            <fieldset>
-                <legend>Deducciones de Pr&eacute;stamos Diarios</legend>
-                <ul>
-                    <li>
-                        <label>Inicio:</label>
-                        <input name="start" class="datepicker"/>
-                    </li>
-                    <li><input type="submit" value="Ver"/></li>
-                </ul>
-            </fieldset>
-        </form>
-        <form class="ui-widget-content ui-corner-all"
-              action="${tg.url('paymentDate')}">
-            <fieldset>
-                <legend>Pr&eacute;stamos por Tipo de Cotizaci&oacute;n y Fecha
-                </legend>
-                <ul>
-                    <li>
-                        <label for="payment">Cotiza por:</label>
-                        <select name="payment">
-                            <option>Escalafon</option>
-                            <option>INPREMA</option>
-                            <option>UPN</option>
-                            <option>Ministerio</option>
-                            <option>Retirado</option>
-                        </select>
-                    </li>
-                    <li>
-                        <label>Inicio:</label>
-                        <input name="start" class="datepicker"/>
-                    </li>
-                    <li>
-                        <label>Final:</label>
-                        <input name="end" class="datepicker"/>
-                    </li>
-                    <li>
-                        <input type="submit" value="Ver"/>
-                    </li>
-                </ul>
-            </fieldset>
-        </form>
-    </div>
 </div>
 </body>
 </html>
