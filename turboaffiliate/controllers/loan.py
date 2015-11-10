@@ -669,43 +669,42 @@ class Loan(controllers.Controller):
 
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.list')
-    @validate(validators=dict(payment=validators.UnicodeString()))
-    def bypayment(self, payment):
+    @validate(validators=dict(cotizacion=validators.Int()))
+    def bypayment(self, cotizacion):
 
-        affiliates = model.Affiliate.selectBy(payment=payment)
+        cotizacion = model.Cotizacion.get(cotizacion)
+        affiliates = model.Affiliate.selectBy(cotizacion=cotizacion)
+        prestamos = affiliates.throughTo.loans
 
-        loans = list()
-        for a in affiliates:
-            loans.extend(l for l in a.loans)
+        debt = prestamos.sum('debt')
+        capital = prestamos.sum('capital')
 
-        debt = sum(l.debt for l in loans)
-        capital = sum(l.capital for l in loans)
+        count = prestamos.count()
 
-        count = len(loans)
-
-        return dict(loans=loans, count=count, debt=debt, capital=capital,
-                    payment=payment)
+        return dict(loans=prestamos, count=count, debt=debt, capital=capital,
+                    payment=cotizacion.nombre)
 
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.list')
     @validate(
         validators=dict(start=validators.DateTimeConverter(format='%d/%m/%Y'),
                         end=validators.DateTimeConverter(format='%d/%m/%Y'),
-                        payment=validators.String()))
-    def paymentDate(self, payment, start, end):
+                        cotizacion=validators.Int()))
+    def paymentDate(self, cotizacion, start, end):
 
-        loans = model.Loan.select(AND(model.Loan.q.startDate >= start,
-                                      model.Loan.q.startDate <= end))
+        cotizacion = model.Cotizacion.get(cotizacion)
+        affiliates = model.Affiliate.selectBy(cotizacion=cotizacion)
+        loans = affiliates.throughTo.loans.filter(
+            AND(model.Loan.q.startDate >= start,
+                model.Loan.q.startDate <= end))
 
-        loans = [l for l in loans if l.affiliate.payment == payment]
+        debt = loans.sum('debt')
+        capital = loans.sum('capital')
 
-        debt = sum(l.debt for l in loans)
-        capital = sum(l.capital for l in loans)
-
-        count = len(loans)
+        count = loans.count()
 
         return dict(loans=loans, count=count, debt=debt, capital=capital,
-                    payment=payment)
+                    payment=cotizacion.nombre)
 
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.loan.liquid')
@@ -717,10 +716,9 @@ class Loan(controllers.Controller):
         loans = model.Loan.select(AND(model.Loan.q.startDate >= start,
                                       model.Loan.q.startDate <= end))
         debt = sum(l.net() for l in loans)
-        capital = sum(l.capital for l in loans)
-        count = loans.count()
 
-        return dict(loans=loans, count=count, debt=debt, capital=capital,
+        return dict(loans=loans, count=loans.count(), debt=debt,
+                    capital=loans.sum('capital'),
                     payment=u"")
 
     @identity.require(identity.All(identity.in_any_group('admin', 'operarios'),
