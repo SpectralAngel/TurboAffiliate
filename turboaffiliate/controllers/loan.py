@@ -751,9 +751,9 @@ class Loan(controllers.Controller):
 
         pays = model.Pay.selectBy(day=day)
 
-        capital = sum(pay.capital for pay in pays)
+        capital = pays.sum('capital')
 
-        interest = sum(pay.interest for pay in pays)
+        interest = pays.sum('interest')
 
         return dict(pays=pays, capital=capital, interest=interest)
 
@@ -767,7 +767,7 @@ class Loan(controllers.Controller):
         """Crea un reporte de capital e intereses de todos los préstamos,
         incluidos los pagados"""
 
-        pagos = list()
+        pagos = []
         pays = model.Pay.select(AND(model.Pay.q.day >= start,
                                     model.Pay.q.day <= end))
         pagos.extend(pays)

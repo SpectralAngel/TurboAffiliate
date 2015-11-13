@@ -427,29 +427,18 @@ class Affiliate(SQLObject):
 
         return loans
 
-    def populate(self, year):
-
-        kw = dict()
-        for n in range(1, 13):
-            kw["month{0}".format(n)] = False
-        return kw
-
     def complete(self, year):
 
         """Agrega un año de aportaciones al estado de cuenta del afiliado"""
 
-        kw = dict()
-        kw['affiliate'] = self
-        kw['year'] = year
+        kw = {'affiliate': self, 'year': year}
         CuotaTable(**kw)
 
     def complete_compliment(self, year):
 
         """Agrega un año de aportaciones al estado de cuenta del afiliado"""
 
-        kw = dict()
-        kw['affiliate'] = self
-        kw['year'] = year
+        kw = {'affiliate': self, 'year': year}
         AutoSeguro(**kw)
 
     def get_delayed(self):
@@ -469,9 +458,7 @@ class Affiliate(SQLObject):
             if year < self.joined.year:
                 return None
 
-            kw = dict()
-            kw['affiliate'] = self
-            kw['year'] = year
+            kw = {'affiliate': self, 'year': year}
             cuota = CuotaTable(**kw)
         return cuota
 
@@ -485,9 +472,7 @@ class Affiliate(SQLObject):
             if year < self.joined.year:
                 return None
 
-            kw = dict()
-            kw['affiliate'] = self
-            kw['year'] = year
+            kw = {'affiliate': self, 'year': year}
             cuota = AutoSeguro(**kw)
         return cuota
 
@@ -1220,7 +1205,7 @@ class Loan(SQLObject):
         ordenados en cuanto al valor de su monto en capital e intereses"""
 
         pagos = map(Pay.calibrar, self.pays)
-        fechas = list()
+        fechas = []
         result = False
         self.debt = self.capital
         for pago in pagos:
