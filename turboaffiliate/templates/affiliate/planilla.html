@@ -34,7 +34,7 @@
                         <div class="col-md-12">
                             <form class="form-horizontal postear" action="${tg.url('/affiliate/cuota/pagoPlanilla')}">
                                 <fieldset>
-                                    <legend>Aportaciones ${locale.currency(afiliado.get_cuota(), True, True)}</legend>
+                                    <legend>Aportaciones ${locale.currency(afiliado.get_cuota(day), True, True)}</legend>
                                     <input name="afiliado" value="${afiliado.id}" type="hidden" />
                                     <input name="day" value="${day.strftime('%d/%m/%Y')}" type="hidden" />
                                     <input name="cuenta" value="${aportaciones}" type="hidden" />
