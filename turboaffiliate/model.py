@@ -681,6 +681,9 @@ class CuotaTable(SQLObject):
         else:
             total = os.sum('amount')
 
+        if total is None:
+            total = Zero
+
         return total
 
     def pago_mes(self, mes, periodo=None):
