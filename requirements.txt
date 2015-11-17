@@ -1,0 +1,7 @@
+Genshi
+MySQL-python
+sqlalchemy
+SQLObject
+TurboGears==1.5.1
+-f http://peak.telecommunity.com/snapshots/PEAK-Rules-0.5a1.dev-r2700.tar.gz#egg=PEAK-Rules
+-e git+https://github.com/ifwe/elixir.git#egg=Elixir
