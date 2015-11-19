@@ -20,6 +20,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 from turbogears import controllers, expose, identity, redirect, url
+from turbogears.i18n.tg_gettext import gettext as _
 # from turbogears.toolbox.catwalk import CatWalk
 from cherrypy import request, response
 # from turboaffiliate import model
@@ -28,17 +29,17 @@ from turboaffiliate.controllers import (affiliate, loan, obligation, report,
                                         solicitud, reintegro, asamblea, json,
                                         deposito)
 
+
 # import logging
 # log = logging.getLogger("turboaffiliate.controllers")
 
 class Root(controllers.RootController):
-    
     affiliate = affiliate.Affiliate()
     loan = loan.Loan()
     report = report.Report()
     obligation = obligation.Obligation()
     account = account.Account()
-    #catwalk = CatWalk(model)
+    # catwalk = CatWalk(model)
     payed = payed.PayedLoan()
     logger = logger.Logger()
     elecciones = elecciones.Elecciones()
@@ -47,46 +48,46 @@ class Root(controllers.RootController):
     asamblea = asamblea.Asamblea()
     json = json.JSON()
     deposito = deposito.Deposito()
-    
+
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.welcome")
     def index(self):
-        
+
         return dict()
-    
+
     @expose(template="turboaffiliate.templates.login")
     def login(self, forward_url=None, previous_url=None, *args, **kw):
         if not identity.current.anonymous \
-            and identity.was_login_attempted() \
-            and not identity.get_identity_errors():
+                and identity.was_login_attempted() \
+                and not identity.get_identity_errors():
             raise redirect(forward_url)
-        
-        forward_url=None
+
+        forward_url = None
         previous_url = url(request.path_info)
-        
+
         if identity.was_login_attempted():
-            msg=_("The credentials you supplied were not correct or "
-                "did not grant access to this resource.")
+            msg = _("The credentials you supplied were not correct or "
+                    "did not grant access to this resource.")
         elif identity.get_identity_errors():
-            msg=_("You must provide your credentials before accessing "
-                  "this resource.")
+            msg = _("You must provide your credentials before accessing "
+                    "this resource.")
         else:
-            msg=_("Please log in.")
-            forward_url= request.headers.get("Referer", "/")
-        
-        response.status=403
+            msg = _("Please log in.")
+            forward_url = request.headers.get("Referer", "/")
+
+        response.status = 403
         return dict(message=msg, previous_url=previous_url, logging_in=True,
                     original_parameters=request.params,
                     forward_url=forward_url)
-    
+
     @expose()
     def logout(self):
         identity.current.logout()
         raise redirect("/")
-    
+
     @expose()
     def afiliados(self):
-        
+
         """Workaround para 404 not Found al utilizar /afiliados como raiz"""
-        
+
         raise redirect("/")
