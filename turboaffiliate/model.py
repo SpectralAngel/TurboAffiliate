@@ -286,11 +286,11 @@ class Affiliate(SQLObject):
     cuotaTables = MultipleJoin("CuotaTable", orderBy='year')
     autoseguros = MultipleJoin("AutoSeguro", orderBy='year')
     """Historial de aportaciones"""
-    loans = MultipleJoin("Loan", orderBy='startDate')
+    loans = SQLMultipleJoin("Loan", orderBy='startDate')
     """Préstamos activos"""
-    payedLoans = MultipleJoin("PayedLoan", orderBy='startDate')
+    payedLoans = SQLMultipleJoin("PayedLoan", orderBy='startDate')
     """Préstamos cancelados"""
-    extras = MultipleJoin("Extra")
+    extras = SQLMultipleJoin("Extra")
     """Deducciones extra a efectuar"""
     deduced = MultipleJoin("Deduced", orderBy=['-year', '-month'])
     """Deducciones efectuadas por planilla en un mes y año"""
@@ -349,14 +349,14 @@ class Affiliate(SQLObject):
         if loan_only:
             return self.get_prestamo()
 
-        total = sum(e.amount for e in self.extras)
-        # loans = sum(l.get_payment() for l in self.loans)
-        # reintegros = sum(r.monto for r in self.reintegros if not r.pagado)
+        extras = self.extras.sum('amount')
 
-        for reintegro in self.reintegros:
-            if reintegro.pagado:
-                break
-            total += reintegro.monto
+        if extras is None:
+            extras = Zero
+
+        total = extras
+        reintegros = sum(r.monto for r in self.reintegros if not r.pagado)
+        total += reintegros
 
         if bank:
             total += self.get_bank_cuota(day)
@@ -419,7 +419,7 @@ class Affiliate(SQLObject):
 
     def get_prestamo(self):
 
-        loans = Decimal(0)
+        loans = Zero
         # Cobrar solo el primer préstamo
         for loan in self.loans:
             loans = loan.get_payment()
