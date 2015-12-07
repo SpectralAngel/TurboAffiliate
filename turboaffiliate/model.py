@@ -380,13 +380,22 @@ class Affiliate(SQLObject):
 
         obligation = Zero
         if self.cotizacion.normal:
-            obligation += obligations.sum('amount')
+            o = obligations.sum('amount')
+            if o is None:
+                o = Decimal()
+            obligation += o
 
         if self.cotizacion.jubilados:
-            obligation += obligations.sum('inprema')
+            o = obligations.sum('inprema')
+            if o is None:
+                o = Decimal()
+            obligation += o
 
         if self.cotizacion.alternate:
-            obligation += obligations.sum('alternate')
+            o = obligations.sum('alternate')
+            if o is None:
+                o = Decimal()
+            obligation += o
 
         return obligation
 
