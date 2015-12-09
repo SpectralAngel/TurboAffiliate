@@ -36,6 +36,7 @@
                     <li>Cuenta: ${afiliado.cuenta}</li>
                     <li>Departamento: ${afiliado.departamento.nombre}</li>
                     <li>Municipio: ${afiliado.municipio.nombre}</li>
+                    <li>Tel&eacute;fono: ${afiliado.telefono}</li>
                 </ul>
                 <div class="form-actions">
                     <input py:if="not deshabilitado" class="btn btn-primary" type="submit" value="Inscribir" />
@@ -62,6 +63,12 @@
                     <label class="control-label col-md-4">Cuenta:</label>
                     <div class="controls col-md-7">
                         <input name="cuenta" class="form-control" value="${afiliado.cuenta}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Telefono:</label>
+                    <div class="controls col-md-7">
+                        <input name="telefono" class="form-control" value="${afiliado.telefono}"/>
                     </div>
                 </div>
                 <div class="form-group">
