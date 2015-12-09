@@ -226,7 +226,7 @@ class Asamblea(controllers.Controller):
                     departamentos=model.Departamento.select(),
                     bancos=model.Banco.select())
 
-    @identity.require(identity.All(identity.in_any_group('admin', 'junta'),
+    @identity.require(identity.All(identity.in_any_group('admin'),
                                    identity.not_anonymous()))
     @expose()
     @validate(validators=dict(departamento=validators.Int(),
