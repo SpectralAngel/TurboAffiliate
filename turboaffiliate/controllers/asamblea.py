@@ -349,10 +349,11 @@ class Asamblea(controllers.Controller):
                               banco=validators.Int(),
                               departamento=validators.Int(),
                               cuenta=validators.UnicodeString(),
+                              telefono=validators.UnicodeString(),
                               asamblea=validators.Int(),
                               municipio=validators.Int()))
     def corregir(self, afiliado, asamblea, departamento, banco, cuenta,
-                 municipio):
+                 municipio, telefono):
         afiliado = model.Affiliate.get(afiliado)
         asamblea = model.Asamblea.get(asamblea)
 
@@ -368,6 +369,7 @@ class Asamblea(controllers.Controller):
         banco = model.Banco.get(banco)
         afiliado.banco = banco.id
         afiliado.cuenta = cuenta
+        afiliado.phone = telefono
 
         kw = {'afiliado': afiliado, 'asamblea': asamblea,
               'viatico': model.Viatico.selectBy(asamblea=asamblea,
