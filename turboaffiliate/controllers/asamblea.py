@@ -21,11 +21,9 @@
 
 from decimal import Decimal
 from datetime import date
-
 from turbogears import (controllers, identity, expose, validate, validators,
                         redirect, flash)
 from sqlobject.sqlbuilder import *
-
 from turboaffiliate import model
 from turboaffiliate.controllers.affiliate import log
 
@@ -322,7 +320,6 @@ class Asamblea(controllers.Controller):
 
         asamblea = model.Asamblea.get(asamblea)
 
-        kw = dict()
         afiliado = model.Affiliate.get(afiliado)
 
         log(identity.current.user,
@@ -330,11 +327,11 @@ class Asamblea(controllers.Controller):
                 afiliado.id,
                 asamblea.id), afiliado)
 
-        kw['afiliado'] = afiliado
-        kw['asamblea'] = asamblea
-        kw['viatico'] = model.Viatico.selectBy(asamblea=asamblea,
-                                               municipio=afiliado.municipio).limit(
-            1).getOne()
+        kw = {'afiliado': afiliado, 'asamblea': asamblea,
+              'viatico': model.Viatico.selectBy(
+                  asamblea=asamblea,
+                  municipio=afiliado.municipio
+              ).limit(1).getOne()}
 
         model.Inscripcion(**kw)
 
