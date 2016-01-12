@@ -1,112 +1,130 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="../../master.html" />
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../../master.html"/>
 <head>
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-  <title>TurboAffiliate &bull; Asambleas</title>
-  <script type="text/javascript">
-    $('document').ready(function()
-    {
-      $('#depto-inscripcion').change();
-    });
-  </script>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"
+          py:replace="''"/>
+    <title>TurboAffiliate &bull; Asambleas</title>
+    <script type="text/javascript">
+        $('document').ready(function () {
+            $('#depto-inscripcion').change();
+        });
+    </script>
 </head>
 <body>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('agregar')}">
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <form class="form-horizontal" role="form" action="${tg.url('agregar')}">
+                <fieldset>
+                    <legend>Registrar Viaticos a un Municipio</legend>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Departamento:</label>
+                        <div class="controls col-md-7">
+                            <select id="depto-inscripcion" class="select form-control"
+                                    onchange="JSON.municipio('${tg.url('/json')}', $('#depto-inscripcion' + ' option:selected').val(), '#ins-municipios')">
+                                <option value="${d.id}" py:for="d in departamentos">
+                                    ${d.nombre}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <ol>
+                        <li>
+                            <label>Asamblea:</label>
+                            <select name="asamblea">
+                                <option value="${a.id}" py:for="a in asambleas">
+                                    ${a.id} - ${a.nombre}
+                                </option>
+                            </select>
+                        </li>
+                        <li>
+                            <label for="municipio">Municipio:</label>
+                            <select name="municipio" class="municipio" id="ins-municipios">
+                            </select>
+                        </li>
+                        <li>
+                            <label for="monto">Monto</label>
+                            <input name="monto"/>
+                        </li>
+                        <li>
+                            <label for="transporte">Transporte</label>
+                            <input name="transporte"/>
+                        </li>
+                        <li>
+                            <label for="previo">D&iacute;a Previo</label>
+                            <input name="previo"/>
+                        </li>
+                        <li>
+                            <label for="posterior">Posterior</label>
+                            <input name="posterior"/>
+                        </li>
+                        <li><input type="submit" value="Agregar"/></li>
+                    </ol>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+<form class="ui-widget-content ui-corner-all"
+      action="${tg.url('agregarDepto')}">
     <fieldset>
-      <legend>Registrar Viaticos a un Municipio</legend>
-      <ol>
-        <li>
-          <label>Asamblea:</label>
-          <select name="asamblea">
-            <option value="${a.id}" py:for="a in asambleas">
-              ${a.id} - ${a.nombre}
-            </option>
-          </select>
-        </li>
-        <li>
-          <label>Departamento:</label>
-          <select id="depto-inscripcion" onchange="JSON.municipio('${tg.url('/json')}', $('#depto-inscripcion' + ' option:selected').val(), '#ins-municipios')">
-            <option value="${d.id}" py:for="d in departamentos">${d.nombre}</option>
-          </select>
-        </li>
-        <li>
-          <label for="municipio">Municipio:</label>
-          <select name="municipio" class="municipio" id="ins-municipios">
-          </select>
-        </li>
-        <li>
-          <label for="monto">Monto</label>
-          <input name="monto" />
-        </li>
-        <li>
-          <label for="transporte">Transporte</label>
-          <input name="transporte" />
-        </li>
-        <li>
-          <label for="previo">D&iacute;a Previo</label>
-          <input name="previo" />
-        </li>
-        <li>
-          <label for="posterior">Posterior</label>
-          <input name="posterior" />
-        </li>
-        <li><input type="submit" value="Agregar" /></li>
-      </ol>
+        <legend>Registrar Viaticos a un Departamento</legend>
+        <ol>
+            <li>
+                <label>Asamblea:</label>
+                <select name="asamblea">
+                    <option value="${a.id}" py:for="a in asambleas">
+                        ${a.id} - ${a.nombre}
+                    </option>
+                </select>
+            </li>
+            <li>
+                <label>Departamento:</label>
+                <select id="depto-inscripcion" name="departamento">
+                    <option value="${d.id}" py:for="d in departamentos">
+                        ${d.nombre}
+                    </option>
+                </select>
+            </li>
+            <li>
+                <label for="monto">Monto</label>
+                <input name="monto"/>
+            </li>
+            <li>
+                <label for="transporte">Transporte</label>
+                <input name="transporte"/>
+            </li>
+            <li>
+                <label for="previo">D&iacute;a Previo</label>
+                <input name="previo"/>
+            </li>
+            <li>
+                <label for="posterior">Posterior</label>
+                <input name="posterior"/>
+            </li>
+            <li><input type="submit" value="Agregar"/></li>
+        </ol>
     </fieldset>
-  </form><form class="ui-widget-content ui-corner-all" action="${tg.url('agregarDepto')}">
+</form>
+<form class="ui-widget-content ui-corner-all" action="${tg.url('asamblea')}">
     <fieldset>
-      <legend>Registrar Viaticos a un Departamento</legend>
-      <ol>
-        <li>
-          <label>Asamblea:</label>
-          <select name="asamblea">
-            <option value="${a.id}" py:for="a in asambleas">
-              ${a.id} - ${a.nombre}
-            </option>
-          </select>
-        </li>
-        <li>
-          <label>Departamento:</label>
-          <select id="depto-inscripcion" name="departamento">
-            <option value="${d.id}" py:for="d in departamentos">${d.nombre}</option>
-          </select>
-        </li>
-        <li>
-          <label for="monto">Monto</label>
-          <input name="monto" />
-        </li>
-        <li>
-          <label for="transporte">Transporte</label>
-          <input name="transporte" />
-        </li>
-        <li>
-          <label for="previo">D&iacute;a Previo</label>
-          <input name="previo" />
-        </li>
-        <li>
-          <label for="posterior">Posterior</label>
-          <input name="posterior" />
-        </li>
-        <li><input type="submit" value="Agregar" /></li>
-      </ol>
+        <legend>Mostrar los Vi&aacute;ticos para una asamblea</legend>
+        <ol>
+            <li>
+                <label>Asamblea:</label>
+                <select name="asamblea">
+                    <option value="${a.id}" py:for="a in asambleas">
+                        ${a.id} - ${a.nombre}
+                    </option>
+                </select>
+            </li>
+            <li><input type="submit" value="Mostrar"/></li>
+        </ol>
     </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('asamblea')}">
-    <fieldset>
-      <legend>Mostrar los Vi&aacute;ticos para una asamblea</legend>
-      <ol>
-        <li>
-          <label>Asamblea:</label>
-          <select name="asamblea">
-            <option value="${a.id}" py:for="a in asambleas">
-              ${a.id} - ${a.nombre}
-            </option>
-          </select>
-        </li>
-        <li><input type="submit" value="Mostrar" /></li>
-      </ol>
-    </fieldset>
-  </form>
+</form>
 </body>
 </html>

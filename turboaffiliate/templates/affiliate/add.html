@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<?python import locale ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html"/>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"
+          py:replace="''"/>
+    <title>TurboAffiliate &bull; Afiliados Agregar Afiliado</title>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h1>Agregar Afiliado</h1>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <form class="editar form-horizontal" action="${tg.url('/affiliate/save')}" method="post">
+            <div class="row">
+            <fieldset class="col-md-6">
+                <legend>Información Personal</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Identidad:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="cardID" maxlength="15" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Nombres:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="firstName" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Apellidos:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="lastName" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Sexo:</label>
+                    <div class="controls col-md-7">
+                        <select name="gender" class="form-control select">
+                            <option value="F">Femenino</option>
+                            <option value="M">Masculino</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Lugar de Nacimiento:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="birthPlace" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Fecha de Nacimiento:</label>
+                    <div class="controls col-md-7">
+                        <input name="birthday" class="datepicker form-control"/>
+                    </div>
+                </div>
+                <legend>Lugar de Residencia</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Departamento:</label>
+                    <div class="controls col-md-7">
+                        <select name="departamento" class="select form-control" id="agregarDepartamento"
+                                onchange="JSON.municipio('${tg.url('/json')}', $(this).val(), '#agregarMunicipios')">
+                            <option py:for="d in departamentos" value="${d.id}">
+                                ${d.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Municipio:</label>
+                    <div class="controls col-md-7">
+                        <select name="municipio" class="municipio select form-control" id="agregarMunicipios">
+
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="col-md-6">
+                <legend>Informaci&oacute;n de Contacto</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Tel&eacute;fono:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="phone" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Email:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="email" />
+                    </div>
+                </div>
+                <legend>Informaci&oacute;n de Cotizaci&oacute;n</legend>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Cotiza por:</label>
+                    <div class="controls col-md-7">
+                        <select name="cotizacion" class="cotizaciones select form-control">
+
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Banco:</label>
+                    <div class="controls col-md-7">
+                        <select name="banco" class="form-control select">
+                            <option py:for="b in bancos" value="${b.id}">${b.nombre}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Cuenta:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="cuenta" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Escalafon:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="escalafon" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Instituto:</label>
+                    <div class="controls col-md-7">
+                        <input class="form-control" name="school"  />
+                    </div>
+                </div>
+            </fieldset>
+            </div>
+            <div class="form-actions">
+                <input class="btn btn-primary" type="submit" value="Guardar" />
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

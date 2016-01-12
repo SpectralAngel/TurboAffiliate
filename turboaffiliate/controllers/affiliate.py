@@ -110,6 +110,12 @@ class Affiliate(controllers.Controller):
 
         return self.default(affiliate)
 
+    @expose(template='turboaffiliate.templates.affiliate.add')
+    def add(self):
+
+        return dict(departamentos=model.Departamento.select(),
+                    bancos=model.Banco.select())
+
     @error_handler(error)
     @identity.require(identity.not_anonymous())
     @expose(template='turboaffiliate.templates.affiliate.autorizacion')
