@@ -55,6 +55,12 @@ class Root(controllers.RootController):
 
         return dict()
 
+    @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.welcome")
+    def afiliados(self):
+
+        return dict()
+
     @expose(template="turboaffiliate.templates.login")
     def login(self, forward_url=None, previous_url=None, *args, **kw):
         if not identity.current.anonymous \
