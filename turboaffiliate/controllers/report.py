@@ -49,8 +49,8 @@ class Report(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.post")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(
-        min=1,
-        max=12)))
+            min=1,
+            max=12)))
     def postReport(self, year, month):
 
         """Muestra el reporte de ingresos por los diferentes cargos en un mes
@@ -140,8 +140,8 @@ class Report(controllers.Controller):
         cotizacion = model.Cotizacion.get(cotizacion)
         afiliados = model.Affiliate.selectBy(cotizacion=cotizacion)
         deducciones = afiliados.throughTo.deduced.filter(AND(
-            model.Deduced.q.year == year,
-            model.Deduced.q.month == month))
+                model.Deduced.q.year == year,
+                model.Deduced.q.month == month))
         cuentas = OrderedDict()
 
         for deduccion in deducciones:
@@ -251,14 +251,14 @@ class Report(controllers.Controller):
         cotizacion = model.Cotizacion.get(1)
         afiliados = model.Affiliate.selectBy(cotizacion=cotizacion,
                                              departamento=departamento)
-        filiales = dict()
+        filiales = {}
 
         for afiliado in afiliados:
             if afiliado.get_month(year, month):
                 if afiliado.school in filiales:
                     filiales[afiliado.school].append(afiliado)
                 else:
-                    filiales[afiliado.school] = list()
+                    filiales[afiliado.school] = []
                     filiales[afiliado.school].append(afiliado)
 
         return dict(filiales=filiales, departamento=departamento)
@@ -267,7 +267,7 @@ class Report(controllers.Controller):
     @expose(template="turboaffiliate.templates.report.planilla")
     @validate(validators=dict(cotizacion=validators.Int(),
                               day=validators.DateTimeConverter(
-                                  format='%d/%m/%Y')))
+                                      format='%d/%m/%Y')))
     def planilla(self, cotizacion, day):
 
         cotizacion = model.Cotizacion.get(cotizacion)
@@ -294,17 +294,24 @@ class Report(controllers.Controller):
         deducciones = model.DeduccionBancaria.selectBy(banco=banco, year=year,
                                                        month=month)
         if reporte is None:
+            reporte = model.BankReport(banco=banco, year=year, month=month)
             for deduccion in deducciones:
 
                 if deduccion.account in cuentas:
                     cuentas[deduccion.account] += deduccion.amount
                 else:
                     cuentas[deduccion.account] = deduccion.amount
+
+            for cuenta in cuentas:
+                report_account = model.BankAccount(
+                        account=cuenta,
+                        amount=cuentas[cuenta],
+                        bankReport=reporte)
         else:
             for cuenta in reporte.bankAccounts:
                 cuentas[cuenta.account] = cuenta.amount
 
-        total = sum(cuentas[c] for c in cuentas)
+        total = reporte.total()
 
         return dict(banco=banco, month=month, year=year, cuentas=cuentas,
                     total=total)
@@ -372,9 +379,9 @@ class Report(controllers.Controller):
         account = model.Account.get(account)
         afiliados = model.Affiliate.selectBy(cotizacion=cotizacion)
         deduced = afiliados.throughTo.deduced.filter(AND(
-            model.Deduced.q.year == year,
-            model.Deduced.q.account == account,
-            model.Deduced.q.month == month))
+                model.Deduced.q.year == year,
+                model.Deduced.q.account == account,
+                model.Deduced.q.month == month))
         total = sum(d.amount for d in deduced)
 
         return dict(deduced=deduced, account=account, month=months[month],
@@ -415,14 +422,14 @@ class Report(controllers.Controller):
 
         return dict(affiliates=affiliates,
                     show="Cotizan por {0} y pagaron un mes en {1}".format(
-                        payment,
-                        year),
+                            payment,
+                            year),
                     count=len(affiliates))
 
     @expose(template="turboaffiliate.templates.affiliate.show")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(
-        min=1,
-        max=12)))
+            min=1,
+            max=12)))
     def aportaron(self, year, month):
 
         query = "cuota_table.month%s = true AND cuota_table.year = %s" % (
@@ -435,8 +442,8 @@ class Report(controllers.Controller):
 
     @expose(template="turboaffiliate.templates.affiliate.show")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(
-        min=1,
-        max=12)))
+            min=1,
+            max=12)))
     def noAportaron(self, year, month):
         query = "cuota_table.month%s = 0 AND cuota_table.year = %s" % (
             month, year)
@@ -448,8 +455,8 @@ class Report(controllers.Controller):
 
     @expose(template="turboaffiliate.templates.affiliate.show")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(
-        min=1,
-        max=12)))
+            min=1,
+            max=12)))
     def conTabla(self, year, month):
 
         cuotas = model.CuotaTable.selectBy(year=year)
@@ -488,9 +495,9 @@ class Report(controllers.Controller):
         account = model.Account.get(account)
         afiliados = model.Affiliate.selectBy(cotizacion=cotizacion)
         deduced = afiliados.throughTo.deduced.filter(AND(
-            model.Deduced.q.year == year,
-            model.Deduced.q.account == account,
-            model.Deduced.q.month == month))
+                model.Deduced.q.year == year,
+                model.Deduced.q.account == account,
+                model.Deduced.q.month == month))
 
         distribute = defaultdict(Decimal)
         for d in deduced:

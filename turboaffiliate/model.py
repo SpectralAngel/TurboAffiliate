@@ -409,9 +409,13 @@ class Affiliate(SQLObject):
         obligation = Zero
         if self.banco_completo:
             if not self.cotizacion.jubilados:
-                obligation += obligation.sum('amount_compliment')
+                obligation += obligation.sum('amount_compliment') + obligation.sum(
+                        'alternate'
+                )
             if self.cotizacion.jubilados:
-                obligation += obligation.sum('inprema')
+                obligation += obligation.sum('inprema') + obligation.sum(
+                        'inprema_compliment'
+                )
             if not self.cotizacion.alternate:
                 obligation += obligations.sum('amount')
         else:
@@ -419,7 +423,7 @@ class Affiliate(SQLObject):
                 obligation += obligations.sum('amount')
 
             if self.cotizacion.jubilados:
-                obligation = obligations.sum('inprema')
+                obligation = obligations.sum('inprema_compliment')
 
             if self.cotizacion.alternate:
                 obligation = obligations.sum('amount_compliment')
@@ -1706,11 +1710,11 @@ class OtherAccount(SQLObject):
 class BankReport(SQLObject):
     year = IntCol()
     month = IntCol()
-    bankAccounts = MultipleJoin("BankAccount")
+    bankAccounts = SQLMultipleJoin("BankAccount")
     banco = ForeignKey("Banco")
 
     def total(self):
-        return sum(r.amount for r in self.otherAccounts)
+        return self.bankAccounts.sum('amount')
 
 
 class BankAccount(SQLObject):
@@ -1720,7 +1724,6 @@ class BankAccount(SQLObject):
 
     def add(self, amount):
         self.amount += amount
-        self.quantity += 1
 
 
 class AuxiliarPrestamo(object):
