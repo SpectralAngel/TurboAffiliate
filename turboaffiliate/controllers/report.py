@@ -44,6 +44,7 @@ class Report(controllers.Controller):
     def index(self):
         return dict(accounts=model.Account.select(),
                     bancos=model.Banco.select(),
+                    cotizaciones=model.Cotizacion.select(),
                     departamentos=model.Departamento.select())
 
     @identity.require(identity.not_anonymous())
@@ -81,19 +82,18 @@ class Report(controllers.Controller):
 
         loans = model.Loan.select()
         loans = [loan for loan in loans if loan.affiliate.payment == payment]
-        loand = dict()
-        loand['amount'] = sum(loan.get_payment() for loan in loans)
-        loand['count'] = len(loans)
+        loand = {'amount': sum(loan.get_payment() for loan in loans),
+                 'count': len(loans)}
 
-        kw = dict()
+        kw = {}
         total = Decimal(0)
         accounts = model.Account.select()
         for account in accounts:
-            kw[account] = dict()
+            kw[account] = {}
 
             li = [extra for extra in account.extras
                   if extra.affiliate.payment == payment and
-                  extra.affiliate.active == True]
+                  extra.affiliate.active is True]
 
             kw[account]['amount'] = sum(e.amount for e in li)
             kw[account]['count'] = len(li)
@@ -104,9 +104,8 @@ class Report(controllers.Controller):
                 del kw[account]
 
         reintegros = model.Reintegro.selectBy(pagado=False)
-        reintegro = dict()
-        reintegro['count'] = reintegros.count()
-        reintegro['amount'] = sum(r.monto for r in reintegros)
+        reintegro = {'count': reintegros.count(),
+                     'amount': sum(r.monto for r in reintegros)}
         total += reintegro['amount']
 
         return dict(deductions=kw, count=affiliates.count(),
@@ -162,7 +161,7 @@ class Report(controllers.Controller):
     def filiales(self, year, month):
 
         affiliates = model.Affiliate.selectBy(payment="Escalafon")
-        filiales = dict()
+        filiales = {}
 
         for affiliate in affiliates:
             if affiliate.get_month(year, month):
@@ -193,7 +192,7 @@ class Report(controllers.Controller):
         cotizacion = model.Cotizacion.get(1)
         afiliados = model.Affiliate.selectBy(cotizacion=cotizacion,
                                              departamento=departamento)
-        filiales = dict()
+        filiales = {}
 
         def iniciar_colegio(afiliado):
             filiales[afiliado.school] = defaultdict(int)
@@ -226,7 +225,7 @@ class Report(controllers.Controller):
         departamento = model.Departamento.get(departamento)
         afiliados = model.Affiliate.selectBy(school=instituto,
                                              departamento=departamento)
-        listado = list()
+        listado = []
         for afiliado in afiliados:
 
             colegiacion = model.CuotaTable.selectBy(affiliate=afiliado,
@@ -336,6 +335,25 @@ class Report(controllers.Controller):
                     deducciones=deducciones)
 
     @identity.require(identity.not_anonymous())
+    @expose(template="turboaffiliate.templates.report.paymentDetail")
+    @validate(validators=dict(payment=validators.Int(), year=validators.Int(),
+                              month=validators.Int(min=1, max=12)))
+    def paymentDetail(self, payment, month, year):
+
+        cotizacion = model.Cotizacion.get(payment)
+        deducciones = []
+        afiliados = []
+        deduced = model.Deduced.selectBy(cotizacion=cotizacion, year=year,
+                                         month=month)
+        for d in deduced:
+            if d.affiliate not in afiliados:
+                deducciones.append(d)
+                afiliados.append(d.affiliate)
+
+        return dict(cotizacion=cotizacion, month=month, year=year,
+                    deducciones=deducciones)
+
+    @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.deduced")
     @validate(validators=dict(account=validators.Int(), year=validators.Int(),
                               month=validators.Int(min=1, max=12)))
@@ -414,7 +432,7 @@ class Report(controllers.Controller):
 
         tables = model.CuotaTable.selectBy(year=year)
 
-        affiliates = list()
+        affiliates = []
         for table in tables:
 
             if not table.empty() and table.affiliate.payment == payment:

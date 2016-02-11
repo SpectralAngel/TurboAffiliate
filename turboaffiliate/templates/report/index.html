@@ -1,9 +1,13 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="../master.html" />
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="../master.html"/>
 <head>
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-  <title>TurboAffiliate &bull; Volantes y Deducciones</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"
+          py:replace="''"/>
+    <title>TurboAffiliate &bull; Volantes y Deducciones</title>
 </head>
 <body>
 <div class="row">
@@ -15,23 +19,26 @@
 </div>
 <div class="row">
     <div class="col-md-4">
-        <form class="form-horizontal" role="form" action="${tg.url('postReport')}">
+        <form class="form-horizontal" role="form"
+              action="${tg.url('postReport')}">
             <fieldset>
-                <legend>Ver Reporte de Ingresos Mediante Escalaf&oacute;n</legend>
+                <legend>Ver Reporte de Ingresos Mediante Escalaf&oacute;n
+                </legend>
                 <div class="form-group">
                     <label class="control-label col-md-4">A&ntilde;o:</label>
                     <div class="controls col-md-7">
-                        <input name="year" class="form-control" />
+                        <input name="year" class="form-control"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-md-4">Mes:</label>
                     <div class="controls col-md-7">
-                        <input name="month" class="form-control" />
+                        <input name="month" class="form-control"/>
                     </div>
                 </div>
                 <div class="form-actions">
-                    <input class="btn btn-primary" type="submit" value="Mostrar" />
+                    <input class="btn btn-primary" type="submit"
+                           value="Mostrar"/>
                 </div>
             </fieldset>
         </form>
@@ -43,54 +50,96 @@
                 <div class="form-group">
                     <label class="control-label col-md-4">Cotizaci&oacute;n:</label>
                     <div class="controls col-md-7">
-                        <select name="cotizacion" class="cotizaciones select form-control" />
+                        <select name="cotizacion"
+                                class="cotizaciones select form-control"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-md-4">A&ntilde;o:</label>
                     <div class="controls col-md-7">
-                        <input name="year" class="form-control" />
+                        <input name="year" class="form-control"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-md-4">Mes:</label>
                     <div class="controls col-md-7">
-                        <input name="month" class="form-control" />
+                        <input name="month" class="form-control"/>
                     </div>
                 </div>
                 <div class="form-actions">
-                    <input class="btn btn-primary" type="submit" value="Mostrar" />
+                    <input class="btn btn-primary" type="submit"
+                           value="Mostrar"/>
                 </div>
             </fieldset>
         </form>
     </div>
     <div class="col-md-4">
-        <form class="form-horizontal" role="form" action="${tg.url('cotizacion')}">
+        <form class="form-horizontal" role="form"
+              action="${tg.url('cotizacion')}">
             <fieldset>
                 <legend>Ver Reporte de Ingresos por Cotizaci&oacute;n</legend>
                 <div class="form-group">
                     <label class="control-label col-md-4">Cotizaci&oacute;n:</label>
                     <div class="controls col-md-7">
-                        <select name="cotizacion" class="cotizaciones select form-control" />
+                        <select name="cotizacion"
+                                class="cotizaciones select form-control"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-md-4">A&ntilde;o:</label>
                     <div class="controls col-md-7">
-                        <input name="year" class="form-control" />
+                        <input name="year" class="form-control"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-md-4">Mes:</label>
                     <div class="controls col-md-7">
-                        <input name="month" class="form-control" />
+                        <input name="month" class="form-control"/>
                     </div>
                 </div>
                 <div class="form-actions">
-                    <input class="btn btn-primary" type="submit" value="Mostrar" />
+                    <input class="btn btn-primary" type="submit"
+                           value="Mostrar"/>
                 </div>
             </fieldset>
         </form>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <form class="form-horizontal" role="form"
+                  action="${tg.url('paymentDetail')}">
+                <fieldset>
+                    <legend>Ver Detalle de Ingresos por Cotizacion</legend>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Banco:</label>
+                        <div class="controls col-md-7">
+                            <select name="payment" class="form-control select">
+                                <option py:for="cotizacion in cotizaciones"
+                                        value="${cotizacion.id}">
+                                    ${cotizacion.nombre}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">A&ntilde;o:</label>
+                        <div class="controls col-md-7">
+                            <input name="year" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Mes:</label>
+                        <div class="controls col-md-7">
+                            <input name="month" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <input class="btn btn-primary" type="submit"
+                               value="Mostrar"/>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
     </div>
 </div>
 <div class="row">
@@ -104,82 +153,103 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <form class="form-horizontal" role="form" action="${tg.url('banco')}">
+                <form class="form-horizontal" role="form"
+                      action="${tg.url('banco')}">
                     <fieldset>
                         <legend>Ver Reporte de Ingresos por Banco</legend>
                         <div class="form-group">
                             <label class="control-label col-md-4">Banco:</label>
                             <div class="controls col-md-7">
-                                <select name="banco" class="form-control select">
-                                    <option py:for="banco in bancos" value="${banco.id}" py:content="banco.nombre" />
+                                <select name="banco"
+                                        class="form-control select">
+                                    <option py:for="banco in bancos"
+                                            value="${banco.id}">
+                                        ${banco.nombre}
+                                    </option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">A&ntilde;o:</label>
                             <div class="controls col-md-7">
-                                <input name="year" class="form-control" />
+                                <input name="year" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">Mes:</label>
                             <div class="controls col-md-7">
-                                <input name="month" class="form-control" />
+                                <input name="month" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-actions">
-                            <input class="btn btn-primary" type="submit" value="Mostrar" />
+                            <input class="btn btn-primary" type="submit"
+                                   value="Mostrar"/>
                         </div>
                     </fieldset>
                 </form>
             </div>
             <div class="col-md-4">
-                <form class="form-horizontal" role="form" action="${tg.url('deducedBank')}">
+                <form class="form-horizontal" role="form"
+                      action="${tg.url('deducedBank')}">
                     <fieldset>
-                        <legend>Ver Reporte de Ingresos por Banco y Cuenta</legend>
+                        <legend>Ver Reporte de Ingresos por Banco y Cuenta
+                        </legend>
                         <div class="form-group">
                             <label class="control-label col-md-4">Cuenta:</label>
                             <div class="controls col-md-7">
-                                <select name="account" class="form-control select">
-                                    <option py:for="account in accounts" value="${account.id}">${account.id} - ${account.name}</option>
+                                <select name="account"
+                                        class="form-control select">
+                                    <option py:for="account in accounts"
+                                            value="${account.id}">
+                                        ${account.id} - ${account.name}
+                                    </option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">Banco:</label>
                             <div class="controls col-md-7">
-                                <select name="banco" class="form-control select">
-                                    <option py:for="banco in bancos" value="${banco.id}" py:content="banco.nombre" />
+                                <select name="banco"
+                                        class="form-control select">
+                                    <option py:for="banco in bancos"
+                                            value="${banco.id}">
+                                        ${banco.nombre}
+                                    </option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">A&ntilde;o:</label>
                             <div class="controls col-md-7">
-                                <input name="year" class="form-control" />
+                                <input name="year" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">Mes:</label>
                             <div class="controls col-md-7">
-                                <input name="month" class="form-control" />
+                                <input name="month" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-actions">
-                            <input class="btn btn-primary" type="submit" value="Mostrar" />
+                            <input class="btn btn-primary" type="submit"
+                                   value="Mostrar"/>
                         </div>
                     </fieldset>
                 </form>
             </div>
             <div class="col-md-4">
-                <form class="form-horizontal" role="form" action="${tg.url('distribution')}">
+                <form class="form-horizontal" role="form"
+                      action="${tg.url('distribution')}">
                     <fieldset>
-                        <legend>Ver Distribuci&oacute;n de Ingresos por Banco</legend>
+                        <legend>Ver Distribuci&oacute;n de Ingresos por Banco
+                        </legend>
                         <div class="form-group">
                             <label class="control-label col-md-4">Cuenta:</label>
                             <div class="controls col-md-7">
-                                <select name="account" class="form-control select">
-                                    <option py:for="account in accounts" value="${account.id}">
+                                <select name="account"
+                                        class="form-control select">
+                                    <option py:for="account in accounts"
+                                            value="${account.id}">
                                         ${account.id} - ${account.name}
                                     </option>
                                 </select>
@@ -189,24 +259,28 @@
                             <label class="control-label col-md-4">Banco:</label>
                             <div class="controls col-md-7">
                                 <select name="bank" class="form-control select">
-                                    <option py:for="banco in bancos" value="${banco.id}" py:content="banco.nombre" />
+                                    <option py:for="banco in bancos"
+                                            value="${banco.id}">
+                                        ${banco.nombre}
+                                    </option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">A&ntilde;o:</label>
                             <div class="controls col-md-7">
-                                <input name="year" class="form-control" />
+                                <input name="year" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">Mes:</label>
                             <div class="controls col-md-7">
-                                <input name="month" class="form-control" />
+                                <input name="month" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-actions">
-                            <input class="btn btn-primary" type="submit" value="Mostrar" />
+                            <input class="btn btn-primary" type="submit"
+                                   value="Mostrar"/>
                         </div>
                     </fieldset>
                 </form>
@@ -214,31 +288,37 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <form class="form-horizontal" role="form" action="${tg.url('bancoDetail')}">
+                <form class="form-horizontal" role="form"
+                      action="${tg.url('bancoDetail')}">
                     <fieldset>
                         <legend>Ver Detalle de Ingresos por Banco</legend>
                         <div class="form-group">
                             <label class="control-label col-md-4">Banco:</label>
                             <div class="controls col-md-7">
-                                <select name="banco" class="form-control select">
-                                    <option py:for="banco in bancos" value="${banco.id}" py:content="banco.nombre" />
+                                <select name="banco"
+                                        class="form-control select">
+                                    <option py:for="banco in bancos"
+                                            value="${banco.id}">
+                                        ${banco.nombre}
+                                    </option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">A&ntilde;o:</label>
                             <div class="controls col-md-7">
-                                <input name="year" class="form-control" />
+                                <input name="year" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">Mes:</label>
                             <div class="controls col-md-7">
-                                <input name="month" class="form-control" />
+                                <input name="month" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-actions">
-                            <input class="btn btn-primary" type="submit" value="Mostrar" />
+                            <input class="btn btn-primary" type="submit"
+                                   value="Mostrar"/>
                         </div>
                     </fieldset>
                 </form>
@@ -257,34 +337,41 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <form class="form-horizontal" role="form" action="${tg.url('extra')}">
+                <form class="form-horizontal" role="form"
+                      action="${tg.url('extra')}">
                     <fieldset>
                         <legend>Mostrar Cuentas por Cobrar</legend>
                         <div class="form-group">
                             <label class="control-label col-md-4">Cuenta:</label>
                             <div class="controls col-md-7">
-                                <select name="account" class="form-control select">
-                                    <option py:for="account in accounts" value="${account.id}">
+                                <select name="account"
+                                        class="form-control select">
+                                    <option py:for="account in accounts"
+                                            value="${account.id}">
                                         ${account.id} - ${account.name}
                                     </option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-actions">
-                            <input class="btn btn-primary" type="submit" value="Mostrar" />
+                            <input class="btn btn-primary" type="submit"
+                                   value="Mostrar"/>
                         </div>
                     </fieldset>
                 </form>
             </div>
             <div class="col-md-4">
-                <form class="form-horizontal" role="form" action="${tg.url('deduced')}">
+                <form class="form-horizontal" role="form"
+                      action="${tg.url('deduced')}">
                     <fieldset>
                         <legend>Mostrar Cobros Efectuados por Cuenta</legend>
                         <div class="form-group">
                             <label class="control-label col-md-4">Cuenta:</label>
                             <div class="controls col-md-7">
-                                <select name="account" class="form-control select">
-                                    <option py:for="account in accounts" value="${account.id}">
+                                <select name="account"
+                                        class="form-control select">
+                                    <option py:for="account in accounts"
+                                            value="${account.id}">
                                         ${account.id} - ${account.name}
                                     </option>
                                 </select>
@@ -293,36 +380,41 @@
                         <div class="form-group">
                             <label class="control-label col-md-4">A&ntilde;o:</label>
                             <div class="controls col-md-7">
-                                <input name="year" class="form-control" />
+                                <input name="year" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">Mes:</label>
                             <div class="controls col-md-7">
-                                <input name="month" class="form-control" />
+                                <input name="month" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-actions">
-                            <input class="btn btn-primary" type="submit" value="Mostrar" />
+                            <input class="btn btn-primary" type="submit"
+                                   value="Mostrar"/>
                         </div>
                     </fieldset>
                 </form>
             </div>
             <div class="col-md-4">
-                <form class="form-horizontal" role="form" action="${tg.url('deducedPayment')}">
+                <form class="form-horizontal" role="form"
+                      action="${tg.url('deducedPayment')}">
                     <fieldset>
                         <legend>Mostrar Cobros Efectuados por Cuenta y Cotizaci&oacute;n</legend>
                         <div class="form-group">
                             <label class="control-label col-md-4">Cotizaci&oacute;n:</label>
                             <div class="controls col-md-7">
-                                <select name="cotizacion" class="cotizaciones select form-control"></select>
+                                <select name="cotizacion"
+                                        class="cotizaciones select form-control"></select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">Cuenta:</label>
                             <div class="controls col-md-7">
-                                <select name="account" class="form-control select">
-                                    <option py:for="account in accounts" value="${account.id}">
+                                <select name="account"
+                                        class="form-control select">
+                                    <option py:for="account in accounts"
+                                            value="${account.id}">
                                         ${account.id} - ${account.name}
                                     </option>
                                 </select>
@@ -331,17 +423,18 @@
                         <div class="form-group">
                             <label class="control-label col-md-4">A&ntilde;o:</label>
                             <div class="controls col-md-7">
-                                <input name="year" class="form-control" />
+                                <input name="year" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">Mes:</label>
                             <div class="controls col-md-7">
-                                <input name="month" class="form-control" />
+                                <input name="month" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-actions">
-                            <input class="btn btn-primary" type="submit" value="Mostrar" />
+                            <input class="btn btn-primary" type="submit"
+                                   value="Mostrar"/>
                         </div>
                     </fieldset>
                 </form>
@@ -360,14 +453,20 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <form class="form-horizontal" role="form" action="${tg.url('excedenteBank')}">
+                <form class="form-horizontal" role="form"
+                      action="${tg.url('excedenteBank')}">
                     <fieldset>
-                        <legend>Ver Distribuci&oacute;n de Excedente por Banco</legend>
+                        <legend>Ver Distribuci&oacute;n de Excedente por Banco
+                        </legend>
                         <div class="form-group">
                             <label class="control-label col-md-4">Cuenta:</label>
                             <div class="controls col-md-7">
-                                <select name="account" class="form-control select">
-                                    <option py:for="account in accounts" value="${account.id}">${account.id} - ${account.name}</option>
+                                <select name="account"
+                                        class="form-control select">
+                                    <option py:for="account in accounts"
+                                            value="${account.id}">${account.id}
+                                        - ${account.name}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -375,95 +474,116 @@
                             <label class="control-label col-md-4">Banco:</label>
                             <div class="controls col-md-7">
                                 <select name="bank" class="form-control select">
-                                    <option py:for="banco in bancos" value="${banco.id}" py:content="banco.nombre" />
+                                    <option py:for="banco in bancos"
+                                            value="${banco.id}">
+                                        ${banco.nombre}
+                                    </option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">A&ntilde;o:</label>
                             <div class="controls col-md-7">
-                                <input name="year" class="form-control" />
+                                <input name="year" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">Mes:</label>
                             <div class="controls col-md-7">
-                                <input name="month" class="form-control" />
+                                <input name="month" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-actions">
-                            <input class="btn btn-primary" type="submit" value="Mostrar" />
+                            <input class="btn btn-primary" type="submit"
+                                   value="Mostrar"/>
                         </div>
                     </fieldset>
                 </form>
-            </div><div class="col-md-4">
-            <form class="form-horizontal" role="form" action="${tg.url('excedenteDeducciones')}">
-                <fieldset>
-                    <legend>Ver Distribuci&oacute;n de Excedente por Cotizaci&oacute;n</legend>
-                    <div class="form-group">
-                        <label class="control-label col-md-4">Cuenta:</label>
-                        <div class="controls col-md-7">
-                            <select name="account" class="form-control select">
-                                <option py:for="account in accounts" value="${account.id}">${account.id} - ${account.name}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-4">Cotizaci&oacute;n:</label>
-                        <div class="controls col-md-7">
-                            <select name="cotizacion" class="cotizaciones select form-control" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-4">A&ntilde;o:</label>
-                        <div class="controls col-md-7">
-                            <input name="year" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-4">Mes:</label>
-                        <div class="controls col-md-7">
-                            <input name="month" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="form-actions">
-                        <input class="btn btn-primary" type="submit" value="Mostrar" />
-                    </div>
-                </fieldset>
-            </form>
-        </div>
+            </div>
             <div class="col-md-4">
-                <form class="form-horizontal" role="form" action="${tg.url('filialesResumen')}">
+                <form class="form-horizontal" role="form"
+                      action="${tg.url('excedenteDeducciones')}">
+                    <fieldset>
+                        <legend>Ver Distribuci&oacute;n de Excedente por
+                            Cotizaci&oacute;n
+                        </legend>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Cuenta:</label>
+                            <div class="controls col-md-7">
+                                <select name="account"
+                                        class="form-control select">
+                                    <option py:for="account in accounts"
+                                            value="${account.id}">${account.id}
+                                        - ${account.name}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Cotizaci&oacute;n:</label>
+                            <div class="controls col-md-7">
+                                <select name="cotizacion"
+                                        class="cotizaciones select form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">A&ntilde;o:</label>
+                            <div class="controls col-md-7">
+                                <input name="year" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Mes:</label>
+                            <div class="controls col-md-7">
+                                <input name="month" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input class="btn btn-primary" type="submit"
+                                   value="Mostrar"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <form class="form-horizontal" role="form"
+                      action="${tg.url('filialesResumen')}">
                     <fieldset>
                         <legend>Mostrar Resumen de Filiales</legend>
                         <div class="form-group">
                             <label class="control-label col-md-4">Departamento:</label>
                             <div class="controls col-md-7">
-                                <select name="departamento" class="form-control select">
-                                    <option py:for="d in departamentos" value="${d.id}">${d.nombre}</option>
+                                <select name="departamento"
+                                        class="form-control select">
+                                    <option py:for="d in departamentos"
+                                            value="${d.id}">${d.nombre}
+                                    </option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-4">A&ntilde;o:</label>
                             <div class="controls col-md-7">
-                                <input name="year" class="form-control" />
+                                <input name="year" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-4">Mes Inicial:</label>
+                            <label class="control-label col-md-4">Mes
+                                Inicial:</label>
                             <div class="controls col-md-7">
-                                <input name="start" class="form-control" />
+                                <input name="start" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-4">Mes Final:</label>
+                            <label class="control-label col-md-4">Mes
+                                Final:</label>
                             <div class="controls col-md-7">
-                                <input name="end" class="form-control" />
+                                <input name="end" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-actions">
-                            <input class="btn btn-primary" type="submit" value="Mostrar Resumen" />
+                            <input class="btn btn-primary" type="submit"
+                                   value="Mostrar Resumen"/>
                         </div>
                     </fieldset>
                 </form>
@@ -472,119 +592,126 @@
     </div>
 </div>
 <div class="row">
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('filialesDept')}">
-    <fieldset>
-      <legend>Mostrar Reporte de Filiales</legend>
-      <ul>
-        <li>
-          <label for="departamento">Departamento:</label>
-          <select name="departamento">
-            <option py:for="d in departamentos" value="${d.id}">${d.nombre}</option>
-          </select>
-        </li>
-        <li>
-          <label for="month">Mes:</label>
-          <input name="month" />
-        </li>
-        <li>
-          <label for="year">A&ntilde;o:</label>
-          <input name="year" />
-        </li>
-        <li>
-          <input type="submit" value="Mostrar Reporte" />
-        </li>
-      </ul>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('aportaciones')}">
-    <fieldset>
-      <legend>Mostrar Afiliados que Aportaron</legend>
-      <ul>
-        <li>
-          <label for="month">Mes:</label>
-          <input name="month" />
-        </li>
-        <li>
-          <label for="year">A&ntilde;o:</label>
-          <input name="year" />
-        </li>
-        <li>
-          <input type="submit" value="Mostrar Reporte" />
-        </li>
-      </ul>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('empty')}">
-    <fieldset>
-      <legend>Afiliados que cotizaron al menos una vez</legend>
-      <ul>
-        <li>
-          <label for="payment">Cotiza por:</label>
-          <select name="payment">
-            <option>Escalafon</option>
-            <option>INPREMA</option>
-            <option>UPN</option>
-            <option>Ventanilla</option>
-          </select>
-        </li>
-        <li>
-          <label>A&ntilde;o:</label>
-          <input name="year" />
-        </li>
-        <li>
-          <input type="submit" value="Buscar" />
-        </li>
-      </ul>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('aportaron')}">
-    <fieldset>
-      <legend>Mostrar Afiliados que Aportaron</legend>
-      <ul>
-        <li>
-          <label for="month">Mes:</label>
-          <input name="month" />
-        </li>
-        <li>
-          <label for="year">A&ntilde;o:</label>
-          <input name="year" />
-        </li>
-        <li><input type="submit" value="Mostrar Reporte" /></li>
-      </ul>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('noAportaron')}">
-    <fieldset>
-      <legend>Mostrar Afiliados que no Aportaron</legend>
-      <ul>
-        <li>
-          <label for="month">Mes:</label>
-          <input name="month" />
-        </li>
-        <li>
-          <label for="year">A&ntilde;o:</label>
-          <input name="year" />
-        </li>
-        <li><input type="submit" value="Mostrar Reporte" /></li>
-      </ul>
-    </fieldset>
-  </form>
-  <form class="ui-widget-content ui-corner-all" action="${tg.url('conTabla')}">
-    <fieldset>
-      <legend>Reporte Aseguradora</legend>
-      <ul>
-        <li>
-          <label for="month">Mes:</label>
-          <input name="month" />
-        </li>
-        <li>
-          <label for="year">A&ntilde;o:</label>
-          <input name="year" />
-        </li>
-        <li><input type="submit" value="Mostrar Reporte" /></li>
-      </ul>
-    </fieldset>
-  </form>
+    <form class="ui-widget-content ui-corner-all"
+          action="${tg.url('filialesDept')}">
+        <fieldset>
+            <legend>Mostrar Reporte de Filiales</legend>
+            <ul>
+                <li>
+                    <label for="departamento">Departamento:</label>
+                    <select name="departamento">
+                        <option py:for="d in departamentos" value="${d.id}">
+                            ${d.nombre}
+                        </option>
+                    </select>
+                </li>
+                <li>
+                    <label for="month">Mes:</label>
+                    <input name="month"/>
+                </li>
+                <li>
+                    <label for="year">A&ntilde;o:</label>
+                    <input name="year"/>
+                </li>
+                <li>
+                    <input type="submit" value="Mostrar Reporte"/>
+                </li>
+            </ul>
+        </fieldset>
+    </form>
+    <form class="ui-widget-content ui-corner-all"
+          action="${tg.url('aportaciones')}">
+        <fieldset>
+            <legend>Mostrar Afiliados que Aportaron</legend>
+            <ul>
+                <li>
+                    <label for="month">Mes:</label>
+                    <input name="month"/>
+                </li>
+                <li>
+                    <label for="year">A&ntilde;o:</label>
+                    <input name="year"/>
+                </li>
+                <li>
+                    <input type="submit" value="Mostrar Reporte"/>
+                </li>
+            </ul>
+        </fieldset>
+    </form>
+    <form class="ui-widget-content ui-corner-all" action="${tg.url('empty')}">
+        <fieldset>
+            <legend>Afiliados que cotizaron al menos una vez</legend>
+            <ul>
+                <li>
+                    <label for="payment">Cotiza por:</label>
+                    <select name="payment">
+                        <option>Escalafon</option>
+                        <option>INPREMA</option>
+                        <option>UPN</option>
+                        <option>Ventanilla</option>
+                    </select>
+                </li>
+                <li>
+                    <label>A&ntilde;o:</label>
+                    <input name="year"/>
+                </li>
+                <li>
+                    <input type="submit" value="Buscar"/>
+                </li>
+            </ul>
+        </fieldset>
+    </form>
+    <form class="ui-widget-content ui-corner-all"
+          action="${tg.url('aportaron')}">
+        <fieldset>
+            <legend>Mostrar Afiliados que Aportaron</legend>
+            <ul>
+                <li>
+                    <label for="month">Mes:</label>
+                    <input name="month"/>
+                </li>
+                <li>
+                    <label for="year">A&ntilde;o:</label>
+                    <input name="year"/>
+                </li>
+                <li><input type="submit" value="Mostrar Reporte"/></li>
+            </ul>
+        </fieldset>
+    </form>
+    <form class="ui-widget-content ui-corner-all"
+          action="${tg.url('noAportaron')}">
+        <fieldset>
+            <legend>Mostrar Afiliados que no Aportaron</legend>
+            <ul>
+                <li>
+                    <label for="month">Mes:</label>
+                    <input name="month"/>
+                </li>
+                <li>
+                    <label for="year">A&ntilde;o:</label>
+                    <input name="year"/>
+                </li>
+                <li><input type="submit" value="Mostrar Reporte"/></li>
+            </ul>
+        </fieldset>
+    </form>
+    <form class="ui-widget-content ui-corner-all"
+          action="${tg.url('conTabla')}">
+        <fieldset>
+            <legend>Reporte Aseguradora</legend>
+            <ul>
+                <li>
+                    <label for="month">Mes:</label>
+                    <input name="month"/>
+                </li>
+                <li>
+                    <label for="year">A&ntilde;o:</label>
+                    <input name="year"/>
+                </li>
+                <li><input type="submit" value="Mostrar Reporte"/></li>
+            </ul>
+        </fieldset>
+    </form>
 </div>
 </body>
 </html>

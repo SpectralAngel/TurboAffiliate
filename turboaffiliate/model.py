@@ -95,6 +95,7 @@ class User(SQLObject):
     """
     Reasonably basic User definition. Probably would want additional attributes.
     """
+
     # names like "Group", "Order" and "User" are reserved words in SQL
     # so we set the name to something safe for SQL
     class sqlmeta:
@@ -409,7 +410,8 @@ class Affiliate(SQLObject):
         obligation = Zero
         if self.banco_completo:
             if not self.cotizacion.jubilados:
-                obligation += obligation.sum('amount_compliment') + obligation.sum(
+                obligation += obligation.sum(
+                    'amount_compliment') + obligation.sum(
                         'alternate'
                 )
             if self.cotizacion.jubilados:
@@ -1236,7 +1238,7 @@ class Loan(SQLObject):
             pagos = filter((lambda p: not p[0] in fechas), pagos)
             for pago in pagos:
                 comment = "Sobrante de {0} del pago efectuado el {1}".format(
-                    pago[1], pago[0].strftime('%d de %B de %Y'))
+                        pago[1], pago[0].strftime('%d de %B de %Y'))
 
                 Observacion(affiliate=self.affiliate, texto=comment,
                             fecha=date.today())
@@ -1381,7 +1383,6 @@ class Loan(SQLObject):
         pagado = self.pays.sum('capital')
 
         if pagado is None:
-
             return Decimal()
 
         return pagado
@@ -1392,7 +1393,6 @@ class Loan(SQLObject):
         pagado = self.pays.sum('amount')
 
         if pagado is None:
-
             return Decimal()
 
         return pagado
@@ -1402,7 +1402,6 @@ class Loan(SQLObject):
         interes = self.pays.sum('interest')
 
         if interes is None:
-
             return Decimal()
 
         return interes
@@ -1685,6 +1684,14 @@ class Deduced(SQLObject):
     month = IntCol(default=date.today().month)
     year = IntCol(default=date.today().year)
 
+    def consolidar(self):
+        deducciones = Deduced.selectBy(affiliate=self.affiliate,
+                                       month=self.month,
+                                       year=self.year,
+                                       cotizacion=self.cotizacion)
+
+        return sum(d.amount for d in deducciones)
+
 
 class OtherReport(SQLObject):
     year = IntCol()
@@ -1816,8 +1823,8 @@ class Reintegro(SQLObject):
         kw = {'amount': self.monto, 'affiliate': self.affiliate,
               'account': self.cuenta, 'month': dia.month, 'year': dia.year,
               'detail': "Reintegro {0} por {0}".format(
-                  self.emision.strftime('%d/%m/%Y'),
-                  self.motivo)}
+                      self.emision.strftime('%d/%m/%Y'),
+                      self.motivo)}
 
         Deduced(**kw)
 
@@ -1829,8 +1836,8 @@ class Reintegro(SQLObject):
               'banco': self.affiliate.get_banco(), 'account': self.cuenta,
               'month': dia.month, 'year': dia.year, 'day': cobro,
               'detail': "Reintegro {0} por {0}".format(
-                  self.emision.strftime('%d/%m/%Y'),
-                  self.motivo)}
+                      self.emision.strftime('%d/%m/%Y'),
+                      self.motivo)}
 
         DeduccionBancaria(**kw)
 
