@@ -90,7 +90,7 @@
 </div>
 <div class="row">
     <div class="col-md-6"
-         py:if="affiliate.payment == 'INPREMA' and affiliate.jubilated == None">
+         py:if="affiliate.cotizacion.jubilated and affiliate.jubilated == None">
         <div class="bg-danger" style="padding: 0.5em;">
             <span class="glyphicon glyphicon-warning-sign"></span>
             <strong>Este afiliado requiere actualizar sus datos de jubilaci&oacute;n</strong>
@@ -152,7 +152,7 @@
             </li>
             <li><strong>Banco: </strong>${affiliate.get_banco().nombre}</li>
             <li><strong>Cuenta: </strong>${affiliate.cuenta}</li>
-            <li py:if="affiliate.cotizacion.nombre == 'INPREMA' and affiliate.jubilated != None">
+            <li py:if="affiliate.cotizacion.jubilated and affiliate.jubilated != None">
                 <strong>Jubilado desde
                     ${affiliate.jubilated.strftime('%d de %B de %Y')}</strong>
             </li>
