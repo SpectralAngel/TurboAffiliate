@@ -152,7 +152,7 @@
             </li>
             <li><strong>Banco: </strong>${affiliate.get_banco().nombre}</li>
             <li><strong>Cuenta: </strong>${affiliate.cuenta}</li>
-            <li py:if="affiliate.cotizacion.jubilated and affiliate.jubilated != None">
+            <li py:if="affiliate.cotizacion.jubilados and affiliate.jubilated != None">
                 <strong>Jubilado desde
                     ${affiliate.jubilated.strftime('%d de %B de %Y')}</strong>
             </li>
