@@ -144,7 +144,8 @@ class Deduced(controllers.Controller):
     @validate(
         validators=dict(affiliate=validators.Int(), account=validators.Int(),
                         amount=validators.String(), year=validators.Int(),
-                        month=validators.Int(), banco=validators.Int()))
+                        month=validators.Int(), banco=validators.Int(),
+                        day=validators.DateTimeConverter(format='%d/%m/%Y')))
     def saveBanco(self, affiliate, account, banco, **kw):
         kw['afiliado'] = model.Affiliate.get(affiliate)
         kw['amount'] = Decimal(kw['amount'].replace(',', ''))
