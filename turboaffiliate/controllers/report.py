@@ -291,7 +291,7 @@ class Report(controllers.Controller):
         except model.SQLObjectNotFound:
             reporte = None
 
-        start = date(1, month, year)
+        start = date(year, month, 1)
         end = start.replace(day=calendar.monthrange(year, month)[1])
         deducciones = model.DeduccionBancaria.select(AND(
             model.DeduccionBancaria.q.account == banco,
@@ -332,7 +332,7 @@ class Report(controllers.Controller):
         deducciones = []
         afiliados = []
 
-        start = date(1, month, year)
+        start = date(year, month, 1)
         end = start.replace(day=calendar.monthrange(year, month)[1])
         deduced = model.DeduccionBancaria.select(AND(
             model.DeduccionBancaria.q.account == banco,
@@ -391,7 +391,7 @@ class Report(controllers.Controller):
 
         account = model.Account.get(account)
         banco = model.Banco.get(banco)
-        start = date(1, month, year)
+        start = date(year, month, 1)
         end = start.replace(day=calendar.monthrange(year, month)[1])
         deduced = model.DeduccionBancaria.select(AND(
             model.DeduccionBancaria.q.account == account,
