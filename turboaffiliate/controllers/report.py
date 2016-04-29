@@ -294,7 +294,7 @@ class Report(controllers.Controller):
         start = date(year, month, 1)
         end = start.replace(day=calendar.monthrange(year, month)[1])
         deducciones = model.DeduccionBancaria.select(AND(
-            model.DeduccionBancaria.q.account == banco,
+            model.DeduccionBancaria.q.banco == banco,
             model.DeduccionBancaria.q.day >= start,
             model.DeduccionBancaria.q.day <= end,
         ))
@@ -302,7 +302,6 @@ class Report(controllers.Controller):
         if reporte is None:
             reporte = model.BankReport(banco=banco, year=year, month=month)
             for deduccion in deducciones:
-
                 if deduccion.account in cuentas:
                     cuentas[deduccion.account] += deduccion.amount
                 else:
@@ -335,7 +334,7 @@ class Report(controllers.Controller):
         start = date(year, month, 1)
         end = start.replace(day=calendar.monthrange(year, month)[1])
         deduced = model.DeduccionBancaria.select(AND(
-            model.DeduccionBancaria.q.account == banco,
+            model.DeduccionBancaria.q.banco == banco,
             model.DeduccionBancaria.q.day >= start,
             model.DeduccionBancaria.q.day <= end,
         ))
@@ -395,7 +394,7 @@ class Report(controllers.Controller):
         end = start.replace(day=calendar.monthrange(year, month)[1])
         deduced = model.DeduccionBancaria.select(AND(
             model.DeduccionBancaria.q.account == account,
-            model.DeduccionBancaria.q.account == banco,
+            model.DeduccionBancaria.q.banco == banco,
             model.DeduccionBancaria.q.day >= start,
             model.DeduccionBancaria.q.day <= end,
         ))
