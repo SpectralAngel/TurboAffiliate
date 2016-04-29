@@ -18,10 +18,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-
+import calendar
 from decimal import Decimal
 from collections import defaultdict, OrderedDict
 
+from datetime import date
 from sqlobject import AND
 from turbogears import controllers, expose, identity, validate, validators
 
@@ -50,8 +51,8 @@ class Report(controllers.Controller):
     @identity.require(identity.not_anonymous())
     @expose(template="turboaffiliate.templates.report.post")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(
-            min=1,
-            max=12)))
+        min=1,
+        max=12)))
     def postReport(self, year, month):
 
         """Muestra el reporte de ingresos por los diferentes cargos en un mes
@@ -139,8 +140,8 @@ class Report(controllers.Controller):
         cotizacion = model.Cotizacion.get(cotizacion)
         afiliados = model.Affiliate.selectBy(cotizacion=cotizacion)
         deducciones = afiliados.throughTo.deduced.filter(AND(
-                model.Deduced.q.year == year,
-                model.Deduced.q.month == month))
+            model.Deduced.q.year == year,
+            model.Deduced.q.month == month))
         cuentas = OrderedDict()
 
         for deduccion in deducciones:
@@ -266,7 +267,7 @@ class Report(controllers.Controller):
     @expose(template="turboaffiliate.templates.report.planilla")
     @validate(validators=dict(cotizacion=validators.Int(),
                               day=validators.DateTimeConverter(
-                                      format='%d/%m/%Y')))
+                                  format='%d/%m/%Y')))
     def planilla(self, cotizacion, day):
 
         cotizacion = model.Cotizacion.get(cotizacion)
@@ -290,8 +291,14 @@ class Report(controllers.Controller):
         except model.SQLObjectNotFound:
             reporte = None
 
-        deducciones = model.DeduccionBancaria.selectBy(banco=banco, year=year,
-                                                       month=month)
+        start = date(1, month, year)
+        end = start.replace(day=calendar.monthrange(year, month)[1])
+        deducciones = model.DeduccionBancaria.select(AND(
+            model.DeduccionBancaria.q.account == banco,
+            model.DeduccionBancaria.q.day >= start,
+            model.DeduccionBancaria.q.day <= end,
+        ))
+
         if reporte is None:
             reporte = model.BankReport(banco=banco, year=year, month=month)
             for deduccion in deducciones:
@@ -303,9 +310,9 @@ class Report(controllers.Controller):
 
             for cuenta in cuentas:
                 report_account = model.BankAccount(
-                        account=cuenta,
-                        amount=cuentas[cuenta],
-                        bankReport=reporte)
+                    account=cuenta,
+                    amount=cuentas[cuenta],
+                    bankReport=reporte)
         else:
             for cuenta in reporte.bankAccounts:
                 cuentas[cuenta.account] = cuenta.amount
@@ -324,8 +331,14 @@ class Report(controllers.Controller):
         banco = model.Banco.get(banco)
         deducciones = []
         afiliados = []
-        deduced = model.DeduccionBancaria.selectBy(banco=banco, year=year,
-                                                   month=month)
+
+        start = date(1, month, year)
+        end = start.replace(day=calendar.monthrange(year, month)[1])
+        deduced = model.DeduccionBancaria.select(AND(
+            model.DeduccionBancaria.q.account == banco,
+            model.DeduccionBancaria.q.day >= start,
+            model.DeduccionBancaria.q.day <= end,
+        ))
         for d in deduced:
             if d.afiliado not in afiliados:
                 deducciones.append(d)
@@ -378,8 +391,14 @@ class Report(controllers.Controller):
 
         account = model.Account.get(account)
         banco = model.Banco.get(banco)
-        deduced = model.DeduccionBancaria.selectBy(account=account, banco=banco,
-                                                   year=year, month=month)
+        start = date(1, month, year)
+        end = start.replace(day=calendar.monthrange(year, month)[1])
+        deduced = model.DeduccionBancaria.select(AND(
+            model.DeduccionBancaria.q.account == account,
+            model.DeduccionBancaria.q.account == banco,
+            model.DeduccionBancaria.q.day >= start,
+            model.DeduccionBancaria.q.day <= end,
+        ))
 
         total = sum(d.amount for d in deduced)
 
@@ -397,9 +416,9 @@ class Report(controllers.Controller):
         account = model.Account.get(account)
         afiliados = model.Affiliate.selectBy(cotizacion=cotizacion)
         deduced = afiliados.throughTo.deduced.filter(AND(
-                model.Deduced.q.year == year,
-                model.Deduced.q.account == account,
-                model.Deduced.q.month == month))
+            model.Deduced.q.year == year,
+            model.Deduced.q.account == account,
+            model.Deduced.q.month == month))
         total = sum(d.amount for d in deduced)
 
         return dict(deduced=deduced, account=account, month=months[month],
@@ -440,14 +459,14 @@ class Report(controllers.Controller):
 
         return dict(affiliates=affiliates,
                     show="Cotizan por {0} y pagaron un mes en {1}".format(
-                            payment,
-                            year),
+                        payment,
+                        year),
                     count=len(affiliates))
 
     @expose(template="turboaffiliate.templates.affiliate.show")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(
-            min=1,
-            max=12)))
+        min=1,
+        max=12)))
     def aportaron(self, year, month):
 
         query = "cuota_table.month%s = true AND cuota_table.year = %s" % (
@@ -460,8 +479,8 @@ class Report(controllers.Controller):
 
     @expose(template="turboaffiliate.templates.affiliate.show")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(
-            min=1,
-            max=12)))
+        min=1,
+        max=12)))
     def noAportaron(self, year, month):
         query = "cuota_table.month%s = 0 AND cuota_table.year = %s" % (
             month, year)
@@ -473,8 +492,8 @@ class Report(controllers.Controller):
 
     @expose(template="turboaffiliate.templates.affiliate.show")
     @validate(validators=dict(year=validators.Int(), month=validators.Int(
-            min=1,
-            max=12)))
+        min=1,
+        max=12)))
     def conTabla(self, year, month):
 
         cuotas = model.CuotaTable.selectBy(year=year)
@@ -513,9 +532,9 @@ class Report(controllers.Controller):
         account = model.Account.get(account)
         afiliados = model.Affiliate.selectBy(cotizacion=cotizacion)
         deduced = afiliados.throughTo.deduced.filter(AND(
-                model.Deduced.q.year == year,
-                model.Deduced.q.account == account,
-                model.Deduced.q.month == month))
+            model.Deduced.q.year == year,
+            model.Deduced.q.account == account,
+            model.Deduced.q.month == month))
 
         distribute = defaultdict(Decimal)
         for d in deduced:
