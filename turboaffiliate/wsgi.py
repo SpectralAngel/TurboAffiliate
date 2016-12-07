@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 from os import path
+
 program, subplace = path.split(path.dirname(__file__))
 sys.path.append(program)
 sys.path.append(path.join(program, 'wording'))
@@ -13,18 +14,17 @@ if os.name == 'nt':
 else:
     locale_name = "es_HN.utf8"
 
-os.environ['PYTHON_EGG_CACHE'] = program 
+os.environ['PYTHON_EGG_CACHE'] = program
 
 import turbogears
 import locale
+
 locale.setlocale(locale.LC_ALL, locale_name)
 
-turbogears.update_config(configfile="dev.cfg", modulename="turboaffiliate.config")
-turbogears.config.update({'global': {'server.webpath': '/afiliados',
-                                     'engine.start': False}})
+turbogears.update_config(configfile="dev.cfg",
+                         modulename="turboaffiliate.config")
 
 from turboaffiliate import command
 
 print(turbogears.config.get("server.webpath"))
 application = command.start()
-
