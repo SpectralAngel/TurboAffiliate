@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 #
-# wsgi.py
+# affiliate.py
 # This file is part of TurboAffiliate
 #
 # Copyright (c) 2007 - 2013 Carlos Flores <cafg10@gmail.com>
