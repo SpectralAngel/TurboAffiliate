@@ -343,7 +343,9 @@ class Report(controllers.Controller):
                 deducciones.append(d)
                 afiliados.append(d.afiliado)
 
-        return dict(banco=banco, month=month, year=year,
+        total = sum(d.amount for d in deducciones)
+
+        return dict(banco=banco, month=month, year=year, total=total,
                     deducciones=deducciones)
 
     @identity.require(identity.not_anonymous())
@@ -362,7 +364,9 @@ class Report(controllers.Controller):
                 deducciones.append(d)
                 afiliados.append(d.affiliate)
 
-        return dict(cotizacion=cotizacion, month=month, year=year,
+        total = sum(d.amount for d in deducciones)
+
+        return dict(cotizacion=cotizacion, month=month, year=year, total=total,
                     deducciones=deducciones)
 
     @identity.require(identity.not_anonymous())
