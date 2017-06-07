@@ -293,7 +293,7 @@ class Affiliate(SQLObject):
     """Préstamos cancelados"""
     extras = SQLMultipleJoin("Extra")
     """Deducciones extra a efectuar"""
-    deduced = MultipleJoin("Deduced", orderBy=['-year', '-month'])
+    deduced = MultipleJoin("Deduced", orderBy=['-month', '-year'])
     """Deducciones efectuadas por planilla en un mes y año"""
     observaciones = MultipleJoin('Observacion')
     """Observaciones acerca de actividad en un afiliado"""
@@ -319,7 +319,7 @@ class Affiliate(SQLObject):
     depositos = MultipleJoin("Deposito", joinColumn="afiliado_id")
     deduccionesBancarias = MultipleJoin("DeduccionBancaria",
                                         joinColumn="afiliado_id",
-                                        orderBy=['-year', '-month'])
+                                        orderBy=['-month', '-year'])
     banco_completo = BoolCol(default=False, notNone=True)
     autorizaciones = MultipleJoin('Autorizacion')
     logs = MultipleJoin('Logger')
