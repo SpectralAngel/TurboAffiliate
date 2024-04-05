@@ -21,9 +21,10 @@ RUN adduser \
     --uid "${UID}" \
     appuser
 
+ENV DEBIAN_FRONTEND noninteractive
+
 RUN apt-get update \
-    && DEBIAN_FRONTEND="noninteractive" apt full-upgrade -y \
-    && DEBIAN_FRONTEND="noninteractive" apt-get install -y \
+    &&  apt-get install -y \
     language-pack-es \
     git \
     curl \
