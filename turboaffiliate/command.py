@@ -26,37 +26,24 @@ __all__ = ['bootstrap', 'ConfigurationError', 'start']
 import sys
 import optparse
 
-from os import getcwd
+from os import getcwd, getenv
 from os.path import dirname, exists, join
 
-import pkg_resources
-try:
-    pkg_resources.require("TurboGears>=1.5")
-except pkg_resources.DistributionNotFound:
-    print("""\
-This is a TurboGears (http://www.turbogears.org) application. It seems that
-you either don't have TurboGears installed or it can not be found.
-
-Please check if your PYTHONPATH is set correctly. To install TurboGears, go to
-http://docs.turbogears.org/Install and follow the instructions there. If you
-are stuck, visit http://docs.turbogears.org/GettingHelp for support options.""")
-    sys.exit(1)
-try:
-    pkg_resources.require("SQLObject>=1.0.0")
-except pkg_resources.DistributionNotFound:
-    from turbogears.util import missing_dependency_error
-    print missing_dependency_error('SQLObject')
-    sys.exit(1)
+from dotenv import load_dotenv
 
 import cherrypy
 import turbogears
+import turbogears.config
+from turbogears.config import config_obj
 
 from turboaffiliate.release import version
 
 cherrypy.lowercase_api = True
 
+
 class ConfigurationError(Exception):
     pass
+
 
 def _read_config(args):
     """Read deployment configuration file.
@@ -84,15 +71,25 @@ def _read_config(args):
         configfile = join(setupdir, "dev.cfg")
     elif exists(join(curdir, "prod.cfg")):
         configfile = join(curdir, "prod.cfg")
-    else:
-        try:
-            configfile = pkg_resources.resource_filename(
-              pkg_resources.Requirement.parse("turboaffiliate"), "config/default.cfg")
-        except pkg_resources.DistributionNotFound:
-            raise ConfigurationError("Could not find default configuration.")
 
-    turbogears.update_config(configfile=configfile,
-        modulename="turboaffiliate.config")
+    db_host = getenv('DB_HOST', 'localhost')
+    db_user = getenv('DB_USER')
+    db_password = getenv('DB_PASSWORD')
+    db_name = getenv('DB_NAME')
+    connection_string = "mysql://{user}:{password}@{host}/{database}?charset=utf8&driver=connector-python".format(
+        **{
+            "user": db_user,
+            "host": db_host,
+            "password": db_password,
+            "database": db_name
+        }
+    )
+    print(connection_string)
+
+    config_data = config_obj(configfile, "turboaffiliate.config")
+    config_data['sqlobject.dburi'] = connection_string
+    turbogears.config.update(config_data.dict())
+
 
 def bootstrap():
     """Example function for loading bootstrap data into the database
