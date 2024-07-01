@@ -996,7 +996,7 @@ class Loan(SQLObject):
     months = IntCol()
     last = DateCol(default=date.today)
     number = IntCol(default=0)
-    offset = IntCol(default=0)
+    internal_offset = IntCol(default=0)
 
     startDate = DateCol(notNone=True, default=date.today)
     aproved = BoolCol(default=False)
@@ -1315,7 +1315,7 @@ class Loan(SQLObject):
 
         debt = copy.copy(self.debt)
         li = list()
-        start = self.startDate.month + self.offset
+        start = self.startDate.month + self.internal_offset
         if self.startDate.day == 24 and self.startDate.month == 8:
             start += 1
         year = self.startDate.year
