@@ -1589,8 +1589,10 @@ class PayedLoan(SQLObject):
 
     def net(self):
         """Obtains the amount that was given to the affiliate in the check"""
-
-        return self.capital - self.deductions.sum('amount')
+        deductions =  self.deductions.sum('amount')
+        if deductions is None:
+            deductions = Decimal(0)
+        return self.capital - deductions
 
     def capitalPagado(self):
         return self.pays.sum('capital')
