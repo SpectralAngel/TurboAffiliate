@@ -1,55 +1,86 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="../master.html" />
-<head>
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" py:replace="''"/>
-  <title>TurboAffiliate &bull; Afiliados</title>
-  <link rel="stylesheet" type="text/css" href="${tg.url('/static/css/status.css')}" />
-</head>
-<body>
-
-<div class="row">
-    <div class="col-md-12">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:py="http://genshi.edgewall.org/"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+>
+  <xi:include href="../master.html" />
+  <head>
+    <meta
+      content="text/html; charset=utf-8"
+      http-equiv="Content-Type"
+      py:replace="''"
+    />
+    <title>TurboAffiliate &bull; Afiliados</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="${tg.url('/static/css/status.css')}"
+    />
+  </head>
+  <body>
+    <div class="row">
+      <div class="col-md-12">
         <div class="page-header">
-            <h1>Pr&eacute;stamos por Liquidaci&oacute;n</h1>
+          <h1>Pr&eacute;stamos por Liquidaci&oacute;n</h1>
         </div>
+      </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-12">
         <table class="table table-striped">
-            <thead>
+          <thead>
             <tr>
-                <th>Pr&eacute;stamo</th>
-                <th>Afiliaci&oacute;n</th>
-                <th>Afiliado</th>
-                <th>Capital</th>
-                <th>Liquidado</th>
-                <th>Fecha de Inicio</th>
+              <th>Pr&eacute;stamo</th>
+              <th>Afiliaci&oacute;n</th>
+              <th>Afiliado</th>
+              <th>Capital</th>
+              <th>Liquidado</th>
+              <th>Fecha de Inicio</th>
             </tr>
-            </thead>
-            <tbody>
+          </thead>
+          <tbody>
             <tr py:for="loan in loans">
-                <td><a href="${tg.url('/loan/{0}'.format(loan.id))}">${loan.id}</a></td>
-                <td><a href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}">${loan.affiliate.id}</a></td>
-                <td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
-                <td>${locale.currency(loan.capital, True, True)}</td>
-                <td>${locale.currency(loan.net(), True, True)}</td>
-                <td>${loan.startDate}</td>
+              <td>
+                <span py:if="loan.debt != 0">
+                  <a href="${tg.url('/loan/{0}'.format(loan.id))}">
+                    ${loan.id}
+                  </a>
+                </span>
+                <span py:if="loan.debt == 0">
+                  <a href="${tg.url('/payed/{0}'.format(loan.id))}">
+                    ${loan.id}
+                  </a>
+                </span>
+              </td>
+              <td>
+                <a href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}">
+                  ${loan.affiliate.id}
+                </a>
+              </td>
+              <td>
+                <a href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}"
+                  >${loan.affiliate.id}</a
+                >
+              </td>
+              <td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
+              <td>${locale.currency(loan.capital, True, True)}</td>
+              <td>${locale.currency(loan.net(), True, True)}</td>
+              <td>${loan.startDate}</td>
             </tr>
-            </tbody>
-            <tfoot>
+          </tbody>
+          <tfoot>
             <tr>
-                <td>Cantidad</td>
-                <td>${count}</td>
-                <td></td>
-                <td>${locale.currency(capital, True, True)}</td>
-                <td>${locale.currency(debt, True, True)}</td>
-                <td></td>
+              <td>Cantidad</td>
+              <td>${count}</td>
+              <td></td>
+              <td>${locale.currency(capital, True, True)}</td>
+              <td>${locale.currency(debt, True, True)}</td>
+              <td></td>
             </tr>
-            </tfoot>
+          </tfoot>
         </table>
+      </div>
     </div>
-</div>
-</body>
+  </body>
 </html>

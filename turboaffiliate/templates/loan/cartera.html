@@ -46,21 +46,21 @@
           <tbody>
             <tr py:for="loan in loans">
               <td>
-                <span py:if="loan.debt != 0"
-                  ><a href="${tg.url('/loan/{0}'.format(loan.id))}"
-                    >${loan.id}</a
-                  ></span
-                >
-                <span py:if="loan.debt == 0"
-                  ><a href="${tg.url('/payed/{0}'.format(loan.id))}"
-                    >${loan.id}</a
-                  ></span
-                >
+                <span py:if="loan.debt != 0">
+                  <a href="${tg.url('/loan/{0}'.format(loan.id))}">
+                    ${loan.id}
+                  </a>
+                </span>
+                <span py:if="loan.debt == 0">
+                  <a href="${tg.url('/payed/{0}'.format(loan.id))}">
+                    ${loan.id}
+                  </a>
+                </span>
               </td>
               <td>
-                <a href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}"
-                  >${loan.affiliate.id}</a
-                >
+                <a href="${tg.url('/affiliate/{0}'.format(loan.affiliate.id))}">
+                  ${loan.affiliate.id}
+                </a>
               </td>
               <td>${loan.affiliate.firstName} ${loan.affiliate.lastName}</td>
               <td>${locale.currency(loan.capital, True, True)}</td>
