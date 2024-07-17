@@ -728,7 +728,7 @@ class Loan(controllers.Controller):
     def increase(self, loan):
 
         loan = model.Loan.get(loan)
-        loan.offset += 1
+        loan.internal_offset += 1
 
         raise redirect('/loan/{0}'.format(loan.id))
 
@@ -739,7 +739,7 @@ class Loan(controllers.Controller):
     def decrease(self, loan):
 
         loan = model.Loan.get(loan)
-        loan.offset -= 1
+        loan.internal_offset -= 1
 
         raise redirect('/loan/{0}'.format(loan.id))
 
