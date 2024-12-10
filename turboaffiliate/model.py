@@ -1197,6 +1197,8 @@ class Loan(SQLObject):
             self.remove()
             return True
 
+        self.compensar()
+
         return False
 
     def refinanciar(self, pago, solicitud, cuenta, usuario, descripcion):
@@ -1337,9 +1339,8 @@ class Loan(SQLObject):
 
             if debt <= self.payment:
                 kw['amount'] = 0
-                kw['interest'] = self.payment - debt
                 kw['capital'] = debt
-                kw['payment'] = self.payment
+                kw['payment'] = kw['interest'] + kw['capital']
                 li.append(kw)
                 break
 
