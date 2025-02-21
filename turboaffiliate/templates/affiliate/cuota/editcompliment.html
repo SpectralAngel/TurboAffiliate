@@ -15,8 +15,8 @@
 			<ul>
 				<li py:for="n in range(1, 13)">
 					<label>Mes <span py:replace="n" />:</label>
-					<input py:if="getattr(table, 'month%s' % n)" type="checkbox" name="${'month%s' % n}" checked="" />
-					<input py:if="not getattr(table, 'month%s' % n)" type="checkbox" name="${'month%s' % n}" />
+					<input py:if="getattr(table, 'month%s' % n)" type="checkbox" name="${'month%s' % n}" checked="${str(getattr(table, 'month%s' % n)).lower()}" />
+					<input py:if="not getattr(table, 'month%s' % n) == 1" type="checkbox" name="${'month%s' % n}" />
 				</li>
 				<li>
 					<input type="submit" value="Grabar" />
