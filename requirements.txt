@@ -4,3 +4,4 @@ MySQL-python
 SQLObject
 https://www.turbogears.org/1.5/downloads/current/PEAK-Rules-0.5a1.dev-r2707.tar.gz#egg=PEAK-Rules
 TurboGears
+CherryPy==3.8.2

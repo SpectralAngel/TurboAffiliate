@@ -29,11 +29,15 @@ FROM ubuntu:22.04
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/Tegucigalpa
 
 RUN apt-get update && apt-get install -y \
     python2 \
     language-pack-es \
     libmysqlclient21 \
+    tzdata \
+    && ln -fs /usr/share/zoneinfo/America/Tegucigalpa /etc/localtime \
+    && dpkg-reconfigure -f noninteractive tzdata \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-privileged user
